@@ -1,0 +1,85 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "默认模块",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "tags": [],
+  "paths": {
+    "/currency/GatePay/payInNotify": {
+      "post": {
+        "summary": "地址支付回调",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "X-GatePay-Timestamp",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "example": "1757495358052",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-GatePay-Nonce",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "example": "1j6Y0S7yynqhIQmw",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-GatePay-Signature",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "example": "4d778bfb6e070c9d5670021ed2b06d36daa30d9083e6840547eeaae9566af1ed36d80d0d43052da54bb80dec7fc5df16a248455ea749d709ade6aada8e0b75e5",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              },
+              "examples": {}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "webhooks": {},
+  "components": {
+    "schemas": {},
+    "responses": {},
+    "securitySchemes": {}
+  },
+  "servers": [],
+  "security": []
+}
