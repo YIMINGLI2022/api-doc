@@ -1,0 +1,115 @@
+---
+title: 错误返回说明
+permalink: /api/version2/error_response_appendix/
+---
+
+
+
+本文档汇总了部分常见的 `error_msg`（或相关错误信息）及其含义，便于排查问题时快速定位实际原因和处理建议。
+
+> 说明：如遇下表未覆盖的错误，请优先根据订单状态、网关返回信息进行排查，必要时联系 HaiPay 支持。
+
+## 美元代付
+
+| 返回失败原因 / error_msg                                                                                           | 实际原因 / 处理建议                                                                                 |
+|:-------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------|
+| 订单一直是支付中的                                                                                                    | 需要收款人登录其邮箱，点击确认收款链接后才能最终收到钱。请提醒收款人尽快在邮箱中完成确认操作。                        |
+| NULL                                                                                                               | 网关未返回具体错误文案，可能为未知异常。请先检查订单状态，如仍异常请联系 HaiPay 支持处理。                             |
+| Manual processing failed                                                                                           | 手工处理失败，可稍后重试；如多次重试仍失败，请联系 HaiPay 支持。                                                  |
+| 银行退单                                                                                                              | 收款账户无效或存在限制（如销户、冻结等），建议让收款人确认账号状态或更换其他收款账户。                                      |
+| HttpStatus:500                                                                                                     | 通讯超时或服务端异常。请先查询订单状态，若重新发起仍失败，请联系 HaiPay 支持。                                         |
+| 创建收款人失败:is invalid length or format.                                                                         | 参数格式或长度不符合要求（例如姓名、证件号、账号等）。请校验参数是否符合文档要求后重试。                                   |
+| HttpStatus:502                                                                                                     | 通讯超时或网关故障。请先查询订单状态，若重新发起仍失败，请联系 HaiPay 支持。                                           |
+| The account cannot be registered with the given information. Please try registering using a different bank account.| 账户信息不符合发卡行要求，账户无效或不支持当前业务。请更换其他有效的银行账户。                                              |
+| java.net.SocketTimeoutException: Read timed out                                                                    | 读取超时。请查询订单状态，必要时可重新发起；若多次出现，请联系 HaiPay 支持。                                             |
+| 创建转帐方式失败:java.net.SocketTimeoutException: Read timed out                                                   | 创建转账方式时读取超时。请查询订单状态，必要时重新发起；若多次出现，请联系 HaiPay 支持。                                   |
+| 转账                                                                                                                | 网关仅返回“转账”或类似模糊描述，无法定位具体原因。请结合订单状态、银行流水进一步排查，或联系 HaiPay 支持。                   |
+| java.net.SocketTimeoutException: connect timed out                                                                 | 建立连接超时。请查询订单状态，必要时重新发起；若网络环境正常且多次出现，请联系 HaiPay 支持。                                |
+| Illegal request!                                                                                                   | 请求参数非法或签名等校验不通过。请检查请求参数、签名规则、编码格式等是否与文档一致。                                      |
+| The account status does not allow the requested action.                                                            | 账户当前状态不允许此类操作（如冻结、受限等），账户无效。请让收款人联系发卡行或更换其他收款账户。                              |
+| Server unknown error                                                                                               | 服务器未知错误或超时。请先检查订单状态，如仍异常请截图完整响应并联系 HaiPay 支持。                                         |
+| The information entered does not match our records. Please try again.                                             | 账户或身份信息与银行记录不一致。请让收款人核对姓名、账号、证件信息等；如多次失败，可联系 HaiPay 支持协助排查。                 |
+| 创建转帐方式失败:Account ID Invalid entry.                                                                          | 收款账户 ID 无效（账户不存在或录入错误），账户无效。请更换或修正收款账户后重试。                                            |
+| 付款账号金额不足                                                                                                      | 付款账户余额不足。请先补足资金后再发起代付，或检查是否存在冻结/保留金额。                                                 |
+| 查询不到付款订单                                                                                                      | 暂未查询到对应付款订单记录。请确认订单号是否正确，可稍后重试；如仍查询不到且资金已扣减，请联系 HaiPay 支持。                    |
+| 可用地址信息不足                                                                                                      | 收款方地址信息不完整或不满足通道要求。请补充完整地址信息（如国家、省市、详细地址等）后重试。                                  |
+| 查询不到付款订单，手动回调                                                                                              | 系统未查到订单（或查询异常），已通过人工方式回调商户。请以商户后台及最终资金状态为准，如有疑问请联系 HaiPay 支持。                 |
+
+## 越南代付
+
+| 返回失败原因 / error_msg                                                                                           | 实际原因 / 处理建议                                                                                 |
+|:-------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------|
+| 付款账号金额不足                                                                                                    | 联系我们                                                                                             |
+| 出款失败渠道已退回                                                                                                  | 联系我们                                                                                             |
+| 查询不到付款订单                                                                                                    | 联系我们                                                                                             |
+| Your account balance is insufficient                                                                              | 联系我们                                                                                             |
+| Unexpected end of file from server                                                                                 | 出现这个错误重新下单吗                                                                               |
+| The amount of the arrival nearly supports the integer                                                              | 联系我们                                                                                             |
+| System error                                                                                                       | 联系我们                                                                                             |
+| syntax error                                                                                                       | 联系我们                                                                                             |
+| SSLHandshakeException: Remote host closed connection during handshake                                              | 联系我们                                                                                             |
+| refund                                                                                                             | 核对账号信息                                                                                          |
+| please input correct account name，account name：                                                                  | 名字错误                                                                                             |
+| NULL                                                                                                               | 联系我们                                                                                             |
+| Manual processing failed                                                                                           | 联系我们                                                                                             |
+| get match outbound fee configs from clear service failed                                                          | 联系我们                                                                                             |
+| error_msg                                                                                                          | 联系我们                                                                                             |
+| ConnectException: Connection timed out (Connection timed out)                                                     | 检查订单状态                                                                                          |
+| Beneficiary account can not receive payment                                                                        | 联系我们                                                                                             |
+| Bank account is not valid                                                                                         | 核对账号信息                                                                                          |
+| &lt;p&gt;The gateway did not receive a timely response from the upstream server or application.&lt;hr/&gt;Powered by Tengine&lt;/body&gt; | 联系我们                                                                                             |
+| &lt;head&gt;&lt;title&gt;504 Gateway Time-out&lt;/title&gt;&lt;/head&gt;                                                                  | 联系我们                                                                                             |
+| &lt;h1&gt;504 Gateway Time-out&lt;/h1&gt;                                                                                      | 联系我们                                                                                             |
+| Invalid cardholder's name                                                                                          | 名字错误                                                                                             |
+| Error when connect to bank. You get this error when the bank is maintenance or upgrade.                          | 连接银行时出错。当银行进行维护或升级时，您会收到此错误。                                               |
+| ErrorCode Query: invalid Bank_code                                                                                 | 联系我们                                                                                             |
+| OrderStatus Query:02                                                                                               | 联系我们                                                                                             |
+| Invalid account number                                                                                             | 联系我们                                                                                             |
+| An error occurred during connection. Need to confirm again with about status of transaction                       | 联系我们                                                                                             |
+| ErrorCode Query: Invalid ref_code                                                                                  | 联系我们                                                                                             |
+| Had refund money                                                                                                   | 失败                                                                                                 |
+| ref_code is exist                                                                                                  | 联系我们                                                                                             |
+
+## 印尼代付
+
+| 返回失败原因 / error_msg                                                                                           | 实际原因 / 处理建议                                                                                 |
+|:-------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------|
+| The current merchant balance is insufficient and the payment on behalf of the merchant has failed!              | 出现此错误联系我们                                                                                   |
+| Vendor Error: 4033805 \| Do Not Honor                                                                              | 渠道异常出款失败，请用户确认账号没有问题后重新尝试                                                   |
+| Vendor Error: 209 \| Bank Account is not found                                                                     | 银行账号错误                                                                                         |
+| Vendor Error: 300 \| The bank/e-wallet system encounters an error while disbursing the money. Try again in a moment. | 重新出款                                                                                             |
+| Vendor Error: 300 \| System encounters an error while disbursing the money. Please try again in a moment.        | 重新出款                                                                                             |
+| Vendor Error: 4033814 \| Insufficient Fund                                                                         | 出现此错误联系我们                                                                                   |
+| Vendor Error: 4033802 \| Exceeds Transaction Amount Limit                                                         | 超过最小-最大金额限制                                                                                |
+| Vendor Error: 300 \| Account has exceeded the maximum amount for receiving money. Please contact the account owner. | 客户收款达到每日、每月收款额度上限                                                                   |
+| Vendor Error: 300 \| Account is no longer active. Please create a new transaction with a different recipient account number. | 客户账号过期，换个卡出款                                                                             |
+| Vendor Error: 300 \| Account not found. Please create a new transaction with a different recipient account number. | 换个卡出款                                                                                           |
+| Does not support the bank                                                                                          | 不支持这个银行，换个卡出款                                                                           |
+| Bank reject please check your account                                                                              | 客户账号风控，换个卡出款试试                                                                         |
+| Wrong account NO. or state abnormal                                                                                | 账号填写错误，账号异常，换个卡出款试试                                                               |
+
+## 马来西亚代付
+
+| 返回失败原因 / error_msg                                                                                           | 实际原因 / 处理建议                                                                                 |
+|:-------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------|
+| Failed / System Error                                                                                             | 出现此错误，请重试                                                                                   |
+
+## 菲律宾代付
+
+| 返回失败原因 / error_msg                                                                                           | 实际原因 / 处理建议                                                                                 |
+|:-------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------|
+| No record on file                                                                                                  | 账号错误                                                                                             |
+| Exceeds account amount limit                                                                                      | 客户达到每日/每月收款额度上限 换个卡出款                                                             |
+| Not supported transaction                                                                                         | 不支持这个银行代付                                                                                   |
+| No response from ISO20022 RFI respdesc of RTP Cancelled Transaction                                               | 收款行网络波动，稍后请重新打款试试                                                                   |
+| Transferee Bank not Ready for InstaPay                                                                            | 收款行网络波动，稍后请重新打款试试                                                                   |
+| No activity allowed against the account                                                                           | 收款人账号风控，不允许给他打款                                                                       |
+| System Failure; Catch all transaction processing error code                                                       | 系统偶然性错误，请稍后重新试一下                                                                     |
+| No Transferee Name                                                                                                | 姓名不能为空                                                                                         |
+| Invalid Account No                                                                                                | 账号错误                                                                                             |
+| AmountExceedsAgreedLimit                                                                                          | 用户卡号被银行风控                                                                                   |
+| IncorrectAccountNumber                                                                                            | 账号错误                                                                                             |
+| NotAllowedPayment                                                                                                 | 用户收款账号被银行风控                                                                               |
+| WaitingTimeExpired                                                                                                | 银行维护                                                                                             |
+| BankSystemProcessingError                                                                                          | 收款行网络波动，稍后请重新打款试试                                                                   |
+| TransactionForbidden                                                                                              | 用户收款账号被银行风控，无法收款                                                                     |

@@ -1,0 +1,782 @@
+---
+title: 配置与签名
+permalink: /guide/config_settings_and_signature_rules_guide/
+---
+# 配置与签名
+
+## 1. 获取商户自助平台账号
+合作确认后，HaiPay 将根据《商户接入申请表》中所填写的“管理员账号信息”，创建可供商户登录商户管理自助平台的管理员账号。 届时，请注意查收 HaiPay 下发的激活邮件，接入方可根据邮件指引激活管理员账号。 首次登录需要更改密码，请确保密码安全，以防外泄。
+
+## 2. 获取密钥appId和密钥
+
+联调接入所需的商户appId，可通过商户管理平台获取。 签名使用的是SHA256WithRSA签名算法，需要商户自行生成公私钥信息，并将公钥通过商户管理平台上传，同时下载HaiPay的公钥。请妥善保管密钥信息，若不慎泄漏密钥，请及时更新密钥。
+
+配置入口：「业务管理」-「支付产品配置」
+
+<img src="/images/v2/applist1-zh.png" style="height: 400px"/>
+
+:::warning
+**商户appId和密钥是配套的，区分币种、区分测试环境与正式环境。**
+:::
+
+## 3. 公钥和私钥配置
+### 3.1 公钥和私钥的作用
+
+```mermaid
+flowchart LR
+    %% 节点样式
+    classDef entity fill:#f9fbff,stroke:#cbd5e1,stroke-width:1px,rx:8px;
+    classDef key fill:#e6f7ff,stroke:#94a3b8,stroke-width:1px,rx:8px;
+    classDef arrow stroke:#60a5fa,stroke-width:1.5px;
+
+    %% 分组
+    subgraph 商户["商户"]
+        A[商户私钥]:::key
+        B[平台公钥]:::key
+    end
+    subgraph 平台["平台"]
+        C[商户公钥]:::key
+        D[平台私钥]:::key
+    end
+
+    %% 流程
+    A -->|私钥对body进行签章，请求发送到平台| C:::arrow
+    D -->|平台会用私钥将回传数据签章后发给商户| B:::arrow
+    C -->|平台会用商户公钥进行验签| A:::arrow
+    B -->|商户需要拿平台公钥进行验签| D:::arrow
+
+    %% 每条箭头颜色（可自定义）
+    linkStyle 0 stroke:#3b82f6,color:#2563eb,stroke-width:1.5px;
+    linkStyle 1 stroke:#22c55e,color:#15803d,stroke-width:1.5px;
+    linkStyle 2 stroke:#f97316,color:#c2410c,stroke-width:1.5px;
+    linkStyle 3 stroke:#a855f7,color:#7e22ce,stroke-width:1.5px;
+
+```
+
+### 3.2 生成公钥私钥
+私钥自行保存，公钥请添加到HaiPay后台，请去掉前后的```-----BEGIN XXX KEY-----```和```-----END XXX KEY-----```，以及换行和空格
+#### 方式一：使用openssl生成
+请参考网上示例，需安装openssl，密钥位数2048位
+
+#### 方式二：在线生成密钥对
+通过 HaiPay 提供的开发者工具，在线生成密钥对，工具为纯js实现不会和 HaiPay 服务器进行交互，不会泄露商户密钥信息。 <a href="/rsa/rsa-generate/" target="_blank">生成地址</a>，也可通过其他在线生成工具生成
+
+#### 方式三：通过代码生成
+商户公私钥可通过以下SDK生成，生成的商户私钥请商户自己妥善保管，用于请求haipay报文的加签操作，商户公钥通过平台上传给haipay用于验证商户签名防止报文在网络传输过程中被篡改，同时在平台上获取haipay公钥放到自己程序中，用于验证haipay加签报文的签名。
+
+
+::: details 生成密钥
+::: tabs
+
+@tab java
+```java
+    /**
+     * 生成2048位的RSA密钥对，并将公钥和私钥转为PEM格式
+     *
+     * @return 一个包含公钥和私钥的Map，键为"publicKey"和"privateKey"
+     */
+    public static Map<String, String> generateRSAKeyPair() {
+        try {
+            // 创建 KeyPairGenerator 对象，并指定 RSA 算法
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+
+            // 初始化密钥长度为 2048
+            keyPairGenerator.initialize(2048);
+
+            // 生成密钥对
+            KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
+            // 获取公钥和私钥
+            PublicKey publicKey = keyPair.getPublic();
+            PrivateKey privateKey = keyPair.getPrivate();
+
+            // 转换公钥和私钥为 PEM 格式
+            String publicKeyPem = convertPublicKeyToPEM(publicKey);
+            String privateKeyPem = convertPrivateKeyToPEM(privateKey);
+
+            // 将公钥和私钥存入 Map
+            Map<String, String> keyPairMap = new HashMap<>();
+            keyPairMap.put("publicKey", publicKeyPem);
+            keyPairMap.put("privateKey", privateKeyPem);
+            return keyPairMap;
+
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Failed to generate RSA key pair", e);
+        }
+    }
+
+    /**
+     * 将公钥转换为 PEM 格式
+     *
+     * @param publicKey 公钥对象
+     * @return PEM 格式的公钥字符串
+     */
+    private static String convertPublicKeyToPEM(PublicKey publicKey) {
+        String encodedPublicKey = Base64.getMimeEncoder(64, "\n".getBytes())
+                .encodeToString(publicKey.getEncoded());
+        return "-----BEGIN PUBLIC KEY-----\n"
+                + encodedPublicKey
+                + "\n-----END PUBLIC KEY-----";
+    }
+
+    /**
+     * 将私钥转换为 PEM 格式
+     *
+     * @param privateKey 私钥对象
+     * @return PEM 格式的私钥字符串
+     */
+    private static String convertPrivateKeyToPEM(PrivateKey privateKey) {
+        String encodedPrivateKey = Base64.getMimeEncoder(64, "\n".getBytes())
+                .encodeToString(privateKey.getEncoded());
+        return "-----BEGIN PRIVATE KEY-----\n"
+                + encodedPrivateKey
+                + "\n-----END PRIVATE KEY-----";
+    }
+```
+
+@tab php
+```php
+    /**
+     * 初始化RSA算法密钥对
+     *
+     * @param int $keysize RSA1024已经不安全了,建议2048
+     * 
+     * 使用示例
+     * 调用函数生成 RSA 密钥对，指定密钥长度为 2048 位
+        $result = initRSAKey(2048);
+
+        echo "私钥：\n";
+        echo $result['private_key'] . "\n";
+
+        echo "公钥：\n";
+        echo $result['public_key'] . "\n";
+     */
+    public function initRSAKey($keysize) {
+        $config = array(
+            "digest_alg" => "sha256",
+            "private_key_bits" => $keysize,
+            "private_key_type" => OPENSSL_KEYTYPE_RSA,
+        );
+        // 生成新的 RSA 密钥对，使用 SHA256 算法
+        $rsaKey = openssl_pkey_new($config);
+
+        // 获取私钥
+        openssl_pkey_export($rsaKey, $privateKey);
+
+        // 获取公钥
+        $publicKey = openssl_pkey_get_details($rsaKey);
+        $publicKey = $publicKey["key"];
+
+        return array(
+            'public_key' => $publicKey,
+            'private_key' => $privateKey
+        );
+    }
+```
+:::
+
+
+## 4. 签名
+
+| 类型     | 说明          |
+| :------- | :------------ |
+| 算法     | RSA           |
+| 签名算法 | SHA256WithRSA |
+| 密钥长度 | 2048          |
+
+签名统一生成规则:
+
+基于RSA的签名验证方式
+
+将所有非空参数的key按照ASCII排序后，取key(不包含sign)和value进行拼接，k1=v1&k2=v2&...，在结尾再拼接&key=merchantSecretKey（加密字段，后台获取）
+
+采用RAS算法对字符串计算，算出签名字符串
+
+**接口可能增加响应字段，验证签名时必须支持增加的扩展字段**
+
+::: details 签名工具
+
+::: tabs
+
+@tab java
+```java
+import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
+
+import javax.crypto.Cipher;
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @ClassName SHA256WithRSAUtils
+ * @Description (SHA256WithRSA 签名工具类)
+ * @Author Finlay
+ * @Date 2021-02-01
+ * @Version 1.0.0
+ */
+@Slf4j
+public class SHA256WithRSAUtils {
+
+    public static final Charset CHARSET = StandardCharsets.UTF_8;
+    /**
+     * 密钥算法
+     */
+    public static final String ALGORITHM_RSA = "RSA";
+    /**
+     * RSA 签名算法
+     */
+    public static final String ALGORITHM_RSA_SIGN = "SHA256WithRSA";
+    public static final int ALGORITHM_RSA_PRIVATE_KEY_LENGTH = 2048;
+
+    private SHA256WithRSAUtils() {
+    }
+
+    /**
+     * RSA算法公钥加密数据
+     *
+     * @param data 待加密的明文字符串
+     * @param key  RSA公钥字符串
+     * @return RSA公钥加密后的经过Base64编码的密文字符串
+     */
+    public static String buildRSAEncryptByPublicKey(String data, String key) {
+        try {
+            //通过X509编码的Key指令获得公钥对象
+            X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(key));
+            KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_RSA);
+            Key publicKey = keyFactory.generatePublic(x509KeySpec);
+            Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            return Base64.getEncoder().encodeToString(rsaSplitCodec(cipher, Cipher.ENCRYPT_MODE, data.getBytes(CHARSET)));
+        } catch (Exception e) {
+            throw new RuntimeException("加密字符串[" + data + "]时遇到异常", e);
+        }
+    }
+
+    /**
+     * RSA算法公钥解密数据
+     *
+     * @param data 待解密的经过Base64编码的密文字符串
+     * @param key  RSA公钥字符串
+     * @return RSA公钥解密后的明文字符串
+     */
+    public static String buildRSADecryptByPublicKey(String data, String key) {
+        try {
+            //通过X509编码的Key指令获得公钥对象
+            X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(key));
+            KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_RSA);
+            Key publicKey = keyFactory.generatePublic(x509KeySpec);
+            Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
+            cipher.init(Cipher.DECRYPT_MODE, publicKey);
+            return new String(rsaSplitCodec(cipher, Cipher.DECRYPT_MODE, Base64.getDecoder().decode(data)), CHARSET);
+        } catch (Exception e) {
+            throw new RuntimeException("解密字符串[" + data + "]时遇到异常", e);
+        }
+    }
+
+    /**
+     * RSA算法私钥加密数据
+     *
+     * @param data 待加密的明文字符串
+     * @param key  RSA私钥字符串
+     * @return RSA私钥加密后的经过Base64编码的密文字符串
+     */
+    public static String buildRSAEncryptByPrivateKey(String data, String key) {
+        try {
+            //通过PKCS#8编码的Key指令获得私钥对象
+            PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(key));
+            KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_RSA);
+            Key privateKey = keyFactory.generatePrivate(pkcs8KeySpec);
+            Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
+            cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+            return Base64.getEncoder().encodeToString(rsaSplitCodec(cipher, Cipher.ENCRYPT_MODE, data.getBytes(CHARSET)));
+        } catch (Exception e) {
+            throw new RuntimeException("加密字符串[" + data + "]时遇到异常", e);
+        }
+    }
+
+    /**
+     * RSA算法私钥解密数据
+     *
+     * @param data 待解密的经过Base64编码的密文字符串
+     * @param key  RSA私钥字符串
+     * @return RSA私钥解密后的明文字符串
+     */
+    public static String buildRSADecryptByPrivateKey(String data, String key) {
+        try {
+            //通过PKCS#8编码的Key指令获得私钥对象
+            PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(key));
+            KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_RSA);
+            Key privateKey = keyFactory.generatePrivate(pkcs8KeySpec);
+            Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
+            return new String(rsaSplitCodec(cipher, Cipher.DECRYPT_MODE, Base64.getDecoder().decode(data)), CHARSET);
+        } catch (Exception e) {
+            throw new RuntimeException("解密字符串[" + data + "]时遇到异常", e);
+        }
+    }
+
+    /**
+     * RSA算法使用私钥对数据生成数字签名
+     *
+     * @param data 待签名的明文字符串
+     * @param key  RSA私钥字符串
+     * @return RSA私钥签名后的经过Base64编码的字符串
+     */
+    public static String buildRSASignByPrivateKey(String data, String key) {
+        try {
+            //通过PKCS#8编码的Key指令获得私钥对象
+            PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(key));
+            KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_RSA);
+            PrivateKey privateKey = keyFactory.generatePrivate(pkcs8KeySpec);
+            Signature signature = Signature.getInstance(ALGORITHM_RSA_SIGN);
+            signature.initSign(privateKey);
+            signature.update(data.getBytes(CHARSET));
+            return Base64.getEncoder().encodeToString(signature.sign());
+        } catch (Exception e) {
+            throw new RuntimeException("签名字符串[" + data + "]时遇到异常", e);
+        }
+    }
+
+    /**
+     * RSA算法使用公钥校验数字签名
+     *
+     * @param data 参与签名的明文字符串
+     * @param key  RSA公钥字符串
+     * @param sign RSA签名得到的经过Base64编码的字符串
+     * @return true--验签通过,false--验签未通过
+     */
+    public static boolean buildRSAverifyByPublicKey(String data, String key, String sign) {
+        try {
+            //通过X509编码的Key指令获得公钥对象
+            X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(key));
+            KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_RSA);
+            PublicKey publicKey = keyFactory.generatePublic(x509KeySpec);
+            Signature signature = Signature.getInstance(ALGORITHM_RSA_SIGN);
+            signature.initVerify(publicKey);
+            signature.update(data.getBytes(CHARSET));
+            return signature.verify(Base64.getDecoder().decode(sign));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * RSA算法分段加解密数据
+     *
+     * @param cipher 初始化了加解密工作模式后的javax.crypto.Cipher对象
+     * @param opmode 加解密模式,值为javax.crypto.Cipher.ENCRYPT_MODE/DECRYPT_MODE
+     * @return 加密或解密后得到的数据的字节数组
+     */
+    private static byte[] rsaSplitCodec(Cipher cipher, int opmode, byte[] datas) {
+        int maxBlock = 0;
+        if (opmode == Cipher.DECRYPT_MODE) {
+            maxBlock = ALGORITHM_RSA_PRIVATE_KEY_LENGTH / 8;
+        } else {
+            maxBlock = ALGORITHM_RSA_PRIVATE_KEY_LENGTH / 8 - 11;
+        }
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        int offSet = 0;
+        byte[] buff;
+        int i = 0;
+        try {
+            while (datas.length > offSet) {
+                if (datas.length - offSet > maxBlock) {
+                    buff = cipher.doFinal(datas, offSet, maxBlock);
+                } else {
+                    buff = cipher.doFinal(datas, offSet, datas.length - offSet);
+                }
+                out.write(buff, 0, buff.length);
+                i++;
+                offSet = i * maxBlock;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("加解密阀值为[" + maxBlock + "]的数据时发生异常", e);
+        }
+        byte[] resultDatas = out.toByteArray();
+        IOUtils.closeQuietly(out);
+        return resultDatas;
+    }
+}
+```
+
+@tab php
+```php
+/*使用示例
+require 'SHA256WithRSAUtils.php';
+$rsa = new SHA256WithRSAUtils();
+$publicKey  = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiqoMbM2+Dm7qCeVPA3c9srThRXPNX5p4kRaPo7zbaznoDFKXfYAT7zBGgc3XiQu+AoPx7ABO3/btuADy4tKC2GQsLYYbNNcUyIQIrPIeyGAknVq3G5/IKQe2qUnuFHdHUus5LkXA01RrCza8zTjCh30/Etd3bbKg8gwQYUqZAcHvU5Hi0AfCuWYw2CfLk7bK3HsveXjRXttq/KgIb+etslAUxtD42aUJoiVg9E+lESy8zWBDlxM7FVWYDygTVklWbzIy4N9nhb/9jMPsfN5+OMN/RS8ehN+OwOYVUGFmwS7hw8hVM1v3p3TpjEo9WCZhg4XLYBCvlCANWzW3sWKN9wIDAQAB';
+$privateKey = 'MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCKqgxszb4ObuoJ5U8Ddz2ytOFFc81fmniRFo+jvNtrOegMUpd9gBPvMEaBzdeJC74Cg/HsAE7f9u24APLi0oLYZCwthhs01xTIhAis8h7IYCSdWrcbn8gpB7apSe4Ud0dS6zkuRcDTVGsLNrzNOMKHfT8S13dtsqDyDBBhSpkBwe9TkeLQB8K5ZjDYJ8uTtsrcey95eNFe22r8qAhv562yUBTG0PjZpQmiJWD0T6URLLzNYEOXEzsVVZgPKBNWSVZvMjLg32eFv/2Mw+x83n44w39FLx6E347A5hVQYWbBLuHDyFUzW/endOmMSj1YJmGDhctgEK+UIA1bNbexYo33AgMBAAECggEAZlZ6NRLjYeOZ9xO17OjkMDAu0gNVX2mx8eKkwENx7QEfsXiDNayBCdanMsWofQydf13B/lt72u9zIooQuDaFOw8zS6XeDnFudU582KcY8OmEHF4HJewW3bFDrk1R2OjvStMvsGbqmQ2EsxIC5bMuXrChDFbZXayn+/vLWwKjShetqPkN2cRHcKWaASqOnWOAnpgHm5VuGu2ttaR5K14pmMq7a0TOaj7lDYyHelWejCfqFFiWfYLefNj3oFVAfiNxwsxj8q42xWwPZ/Xzhn8p0cInja//1AMuNLIadyC4r6VR7cOIKm4F7XwCTCRCSmPbhDu5pOEA//pERFTTNtE7gQKBgQDdzbujAJRqkn0WwPtbKE7ZxR2KFjc4fM1LyPyODz4tbXhtXtZeMcjjsKn8pTpzbgj+Cfmhz9X8sKAqdxe1WJTtkgg5zbvPQ8A+Q0Su19LZMfFCuC0RCp1SX/asl4XeQe6fQZCft3AG7RgA5HjHET0/7Mpwb3C7A/xBwMfn51T0+wKBgQCgCuy9NmpG2bG/MEz1gDojYe08yKOGgTLp6v/UZcn+U6Oit37/sFe0vU7n9NMtkCLdhf2mqF1cNCUv+rzHkvtgG8FaNlsuozOMXuTNCJ6nj/IypMOnU8vV9DL9zUq5cUnny7HKwCTuS8FYZTjI75GfDDwrxIhhzOIkh2leQD+iNQKBgDV1xOgA18ToEeZOFUdfa8HpVLlXqW+gBQtjIhxLaD0iyYfy99A0R6s5hX8zg+cWemxgkx6BLZ5+I9yYX8qB00N/kyP7hmzqc4eORxutQVDATNo78gDNgiW8o4Pt8YIkehNAhk84s3O36bUtXD7+1Lh3pkN7WLx6tW5TvNsUUtHJAoGBAIYOoJ8dpYgTccAkRVKfRhO9Q2tW5SMVtgAayJCxcrGGfdseuVKT8+OBb0b83KedxJaqVf3zqcBCLaQy80543/dxSFS4k0hNjDBYjG7yeXMCMG4bdYgDuQpOsyfFfoI3UyDGjva2XDj/W8UfhKFLiz8ekIhY56SEaikPBEPerW7BAoGBAIW+5xD7BH4Z/w+GNrA5WFWNNH02+32AD/k6W59GQ+ejrFzCa9/SPa/7WEbBjKNWnzYl9pcdA0lP3LGEbKzrm6Zy+6lCHI6Hx/o4PbHaKTQg2jAIJdEUrAOKR44rjIY41a8wtgilfZA4I4zDSvJMPkMYOItIXjFCwHTxLLfw0CJp';
+$decoded = 'eA8//4cK0DZvrOHrfc8vmr5htYqrb8k6gZiZtXAkSoLHOBkgsknRi8SP5YsYar7xXUSOo2b2LLOHB31JlOfXnH5vxIoG6/rHjkPagKA4r8+8cIp6glGou5f41ONJcsMoUPxThgsI+eTe4HxBUKlkjZ/6hh/WSdfcn8lRGGjBmOL5IqRGtvHQBNiJ9l7diezVPhQKZ+YGLOnmH6f+AKNM9/lY+2BWojsLcbLntUr9FGOIkrSf4GiYpWzVRsVOaqY4qmq+1be8qlvA7/MP+bWYCxDtk1OrZh852M4m0LEQosu8rtsalUZhgktBxhmMSR4I6z7e1KkaZdD4Y4iR+AU1Bg==';
+$content = 'amount=200&currency=PHP&merId=1000&orderId=M1234567904&key=WFZflvcV75jYP2G6QIpSsMtoX1e4awxO';
+//$data = $rsa->buildRSAverifyByPublicKey($content,$publicKey,$decoded);
+$data = $rsa->buildRSASignByPrivateKey($content,$privateKey);
+var_dump($data)
+*/
+
+class SHA256WithRSAUtils
+{
+
+    /**
+     * 初始化RSA算法密钥对
+     *
+     * @param int $keysize RSA1024已经不安全了,建议2048
+     * 
+     * 使用示例
+     * 调用函数生成 RSA 密钥对，指定密钥长度为 2048 位
+        $result = initRSAKey(2048);
+
+        echo "私钥：\n";
+        echo $result['private_key'] . "\n";
+
+        echo "公钥：\n";
+        echo $result['public_key'] . "\n";
+     */
+    public function initRSAKey($keysize) {
+        $config = array(
+            "digest_alg" => "sha256",
+            "private_key_bits" => $keysize,
+            "private_key_type" => OPENSSL_KEYTYPE_RSA,
+        );
+        // 生成新的 RSA 密钥对，使用 SHA256 算法
+        $rsaKey = openssl_pkey_new($config);
+
+        // 获取私钥
+        openssl_pkey_export($rsaKey, $privateKey);
+
+        // 获取公钥
+        $publicKey = openssl_pkey_get_details($rsaKey);
+        $publicKey = $publicKey["key"];
+
+        return array(
+            'public_key' => $publicKey,
+            'private_key' => $privateKey
+        );
+    }
+
+    /**
+     * 获取完整的私钥
+     * $privateKey; 私钥内容，不要头尾和换行符，只要内容
+     */
+    public function getPrivateKey($privateKey)
+    {
+        $pem = "-----BEGIN RSA PRIVATE KEY-----" . PHP_EOL;
+
+        $pem .= chunk_split($privateKey, 64, PHP_EOL);
+
+        $pem .= "-----END RSA PRIVATE KEY-----" . PHP_EOL;
+
+        return openssl_pkey_get_private($pem);
+    }
+
+    /**
+     * 获取完整的公钥
+     * @return bool|resource
+     * $publicKey; 公钥内容，不要头尾和换行符，只要内容
+     */
+    public function getPublicKey($publicKey)
+    {
+        $pem = "-----BEGIN PUBLIC KEY-----" . PHP_EOL;
+
+        $pem .= chunk_split($publicKey, 64, PHP_EOL);
+
+        $pem .= "-----END PUBLIC KEY-----" . PHP_EOL;
+
+        return openssl_pkey_get_public($pem);
+    }
+
+    /**
+     * 私钥加密
+     * @param string $data 要加密的数据
+     * @param string $privateKey 私钥
+     * @return 加密后的字符串
+     */
+    public function buildRSASignByPrivateKey($data,$privateKey)
+    {
+        $privatekey = openssl_get_privatekey($this->getPrivateKey($privateKey));
+        //php5.4+ OPENSSL_ALGO_SHA256
+        openssl_sign($data, $result, $privatekey, OPENSSL_ALGO_SHA256);
+        //php5.3 SHA256
+        //openssl_sign($data, $result, $privatekey, 'SHA256');
+        $result = base64_encode($result);
+        return $result;
+    }
+
+    /**
+     * 公钥验证
+     * @param string $data 源数据
+     * @param string $publicKey 公钥
+     * @param string $sign 校验的加密字符串
+     * @return boolean true代表验证成功,false代表验证失败
+     */
+    public function buildRSAverifyByPublicKey($data,$publicKey,$sign)
+    {
+        $publicKey = openssl_get_publickey($this->getPublicKey($publicKey));
+        //php5.4+ OPENSSL_ALGO_SHA256
+        $result = openssl_verify($data, base64_decode($sign), $publicKey, OPENSSL_ALGO_SHA256) == 1 ? true : false;
+        //php5.3 SHA256
+        //$result = openssl_verify($data, base64_decode($sign), $publicKey, 'SHA256') == 1 ? true : false;
+        return $result;
+
+    }
+}
+```
+
+:::
+
+::: details 生成代签名字符串
+
+::: tabs
+@tab java
+```java
+public static String getSign(Object obj, String secretKey) {
+    Map<String, Object> map;
+    if (obj instanceof Map) {
+        map = (Map<String, Object>) obj;
+    } else {
+        map = BeanMapTool.beanToMap(obj);
+    }
+    Set<String> keys = map.keySet();
+    List<String> list = new ArrayList<>(keys);
+    Collections.sort(list);
+    // 构造签名键值对的格式
+    StringBuilder sb = new StringBuilder();
+    // 构造签名键值对的格式
+    for (String key : list) {
+        Object val = map.get(key);
+        // 如果key不为sign_type或sign，以及key不为空，则拼接进签名字符串。
+        if (!("".equals(val) || val == null || List.of("sign_type", "sign").contains(key))) {
+            sb.append(key).append("=").append(val).append("&");
+        }
+    }
+    sb.append("key=").append(secretKey);
+    return sb.toString();
+}
+
+
+
+// package com.haipay.admin.utils;
+import org.springframework.cglib.beans.BeanMap;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * bean和map互转
+ */
+public class BeanMapTool {
+    public static <T> Map<String, Object> beanToMap(T bean) {
+        BeanMap beanMap = BeanMap.create(bean);
+        Map<String, Object> map = new HashMap<>();
+        beanMap.forEach((key, value) -> map.put(String.valueOf(key), value));
+        return map;
+    }
+}
+```
+
+@tab php
+```php
+function getSign($array, $merchantSecretKey) {
+    $result = "";
+    try {
+        $keys = array_keys($array);
+        sort($keys);            
+        $str = "";
+        foreach ($keys as $key) {                
+            $val = $array[$key];
+            //php中数字类型0为空值，可能需要做特殊处理
+            if (!is_null($val) && $key != "sign") {                    
+                $str .= $key . "=" . $val . "&";
+            }
+        }
+        $str = $str . "key=" . $merchantSecretKey;
+        $result = $str;
+    } catch (Exception $e) {
+        return null;
+    }
+    return $result;
+}
+```
+
+@tab js
+```js
+function getSign(map, merchantSecretKey) {
+    try {
+        // 提取键并按字母顺序排序
+        const keys = Object.keys(map).sort();
+       
+        // 构造签名键值对的格式
+        const sb = keys.reduce((acc, key) => {
+            const val = map[key];
+            if (val !== "" && val !== null && key !== "sign") {
+                acc.push(`${key}=${val}`);
+            }
+            return acc;
+        }, []).join('&');
+
+
+        // 加入商户密钥
+        const result = `${sb}&key=${merchantSecretKey}`;
+       
+        return result;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+```
+:::
+
+
+
+
+::: details 签名验签测试Demo
+::: tabs
+@tab java
+```java
+public static void main(String[] args) {
+        String privateKey = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCKqgxszb4ObuoJ5U8Ddz2ytOFFc81fmniRFo+jvNtrOegMUpd9gBPvMEaBzdeJC74Cg/HsAE7f9u24APLi0oLYZCwthhs01xTIhAis8h7IYCSdWrcbn8gpB7apSe4Ud0dS6zkuRcDTVGsLNrzNOMKHfT8S13dtsqDyDBBhSpkBwe9TkeLQB8K5ZjDYJ8uTtsrcey95eNFe22r8qAhv562yUBTG0PjZpQmiJWD0T6URLLzNYEOXEzsVVZgPKBNWSVZvMjLg32eFv/2Mw+x83n44w39FLx6E347A5hVQYWbBLuHDyFUzW/endOmMSj1YJmGDhctgEK+UIA1bNbexYo33AgMBAAECggEAZlZ6NRLjYeOZ9xO17OjkMDAu0gNVX2mx8eKkwENx7QEfsXiDNayBCdanMsWofQydf13B/lt72u9zIooQuDaFOw8zS6XeDnFudU582KcY8OmEHF4HJewW3bFDrk1R2OjvStMvsGbqmQ2EsxIC5bMuXrChDFbZXayn+/vLWwKjShetqPkN2cRHcKWaASqOnWOAnpgHm5VuGu2ttaR5K14pmMq7a0TOaj7lDYyHelWejCfqFFiWfYLefNj3oFVAfiNxwsxj8q42xWwPZ/Xzhn8p0cInja//1AMuNLIadyC4r6VR7cOIKm4F7XwCTCRCSmPbhDu5pOEA//pERFTTNtE7gQKBgQDdzbujAJRqkn0WwPtbKE7ZxR2KFjc4fM1LyPyODz4tbXhtXtZeMcjjsKn8pTpzbgj+Cfmhz9X8sKAqdxe1WJTtkgg5zbvPQ8A+Q0Su19LZMfFCuC0RCp1SX/asl4XeQe6fQZCft3AG7RgA5HjHET0/7Mpwb3C7A/xBwMfn51T0+wKBgQCgCuy9NmpG2bG/MEz1gDojYe08yKOGgTLp6v/UZcn+U6Oit37/sFe0vU7n9NMtkCLdhf2mqF1cNCUv+rzHkvtgG8FaNlsuozOMXuTNCJ6nj/IypMOnU8vV9DL9zUq5cUnny7HKwCTuS8FYZTjI75GfDDwrxIhhzOIkh2leQD+iNQKBgDV1xOgA18ToEeZOFUdfa8HpVLlXqW+gBQtjIhxLaD0iyYfy99A0R6s5hX8zg+cWemxgkx6BLZ5+I9yYX8qB00N/kyP7hmzqc4eORxutQVDATNo78gDNgiW8o4Pt8YIkehNAhk84s3O36bUtXD7+1Lh3pkN7WLx6tW5TvNsUUtHJAoGBAIYOoJ8dpYgTccAkRVKfRhO9Q2tW5SMVtgAayJCxcrGGfdseuVKT8+OBb0b83KedxJaqVf3zqcBCLaQy80543/dxSFS4k0hNjDBYjG7yeXMCMG4bdYgDuQpOsyfFfoI3UyDGjva2XDj/W8UfhKFLiz8ekIhY56SEaikPBEPerW7BAoGBAIW+5xD7BH4Z/w+GNrA5WFWNNH02+32AD/k6W59GQ+ejrFzCa9/SPa/7WEbBjKNWnzYl9pcdA0lP3LGEbKzrm6Zy+6lCHI6Hx/o4PbHaKTQg2jAIJdEUrAOKR44rjIY41a8wtgilfZA4I4zDSvJMPkMYOItIXjFCwHTxLLfw0CJp";
+        String publicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiqoMbM2+Dm7qCeVPA3c9srThRXPNX5p4kRaPo7zbaznoDFKXfYAT7zBGgc3XiQu+AoPx7ABO3/btuADy4tKC2GQsLYYbNNcUyIQIrPIeyGAknVq3G5/IKQe2qUnuFHdHUus5LkXA01RrCza8zTjCh30/Etd3bbKg8gwQYUqZAcHvU5Hi0AfCuWYw2CfLk7bK3HsveXjRXttq/KgIb+etslAUxtD42aUJoiVg9E+lESy8zWBDlxM7FVWYDygTVklWbzIy4N9nhb/9jMPsfN5+OMN/RS8ehN+OwOYVUGFmwS7hw8hVM1v3p3TpjEo9WCZhg4XLYBCvlCANWzW3sWKN9wIDAQAB";
+        Map<String, Object> request = new HashMap<>();
+        request.put("appId", "1000");
+        request.put("orderNo", "1000");
+        //待签名字符串获取
+        String content = SignUtils.getSign(request, "WFZflvcV75jYP2G6QIpSsMtoX1e4awxO");
+        //执行签名
+        String sign = SHA256WithRSAUtils.buildRSASignByPrivateKey(content, privateKey);
+        System.out.println("签名:" + SHA256WithRSAUtils.buildRSASignByPrivateKey(content, privateKey));
+        System.out.println("校验:" + SHA256WithRSAUtils.buildRSAverifyByPublicKey(content, publicKey, SHA256WithRSAUtils.buildRSASignByPrivateKey(content, privateKey)));
+    }
+```
+
+@tab php
+```php
+require 'SHA256WithRSAUtils.php';
+require 'SignUtils.php';
+$publicKey  = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiqoMbM2+Dm7qCeVPA3c9srThRXPNX5p4kRaPo7zbaznoDFKXfYAT7zBGgc3XiQu+AoPx7ABO3/btuADy4tKC2GQsLYYbNNcUyIQIrPIeyGAknVq3G5/IKQe2qUnuFHdHUus5LkXA01RrCza8zTjCh30/Etd3bbKg8gwQYUqZAcHvU5Hi0AfCuWYw2CfLk7bK3HsveXjRXttq/KgIb+etslAUxtD42aUJoiVg9E+lESy8zWBDlxM7FVWYDygTVklWbzIy4N9nhb/9jMPsfN5+OMN/RS8ehN+OwOYVUGFmwS7hw8hVM1v3p3TpjEo9WCZhg4XLYBCvlCANWzW3sWKN9wIDAQAB';
+$privateKey = 'MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCKqgxszb4ObuoJ5U8Ddz2ytOFFc81fmniRFo+jvNtrOegMUpd9gBPvMEaBzdeJC74Cg/HsAE7f9u24APLi0oLYZCwthhs01xTIhAis8h7IYCSdWrcbn8gpB7apSe4Ud0dS6zkuRcDTVGsLNrzNOMKHfT8S13dtsqDyDBBhSpkBwe9TkeLQB8K5ZjDYJ8uTtsrcey95eNFe22r8qAhv562yUBTG0PjZpQmiJWD0T6URLLzNYEOXEzsVVZgPKBNWSVZvMjLg32eFv/2Mw+x83n44w39FLx6E347A5hVQYWbBLuHDyFUzW/endOmMSj1YJmGDhctgEK+UIA1bNbexYo33AgMBAAECggEAZlZ6NRLjYeOZ9xO17OjkMDAu0gNVX2mx8eKkwENx7QEfsXiDNayBCdanMsWofQydf13B/lt72u9zIooQuDaFOw8zS6XeDnFudU582KcY8OmEHF4HJewW3bFDrk1R2OjvStMvsGbqmQ2EsxIC5bMuXrChDFbZXayn+/vLWwKjShetqPkN2cRHcKWaASqOnWOAnpgHm5VuGu2ttaR5K14pmMq7a0TOaj7lDYyHelWejCfqFFiWfYLefNj3oFVAfiNxwsxj8q42xWwPZ/Xzhn8p0cInja//1AMuNLIadyC4r6VR7cOIKm4F7XwCTCRCSmPbhDu5pOEA//pERFTTNtE7gQKBgQDdzbujAJRqkn0WwPtbKE7ZxR2KFjc4fM1LyPyODz4tbXhtXtZeMcjjsKn8pTpzbgj+Cfmhz9X8sKAqdxe1WJTtkgg5zbvPQ8A+Q0Su19LZMfFCuC0RCp1SX/asl4XeQe6fQZCft3AG7RgA5HjHET0/7Mpwb3C7A/xBwMfn51T0+wKBgQCgCuy9NmpG2bG/MEz1gDojYe08yKOGgTLp6v/UZcn+U6Oit37/sFe0vU7n9NMtkCLdhf2mqF1cNCUv+rzHkvtgG8FaNlsuozOMXuTNCJ6nj/IypMOnU8vV9DL9zUq5cUnny7HKwCTuS8FYZTjI75GfDDwrxIhhzOIkh2leQD+iNQKBgDV1xOgA18ToEeZOFUdfa8HpVLlXqW+gBQtjIhxLaD0iyYfy99A0R6s5hX8zg+cWemxgkx6BLZ5+I9yYX8qB00N/kyP7hmzqc4eORxutQVDATNo78gDNgiW8o4Pt8YIkehNAhk84s3O36bUtXD7+1Lh3pkN7WLx6tW5TvNsUUtHJAoGBAIYOoJ8dpYgTccAkRVKfRhO9Q2tW5SMVtgAayJCxcrGGfdseuVKT8+OBb0b83KedxJaqVf3zqcBCLaQy80543/dxSFS4k0hNjDBYjG7yeXMCMG4bdYgDuQpOsyfFfoI3UyDGjva2XDj/W8UfhKFLiz8ekIhY56SEaikPBEPerW7BAoGBAIW+5xD7BH4Z/w+GNrA5WFWNNH02+32AD/k6W59GQ+ejrFzCa9/SPa/7WEbBjKNWnzYl9pcdA0lP3LGEbKzrm6Zy+6lCHI6Hx/o4PbHaKTQg2jAIJdEUrAOKR44rjIY41a8wtgilfZA4I4zDSvJMPkMYOItIXjFCwHTxLLfw0CJp';
+$request = array(
+    "appId" => "1000",
+    "orderNo" => "1000"
+    …………
+);
+
+$sign = new SignUtils();
+$merchantSecretKey = "WFZflvcV75jYP2G6QIpSsMtoX1e4awxO";
+
+$content = $sign->getSign($request,$merchantSecretKey);
+
+$rsa = new SHA256WithRSAUtils();
+
+$sign = $rsa->buildRSASignByPrivateKey($content,$privateKey);
+$flag = $rsa->buildRSAverifyByPublicKey($content,$publicKey,$sign);
+var_dump($content,$sign,$flag)
+```
+
+
+@tab js
+```js
+import { sign as _sign, constants, verify as _verify } from 'crypto';
+
+
+const pub = `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxsSXTf7oaZrpmThFMadf8gvfAGzXyicEpac7w3Y7saP8Nq/hXxQpXW/KKDfAodE+IgE7elpr44X52aDqusP6mc552dTK/WR7UUrW/maoKWM7BAkbGxoXFaqjiEEGrG2N3n9kPtJ8mNaf7UnMQm04SgrruhJC6d7s1scm3YUWmzW76YvcW9+irKY6pkrGZ431Bqe2/QJ8cWoDoNwDVRuoux5tp88EinIZrCis+ySL/uB3+s1SokG3fy01+TaMgPqcqFTq6L75AgY012I8QUaSmP5usTPDiNY3xcBXK1UFhuL9yXMZcMehU+Cr8doJnHgDYNrMGYc54yuF8sIGNcrqFwIDAQAB
+-----END PUBLIC KEY-----
+`
+
+
+const pri = `-----BEGIN PRIVATE KEY-----
+MIIEwAIBADANBgkqhkiG9w0BAQEFAASCBKowggSmAgEAAoIBAQDGxJdN/uhpmumZOEUxp1/yC98AbNfKJwSlpzvDdjuxo/w2r+FfFCldb8ooN8Ch0T4iATt6WmvjhfnZoOq6w/qZznnZ1Mr9ZHtRStb+ZqgpYzsECRsbGhcVqqOIQQasbY3ef2Q+0nyY1p/tScxCbThKCuu6EkLp3uzWxybdhRabNbvpi9xb36KspjqmSsZnjfUGp7b9AnxxagOg3ANVG6i7Hm2nzwSKchmsKKz7JIv+4Hf6zVKiQbd/LTX5NoyA+pyoVOrovvkCBjTXYjxBRpKY/m6xM8OI1jfFwFcrVQWG4v3Jcxlwx6FT4Kvx2gmceANg2swZhznjK4XywgY1yuoXAgMBAAECggEBAKF/GXBFrJAhTaswDQhK9amz+3xc8vdMvHnbZrNpXRb4JfRI8tRNjU5dheMnaVwQpmr6lVjUHtS+BkLMe+tDUFmnaVmTi1pWSdvC8uvAfOEjvs+Iln1utVLlUfli3Ak8+gfNeaWRX6rOtyIU0+Ek3JdMSDrmm3dpqQTYyrsxZyyzDP1rupeSWr+NpMHL6H/C1Pkb+iXDgwcH7QjQjFQIcZ/xwS1Kgjcv5ExmdzDjHcXjMwyOYvVs/QE2UiopiNHJLkbJqnu94t3KsKybIAeif9Bb94DHzKSvkyCjuY4eZ5qZ9zQYzH8J/ovFy8lH3fUwCwiNXSzhO8S7qVJRG5jGgAECgYEA7L7xNd3BxWjOKS+5FmfNH3jdLebDCs7cIykawNcihTSZx/6hNZT40UKs9L8MtSyUKprYQU7Z/J6/VcQalQmKE/zsitbdJQmEtc3kelXXPR7lQmwus0jU5PKEOnYeucSgNEWWdkZDbUioICw36syN1dvlvpKKCCB/9882zlch87MCgYEA1u7yYY2/KS3NvWOQ3meLgPU/hRQa8KlFUZ46Y4wG9S1sy6pagMwAiQuV2zMLJz1ezDjfm8Td8vZWFyDSfaSVdOaF/As5/RGEgOzRsl4xJOy754QZnURUv1zRN4uO9fJA2vxmew0tchfQvYuxUPrso2avpAQ6Os8E301qsJdrTg0CgYEA1/IXTV4YeLvviQv51SEbroBtp4fdEse7bur4dzwFReHD//QYEirvhtk9sAVwTvX5tJ8HcRK+rboTpuS4podMBo1nKgFxOG5lOfwzUw9nxF2hGyRYuLpPTwKTcEv8HNDonKV46CuRJ2blzGrpGmg5XAA3oMxD0cPrVhwRzscVthcCgYEAokHDAzhh/rFQZ1A59lxO6Wy7pjhWWiY/aW09ARedzQuc3WfeaOsY4Fy5pcA0BEyFO0EYNdz5/UhQF6e0oBtWpOi+b1b+UPkfgcDGUZRgH1MES7PjLmF+ZPSqEPevViarJWZz6yM4krA96koB83Nqn7SOlhCG8QyFzhoAmA3HeSUCgYEAzyoKo1dv//tO8917Lr7G4EuiXVjAYn/zBJ/0bZ6pDd0Myo6wMntbbKFt1MJCm8ybrcov/ttFA8SCtFWpZrrPX1YU2Zkb+gkBp9H9cUwOZbAHBTQKdT5QSs9DDIerHFEAT6ZjGDqzdJNfaN+H0D833YDGLe4CTFMPsJ5sdVoIrrQ=
+-----END PRIVATE KEY-----`
+
+
+const data = "Hello, World!";
+
+
+// 将字符串格式的密钥转换为Buffer对象
+const privateKeyBuffer = Buffer.from(pri, 'utf-8');
+const publicKeyBuffer = Buffer.from(pub, 'utf-8');
+
+
+// 使用私钥对数据进行签名
+const sign = _sign('sha256', Buffer.from(data), {
+    key: privateKeyBuffer,
+    padding: constants.RSA_PKCS1_PADDING
+});
+
+
+console.log('Signature:', sign.toString('base64'));
+
+
+// 使用公钥验证签名
+const verify = _verify('sha256', Buffer.from(data), {
+    key: publicKeyBuffer,
+    padding: constants.RSA_PKCS1_PADDING
+}, sign);
+
+
+console.log('Verification result:', verify);
+
+
+Signature: YhuB6NaBumqFh9owd4qiTFAwaKS0sCBWAqS1CkEIIm2Tj5bJeUe7JZ1hbr6lS7usmNpIYiuRdI8E0X44FEiZzPumrC0G85+NEKB7jYP7qBJabRtlpChk9xdljLrRS3kL58cH2wbwFM5Fw+Ja1lElM5Kuy6ZIlWSGox7gid+pX6hExSaOlWDDTzhYO9eeSQBfIl4NIVXzniKwpImCwbwugZyWXLi1CK6DHSiqj7b29q+VdY8p3jVMaLuue4lAbXHR30/gbJGRIw/m27uJ1rL8l/652BqTpoJWAm6WvgUXDk+rv+uRNILdq7xspp0H6ImY4zKdD2iCrcqAn7Su6+DxnQ==
+Verification result: true
+
+```
+:::
+
+
+## 5. 示例报文
+请求
+```json
+// 菲律宾代收请求
+POST https://uat-interface.haipay.asia/php/collect/apply
+Content-Type: application/json
+{
+    "appId": 1054,
+    "orderId": "M233323000059",
+    "amount": "300",
+    "phone": "09230219312",
+    "email": "23423@qq.com",
+    "name": "test",
+    "inBankCode": "PH_QRPH_DYNAMIC",
+    "payType": "QR",
+    // sign: 根据请求body使用merchant privateKey签名
+    "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="  
+}
+```
+
+响应
+```json
+HTTP/1.1 200 OK
+Content-Type:application/json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M233323000059",
+        "orderNo": "6023071013539074",
+        "payUrl": "https://a.api-uat.php.com/1L9zQS2",
+        "bankCode": "GCASH_STATIC_VA",
+        "bankNo": "PC0007I10000035",
+        "qrCode": "00020101021228760011ph.ppmi.p2m0111OPDVPHM1XXX0315777148000000017041652948137245442930503001520460165303608540810000.php Of Mandalu62310010ph.allbank05062110000803***88310012ph.ppmi.qrph0111OPDVPHM1XXX63042763",
+        // sign:HaiPay签名信息，商户根据响应json body以及HaiPay publicKey验签
+        "sign": "YEoA8Y2JzQFGVzwJSqmemm1Kfv/bfyIfCqv2dp7RNzT5B72AQvdD+nt2nR4sL1HWscvmNHyVt5ovAi7MMhy3ziih/sMph+wPx4YjH3W1h5DyBvSlWvaKfKrK5ViomZ0pPYWydwRHnnRnicxToHK9S6qtSy7Q73O0hdz4hJ9p41Th3ycBl2Q9SeqSZYSY1ohcPDhdyRf2y0prb8rHgpBKzxZ5BKX/1bsE9OmsSEHAEYT8OGgko6aNe8XPAhr4G48cpWTftvnGQuzh0O65nuZRI/PF+Axt2zJCVbFHDDSREI9NlAT82ebDqhlVdxQzKE67D1nxgjb3dPmDUYHOBpmwxQ=="  
+    }
+}
+```

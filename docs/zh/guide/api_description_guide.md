@@ -1,0 +1,152 @@
+---
+title: 接口说明
+permalink: /guide/api_description_guide/
+---
+# 接口说明
+  
+## 1. 接入方式
+| 接口类型 | API文档路径 | 适用业务范围 | 功能说明                                                 |
+| :------- | :---------- | :----------- |:-----------------------------------------------------|
+| 全球收银台 | 全球（收银台） | 全球业务 | 一次对接，支持全球多种支付方式。系统根据用户IP自动跳转至对应国家支付页面，用户可选择支付方式完成付款。 |
+| 本地收银台 | 北美、南美、欧洲、亚洲、中东等单一国家业务 | 单一国家业务 | 独立对接，API同步返回指定国家支持的支付页面，供用户选择并完成支付。                  |
+| 纯API支付接口 | 北美、南美、欧洲、亚洲、中东等单一国家业务 | 单一国家业务 | 独立对接，API同步返回指定支付方式的相关信息，便于客户自定义支付页面。                 |
+| 其他支付接口 | 全球（国际信用卡、信用卡订阅）和稳定币 | 全球业务 | 独立对接，API同步返回支付页面，一次性支付; 信用卡支持订阅扣款。                 |
+
+## 2. 通信协议
+商户接入HaiPay服务，调用API须遵循以下规则：
+| 类型            | 说明                                                                                                                 |
+| :-------------- | :------------------------------------------------------------------------------------------------------------------- |
+| 传输方式        | 为保证交易安全性，采用HTTPS传输                                                                                      |
+| 提交方式        | 采用POST方法提交                                                                                                     |
+| 数据格式        | 提交和返回数据都为application/json格式                                                                               |
+| 字符编码        | 统一采用UTF-8字符编码                                                                                                |
+| 签名算法        | SHA256WithRSA                                                                                                        |
+| 签名要求        | 请求和接受数据均需要校验签名，详细方法参考 [配置与签名](/zh/docs/guide/config_settings_and_signature_rules_guide.md) |
+| SSL/TLS协议版本 | TLSv1.2 TLSv1.3
+
+## 3. 接口结构
+如下是调用HaiPay接口的http结构，接口名称放到请求地址后面，data里边的内容为不同业务结构拼接而成的报文
+```json
+POST https://uat-interface.haipay.asia/{币种}/{接口地址}
+{
+    "appId": 1054,
+    "orderId": "M233323000059",
+    ...
+    // sign: 根据请求body使用merchant privateKey签名
+    "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="  
+}
+```
+
+请求地址：
+| 联调环境 | 请求地址                                                               |
+| :------- | :--------------------------------------------------------------------- |
+| 测试     | [https://uat-interface.haipay.asia](https://uat-interface.haipay.asia) |
+| 生产     | 上线提供                                                               |
+
+
+## 4. 接口列表
+
+<table>
+    <tbody>
+        <tr>
+            <td><b>产品</b></td>
+            <td><b>接口名称</b></td>
+            <td><b>接口地址</b></td>
+            <td><b>描述</b></td>
+        </tr>
+        <tr>
+            <td rowspan="3">代收</td>
+            <td>代收申请</td>
+            <td>/collect/apply</td>
+            <td rowspan="3">用户向商户进行付款(充值)</td> 
+        </tr>
+        <tr>
+            <td>代收查询</td>
+            <td ref>/collect/query</td>
+        </tr>
+        <tr>
+            <td>退款申请</td>
+            <td>/refund/apply</td>
+        </tr>
+        <tr>
+            <td rowspan="2">代付</td>
+            <td>代付申请</td>
+            <td>/pay/apply</td>
+            <td rowspan="2">商户向用户进行付款(提现)</td>
+        </tr>
+        <tr>
+            <td>代付查询</td>
+            <td>/pay/query</td>
+        </tr>
+        <tr>
+            <td>账户余额</td>
+            <td>查询账户</td>
+            <td>/account/ledger</td>
+            <td>商户进行余额查询</td>
+        </tr>
+    </tbody>
+</table>
+
+详情查看 [接口文档](/zh/docs/guide/api_doc_list.md) 。
+
+
+## 5. 参数
+
+
+**请求接口公共参数**
+
+| 参数名 | 必选 | 类型    | 说明                                                                                       |
+| :----- | :--- | :------ | :----------------------------------------------------------------------------------------- |
+| appId  | 是   | Integer | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                                         |
+| sign   | 是   | String  | 签名（详情查看 [配置与签名](/zh/docs/guide/config_settings_and_signature_rules_guide.md)） |
+
+**请求示例：**
+```json
+{
+    "appId": 1000,
+    ......
+    "sign": "fCywFPOojpRIPi4ph81+CwoAvMXV1va2XR1DQVJeGnZwzNVd0hmvpud7nbP/3lc5JeTVELomruwVTGLtr+BTGT0IweAFTGNvNUuqOs3I4KG5tjvhPM7wm9NtwK2uAX1niLoylt4DcLfy2TeaxPQYDCJJRf7Qm7sDwJX5VoFt8RO9EC2ih+0Ike2+cAyRpIfKENPoIGQbUwvH6KkzHzjljcuvcSqq4D+iZid7up58A866RFrrJH9vkwaF+2mYxa/7awQIwAq8HPOxHkzLfVg74MZC8I1TOKvQAxkAquoNMMyrcAqRIopURfrgEaAtyW/ThPdyduYVlFeMg7BkpGLqZQ=="
+}
+```
+
+**响应接口公共参数**
+| 参数名 | 必选 | 类型   | 说明                   |
+| :----- | :--- | :----- | :--------------------- |
+| status | 是   | String | 1：正常，0：异常       |
+| error  | 是   | String | 错误编码               |
+| msg    | 是   | String | 错误描述               |
+| data   | 是   | Object | 业务数据(**参与验签**) |
+
+**响应示例：**
+
+```json
+{
+    {
+        "status": "1",
+        "error": "00000000",
+        "msg": "",
+        "data": {
+            ......
+            "sign": "PWA7B2u1hGr1VRxOCZbRuXQXtJiA6BgPExFnFv73hKJ+zcZfOe/R+y+inlwWcdDBzfix35+dl6raEs/yG/hcYyQOwDQ+mVjIt5wFk6iX7GPw557138yBdAmuMqvWM2IF+omLFcQFJvzfbR84rCyOmebDJlhkYMga5TTFHVLicUx3bPIrOJLoWJHrnZfcVFAJ+P5mUQhMH/cf+YmYZvrqq34pMJh6PcP5vyruJ8aNV0QfyHR42AHLIgp+HnOcZpA0aUzFXM5zpsgXK3QR/KO3vLiKd77UaZNO6g5TN/Ck2MtLkBVxyvIHstgXFXKF1e+uc91FdBHK5nfmrjLQ2wyeUA=="
+        }
+    }
+}
+```
+
+**错误编码**
+
+| 错误编码 | 英文回复                                                           | 中文含义                                 |
+|:-----|:---------------------------------------------------------------|:-------------------------------------|
+| 1001 | param is null                                                  | 参数为空                                 |
+| 1002 | Illegal Param                                                  | 非法参数                                 |
+| 1003 | system exception                                               | 系统异常(**订单可能已入库，等待异步通知或者查询结果确定最终状态**) |
+| 1004 | system is busy                                                 | 系统繁忙(**订单可能已入库，等待异步通知或者查询结果确定最终状态**) |
+| 4005 | order already exit                                             | 订单已存在                                |
+| 4011 | appId do not exit                                              | 业务ID不存在                              |
+| 4012 | you do not have an available product, please connect admin     | 商户业务产品不可用，联系管理员                      |
+| 4013 | order not exit                                                 | 订单不存在                                |
+| 4014 | order is already end status                                    | 订单为终态                                |
+| 4015 | this merchant do not have a collect bank                       | 没有可用的收款账号                            |
+| 4016 | your account do not have enough money                          | 账号余额不足                               |
+| 4031 | ip adress is Forbidden                                         | 非法IP                                 |
+| 5012 | pay in channel not functional, please connect customer service | 系统异常                                 |
