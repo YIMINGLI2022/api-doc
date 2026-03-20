@@ -2,11 +2,9 @@
 title: 'Collect Apply'
 openapi: 'docs/zh/openapi.json POST /global/cashier/collect/apply'
 ---
-
 import SignGenerator from "../../snippets/sign-utils.jsx"
 
 <SignGenerator />
-
 export const Counter = () => {
     const [count, setCount] = useState(0)
 
@@ -41,7 +39,6 @@ export const Counter = () => {
 }
 
 <Counter />
-
 
 [//]: # (import { useState } from 'react')
 
@@ -195,3 +192,160 @@ export const Counter = () => {
 
 [//]: # ()
 [//]: # (<CollectApplyPlayground />)
+
+export const APITest = () => {
+  const [order, setOrder] = useState(JSON.stringify({
+    appId: '', subject: '', currency: '', orderId: '',
+    amount: '', name: '', email: '', partnerUserId: '', sign: ''
+  }, null, 2))
+  const [secretKey, setSecretKey] = useState('')
+  const [privateKey, setPrivateKey] = useState('')
+  const [sign, setSign] = useState('')
+  const [msg, setMsg] = useState(null)
+  const [response, setResponse] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  function b64ToBytes(b64) {
+    const bin = atob(b64)
+    const out = new Uint8Array(bin.length)
+    for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i)
+    return out
+  }
+
+  function bytesToB64(buf) {
+    let s = ''
+    const bytes = new Uint8Array(buf)
+    for (let i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i])
+    return btoa(s)
+  }
+
+  function derLen(n) {
+    if (n < 0x80) return [n]
+    if (n < 0x100) return [0x81, n]
+    return [0x82, (n >> 8) & 0xff, n & 0xff]
+  }
+
+  function pkcs1ToPkcs8(pkcs1) {
+    const ver = [0x02, 0x01, 0x00]
+    const alg = [0x30, 0x0d, 0x06, 0x09, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x01, 0x01, 0x05, 0x00]
+    const oct = [0x04, ...derLen(pkcs1.length), ...pkcs1]
+    const inner = [...ver, ...alg, ...oct]
+    return new Uint8Array([0x30, ...derLen(inner.length), ...inner])
+  }
+
+  function getSignStr(params, sk) {
+    const keys = Object.keys(params).sort()
+    const pairs = []
+    for (const k of keys) {
+      const v = params[k]
+      if (v !== '' && v != null && k !== 'sign') pairs.push(k + '=' + v)
+    }
+    return pairs.join('&') + '&key=' + sk
+  }
+
+  async function rsaSign(message, pemKey) {
+    let pem = pemKey.trim()
+    if (!pem.startsWith('-----')) {
+      pem = '-----BEGIN RSA PRIVATE KEY-----\n' + pem + '\n-----END RSA PRIVATE KEY-----'
+    }
+    const isPkcs1 = pem.includes('RSA PRIVATE KEY')
+    const b64 = pem.replace(/-----[^-]+-----/g, '').replace(/\s+/g, '')
+    let keyBytes = b64ToBytes(b64)
+    if (isPkcs1) keyBytes = pkcs1ToPkcs8(keyBytes)
+    const cryptoKey = await crypto.subtle.importKey(
+      'pkcs8', keyBytes.buffer,
+      { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+      false, ['sign']
+    )
+    const sig = await crypto.subtle.sign(
+      'RSASSA-PKCS1-v1_5', cryptoKey,
+      new TextEncoder().encode(message)
+    )
+    return bytesToB64(sig)
+  }
+
+  const handleGenerate = async () => {
+    try {
+      setMsg(null)
+      if (!secretKey.trim()) return setMsg({ t: 'e', s: '请输入 secretkey' })
+      if (!privateKey.trim()) return setMsg({ t: 'e', s: '请输入 privatekey' })
+      const body = JSON.parse(order)
+      const message = getSignStr(body, secretKey)
+      const signature = await rsaSign(message, privateKey)
+      setSign(signature)
+      body.sign = signature
+      setOrder(JSON.stringify(body, null, 2))
+      setMsg({ t: 's', s: '签名生成成功' })
+    } catch (err) {
+      setMsg({ t: 'e', s: '签名失败: ' + err.message })
+    }
+  }
+
+  const handleSubmit = async () => {
+    try {
+      setMsg(null)
+      setLoading(true)
+      const body = JSON.parse(order)
+      const res = await fetch('https://uat-interface.haipay.asia/pay/global/cashier/collect/apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      })
+      const data = await res.json()
+      setResponse(JSON.stringify(data, null, 2))
+      setMsg({ t: data.status === '1' ? 's' : 'e', s: data.status === '1' ? '请求成功' : (data.msg || '请求失败') })
+    } catch (err) {
+      setMsg({ t: 'e', s: '请求失败: ' + err.message })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const ls = { width: '90px', fontWeight: 600, fontSize: '14px', flexShrink: 0, paddingTop: '8px', textAlign: 'right' }
+  const is = { flex: 1, padding: '8px 12px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '14px', fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' }
+  const rs = { display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }
+
+  return (
+    <div style={{ border: '1px solid #e5e7eb', borderRadius: '8px', padding: '20px', marginTop: '24px' }}>
+      <div style={rs}>
+        <label style={ls}>order</label>
+        <textarea value={order} onChange={e => setOrder(e.target.value)} rows={12} spellCheck={false}
+          style={{ ...is, fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace', fontSize: '13px', lineHeight: '1.5', resize: 'vertical', width: '100%' }} />
+      </div>
+      <div style={rs}>
+        <label style={{ ...ls, paddingTop: '8px' }}>secretkey</label>
+        <input type="text" value={secretKey} onChange={e => setSecretKey(e.target.value)} placeholder="商户密钥" style={is} />
+      </div>
+      <div style={rs}>
+        <label style={{ ...ls, paddingTop: '8px' }}>privatekey</label>
+        <input type="text" value={privateKey} onChange={e => setPrivateKey(e.target.value)} placeholder="商户私钥" style={is} />
+      </div>
+      <div style={rs}>
+        <label style={{ ...ls, paddingTop: '8px' }}>sign</label>
+        <input type="text" value={sign} onChange={e => setSign(e.target.value)} placeholder="签名值（可手动录入）" style={is} />
+      </div>
+      <div style={{ display: 'flex', gap: '12px', marginLeft: '102px' }}>
+        <button onClick={handleGenerate} style={{ padding: '8px 20px', background: '#16A34A', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 500 }}>
+          生成签名
+        </button>
+        <button onClick={handleSubmit} disabled={loading} style={{ padding: '8px 20px', background: '#2563EB', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 500, opacity: loading ? 0.6 : 1 }}>
+          {loading ? '提交中...' : '提交'}
+        </button>
+      </div>
+      {msg && (
+        <div style={{ marginTop: '12px', padding: '8px 12px', borderRadius: '6px', fontSize: '14px',
+          background: msg.t === 'e' ? '#FEF2F2' : '#F0FDF4', color: msg.t === 'e' ? '#DC2626' : '#16A34A' }}>
+          {msg.s}
+        </div>
+      )}
+      {response && (
+        <div style={{ marginTop: '16px' }}>
+          <label style={{ fontWeight: 600, fontSize: '14px' }}>Response</label>
+          <pre style={{ marginTop: '6px', padding: '12px', background: '#f3f4f6', borderRadius: '6px', fontSize: '13px', overflow: 'auto', maxHeight: '300px', whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>{response}</pre>
+        </div>
+      )}
+    </div>
+  )
+}
+
+<APITest />
