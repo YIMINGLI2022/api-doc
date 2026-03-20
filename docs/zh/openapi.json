@@ -44,10 +44,7 @@
                   "partnerUserId": {
                     "type": "string"
                   },
-                  "key": {
-                    "type": "string"
-                  },
-                  "privateKey": {
+                  "sign": {
                     "type": "string"
                   }
                 },
