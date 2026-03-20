@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "palm",
+  "theme": "aspen",
   "name": "HaiPay",
   "logo": {
     "light": "/logo/light.png",
@@ -56,9 +56,9 @@
           },
           {
             "tab": "API reference",
-            "openapi": "openapi.json",
+            "openapi": "docs/zh/openapi.json",
             "pages": [
-              "POST /global/cashier/collect/apply"
+              "docs/zh/api-reference/global/cashier/collect-apply"
             ]
           }
         ]
@@ -116,11 +116,7 @@
     }
   },
   "footer": {
-    "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
-    }
+    "socials": {}
   },
   "api": {
     "playground": {
