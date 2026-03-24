@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "aspen",
+  "theme": "palm",
   "name": "HaiPay",
   "logo": {
     "light": "/logo/light.png",
@@ -29,7 +29,8 @@
         "footer": {
           "socials": {
             "x": "https://x.com/mintlify",
-            "github": "https://github.com/mintlify"
+            "github": "https://github.com/mintlify",
+            
           }
         },
         "tabs": [
@@ -50,6 +51,94 @@
                   "docs/zh/guide/integration_process_guide",
                   "docs/zh/guide/onboarding_checklist",
                   "docs/zh/guide/phone_regex"
+                ]
+              },
+              {
+                "group": "公共支付",
+                "pages": [
+                  "docs/zh/merchant/merchant_guide",
+                  "docs/zh/merchant/merchant_list",
+                  "docs/zh/merchant/merchant_parameters",
+                  "docs/zh/merchant/merchant_signature_rules",
+                  "docs/zh/merchant/merchant_testing",
+                  "docs/zh/merchant/merchant_error_response_appendix"
+                ]
+              },
+              {
+                "group": "全球支付",
+                "pages": [
+                  {
+                    "group": "全球通用",
+                    "pages": ["docs/zh/merchant/merchant_guide"]
+                  },
+                  {
+                    "group": "北美洲",
+                    "pages": ["docs/zh/merchant/merchant_list"]
+                  },
+                  {
+                    "group": "欧洲",
+                    "pages": ["docs/zh/merchant/merchant_list"]
+                  },
+                  {
+                    "group": "南美洲",
+                    "pages": ["docs/zh/merchant/merchant_list"]
+                  },
+                  {
+                    "group": "亚洲",
+                    "pages": ["docs/zh/merchant/merchant_list"]
+                  },
+                  {
+                    "group": "中东",
+                    "pages": ["docs/zh/merchant/merchant_list"]
+                  },
+                  {
+                    "group": "稳定币",
+                    "pages": ["docs/zh/merchant/merchant_list"]
+                  }
+                ]
+              },
+              {
+                "group": "统一支付",
+                "pages": [
+                  "docs/zh/merchant/merchant_guide",
+                  "docs/zh/merchant/merchant_list",
+                  "docs/zh/merchant/merchant_parameters",
+                  "docs/zh/merchant/merchant_signature_rules",
+                  "docs/zh/merchant/merchant_testing",
+                  "docs/zh/merchant/merchant_error_response_appendix"
+                ]
+              },
+              {
+                "group": "测试与上线",
+                "pages": [
+                  "docs/zh/merchant/merchant_guide",
+                  "docs/zh/merchant/merchant_list",
+                  "docs/zh/merchant/merchant_parameters",
+                  "docs/zh/merchant/merchant_signature_rules",
+                  "docs/zh/merchant/merchant_testing",
+                  "docs/zh/merchant/merchant_error_response_appendix"
+                ]
+              },
+              {
+                "group": "附录",
+                "pages": [
+                  "docs/zh/merchant/merchant_guide",
+                  "docs/zh/merchant/merchant_list",
+                  "docs/zh/merchant/merchant_parameters",
+                  "docs/zh/merchant/merchant_signature_rules",
+                  "docs/zh/merchant/merchant_testing",
+                  "docs/zh/merchant/merchant_error_response_appendix"
+                ]
+              },
+              {
+                "group": "商户QA",
+                "pages": [
+                  "docs/zh/merchant/merchant_guide",
+                  "docs/zh/merchant/merchant_list",
+                  "docs/zh/merchant/merchant_parameters",
+                  "docs/zh/merchant/merchant_signature_rules",
+                  "docs/zh/merchant/merchant_testing",
+                  "docs/zh/merchant/merchant_error_response_appendix"
                 ]
               }
             ]
