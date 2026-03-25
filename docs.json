@@ -205,6 +205,70 @@
                   "docs/zh/api-reference/brl/api/payApply",
                   "docs/zh/api-reference/brl/api/payQuery"
                 ]
+              },
+              {
+                "group": "香港",
+                "pages": [
+                  "docs/zh/api-reference/hkd/api/collectApply",
+                  "docs/zh/api-reference/hkd/api/collectQuery"
+                ]
+              },
+              {
+                "group": "新加坡",
+                "pages": [
+                  "docs/zh/api-reference/sgd/api/collectApply",
+                  "docs/zh/api-reference/sgd/api/collectQuery"
+                ]
+              },
+              {
+                "group": "台湾",
+                "pages": [
+                  "docs/zh/api-reference/twd/api/collectApply",
+                  "docs/zh/api-reference/twd/api/collectQuery"
+                ]
+              },
+              {
+                "group": "日本",
+                "pages": [
+                  "docs/zh/api-reference/jpy/api/collectApply",
+                  "docs/zh/api-reference/jpy/api/collectQuery"
+                ]
+              },
+              {
+                "group": "韩国",
+                "pages": [
+                  "docs/zh/api-reference/krw/api/collectApply",
+                  "docs/zh/api-reference/krw/api/collectQuery",
+                  "docs/zh/api-reference/krw/api/payApply",
+                  "docs/zh/api-reference/krw/api/payQuery"
+                ]
+              },
+              {
+                "group": "菲律宾",
+                "pages": [
+                  "docs/zh/api-reference/php/api/collectApply",
+                  "docs/zh/api-reference/php/api/collectQuery",
+                  "docs/zh/api-reference/php/api/payApply",
+                  "docs/zh/api-reference/php/api/payQuery"
+                ]
+              },
+              {
+                "group": "泰国",
+                "pages": [
+                  "docs/zh/api-reference/thb/api/collectApply",
+                  "docs/zh/api-reference/thb/api/collectQuery",
+                  "docs/zh/api-reference/thb/api/payApply",
+                  "docs/zh/api-reference/thb/api/payQuery"
+                ]
+              },
+              {
+                "group": "越南",
+                "pages": [
+                  "docs/zh/api-reference/vnd/api/collectApply",
+                  "docs/zh/api-reference/vnd/api/collectQuery",
+                  "docs/zh/api-reference/vnd/api/payApply",
+                  "docs/zh/api-reference/vnd/api/payQuery"
+                ]
               }
             ]
           }
