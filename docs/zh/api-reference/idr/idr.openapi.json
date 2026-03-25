@@ -7,11 +7,11 @@
   },
   "tags": [],
   "paths": {
-    "/usd/collect/apply": {
+    "/idr/collect/apply": {
       "post": {
         "summary": "代收申请",
         "deprecated": false,
-        "description": "",
+        "description": "创建代收订单",
         "tags": [],
         "parameters": [],
         "requestBody": {
@@ -26,23 +26,30 @@
                   },
                   "orderId": {
                     "type": "string",
-                    "description": "商户订单号(必须保证唯一性，长度不超过48)"
+                    "description": "商户订单号(必须保证唯一性，长度不超过48)",
+                    "maxLength": 48
                   },
                   "name": {
                     "type": "string",
-                    "description": "用户姓名，推荐使用真实姓名，格式：包含firstName和lastName，以空格分割"
+                    "description": "付款人姓名(付款人姓名格式:英文或印尼语大小写且允许有空格,1-30位,\"firstName middleName lastName\" (middleName非必填,特殊字符支持!-)",
+                    "minLength": 1,
+                    "maxLength": 30,
+                    "pattern": "^[A-Za-z\\u0000-\\u007F\\s!-]+$"
                   },
                   "phone": {
                     "type": "string",
-                    "description": "真实手机号（格式参考电话号码格式）"
+                    "description": "真实手机号(08xxxxxxxxxx)，（格式参考 电话号码格式 ）",
+                    "pattern": "^08[0-9]{8,11}$"
                   },
                   "email": {
                     "type": "string",
-                    "description": "真实电子邮件"
+                    "description": "真实电子邮件",
+                    "format": "email"
                   },
                   "amount": {
                     "type": "string",
-                    "description": "交易金额（精确到小数点后两位；禁止添加标点符号，例如：\",\"）"
+                    "description": "交易金额(单位：印尼盾）",
+                    "pattern": "^[0-9]+$"
                   },
                   "payType": {
                     "type": "string",
@@ -52,21 +59,25 @@
                     "type": "string",
                     "description": "支付方式编码"
                   },
-                  "clientIp": {
-                    "type": "string",
-                    "description": "用户端ip"
-                  },
                   "callBackUrl": {
                     "type": "string",
-                    "description": "用户支付成功后跳转地址"
+                    "description": "用户支付成功后跳转地址",
+                    "format": "uri"
                   },
                   "callBackFailUrl": {
                     "type": "string",
-                    "description": "用户支付失败后跳转地址"
+                    "description": "用户支付失败后跳转地址",
+                    "format": "uri"
                   },
                   "notifyUrl": {
                     "type": "string",
-                    "description": "回调地址"
+                    "description": "回调地址",
+                    "format": "uri"
+                  },
+                  "currency": {
+                    "type": "string",
+                    "description": "币种(默认IDR)",
+                    "default": "IDR"
                   },
                   "subject": {
                     "type": "string",
@@ -78,7 +89,8 @@
                   },
                   "partnerUserId": {
                     "type": "string",
-                    "description": "用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。"
+                    "description": "用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。",
+                    "pattern": "^[A-Za-z0-9\\-~!@#$%&*()_]+$"
                   },
                   "sign": {
                     "type": "string",
@@ -96,7 +108,6 @@
                   "inBankCode",
                   "callBackUrl",
                   "callBackFailUrl",
-                  "subject",
                   "partnerUserId",
                   "sign"
                 ]
@@ -131,7 +142,7 @@
                       "properties": {
                         "orderId": {
                           "type": "string",
-                          "description": "商户订单号"
+                          "description": "商户订单号(必须保证唯一性)"
                         },
                         "orderNo": {
                           "type": "string",
@@ -139,218 +150,43 @@
                         },
                         "payUrl": {
                           "type": "string",
-                          "description": "支付链接"
+                          "description": "返回的是收款地址 其他时候返回的是指引或者详情"
                         },
-                        "clientToken": {
+                        "bankNo": {
                           "type": "string",
-                          "description": "客户端令牌"
+                          "description": "收款卡号(VA)"
+                        },
+                        "bankCode": {
+                          "type": "string",
+                          "description": "收款银行"
+                        },
+                        "qrCode": {
+                          "type": "string",
+                          "description": "二维码内容-可自行生成二维码(QR)"
                         },
                         "sign": {
                           "type": "string",
                           "description": "签名"
                         }
                       },
-                      "additionalProperties": false
+                      "additionalProperties": true,
+                      "description": "返回数据对象"
                     }
                   },
-                  "additionalProperties": false
+                  "additionalProperties": true
                 }
               }
-            },
-            "headers": {}
-          }
-        },
-        "security": []
-      }
-    },
-    "/usd/mit/apply": {
-      "post": {
-        "summary": "代收申请 MIT模式",
-        "deprecated": false,
-        "description": "appId需使用美元对应的，用户支付成功后增加美元余额",
-        "tags": [],
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "appId": {
-                    "type": "integer",
-                    "description": "业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）"
-                  },
-                  "orderId": {
-                    "type": "string",
-                    "description": "商户订单号(必须保证唯一性，长度不超过48)",
-                    "maxLength": 48
-                  },
-                  "name": {
-                    "type": "string",
-                    "description": "用户姓名，推荐使用真实姓名，格式：包含firstName和lastName，以空格分割的，示例：Donald John Trump"
-                  },
-                  "phone": {
-                    "type": "string",
-                    "description": "真实手机号（格式参考电话号码格式）"
-                  },
-                  "email": {
-                    "type": "string",
-                    "description": "真实电子邮件",
-                    "format": "email"
-                  },
-                  "amount": {
-                    "type": "string",
-                    "description": "交易金额（精确到小数点后两位；禁止添加标点符号，例如：\",\"）",
-                    "pattern": "^\\d+\\.\\d{2}$"
-                  },
-                  "payType": {
-                    "type": "string",
-                    "description": "支付方式类型"
-                  },
-                  "inBankCode": {
-                    "type": "string",
-                    "description": "支付方式编码"
-                  },
-                  "clientIp": {
-                    "type": "string",
-                    "description": "用户端ip",
-                    "format": "ipv4"
-                  },
-                  "callBackUrl": {
-                    "type": "string",
-                    "description": "用户支付成功后跳转地址",
-                    "format": "uri"
-                  },
-                  "callBackFailUrl": {
-                    "type": "string",
-                    "description": "用户支付失败后跳转地址",
-                    "format": "uri"
-                  },
-                  "notifyUrl": {
-                    "type": "string",
-                    "description": "回调地址",
-                    "format": "uri"
-                  },
-                  "subject": {
-                    "type": "string",
-                    "description": "支付备注"
-                  },
-                  "body": {
-                    "type": "string",
-                    "description": "备注详情"
-                  },
-                  "partnerUserId": {
-                    "type": "string",
-                    "description": "用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。",
-                    "pattern": "^[A-Za-z0-9\\-~!@#$%&*()_]+$"
-                  },
-                  "tokenID": {
-                    "type": "string",
-                    "description": "支付令牌，首次交易不需要，后续主动扣款需要，通过回调获取"
-                  },
-                  "token": {
-                    "type": "string",
-                    "description": "Apple Pay / Google Pay Token，自行获取传递或使用HaiPay页面"
-                  },
-                  "loadingType": {
-                    "type": "integer",
-                    "description": "0（默认） – 显示正常的支付结果页面; 1 – 显示加载中动画（loading 转圈），不展示订单信息。",
-                    "enum": [
-                      0,
-                      1
-                    ]
-                  },
-                  "cancelUrl": {
-                    "type": "string",
-                    "description": "用户取消支付URL，如果传递，用户可在支付页面点击返回到此页面",
-                    "format": "uri"
-                  },
-                  "sign": {
-                    "type": "string",
-                    "description": "签名"
-                  }
-                },
-                "required": [
-                  "appId",
-                  "orderId",
-                  "amount",
-                  "payType",
-                  "inBankCode",
-                  "callBackUrl",
-                  "callBackFailUrl",
-                  "subject",
-                  "partnerUserId",
-                  "sign"
-                ],
-                "additionalProperties": false
-              },
-              "examples": {}
             }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "description": "状态码"
-                    },
-                    "error": {
-                      "type": "string",
-                      "description": "错误码"
-                    },
-                    "msg": {
-                      "type": "string",
-                      "description": "返回信息"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "orderId": {
-                          "type": "string",
-                          "description": "商户订单号"
-                        },
-                        "orderNo": {
-                          "type": "string",
-                          "description": "平台订单号"
-                        },
-                        "payUrl": {
-                          "type": "string",
-                          "description": "支付链接"
-                        },
-                        "clientToken": {
-                          "type": "string",
-                          "description": "客户端令牌"
-                        },
-                        "sign": {
-                          "type": "string",
-                          "description": "签名"
-                        }
-                      },
-                      "additionalProperties": false
-                    }
-                  },
-                  "additionalProperties": false
-                }
-              }
-            },
-            "headers": {}
           }
         },
         "security": []
       }
     },
-    "/usd/collect/query": {
+    "/idr/collect/query": {
       "post": {
         "summary": "代收查询",
         "deprecated": false,
-        "description": "查询代收订单",
+        "description": "",
         "tags": [],
         "parameters": [],
         "requestBody": {
@@ -380,8 +216,7 @@
                   "appId",
                   "orderId",
                   "sign"
-                ],
-                "additionalProperties": false
+                ]
               },
               "examples": {}
             }
@@ -406,7 +241,269 @@
                     },
                     "msg": {
                       "type": "string",
-                      "description": "返回信息"
+                      "description": "响应消息"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "响应数据对象",
+                      "properties": {
+                        "orderId": {
+                          "type": "string",
+                          "description": "商户订单号(必须保证唯一性)"
+                        },
+                        "orderNo": {
+                          "type": "string",
+                          "description": "平台订单号"
+                        },
+                        "amount": {
+                          "type": "string",
+                          "description": "交易金额"
+                        },
+                        "actualAmount": {
+                          "type": "string",
+                          "description": "收到金额"
+                        },
+                        "fee": {
+                          "type": "string",
+                          "description": "手续费"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "description": "状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)"
+                        },
+                        "payTime": {
+                          "type": "string",
+                          "description": "支付成功时间（当status=2,4,5时有值）(印尼时间), 格式: yyyy-MM-dd HH:mm:ss"
+                        },
+                        "errorMsg": {
+                          "type": "string",
+                          "description": "失败原因（当status=3时有值）"
+                        },
+                        "sign": {
+                          "type": "string",
+                          "description": "签名"
+                        }
+                      },
+                      "additionalProperties": true
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/idr/pay/apply": {
+      "post": {
+        "summary": "代付申请",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "appId": {
+                    "type": "integer",
+                    "description": "业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）"
+                  },
+                  "orderId": {
+                    "type": "string",
+                    "description": "商户订单号(必须保证唯一性，长度不超过48)",
+                    "maxLength": 48
+                  },
+                  "amount": {
+                    "type": "string",
+                    "description": "交易金额(单位：印尼盾）"
+                  },
+                  "accountType": {
+                    "type": "string",
+                    "description": "支付方式类型"
+                  },
+                  "bankCode": {
+                    "type": "string",
+                    "description": "支付方式编码"
+                  },
+                  "accountNo": {
+                    "type": "string",
+                    "description": "用户银行账号"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "收款人姓名(收款人姓名 格式：英文或印尼语大小写且允许有空格，1-30位,\"firstName middleName lastName\" (middleName 非必填, 特殊字符支持 '.-))",
+                    "minLength": 1,
+                    "maxLength": 30,
+                    "pattern": "^[A-Za-z\\s\\'\\-\\.]+$"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "真实手机号（格式参考 电话号码格式 ）"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "真实电子邮件",
+                    "format": "email"
+                  },
+                  "notifyUrl": {
+                    "type": "string",
+                    "description": "回调地址",
+                    "format": "uri"
+                  },
+                  "subject": {
+                    "type": "string",
+                    "description": "支付备注（交易标题，商品名称，支付原因）"
+                  },
+                  "body": {
+                    "type": "string",
+                    "description": "备注详情"
+                  },
+                  "partnerUserId": {
+                    "type": "string",
+                    "description": "用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。",
+                    "pattern": "^[A-Za-z0-9\\-~!@#$%&*()_]+$"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "签名"
+                  }
+                },
+                "required": [
+                  "appId",
+                  "orderId",
+                  "amount",
+                  "accountType",
+                  "bankCode",
+                  "accountNo",
+                  "name",
+                  "phone",
+                  "email",
+                  "partnerUserId",
+                  "sign"
+                ],
+                "additionalProperties": false
+              },
+              "examples": {}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "状态码"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "错误码"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "消息"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "orderId": {
+                          "type": "string",
+                          "description": "商户订单号(必须保证唯一性)"
+                        },
+                        "orderNo": {
+                          "type": "string",
+                          "description": "平台订单号"
+                        },
+                        "sign": {
+                          "type": "string",
+                          "description": "签名"
+                        }
+                      },
+                      "additionalProperties": true
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/idr/pay/query": {
+      "post": {
+        "summary": "代付查询",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "appId": {
+                    "type": "integer",
+                    "description": "业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）"
+                  },
+                  "orderId": {
+                    "type": "string",
+                    "description": "商户订单号"
+                  },
+                  "orderNo": {
+                    "type": "string",
+                    "description": "平台订单号（响应快）"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "签名"
+                  }
+                },
+                "required": [
+                  "appId",
+                  "orderId",
+                  "sign"
+                ]
+              },
+              "examples": {}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "状态码",
+                      "default": "1"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "错误码",
+                      "default": "00000000"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "消息",
+                      "default": ""
                     },
                     "data": {
                       "type": "object",
@@ -421,33 +518,26 @@
                         },
                         "amount": {
                           "type": "string",
-                          "description": "交易金额",
-                          "pattern": "^\\d+\\.\\d{2}$"
-                        },
-                        "actualAmount": {
-                          "type": "string",
-                          "description": "收到金额",
-                          "pattern": "^\\d+\\.\\d{2}$"
+                          "description": "交易金额"
                         },
                         "fee": {
                           "type": "string",
-                          "description": "手续费",
-                          "pattern": "^\\d+\\.\\d{2}$"
+                          "description": "手续费"
                         },
                         "status": {
                           "type": "integer",
-                          "description": "状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)",
+                          "description": "订单状态(0未开始, 1放款中 2放款成功（终态） 3放款失败（终态） -1异常待确认)",
                           "enum": [
-                            -1,
                             0,
                             1,
                             2,
-                            3
+                            3,
+                            -1
                           ]
                         },
                         "payTime": {
                           "type": "string",
-                          "description": "支付成功时间（当status=2时有值）(本地时间), 格式: yyyy-MM-dd HH:mm:ss",
+                          "description": "支付成功时间（当status=2时有值）(印尼时间), 格式: yyyy-MM-dd HH:mm:ss",
                           "pattern": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$"
                         },
                         "errorMsg": {
@@ -459,244 +549,14 @@
                           "description": "签名"
                         }
                       },
-                      "required": [
-                        "orderId",
-                        "orderNo",
-                        "amount",
-                        "actualAmount",
-                        "fee",
-                        "status",
-                        "sign"
-                      ],
-                      "additionalProperties": false
-                    }
-                  },
-                  "required": [
-                    "status",
-                    "error",
-                    "msg",
-                    "data"
-                  ],
-                  "additionalProperties": false
-                }
-              }
-            },
-            "headers": {}
-          }
-        },
-        "security": []
-      }
-    },
-    "/usd/refund/apply": {
-      "post": {
-        "summary": "退款申请",
-        "deprecated": false,
-        "description": "发起原信用卡交易订单的退款操作，同步返回的退款状态请注意状态值，建议以查询接口为主。",
-        "tags": [],
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "appId": {
-                    "type": "integer",
-                    "description": "业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）"
-                  },
-                  "orderId": {
-                    "type": "string",
-                    "description": "商户申请退款订单号（商户新的订单号，不能使用原代收的商户订单号）"
-                  },
-                  "orderNo": {
-                    "type": "string",
-                    "description": "平台订单号（原代收返回的平台单号）"
-                  },
-                  "sign": {
-                    "type": "string",
-                    "description": "签名"
-                  }
-                },
-                "required": [
-                  "appId",
-                  "orderId",
-                  "orderNo",
-                  "sign"
-                ],
-                "additionalProperties": false
-              },
-              "examples": {}
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "description": "状态码"
-                    },
-                    "error": {
-                      "type": "string",
-                      "description": "错误码"
-                    },
-                    "msg": {
-                      "type": "string",
-                      "description": "消息"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "appId": {
-                          "type": "string",
-                          "description": "业务ID"
-                        },
-                        "orderNo": {
-                          "type": "string",
-                          "description": "平台订单号（原代收返回的平台单号）"
-                        },
-                        "orderId": {
-                          "type": "string",
-                          "description": "商户退款申请订单号"
-                        },
-                        "refundNo": {
-                          "type": "string",
-                          "description": "本次退款平台单号"
-                        },
-                        "status": {
-                          "type": "string",
-                          "description": "退款状态，1表示退款申请成功，0表示处理中，2表示失败"
-                        },
-                        "errorMsg": {
-                          "type": "string",
-                          "description": "错误信息，不一定有值"
-                        },
-                        "sign": {
-                          "type": "string",
-                          "description": "签名"
-                        }
-                      },
                       "additionalProperties": false,
-                      "description": "返回数据"
+                      "default": {}
                     }
                   },
                   "additionalProperties": false
                 }
               }
-            },
-            "headers": {}
-          }
-        },
-        "security": []
-      }
-    },
-    "/usd/refund/refundQuery": {
-      "post": {
-        "summary": "退款查询",
-        "deprecated": false,
-        "description": "发起退款的订单的结果查询",
-        "tags": [],
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "appId": {
-                    "type": "integer",
-                    "description": "业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）"
-                  },
-                  "orderId": {
-                    "type": "string",
-                    "description": "商户退款申请订单号"
-                  },
-                  "refundNo": {
-                    "type": "string",
-                    "description": "平台退款单号（申请退款返回的平台单号，如果有值优先查询此字段）"
-                  },
-                  "sign": {
-                    "type": "string",
-                    "description": "签名"
-                  }
-                },
-                "required": [
-                  "appId",
-                  "sign"
-                ],
-                "additionalProperties": false
-              },
-              "examples": {}
             }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "description": "状态码"
-                    },
-                    "error": {
-                      "type": "string",
-                      "description": "错误码"
-                    },
-                    "msg": {
-                      "type": "string",
-                      "description": "消息"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "appId": {
-                          "type": "string",
-                          "description": "商户订单号(必须保证唯一性)"
-                        },
-                        "orderNo": {
-                          "type": "string",
-                          "description": "平台订单号(原代收返回的平台单号)"
-                        },
-                        "orderId": {
-                          "type": "string",
-                          "description": "商户申请订单号"
-                        },
-                        "refundNo": {
-                          "type": "string",
-                          "description": "平台退款单号"
-                        },
-                        "status": {
-                          "type": "string",
-                          "description": "退款状态，1表示退款申请成功，0表示处理中，2表示失败，退款结果以此状态为准"
-                        },
-                        "errorMsg": {
-                          "type": "string",
-                          "description": "错误信息，不一定有值"
-                        },
-                        "sign": {
-                          "type": "string",
-                          "description": "签名"
-                        }
-                      },
-                      "additionalProperties": false
-                    }
-                  },
-                  "additionalProperties": false
-                }
-              }
-            },
-            "headers": {}
           }
         },
         "security": []

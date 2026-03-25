@@ -269,6 +269,115 @@
                   "docs/zh/api-reference/vnd/api/payApply",
                   "docs/zh/api-reference/vnd/api/payQuery"
                 ]
+              },
+              {
+                "group": "印尼",
+                "pages": [
+                  "docs/zh/api-reference/idr/api/collectApply",
+                  "docs/zh/api-reference/idr/api/collectQuery",
+                  "docs/zh/api-reference/idr/api/payApply",
+                  "docs/zh/api-reference/idr/api/payQuery"
+                ]
+              },
+              {
+                "group": "印度",
+                "pages": [
+                  "docs/zh/api-reference/inr/api/collectApply",
+                  "docs/zh/api-reference/inr/api/collectQuery",
+                  "docs/zh/api-reference/inr/api/payApply",
+                  "docs/zh/api-reference/inr/api/payQuery"
+                ]
+              },
+              {
+                "group": "马来西亚",
+                "pages": [
+                  "docs/zh/api-reference/myr/api/collectApply",
+                  "docs/zh/api-reference/myr/api/collectQuery",
+                  "docs/zh/api-reference/myr/api/payApply",
+                  "docs/zh/api-reference/myr/api/payQuery"
+                ]
+              },
+              {
+                "group": "巴基斯坦",
+                "pages": [
+                  "docs/zh/api-reference/pkr/api/collectApply",
+                  "docs/zh/api-reference/pkr/api/collectQuery",
+                  "docs/zh/api-reference/pkr/api/payApply",
+                  "docs/zh/api-reference/pkr/api/payQuery"
+                ]
+              },
+              {
+                "group": "孟加拉",
+                "pages": [
+                  "docs/zh/api-reference/bdt/api/collectApply",
+                  "docs/zh/api-reference/bdt/api/collectQuery",
+                  "docs/zh/api-reference/bdt/api/payApply",
+                  "docs/zh/api-reference/bdt/api/payQuery"
+                ]
+              },
+              {
+                "group": "埃及",
+                "pages": [
+                  "docs/zh/api-reference/egp/api/collectApply",
+                  "docs/zh/api-reference/egp/api/collectQuery",
+                  "docs/zh/api-reference/egp/api/payApply",
+                  "docs/zh/api-reference/egp/api/payQuery"
+                ]
+              },
+              {
+                "group": "沙特",
+                "pages": [
+                  "docs/zh/api-reference/sar/api/collectApply",
+                  "docs/zh/api-reference/sar/api/collectQuery"
+                ]
+              },
+              {
+                "group": "科威特",
+                "pages": [
+                  "docs/zh/api-reference/kwd/api/collectApply",
+                  "docs/zh/api-reference/kwd/api/collectQuery"
+                ]
+              },
+              {
+                "group": "巴林",
+                "pages": [
+                  "docs/zh/api-reference/bhd/api/collectApply",
+                  "docs/zh/api-reference/bhd/api/collectQuery"
+                ]
+              },
+              {
+                "group": "阿联酋",
+                "pages": [
+                  "docs/zh/api-reference/aed/api/collectApply",
+                  "docs/zh/api-reference/aed/api/collectQuery"
+                ]
+              },
+              {
+                "group": "阿曼",
+                "pages": [
+                  "docs/zh/api-reference/omr/api/collectApply",
+                  "docs/zh/api-reference/omr/api/collectQuery"
+                ]
+              },
+              {
+                "group": "卡塔尔",
+                "pages": [
+                  "docs/zh/api-reference/qar/api/collectApply",
+                  "docs/zh/api-reference/qar/api/collectQuery"
+                ]
+              },
+              {
+                "group": "稳定币",
+                "pages": [
+                  "docs/zh/api-reference/usdtc/api/usdcCollectApply",
+                  "docs/zh/api-reference/usdtc/api/usdcCollectQuery",
+                  "docs/zh/api-reference/usdtc/api/usdcPayApply",
+                  "docs/zh/api-reference/usdtc/api/usdcPayQuery",
+                  "docs/zh/api-reference/usdtc/api/usdtCollectApply",
+                  "docs/zh/api-reference/usdtc/api/usdtCollectQuery",
+                  "docs/zh/api-reference/usdtc/api/usdtPayApply",
+                  "docs/zh/api-reference/usdtc/api/usdtPayQuery"
+                ]
               }
             ]
           }
