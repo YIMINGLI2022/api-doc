@@ -1,0 +1,253 @@
+---
+title: 孟加拉支付接口
+permalink: /api/version2/Bangladesh/
+---
+
+# **孟加拉支付接口**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+:::warning
+**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
+:::
+
+### **限额**
+
+| 交易类型 | 限额                  |
+| :------- | --------------------- |
+| 代收     | 孟加拉塔卡: 100-50000 |
+| 代付     | 孟加拉塔卡: 100-50000 |
+
+## **代收API**
+
+### **代收申请**
+
+**简要描述：**
+
+* 创建代收订单
+
+**URL：**
+
+塔卡：`/bdt/collect/apply`
+说明：appId需使用塔卡对应的，用户支付成功后增加塔卡余额
+
+**参数：**
+
+| 参数名          | 必选 | 类型   | 说明                                                                                                                             |
+| :-------------- | :--- | :----- | :------------------------------------------------------------------------------------------------------------------------------- |
+| appId           | 是   | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                                          |
+| orderId         | 是   | String | 商户订单号(必须保证唯一性，长度不超过48)                                                                                         |
+| name            | 是   | String | 用户姓名，推荐使用真实姓名，格式：包含firstName和lastName，以空格分割的，示例：Donald John Trump                                 |
+| phone           | 是   | String | 真实手机号（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ）                               |
+| email           | 是   | String | 真实电子邮件                                                                                                                     |
+| amount          | 是   | String | 交易金额（精确到小数点后两位；禁止添加标点符号，例如：”,”）                                                                      |
+| payType         | 是   | String | 交易类型                                                                                                                         |
+| inBankCode      | 是   | String | [支付方式](#inBankCode)                                                                                                          |
+| callBackUrl     | 是   | String | 用户支付成功后跳转地址                                                                                                           |
+| callBackFailUrl | 是   | String | 用户支付失败后跳转地址                                                                                                           |
+| notifyUrl       | 否   | String | 回调地址                                                                                                                         |
+| subject         | 是   | String | 支付备注                                                                                                                         |
+| body            | 否   | String | 备注详情                                                                                                                         |                                                                                                 |
+| partnerUserId   | 是   | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。 |
+| sign            | 是   | String | 签名                                                                                                                             |
+
+返回data参数说明
+
+| 参数名  | 类型   | 说明       |
+| :------ | :----- | :--------- |
+| orderId | String | 商户订单号 |
+| orderNo | String | 平台订单号 |
+| payUrl  | String | 支付链接   |
+| sign    | String | 签名       |
+
+### **代收查询**
+
+**简要描述：**
+
+* 查询代收订单
+
+**URL：**
+
+塔卡：`/bdt/collect/query`
+
+**参数：**
+
+| 参数名  | 必选 | 类型   | 说明                                                    |
+| :------ | :--- | :----- | :------------------------------------------------------ |
+| appId   | 是   | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| orderId | 是   | String | 商户订单号                                              |
+| orderNo | 否   | String | 平台订单号（响应快）                                    |
+| sign    | 是   | String | 签名                                                    |
+
+返回data参数说明
+
+| 参数名       | 类型    | 说明                                                            |
+| :----------- | :------ |:--------------------------------------------------------------|
+| orderId      | String  | 商户订单号                                                         |
+| orderNo      | String  | 平台订单号                                                         |
+| amount       | String  | 交易金额                                                          |
+| actualAmount | String  | 收到金额                                                          |
+| fee          | String  | 手续费                                                           |
+| status       | Integer | 状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)                        |
+| payTime      | String  | 支付成功时间（当status=2时有值）(币种时间 UTC+06:00), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg     | String  | 支付失败原因（当status=3时有值）                                          |
+| sign         | String  | 签名                                                            |
+
+### **支付方式**<a id="inBankCode"></a>
+
+<table style="border-collapse:collapse;table-layout:fixed;width:1040px;margin:0">
+    <colgroup >
+        <col style="width:80px" />
+        <col style="width:170px" />
+        <col style="width:200px" />
+        <col style="width:155px" />
+        <col style="width:80px" />
+        <col style="width:100px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>币种</th>
+            <th>支付类型(payType)</th>
+            <th>支付编码(inBankCode)</th>
+            <th>限额</th>
+            <th>状态</th>
+            <th>说明</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>BDT</td>
+            <td>EWALLET</td>
+            <td>BDT_BKASH</td>
+            <td>100-50000</td>
+            <td>可用</td>
+            <td>bkash</td>
+        </tr>
+        <tr>
+            <td>BDT</td>
+            <td>EWALLET</td>
+            <td>BDT_NAGAD</td>
+            <td>100-50000</td>
+            <td>可用</td>
+            <td>nagad</td>
+        </tr>
+    </tbody>
+</table>
+
+
+## **代付API**
+
+### **代付申请**
+
+**简要描述：**
+
+* 创建代付订单
+
+**URL：`/bdt/pay/apply`**
+
+**参数：**
+
+| 参数名        | 必选 | 类型   | 说明                                                                                                                              |
+| :------------ | :--- | :----- | :-------------------------------------------------------------------------------------------------------------------------------- |
+| appId         | 是   | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                                           |
+| orderId       | 是   | String | 商户订单号(必须保证唯一性，长度不超过48)                                                                                          |
+| amount        | 是   | String | 交易金额（精确到小数点后两位；禁止添加标点符号，例如：”,”）                                                                       |
+| accountType   | 是   | String | 账户类型：EWALLET（电子钱包） , BANK\_ACCOUNT（银行）                                                                             |
+| bankCode      | 是   | String | [支付方式](#bankCode)                                                                                                             |
+| accountNo     | 是   | String | 用户账号                                                                                                                          |
+| name          | 是   | String | 收款人姓名(收款人姓名 格式：英文大小写且允许有空格，1-30位,"firstName middleName lastName" (middleName 非必填, 特殊字符支持 '.-)) |
+| phone         | 是   | String | 真实手机号（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ）                                |
+| email         | 是   | String | 真实电子邮件                                                                                                                      |
+| notifyUrl     | 否   | String | 回调地址                                                                                                                          |
+| subject       | 否   | String | 支付备注（交易标题，商品名称，支付原因）                                                                                          |
+| body          | 否   | String | 备注详情                                                                                                                          |
+| partnerUserId | 是   | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。  |
+| sign          | 是   | String | 签名                                                                                                                              |
+
+返回data参数说明
+
+| 参数名  | 必选   | 类型                       |
+| :------ | :----- | :------------------------- |
+| orderId | String | 商户订单号(必须保证唯一性) |
+| orderNo | String | 平台订单号                 |
+| sign    | String | 签名                       |
+
+### **代付查询**
+
+**URL：`/bdt/pay/query`**
+
+**参数：**
+
+| 参数名  | 必选 | 类型   | 说明                                                    |
+| :------ | :--- | :----- | :------------------------------------------------------ |
+| appId   | 是   | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| orderId | 是   | String | 商户订单号                                              |
+| orderNo | 否   | String | 平台订单号（响应快）                                    |
+| sign    | 是   | String | 签名                                                    |
+
+返回data参数说明
+
+| 参数名   | 类型    | 说明                                                            |
+| :------- | :------ |:--------------------------------------------------------------|
+| orderId  | String  | 商户订单号(必须保证唯一性)                                                |
+| orderNo  | String  | 平台订单号                                                         |
+| amount   | String  | 交易金额                                                          |
+| fee      | String  | 手续费                                                           |
+| status   | Integer | 状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)                        |
+| payTime  | String  | 支付成功时间（当status=2时有值）(币种时间 UTC+06:00), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg | String  | 支付失败原因（当status=3时有值）                                          |
+| sign     | String  | 签名                                                            |
+
+### **支付方式**<a id="bankCode"></a>
+
+<table style="border-collapse:collapse;table-layout:fixed;width:1050px;margin:0">
+    <colgroup >
+        <col style="width:80px" />
+        <col style="width:190px" />
+        <col style="width:190px" />
+        <col style="width:155px" />
+        <col style="width:80px" />
+        <col style="width:100px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>币种</th>
+            <th>支付类型(accountType)</th>
+            <th>支付编码(bankCode)</th>
+            <th>限额</th>
+            <th>状态</th>
+            <th>说明</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>BDT</td>
+            <td>EWALLET</td>
+            <td>BDT_BKASH</td>
+            <td>100-50000</td>
+            <td>可用</td>
+            <td>bkash</td>
+        </tr>
+        <tr>
+            <td>BDT</td>
+            <td>EWALLET</td>
+            <td>BDT_NAGAD</td>
+            <td>100-50000</td>
+            <td>可用</td>
+            <td>nagad</td>
+        </tr>
+    </tbody>
+</table>
+
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}
+

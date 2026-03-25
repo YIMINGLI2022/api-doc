@@ -1,0 +1,362 @@
+---
+title: Stablecoin Payment API
+permalink: /en/api/version2/coinpay/
+---
+# **Stablecoin Payment API**
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+:::warning
+**Before reading this API document, please first review the [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
+
+### **<font color='red'>Important Notes on Stablecoin Collection and Payout:</font>**
+
+***If a collection or payout transaction involves internationally sanctioned regions (such as countries/regions on the UN or OFAC sanction lists), or the source/destination of funds is identified as being associated with money laundering organizations or other high‑risk entities, the platform will initiate necessary fund control measures as required, including, in extreme cases, fund freezing.***
+
+***In cases where fund freezing is triggered, if your company applies for fund return, depending on the transaction risk level, we may require your cooperation to provide relevant information to prove the legitimacy of the transaction (such as the initiator's name, nationality, occupation, goods involved, etc.), or to take necessary compliance measures (such as deactivating the relevant payer account).***
+
+***Please avoid providing services to users in sanctioned regions and follow day‑to‑day compliance requirements to effectively avoid triggering risk control.***
+:::
+
+## **Collection API**
+
+### **Collection Apply**
+
+**Brief Description:**
+
+* Create a collection order
+
+:::warning
+**This address is only for one‑time (temporary) transfers and is valid for <font color='red'>60 minutes</font> after generation.**
+
+**1. Do not save the address for subsequent transfers**
+
+**2. Do not make transfers after the expiration time**
+:::
+
+**URL:**
+
+USDT: `/usdt/collect/apply`
+Description: The appId must correspond to USDT. After the user pays successfully, the USDT balance increases
+
+USDC: `/usdc/collect/apply`
+Description: The appId must correspond to USDC. After the user pays successfully, the USDC balance increases
+
+**Parameters:**
+
+| Parameter       | Required | Type   | Description                                                                                                                     |
+| :-------------- | :------- | :----- |:--------------------------------------------------------------------------------------------------------------------------------|
+| appId           | Yes      | Long   | Business ID (obtained in the backend; must correspond to the currency in the URL)                                               |
+| orderId         | Yes      | String | Merchant order number (must be unique, length ≤ 48)                                                                             |
+| name            | Yes      | String | User name, recommended to use real name, format: include firstName and lastName, separated by space, example: Donald John Trump |
+| phone           | Yes      | String | Real mobile number (format reference: [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format))        |
+| email           | Yes      | String | Real email address                                                                                                              |
+| amount          | Yes      | String | Transaction amount (prohibited to add punctuation marks such as ",") Range reference: 0.01-5000000                              |
+| payType         | Yes      | String | [Payment type](#inBankCode)                                                                                                     |
+| inBankCode      | Yes      | String | [Payment code](#inBankCode)                                                                                                     |
+| callBackUrl     | Yes      | String | Redirect URL after successful payment                                                                                           |
+| callBackFailUrl | Yes      | String | Redirect URL after failed payment                                                                                               |
+| subject         | No       | String | Payment note                                                                                                                    |
+| body            | No       | String | Note details                                                                                                                    |
+| clientType      | Yes      | String | APP, WEB, WAP, MINIAPP, OTHERS                                                                                                  |
+| currency        | Yes      | String | Fiat currency. If no currency conversion is required, pass USDT/USDC                                                            |
+| notifyUrl       | No       | String | webhook URL                                                                                                                     |
+| partnerUserId   | Yes      | String | User unique identifier, format: digits                                                                                          |
+| sign            | Yes      | String | Signature                                                                                                                       |
+
+
+Returned data parameters description
+
+| Parameter     | Type   | Description                        |
+| :------------ | :----- | :--------------------------------- |
+| orderId       | String | Merchant order number (unique)     |
+| orderNo       | String | Platform order number              |
+| payUrl        | String | Payment link                       |
+| exchangeRate  | String | Exchange rate                      |
+| orderAmount   | String | Converted currency amount         |
+| amount        | String | Original currency amount when placing order           |
+| bankNo        | String | Chain address                      |
+| sign          | String | Signature                          |
+
+### **Collection Query**
+
+**URL:**
+
+USDT: `/usdt/collect/query`
+
+USDC: `/usdc/collect/query`
+
+**Parameters:**
+
+| Parameter | Required | Type   | Description                                                                                                    |
+| :-------- | :------- | :----- | :-------------------------------------------------------------------------------------------------------------- |
+| appId     | Yes      | Long   | Business ID (obtained in the backend; must correspond to the currency in the URL)                              |
+| orderId   | Yes      | String | Merchant order number                                                                                           |
+| orderNo   | No       | String | Platform order number (faster response)                                                                         |
+| sign      | Yes      | String | Signature                                                                                                       |
+
+
+Returned data parameters description
+
+| Parameter     | Type    | Description                                                                                                             |
+| :------------ | :------ | :--------------------------------------------------------------------------------------------------------------------- |
+| orderId       | String  | Merchant order number (unique)                                                                                          |
+| orderNo       | String  | Platform order number                                                                                                   |
+| amount        | String  | Transaction amount                                                                                                      |
+| actualAmount  | String  | Amount received                                                                                                         |
+| fee           | String  | Fee                                                                                                                     |
+| status        | Integer | Status (0 Not started, 1 Paying, 2 Success (final), 3 Failed (final), 4 Partial receipt (final), 5 Overpayment (final), -1 Abnormal to be confirmed) |
+| payTime       | String  | Payment success time (when status=2) (New York time), format: yyyy‑MM‑dd HH:mm:ss                                      |
+| errorMsg      | String  | Payment failure reason (when status=3)                                                                                  |
+| sign          | String  | Signature                                                                                                               |
+
+
+### **Payment Methods**<a id="inBankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (payType)</b></td>
+        <td><b>Payment Code (inBankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>USDT</td>
+        <td>EWALLET</td>
+        <td>EWALLET</td>
+        <td>1-200000</td>
+        <td>Available</td>
+        <td>Cashier</td>
+    </tr>
+    <tr>
+        <td>USDT</td>
+        <td>EWALLET</td>
+        <td>TRX</td>
+        <td>1-200000</td>
+        <td>Available</td>
+        <td>USDT on TRON chain, TRC-20 token standard</td>
+    </tr>
+    <tr>
+        <td>USDT</td>
+        <td>EWALLET</td>
+        <td>ETH</td>
+        <td>1-200000</td>
+        <td>Available</td>
+        <td>USDT on Ethereum chain, ERC-20 token standard</td>
+    </tr>
+    <tr>
+        <td>USDT</td>
+        <td>EWALLET</td>
+        <td>BSC</td>
+        <td>1-200000</td>
+        <td>Available</td>
+        <td>USDT on BNB Smart Chain, BEP-20 token standard</td>
+    </tr>
+    <tr>
+        <td>USDC</td>
+        <td>EWALLET</td>
+        <td>EWALLET</td>
+        <td>1-200000</td>
+        <td>Available</td>
+        <td>Cashier</td>
+    </tr>
+<tr>
+        <td>USDC</td>
+        <td>EWALLET</td>
+        <td>ETH</td>
+        <td>1-200000</td>
+        <td>Available</td>
+        <td>USDC on Ethereum chain, ERC-20 token standard</td>
+    </tr>
+</table>
+
+## **Payout API**
+
+### **Payout Apply**
+
+**Brief Description:**
+
+* Create a payout order
+
+**USDT: `/usdt/pay/apply`**
+
+**USDC: `/usdc/pay/apply`**
+
+**Parameters:**
+
+| Parameter      | Required | Type   | Description                                                                                                                  |
+| :------------- | :------- | :----- |:---------------------------------------------------------------------------------------------------------------------------- |
+| appId          | Yes      | Long   | Business ID (obtained in the backend; must correspond to the currency in the URL)                                           |
+| orderId        | Yes      | String | Merchant order number (must be unique, length ≤ 48)                                                                          |
+| amount         | Yes      | String | Transaction amount (unit: USDT, accurate to two decimal places; prohibited to add punctuation marks such as ",") Range: 0.0001-5000000         |
+| accountType    | Yes      | String | [Payment type](#bankCode)                                                                                                    |
+| bankCode       | Yes      | String | [Payment code](#bankCode)                                                                                                    |
+| accountNo      | Yes      | String | Address                                                                                                                      |
+| name           | Yes      | String | Payee name (Payee name format: English letters with spaces allowed, 1-30 chars, "firstName middleName lastName" (middleName optional, special characters support '.-)) |
+| phone          | Yes      | String | Real mobile number (format reference: [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format))      |
+| email          | Yes      | String | Real email address                                                                                                                   |
+| subject        | No       | String | Payment note (title, product name, reason)                                                                                   |
+| body           | No       | String | Note details                                                                                                                 |
+| partnerUserId  | Yes      | String | Unique user identifier (e.g., userId), used for risk control system, must be valid, otherwise it will affect the transaction. Format: digits, letters, or symbols -~!@#$%&*()_. |
+| notifyUrl       | No       | String | webhook URL                                                                                                                     |
+| sign           | Yes      | String | Signature                                                                                                                    |
+
+Returned data parameters description
+
+| Parameter | Type   | Description                        |
+| :-------- | :----- | :--------------------------------- |
+| orderId   | String | Merchant order number (unique)     |
+| orderNo   | String | Platform order number              |
+| sign      | String | Signature                          |
+
+### **Payout Query**
+
+**Brief Description:**
+
+* Query a payout order
+
+**USDT: `/usdt/pay/query`**
+
+**USDC: `/usdc/pay/query`**
+
+**Parameters:**
+
+| Parameter | Required | Type   | Description                                                                                                    |
+| :-------- | :------- | :----- | :-------------------------------------------------------------------------------------------------------------- |
+| appId     | Yes      | Long   | Business ID (obtained in the backend; must correspond to the currency in the URL)                              |
+| orderId   | Yes      | String | Merchant order number                                                                                           |
+| orderNo   | No       | String | Platform order number (faster response)                                                                         |
+| sign      | Yes      | String | Signature                                                                                                       |
+
+Returned data parameters description
+
+| Parameter | Type    | Description                                                                                                  |
+| :-------- | :------ | :------------------------------------------------------------------------------------------------------------ |
+| orderId   | String  | Merchant order number (unique)                                                                               |
+| orderNo   | String  | Platform order number                                                                                        |
+| amount    | String  | Transaction amount                                                                                           |
+| fee       | String  | Fee                                                                                                          |
+| status    | Integer | Status (0 Not started, 1 In progress, 2 Success (final), 3 Failed (final), -1 Abnormal to be confirmed)     |
+| payTime   | String  | Payment success time (when status=2) (New York time), format: yyyy‑MM‑dd HH:mm:ss                            |
+| errorMsg  | String  | Payment failure reason (when status=3)                                                                       |
+| sign      | String  | Signature                                                                                                    |
+
+### **Payment Methods**<a id="bankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1050px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Account Type (accountType)</b></td>
+        <td><b>Code (bankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>USDT</td>
+        <td>EWALLET</td>
+        <td>TRX</td>
+        <td>10-200000</td>
+        <td>Available</td>
+        <td>USDT on TRON chain, TRC-20 token standard</td>
+    </tr>
+    <tr>
+        <td>USDT</td>
+        <td>EWALLET</td>
+        <td>ETH</td>
+        <td>10-200000</td>
+        <td>Available</td>
+        <td>USDT on Ethereum chain, ERC-20 token standard</td>
+    </tr>
+    <tr>
+        <td>USDT</td>
+        <td>EWALLET</td>
+        <td>BSC</td>
+        <td>10-200000</td>
+        <td>Available</td>
+        <td>USDT on BNB Smart Chain, BEP-20 token standard</td>
+    </tr>
+    <tr>
+        <td>USDC</td>
+        <td>EWALLET</td>
+        <td>BSC</td>
+        <td>10-200000</td>
+        <td>Available</td>
+        <td>USDC on BNB Smart Chain, BEP-20 token standard</td>
+    </tr>
+    <tr>
+        <td>USDC</td>
+        <td>EWALLET</td>
+        <td>ETH</td>
+        <td>10-200000</td>
+        <td>Available</td>
+        <td>USDC on Ethereum chain, ERC-20 token standard</td>
+    </tr>
+    <tr>
+        <td>USDC</td>
+        <td>EWALLET</td>
+        <td>TRX</td>
+        <td>10-200000</td>
+        <td>Available</td>
+        <td>USDC on TRON chain, TRC-20 token standard</td>
+    </tr>
+    <tr>
+        <td>USDC</td>
+        <td>EWALLET</td>
+        <td>BASEEVM</td>
+        <td>10-200000</td>
+        <td>Available</td>
+        <td>USDC on EVM（Ethereum Virtual Machine） chain, EVM ERC-20 token standard</td>
+    </tr>
+</table>
+
+## **Notes**
+
+:::warning
+1. Payment timeliness: For on‑chain transactions, it depends on each chain's processing speed and congestion.
+2. If the full amount is paid successfully within the validity period, the callback is sent in real‑time. No need to wait until the order expires. Even if multiple payments are made to reach the total, the callback will be sent once the full amount is received.
+3. If multiple payments within the validity period still do not reach the full amount, the callback will be sent after expiration, with the callback amount being the actual amount paid, which may differ from the order amount.
+4. Payments made after the validity period require manual verification. If not received, it may cause fund loss; if received, a supplemental order can be processed. To avoid loss, please pay within the validity period.
+5. On‑chain payments incur chain handling fees (GAS fees, unrelated to this platform), which may cause differences from the actual received amount. Refer to third‑party sites: [USDT Fees](https://gasfeesnow.com)
+6. During payout operations, if the chain and address do not match, funds may be lost. Please ensure they match.
+:::
+
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div>
+ */}

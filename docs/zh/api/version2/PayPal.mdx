@@ -1,0 +1,254 @@
+---
+title: PayPal接口
+permalink: /api/version2/PayPal/
+---
+# **PayPal/VENMO/ACH/ECASHAPP接口**
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+:::warning
+**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
+:::
+
+## **限额**
+
+| 交易类型 | 限额(单位:USD) |
+| :------- | -------------- |
+| 代付     | 1-800        |
+
+## **代付API**
+
+### **代付申请**
+
+**URL：**
+
+美元: `/usd/pay/apply`
+
+
+
+**参数：**
+
+| 参数名           | 必选 | 类型     | 说明                                                                                |
+|:--------------|:---|:-------|:----------------------------------------------------------------------------------|
+| appId         | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                   |
+| orderId       | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                            |
+| name          | 是  | String | 收款人姓名，推荐使用真实姓名，必须英文，不带特殊字符，以空格分割的，至少包含firstName和lastName，示例：Donald John Trump     |
+| phone         | 是  | String | 真实手机号（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ） |
+| email         | 是  | String | 真实电子邮件                                                                            |
+| notifyUrl     | 否  | String | 回调地址                                                                              |
+| amount        | 是  | String | 交易金额(单位：美元，精确到小数点后两位；禁止添加标点符号，例如：”,”）                                             |
+| accountType   | 是  | String | 账户类型                                                                              |
+| bankCode      | 是  | String | [支付方式](#支付方式)                                                                     |
+| subject       | 是  | String | 支付备注                                                                              |
+| accountNo     | 是  | String | 账号，PayPal的邮箱就是账号                                                                  |
+| identifyType  | 否  | String | 银行路由编码，ACH方式必填                                                                    |
+| body          | 否  | String | 备注详情，ECASHAPP方式必填                                                                 |
+| country       | 否  | String | 收款人所在国家，ACH方式必填，如美国为US                                                            |
+| address1      | 否  | String | 收款地址-详细街道，ACH方式必填                                                                 |
+| address2      | 否  | String | 收款地址-城市，ACH方式必填                                                                   |
+| address3      | 否  | String | 收款地址(省、州)，ACH方式必填                                                                 |
+| postalCode    | 否  | String | 收款邮编，ACH方式必填                                                                      |
+| bankName      | 否  | String | 银行名称，ACH方式必填                                                                      |
+| swiftCode     | 否  | String | swiftCode，ACH方式必填                                                                      |
+| partnerUserId | 是  | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。       |
+| sign          | 是  | String | 签名                                                                                |
+
+##### 
+
+request
+
+```json
+{
+    "appId": 1054,
+    "orderId": "M233323000059",
+    "amount": "300",
+    "phone": "09230219312",
+    "email": "23423@qq.com",
+    "name": "test",
+    "accountType": "EWALLET",
+    "bankCode": "PayPal",
+    "accountNo": "123465",
+    "partnerUserId": "149597870",
+    "sign": "af0gAHkUOyYH***"
+}
+```
+
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M233323000059",
+        "orderNo": "6023071013539074",
+        "payUrl": "",
+        "sign": "YEoA8Y2JzQFG***"
+    }
+}
+```
+
+返回data参数说明
+
+| 参数名  | 类型   | 说明                       |
+| :------ | :----- | :------------------------- |
+| orderId | String | 商户订单号(必须保证唯一性) |
+| orderNo | String | 平台订单号                 |
+| payUrl  | String | 支付链接                   |
+| sign    | String | 签名                       |
+
+### **代付查询**
+
+**简要描述：**
+
+* 创建代付订单  
+* 同步返回orderNo可以直接查询  
+* 其他支付方式异步通知后，通过orderNo查询二次确认状态
+
+**URL：**
+
+美元: `/usd/pay/query`
+
+
+
+**参数：**
+
+| 参数名  | 必选 | 类型   | 说明                 |
+| :------ | :--- | :----- | :------------------- |
+| appId   | 是   | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）   |
+| orderId | 是   | String | 商户订单号           |
+| orderNo | 否   | String | 平台订单号（响应快） |
+| sign    | 是   | String | 签名                 |
+
+request
+
+```json
+{
+    "appId": 1054,
+    "orderId": "M22222000028",
+    "sign": "EmyJGm3ELzG4FsOd0Krs9ncbSjo4oTGuXWML+7djYla3+VAwd9wS17z38p/7U2ZAjroO04XrE7YXcB1o76Dtyipj3h3bJzs7FYma1QNkMUdt9hh7m8U6hMsMQX7vIWHtXNwz4pbTSC75+kQWXaCew7KoE6LXECdJU8AISgNgeki2TK9R0pCfshr0Z2SZBPeuT6OvIH5LdmqgdZhuqnffGU2qnXk4KMkO848e6/WALLBR+LE1wyKHfPnYVcuKSMVYxkvKyyIL5JIPEgW0o5bh4RCbaUn3NZtyYwrU1uQ3ZDFRThm9j6XAQP+LBlmq3nOePqBtp/VDVarRaV+7FbQg3A=="
+}
+```
+
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M22222000028",
+        "orderNo": "6023042811314347",
+        "amount": "50.00",
+        "actualAmount": "0.00",
+        "fee": "0.00",
+        "status": 1,
+        "sign": "fP433ygWVDLVGxYkVnIJj7riGq0U3vyVX+MbBAImxfGLZkZcEAHVEoVYuULZSmXAAXKRSyd67WlDNm+24pougM54ofAoH4HMtCL2tfCoBReFyz3z02AGKkrKE2xWhSpWoqfQoBvzwuN5iGMMu0s9Q1YvqiwJ8WDVIENnmiIyD8qDJN7caHTW2US14/faG+69AvnuIgJ/nu7/jogOlgEYdZdVYU7gcRDE+d47KjlFGswQkJ/h/uzV7cWtUqrtOO7ZnZ3/z33Xx8awokX36QoYcPSWAU0h+Ij9O9402HNhm1eTbYcLU0uI/z8xCAtyAI/tTyiFijpiNlxUKQj+zKsILw=="
+    }
+}
+```
+
+返回data参数说明
+
+| 参数名   | 类型    | 说明                                                                  |
+| :------- | :------ | :-------------------------------------------------------------------- |
+| orderId  | String  | 商户订单号(必须保证唯一性)                                            |
+| orderNo  | String  | 平台订单号                                                            |
+| amount   | String  | 交易金额                                                              |
+| fee      | String  | 手续费                                                                |
+| status   | Integer | 状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)    |
+| payTime  | String  | 支付成功时间（当status=2时有值）(本地时间), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg | String  | 支付失败原因（当status=3时有值）                                      |
+| sign     | String  | 签名                                                                  |
+
+### **支付方式**
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1050px;margin:0'>
+ <colgroup>
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+ </colgroup>
+ <tbody>
+    <tr>
+        <td><b>币种</b></td>
+        <td><b>支付类型(accountType)</b></td>
+        <td><b>支付编码(bankCode)</b></td>
+        <td><b>限额</b></td>
+        <td><b>状态</b></td>
+        <td><b>说明</b></td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>PayPal</td>
+        <td>1-800</td>
+        <td>可用</td>
+        <td>PayPal钱包</td>
+    </tr>
+   <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>VENMO</td>
+        <td>1-800</td>
+        <td>可用</td>
+        <td>Venmo钱包</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ACH</td>
+        <td>10-200000</td>
+        <td>可用</td>
+        <td>ACH转账</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>ECASHAPP</td>
+        <td>1-800</td>
+        <td>维护</td>
+        <td>CashApp钱包</td>
+    </tr>
+    </tbody>
+</table>
+
+### **说明**
+
+1. **失败原因`<银行退单>` 是什么意思？**
+   
+    用户账号被PayPal标记为风险用户，无法收款，需更换账户
+
+2. **已在出款中的订单是否可以追回？**
+
+    不可以。
+
+3. **已打款，但用户未收到款，如何操作？**
+
+    需要用户在PayPal邮箱看下有没有收到邮件，领取下，若一直显示在转账中的话，等三十天后无人领取，会自动退还
+
+    **下面是PayPal邮箱领取指引图**
+    
+    ![](/images/paypal.jpg)
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}
+

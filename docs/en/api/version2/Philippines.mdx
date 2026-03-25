@@ -1,0 +1,1030 @@
+---
+title: Philippines Payment API
+permalink: /en/api/version2/Philippines/
+---
+# **Philippines Payment API**
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+:::warning
+**Before reading this API documentation, please make sure to review [**API Guide**](/en/docs/guide/api_description_guide.md)**
+:::
+
+### **Transaction Limits**
+
+| Transaction Type | Limit (Unit: PHP) |
+| :--------------- | ----------------- |
+| Collection       | 100-50000         |
+| Disbursement     | 1-50000           |
+
+## **Collection API**
+
+### **Collection Application**
+
+**Description:**
+
+* Create a collection order.
+
+**URL: `/php/collect/apply`** 
+Note: AppId must correspond to the Philippine Peso (PHP), and upon successful payment, the user's PHP balance will be topped up.
+
+**Parameters:**
+
+| Name         | Required | Type   | Description                                                                                                    |
+| :----------- | :------- | :----- | :-------------------------------------------------------------------------------------------------------------- |
+| appId        | Yes      | Long   | Business ID (obtain from the backend, must pass the correct business ID according to the currency in the URL). |
+| orderId      | Yes      | String | Merchant order number (must be unique, max length 48).                                                         |
+| name         | Yes      | String | Payee name (format: upper/lowercase letters with spaces allowed, 1-30 chars, "firstName middleName lastName" (middleName optional, special characters supported: `! -`)). |
+| phone        | Yes      | String | Real phone number (format: starts with 09, numeric only, 11 digits). Valid if it matches the format.           |
+| email        | Yes      | String | Real email.                                                                                                    |
+| amount       | Yes      | String | Transaction amount (unit: ₱, up to 2 decimal places; do not add symbols such as “,”). Range: 50-49999.         |
+| payType      | Yes      | String | Transaction type.                                                                                              |
+| inBankCode   | Yes      | String | [Payment Method](#收款编码).                                                                                   |
+| callBackUrl  | Yes      | String | Redirect URL after successful payment.                                                                         |
+| callBackFailUrl | Yes   | String | Redirect URL after failed payment.                                                                             |
+| notifyUrl    | No       | String | Callback notification URL.                                                                                     |
+| subject      | No       | String | Payment note.                                                                                                  |
+| body         | No       | String | Payment details.                                                                                               |
+| partnerUserId | Yes     | String | Unique user identifier (e.g., userId). Used by risk control systems, must be real and valid. Format: numbers, letters, or symbols `-~!@#$%&*()_`. |
+| sign         | Yes      | String | Signature.                                                                                                     |
+
+
+request
+
+```json
+{
+    "appId": 1054,
+    "orderId": "M233323000059",
+    "amount": "300",
+    "phone": "09230219312",
+    "email": "23423@qq.com",
+    "name": "test",
+    "inBankCode": "PH_QRPH_DYNAMIC",
+    "payType": "QR",
+    "partnerUserId": "149597870",
+    "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="
+}
+```
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M233323000059",
+        "orderNo": "6023071013539074",
+        "payUrl": "https://a.api-uat.php.com/1L9zQS2",
+        "bankCode": "GCASH_STATIC_VA",
+        "bankNo": "PC0007I10000035",
+        "qrCode": "00020101021228760011ph.ppmi.p2m0111OPDVPHM1XXX0315777148000000017041652948137245442930503001520460165303608540810000.php Of Mandalu62310010ph.allbank05062110000803***88310012ph.ppmi.qrph0111OPDVPHM1XXX63042763",
+        "sign": "YEoA8Y2JzQFGVzwJSqmemm1Kfv/bfyIfCqv2dp7RNzT5B72AQvdD+nt2nR4sL1HWscvmNHyVt5ovAi7MMhy3ziih/sMph+wPx4YjH3W1h5DyBvSlWvaKfKrK5ViomZ0pPYWydwRHnnRnicxToHK9S6qtSy7Q73O0hdz4hJ9p41Th3ycBl2Q9SeqSZYSY1ohcPDhdyRf2y0prb8rHgpBKzxZ5BKX/1bsE9OmsSEHAEYT8OGgko6aNe8XPAhr4G48cpWTftvnGQuzh0O65nuZRI/PF+Axt2zJCVbFHDDSREI9NlAT82ebDqhlVdxQzKE67D1nxgjb3dPmDUYHOBpmwxQ=="
+    }
+}
+```
+
+**Response Data Parameters**
+
+| Name     | Type   | Description                                    |
+| :------- | :----- | :--------------------------------------------- |
+| orderId  | String | Merchant order number (must be unique).        |
+| orderNo  | String | Platform order number.                         |
+| payUrl   | String | Payment link.                                  |
+| bankNo   | String | Repayment account number (VA).                 |
+| bankCode | String | Channel code (VA).                             |
+| qrCode   | String | QR code content (can be used to generate QR).  |
+| sign     | String | Signature.                                     |
+
+### **Collection Query**
+
+**Description:**
+
+* Create a collection order.  
+* When `payType=PAYMENT_GATEWAY`, the `orderNo` will be returned synchronously and can be queried directly.  
+* For other payment methods, after asynchronous notification, query again with `orderNo` for confirmation.  
+
+**URL: `/php/collect/query`**
+
+**Parameters:**
+
+| Name    | Required | Type   | Description                                                                 |
+| :------ | :------- | :----- | :--------------------------------------------------------------------------- |
+| appId   | Yes      | Long   | Business ID (obtain from the backend, must pass the correct business ID according to the currency in the URL). |
+| orderId | Yes      | String | Merchant order number.                                                      |
+| orderNo | No       | String | Platform order number (faster response).                                    |
+| sign    | Yes      | String | Signature.                                                                  |
+
+request
+
+```json
+{
+    "appId": 1054,
+    "orderId": "M22222000028",
+    "sign": "EmyJGm3ELzG4FsOd0Krs9ncbSjo4oTGuXWML+7djYla3+VAwd9wS17z38p/7U2ZAjroO04XrE7YXcB1o76Dtyipj3h3bJzs7FYma1QNkMUdt9hh7m8U6hMsMQX7vIWHtXNwz4pbTSC75+kQWXaCew7KoE6LXECdJU8AISgNgeki2TK9R0pCfshr0Z2SZBPeuT6OvIH5LdmqgdZhuqnffGU2qnXk4KMkO848e6/WALLBR+LE1wyKHfPnYVcuKSMVYxkvKyyIL5JIPEgW0o5bh4RCbaUn3NZtyYwrU1uQ3ZDFRThm9j6XAQP+LBlmq3nOePqBtp/VDVarRaV+7FbQg3A=="
+}
+```
+
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M22222000028",
+        "orderNo": "6023042811314347",
+        "amount": "50000.00",
+        "actualAmount": "0.00",
+        "fee": "0.00",
+        "status": 1,
+        "sign": "fP433ygWVDLVGxYkVnIJj7riGq0U3vyVX+MbBAImxfGLZkZcEAHVEoVYuULZSmXAAXKRSyd67WlDNm+24pougM54ofAoH4HMtCL2tfCoBReFyz3z02AGKkrKE2xWhSpWoqfQoBvzwuN5iGMMu0s9Q1YvqiwJ8WDVIENnmiIyD8qDJN7caHTW2US14/faG+69AvnuIgJ/nu7/jogOlgEYdZdVYU7gcRDE+d47KjlFGswQkJ/h/uzV7cWtUqrtOO7ZnZ3/z33Xx8awokX36QoYcPSWAU0h+Ij9O9402HNhm1eTbYcLU0uI/z8xCAtyAI/tTyiFijpiNlxUKQj+zKsILw=="
+    }
+}
+```
+
+**Response Data Parameters**
+
+| Name         | Type    | Description                                                                                                                 |
+| :----------- | :------ |:----------------------------------------------------------------------------------------------------------------------------|
+| orderId      | String  | Merchant order number (must be unique).                                                                                     |
+| orderNo      | String  | Platform order number.                                                                                                      |
+| amount       | String  | Transaction amount.                                                                                                         |
+| actualAmount | String  | Received amount.                                                                                                            |
+| fee          | String  | Handling fee.                                                                                                               |
+| status       | Integer | Status (0: Not started, 1: Collecting, 2: Success, 3: Failed, 4: Partial, 5: Overpaid, -1: Exception pending confirmation). |
+| payTime      | String  | Payment success time (present when status=2,4,5) (Philippines Time), format: yyyy-MM-dd HH:mm:ss                            |
+| errorMsg     | String  | Failure reason (present when status=3).                                                                                     |
+| sign         | String  | Signature.                                                                                                                  |
+
+### **Payment Methods**<a id="inBankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (payType)</b></td>
+        <td><b>Payment Code (inBankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>QR</td>
+        <td>PH_QRPH_DYNAMIC</td>
+        <td>100-50000</td>
+        <td>Available</td>
+        <td>QRPH Dynamic Code</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>GCASH_QR</td>
+        <td>100-50000</td>
+        <td>Available</td>
+        <td>GCash Wallet (Activation)</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>GCASH_URL</td>
+        <td>100-50000</td>
+        <td>Available</td>
+        <td>GCash Wallet (Direct)</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>GRPY_URL</td>
+        <td>100-50000</td>
+        <td>Available</td>
+        <td>GrabPay Wallet</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>PAYMAYA_URL</td>
+        <td>100-50000</td>
+        <td>Available</td>
+        <td>PayMaya Wallet</td>
+    </tr>
+</table>
+
+---
+
+## **Payout API**
+
+### **Payout Apply**
+
+**Description:**
+
+* Create a payout order.
+
+**URL: `/php/pay/apply`**
+
+**Parameters:**
+
+| Name         | Required | Type   | Description                                                                                                                   |
+| :----------- | :------- | :----- | :----------------------------------------------------------------------------------------------------------------------------- |
+| appId        | Yes      | Long   | Business ID (obtain from backend, must match the business ID according to the currency in the URL).                            |
+| orderId      | Yes      | String | Merchant order number (must be unique, max length 48).                                                                         |
+| amount       | Yes      | String | Transaction amount (unit: ₱, accurate to 2 decimals; do not include punctuation such as “,”).                                  |
+| accountType  | Yes      | String | Account type: EWALLET (e-wallet), BANK\_ACCOUNT (bank).                                                                        |
+| bankCode     | Yes      | String | [Wallet code and bank code](#钱包编码和银行代码).                                                                              |
+| accountNo    | Yes      | String | User’s bank/wallet account number.                                                                                             |
+| name         | Yes      | String | Recipient name (Format: English letters, allows spaces, 1-30 chars, "firstName middleName lastName", middleName optional, supports '.-). |
+| phone        | Yes      | String | Real phone number (Format: starts with 09, digits only, 11 digits total).                                                     |
+| email        | Yes      | String | Real email address.                                                                                                            |
+| notifyUrl    | No       | String | Callback URL.                                                                                                                  |
+| subject      | No       | String | Payment remark (transaction title, product name, payment reason).                                                              |
+| body         | No       | String | Detailed remark.                                                                                                               |
+| partnerUserId| Yes      | String | Unique user identifier (e.g., userId), required for risk control. Must be valid. Format: digits, letters, or common symbols -~!@#$%&*()_. |
+| sign         | Yes      | String | Signature.                                                                                                                     |
+
+##### 
+
+request（When accountType = BANK\_ACCOUNT）
+
+```json
+{
+    "appId": 1054,
+    "orderId": "M100000450012",
+    "amount": "500",
+    "accountType": "BANK_ACCOUNT",
+    "bankCode": "BDO",
+    "accountNo": "09876543210",
+    "name": "john doe",
+    "phone": "09876543210",
+    "email": "johndoe@cashfree.com",
+    "subject": "iphone13",
+    "body": "ProMotion technology with adaptive refresh rates up to 120Hz",
+    "partnerUserId": "149597870",
+    "sign": "I1PeK3eJOVsFFNowxVRqMXpeWm1lr/BcRpBi8WsW4wVo1+5CC3JsrFq/m/L2O69NzKHvtDWi4zia3DL3dPut0yMyUyqL91LNCSaeISbGsQPlhEsQpyTOryS/RKOfsrn2Xo37SCF/phAvndOk2jwwGwqM5xLz1ms9Ukl85wv27QFNrXIMxK2p18oe7MpMYrgf+xvEBE/VqCtKMtN9pO449wWwXzHWNPbZ76s4pAvKwRE9yXQDr7Iw14Dktcnl1FoLM4gWM/obkO+mz6SyAGDuXhVh/+OD/IGNiCyTCNq6ciQY28UnCFV6ZIP40gxsFhfBJKbK+Raw7y1Bh912ifYfug=="
+}
+```
+
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M100000450013",
+        "orderNo": "3023062014149637",
+        "sign": "LmhUnkw5j0pMiimsG8rKwdNNZGvXH5MpSmD6mdHZwq1SQwuK5BohmdEoqKB/jkMk28o3da4Cxh6Q+tW97+yTCemRrF+dMaHA73rpOeUuujKQl/UcFvJuMhfLBa2tp09L71NzoBqpPD6aXf37mYAz8E1HmERwFPpac5FVxIYanHG8cqmMLJYsVmHTSxWavgWU03ys9UczBePkBiR8sl2FSOhFABB0wAP28lswrV/ABS68IsLKtyd1fyI3GBfSbIK5nDEEnlE+EdElFdLs9taAxJImeVF1x4eT47+bkPJ2qS8z3K8QGzKLF3W+8SiRZGfSwDTsLKH+2Vycvy5auRl+ag=="
+    }
+}
+```
+Response Data Description
+
+| Name    | Type   | Description                        |
+| :------ | :----- | :--------------------------------- |
+| orderId | String | Merchant order number (must be unique). |
+| orderNo | String | Platform order number.             |
+| sign    | String | Signature.                         |
+
+### **Disbursement Query**
+
+**Description:**
+
+* Query disbursement order.
+
+**URL: `/php/pay/query`**
+
+**Parameters:**
+
+| Name    | Required | Type   | Description                                                                 |
+| :------ | :------- | :----- | :--------------------------------------------------------------------------- |
+| appId   | Yes      | Long   | Business ID (obtain from backend, must match the business ID according to the currency in the URL). |
+| orderId | Yes      | String | Merchant order number.                                                       |
+| orderNo | No       | String | Platform order number (faster response).                                     |
+| sign    | Yes      | String | Signature.                                                                   |
+
+
+request
+
+```json
+{
+    "appId": 1000,
+    "orderId": "M1234567111",
+    "orderNo": "3022111516571436",
+    "sign": "ZxkVZL+GAyv0VhvWn4IvuYahTzxgQuthkuV2ONWiqIfIDb2avvHlFOUJVzqZi1q8CPHXZm1ltanRTRVTxfsuftLvGeDioUHglWt46/RU6c1OPznpLGsZ35Q3n5tW2y1EnOsxPynXBFLuDQy+aZ3l9u6AQ30T0zQexMGT+IxuFkmUp02g/6juaHa5ZgNMv7lN67ixIp162wrM7OJuaOif872QijSceRdZhzaMGImAwB0D4MosRV4WMBOKkwgPdmS7GuZN66YUidXk3wTGqX3MYRw6M0kj4eNegSUwPXvp4q4p0KO8Y3xUMld54GY2ApX3WN3CBtC/vpJqEszjGBbbGg=="
+}
+```
+response — Order Failed
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M1234567111",
+        "orderNo": "3022111516571436",
+        "amount": "100000.00",
+        "fee": "0.00",
+        "status": 3,
+        "errorMsg": "Đơn hàng không tồn tại",
+        "sign": "KKuvCl0SuNANJs+l2ogDaJm8pmV+Hi+Xa7q27vJ6D1Ehs4aOp13kRbITfJAhczh3T81BE9qwHeJaYwf+r0EypKM9TL6pMwfG8Az4gRy1D57wiUaVjl2PWcvbEqrn1hL0b+btkjvAM9I+CcSv+wuOW3/uku17Ws3FhgJLj9sFsQUBAPjDO+758VnwBytCOLBmljLBXyKgNgpmFQ1/DNkqWl0UNzyLK45Zw3yf5NiwhEFbvW0jlOWlfu/ql4hluISUQG573jEoFCBEnQLb2tQoRZj1QYNRCXPf5lbej0vzqbEwvR9h+ZOf255t1MocJkdIe463DTV5U3KZdVT87HMagw=="
+    }
+}
+```
+
+response — Order Successful
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M1234567112",
+        "orderNo": "3022111517401574",
+        "amount": "100000.00",
+        "fee": "1003.00",
+        "status": 2,
+        "payTime": "2024-03-01 23:59:59",
+        "sign": "khPtOmGq+cpKX0HFAI/lbP0dx4oVyNAnL5oLsdmhDJdASlQm0yg5I3o+MhImYggEsL6c2bo5fP29t54OZFqSdQDfIuNDvGbAMAr4mRBxc0hoHLkBLyyagfVPBLyQA1JY8XV3ZL4ySzQ3ZQnMCfrh2K39ueUuz6HpZ03Hj0KYijVRCXAZaio/L5jfLBT12QXmvIfAHa8s/k9flhK05ENHPep3zjj/MZGOEaX7jkEJLfjK0duypDCa61BRQjM+oePOdVsgleIl1Yf98UAxMDZ/A3912KFHEb+/jvmdnulNbiJFyuT1fEe+j2teUgw3vFsZAtwNWAgxhC7UO+N0Q5z4EA=="
+    }
+}
+```
+Response Data Description
+
+| Name     | Type    | Description                                                                 |
+| :------- | :------ | :-------------------------------------------------------------------------- |
+| orderId  | String  | Merchant order number (must be unique).                                     |
+| orderNo  | String  | Platform order number.                                                      |
+| amount   | String  | Transaction amount.                                                         |
+| fee      | String  | Transaction fee.                                                            |
+| status   | Integer | Status (0 Not Started, 1 Processing, 2 Success (final), 3 Failed (final), -1 Exception Pending Confirmation). |
+| payTime  | String  | Payment success time (available when status=2) (Philippines time), format: yyyy-MM-dd HH:mm:ss. |
+| errorMsg | String  | Reason for payment failure (available when status=3).                       |
+| sign     | String  | Signature.                                                                  |
+
+### **Payment Methods**
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1050px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (accountType)</b></td>
+        <td><b>Payment Code (bankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>EWALLET</td>
+        <td>GCASH</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>GCash Wallet</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>EWALLET</td>
+        <td>COINS</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Coins Wallet</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>EWALLET</td>
+        <td>PAYMAYA</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>PayMaya Wallet</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>EWALLET</td>
+        <td>GRABPAY</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>GrabPay Wallet</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>EWALLET</td>
+        <td>SHOPEE</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>ShopeePay Wallet</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>EWALLET</td>
+        <td>OMNIPAY</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>OmniPay Wallet</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ABP</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>AllBank Inc.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ALIP</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Alipay Philippines Inc</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>AUB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Asia United Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BDO</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Banco de Oro</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BMB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Bangko Mabuhay</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BOC</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Bank Of Commerce</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BPI</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Bank of the Philippine Islands</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BPIDB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>BPI Direct BanKO, Inc., A Savings Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BRB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Binangonan Rural Bank (BRBDigital)</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CBC</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>China Banking Corporation(China Bank)</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CBS</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>China Bank Savings, Inc</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CCI</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>CIS BAYAD CENTER INC</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CEBRUR</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Cebuana Lhuillier Rural Bank, Inc.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CIMB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>CIMB Bank Philippines, Inc.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CMG</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>CAMALIG BANK</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CRB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>COMMUNITY RURAL BANK OF ROMBLON, INC</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CRD</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>CARD Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CSB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Citystate Savings Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CSI</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>CARD SME BANK INC</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CTBC</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Ctbc Bank (Philippines) Corp.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>DBI</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Dungganon Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>DBP</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Development Bank of the Philippines</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>DCI</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>DUMAGUETE CITY DEVELOPMENT BANK, INC.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>DCP</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>DCPay Philippines Inc.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>DOP</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>DEVT. BANK OF THE PHILIPPINES</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>EQB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Equicom Savings Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>EWB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>East-West Banking Corporation</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>EWR</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>East West Rural Bank (Green Bank)</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>GTB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>GoTyme Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>IBI</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>ISLA Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ING</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>ING Bank N.V.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>JPM</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>JP Morgan Chase Bank, N.A.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>LBP</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Land Bank of the Philippines</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>LSB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>LEGAZPI SAVINGS BANK INC</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>LUL</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>LULU FINANCIAL SERVICES (PHILS), INC.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MBP</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Maybank Philippines</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MCC</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>MINDANAO CONSOLIDATED COOPERATIVE</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MET</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Metrobank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MSB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Malayan Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ONB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>One Network Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>OWN</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>ownbank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PAP</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>PalawanPay</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PAR</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Partner Rural Bank(Cotabato) Inc.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PBB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Philippine Business Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PBCOM</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Philippine Bank of Communications</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PNB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Philippine National Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PNS</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>PNB Savings Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PRB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Producers Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PSB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Philippine Savings Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PTC</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Philippine Trust Company</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PVB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Philippine Veterans Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>QCB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Queen City Development Bank, Inc.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>QRB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Quezon Capital Rural Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>RBG</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>RURAL BANK OF GUINOBATAN, INC.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>RCBC</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Rizal Commercial Banking Corp. (RCBC)</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>RSB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Robinsons Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>RSBI</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Rcbc Savings Bank Inc.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SBA</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Sterling Bank Of Asia</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SBC</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Security Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SEB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>SEABANK PH</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SPY</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Starpay Corporation</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SSB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Sun Savings Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>TSB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>THE STANDARD CHARTERED BANK</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>TYC</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Tayocash</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>UBP</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Union Bank Of The Philippines</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>UCBSB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>UCBP Savings bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>UCPB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>United Coconut Planters Bank (UCPB)</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>USS</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>USSC Money Services</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>WDB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Wealth Development Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>YUANSB</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>Yuanta Savings Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ZTI</td>
+        <td>1-50000</td>
+        <td>Available</td>
+        <td>ZYBI TECH, INC.</td>
+    </tr>
+</table>
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}
+

@@ -1,0 +1,137 @@
+---
+title: 稳定币支付（固定地址）支付接口
+permalink: /api/version2/coinpay-fixed_address/
+---
+
+# **稳定币支付（固定地址）支付接口**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+:::warning
+**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
+:::
+
+## **代收API**
+
+### **代收申请**
+
+**简要描述：**
+
+* 创建代收订单
+
+**此地址永久有效，对接时请先查看 [注意事项](#注意事项)**
+
+**URL：**
+
+USDT
+
+`/usdt/collect/apply/multiple`
+说明：appId USDT，实收结算USDT
+
+**参数：**
+
+| 参数名        | 必选 | 类型     | 说明                              |
+|:-----------|:---|:-------|:--------------------------------|
+| appId      | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| payType    | 是  | String | [支付方式类型](#inBankCode)           |
+| inBankCode | 是  | String | [支付方式编码](#inBankCode)           |
+| sign       | 是  | String | 签名                              |
+
+返回data参数说明
+
+| 参数名    | 类型     | 说明   |
+|:-------|:-------|:-----|
+| payUrl | String | 支付链接 |
+| bankNo | String | 链地址  |
+| sign   | String | 签名   |
+
+### **异步通知**
+
+**URL：`贵方提供`**
+
+参数：
+
+| 参数名      | 类型      | 说明                                    |
+|:---------|:--------|:--------------------------------------|
+| appId    | Long    | 业务ID                                  |
+| currency | String  | 币种                                    |
+| orderId  | String  | 商户订单号，每次回调单号不同                        |
+| orderNo  | String  | 平台订单号，每次回调单号不同                        |
+| amount   | String  | 本次收款金额                                |
+| fee      | String  | 手续费金额                                 |
+| status   | Integer | 状态(2收款成功)                             |
+| payTime  | String  | 支付成功时间(纽约时间), 格式: yyyy-MM-dd HH:mm:ss |
+| hash     | String  | 交易hash                                |
+| sign     | String  | 签名                                    |
+
+request
+
+```json
+{
+  "appId": 10002,
+  "currency": "USD",
+  "orderId": "M123456789",
+  "orderNo": "PLAT123456789",
+  "amount": "21.00",
+  "fee": "1.00",
+  "status": 2,
+  "payTime": "2024-03-01 23:59:59",
+  "sign": "SIGN123456789"
+}
+```
+
+备注：收到回调通知之后,请返回**SUCCESS**(**大写**) 否则会持续通知5次
+
+### **支付方式**<a id="inBankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>币种</b></td>
+        <td><b>支付类型(payType)</b></td>
+        <td><b>支付编码(inBankCode)</b></td>
+        <td><b>限额</b></td>
+        <td><b>状态</b></td>
+        <td><b>说明</b></td>
+    </tr>
+    <tr>
+        <td>USDT</td>
+        <td>EWALLET</td>
+        <td>FIX_TRX</td>
+        <td>1-200000</td>
+        <td>可用</td>
+        <td>TRON 链上的 USDT，TRC-20 代币标准</td>
+    </tr>
+</table>
+
+### **注意事项**
+
+1，下单后的地址永久有效，每次支付后，都会触发回调，回调时，平台订单号(orderNo)和商户订单号(orderId)每次均不一样。但**同一笔订单**重复回调（5次重试通知）是相同的
+
+2，如果已存在某网络协议对应的收款地址，则会将请求中的**currencies**更新到已绑定的地址中更新方式为**覆盖**，原币种将不再支持，请谨慎操作
+
+3，仅支持下单时选定的 [**网络协议与币种**](#inBankCode)，未选择的不支持支付，强行支付资金无法入账，也不会有回调通知，为避免资金损失，请确认后支付
+
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

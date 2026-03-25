@@ -1,0 +1,151 @@
+---
+title: API Description
+permalink: /en/guide/api_description_guide/
+---
+# API Description
+
+## 1. Integration Methods
+| Interface Type             | API Documentation Path                                                            | Business Scope          | Description                                                                                                                                                                                                                        |
+|:---------------------------|:----------------------------------------------------------------------------------|:------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Global Cashier             | Global (Cashier)                                                                  | Global Business         | One integration supports multiple payment methods worldwide. The system automatically redirects users to the corresponding country's payment page based on their IP, allowing users to choose payment methods to complete payment. |
+| Local Cashier              | North America, South America, Europe, Asia, Middle East, etc.                     | Single Country Business | Independent integration, API synchronously returns payment pages supported by specific countries for users to choose and complete payment.                                                                                         |
+| Pure API Payment Interface | North America, South America, Europe, Asia, Middle East, etc.                     | Single Country Business | Independent integration, API synchronously returns relevant information for specific payment methods, facilitating customer-customized payment pages.                                                                              |
+| Other Payment Interfaces   | Global (International Credit Cards, Credit Card Subscriptions) and Stablecoin | Global Business         | Independent integration, API synchronously returns payment pages, credit Cards supports subscription deductions.                                                                                                                   |
+
+
+## 2. Communication Protocol
+When merchants integrate with HaiPay services and call the API, they must follow the rules below:
+
+| Type            | Description                                                                                                                                                                |
+|:----------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Transmission    | To ensure transaction security, HTTPS transmission is required                                                                                                             |
+| Submission      | Requests must be submitted using the POST method                                                                                                                           |
+| Data Format     | Both requests and responses must use application/json format                                                                                                               |
+| Character Set   | UTF-8 character encoding must be used                                                                                                                                      |
+| Signature Algo  | SHA256WithRSA                                                                                                                                                              |
+| Signature Req.  | Both request and response data must be signed and verified. See [Configuration & Signature Rules](/en/docs/guide/config_settings_and_signature_rules_guide.md) for details |
+| SSL/TLS Version | TLSv1.2, TLSv1.3     
+## 3. API Structure
+Below is the structure for calling HaiPay APIs. The API name is appended to the request URL. The content inside `data` contains the concatenated payload for different business operations.
+
+```json
+POST https://uat-interface.haipay.asia/{currency}/{api_endpoint}
+{
+    "appId": 1054,
+    "orderId": "M233323000059",
+    ...
+    // sign: Signature of the request body using the merchant's privateKey
+    "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="  
+}
+```
+
+Request URL:  
+| Environment | URL                                                                 |
+| :---------- | :------------------------------------------------------------------ |
+| Test        |[https://uat-interface.haipay.asia](https://uat-interface.haipay.asia) |
+| Production  | To be provided at go-live                                           |
+
+## 4. API List
+
+<table>
+    <tbody>
+        <tr>
+            <td><b>Product</b></td>
+            <td><b>API Name</b></td>
+            <td><b>Endpoint</b></td>
+            <td><b>Description</b></td>
+        </tr>
+        <tr>
+            <td rowspan="3">Collection</td>
+            <td>Collection Apply</td>
+            <td>/collect/apply</td>
+            <td rowspan="3">User makes a payment to the merchant (Top-up)</td> 
+        </tr>
+        <tr>
+            <td>Collection Query</td>
+            <td>/collect/query</td>
+        </tr>
+        <tr>
+            <td>Refund Apply</td>
+            <td>/refund/apply</td>
+        </tr>
+        <tr>
+            <td rowspan="2">Disbursement</td>
+            <td>Disbursement Apply</td>
+            <td>/pay/apply</td>
+            <td rowspan="2">Merchant makes a payment to the user (Withdrawal)</td>
+        </tr>
+        <tr>
+            <td>Disbursement Query</td>
+            <td>/pay/query</td>
+        </tr>
+        <tr>
+            <td>Account Balance</td>
+            <td>Account Query</td>
+            <td>/account/ledger</td>
+            <td>Merchant queries account balance</td>
+        </tr>
+    </tbody>
+</table>
+
+For details, see [API Documentation](/en/docs/guide/api_doc_list.md).
+
+## 5. Parameters
+
+**Common Request Parameters**
+
+| Parameter | Required | Type    | Description                                                                                       |
+| :-------- | :------- | :------ | :------------------------------------------------------------------------------------------------ |
+| appId     | Yes      | Integer | Business ID (retrieved from the backend, must correspond to the currency in the request URL)      |
+| sign      | Yes      | String  | Signature (see [Configuration & Signature Rules](/en/docs/guide/config_settings_and_signature_rules_guide.md)) |
+
+**Request Example:**
+```json
+{
+    "appId": 1000,
+    ......
+    "sign": "fCywFPOojpRIPi4ph81+CwoAvMXV1va2XR1DQVJeGnZwzNVd0hmvpud7nbP/3lc5JeTVELomruwVTGLtr+BTGT0IweAFTGNvNUuqOs3I4KG5tjvhPM7wm9NtwK2uAX1niLoylt4DcLfy2TeaxPQYDCJJRf7Qm7sDwJX5VoFt8RO9EC2ih+0Ike2+cAyRpIfKENPoIGQbUwvH6KkzHzjljcuvcSqq4D+iZid7up58A866RFrrJH9vkwaF+2mYxa/7awQIwAq8HPOxHkzLfVg74MZC8I1TOKvQAxkAquoNMMyrcAqRIopURfrgEaAtyW/ThPdyduYVlFeMg7BkpGLqZQ=="
+}
+```
+
+**Common Response Parameters**
+
+| Parameter | Required | Type   | Description                                      |
+| :-------- | :------- | :----- | :----------------------------------------------- |
+| status    | Yes      | String | 1: Normal, 0: Exception                         |
+| error     | Yes      | String | Error code                                      |
+| msg       | Yes      | String | Error description                               |
+| data      | Yes      | Object | Business data (**included in signature check**) |
+
+**Response Example:**
+```json
+{
+    {
+        "status": "1",
+        "error": "00000000",
+        "msg": "",
+        "data": {
+            ......
+            "sign": "PWA7B2u1hGr1VRxOCZbRuXQXtJiA6BgPExFnFv73hKJ+zcZfOe/R+y+inlwWcdDBzfix35+dl6raEs/yG/hcYyQOwDQ+mVjIt5wFk6iX7GPw557138yBdAmuMqvWM2IF+omLFcQFJvzfbR84rCyOmebDJlhkYMga5TTFHVLicUx3bPIrOJLoWJHrnZfcVFAJ+P5mUQhMH/cf+YmYZvrqq34pMJh6PcP5vyruJ8aNV0QfyHR42AHLIgp+HnOcZpA0aUzFXM5zpsgXK3QR/KO3vLiKd77UaZNO6g5TN/Ck2MtLkBVxyvIHstgXFXKF1e+uc91FdBHK5nfmrjLQ2wyeUA=="
+        }
+    }
+}
+```
+
+**Error Codes**
+
+| Error Code | English Response                                                | Description                                                                 |
+| :--------- | :-------------------------------------------------------------- | :-------------------------------------------------------------------------- |
+| 1001       | param is null                                                   | Parameter is null                                                           |
+| 1002       | Illegal Param                                                   | Illegal parameter                                                           |
+| 1003       | system exception                                                | System exception (**order may already be recorded, awaiting async notification or query for final status**) |
+| 1004       | system is busy                                                  | System busy (**order may already be recorded, awaiting async notification or query for final status**) |
+| 4005       | order already exit                                              | Order already exists                                                        |
+| 4011       | appId do not exit                                               | appId does not exist                                                        |
+| 4012       | you do not have an available product, please connect admin      | Merchant product unavailable, contact administrator                         |
+| 4013       | order not exit                                                  | Order does not exist                                                        |
+| 4014       | order is already end status                                     | Order is already in a final status                                          |
+| 4015       | this merchant do not have a collect bank                        | No available collection account                                             |
+| 4016       | your account do not have enough money                           | Insufficient account balance                                                |
+| 4031       | ip adress is Forbidden                                          | Illegal IP                                                                  |
+| 5012       | pay in channel not functional, please connect customer service  | System exception                                                            |

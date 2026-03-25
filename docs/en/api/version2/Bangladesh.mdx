@@ -1,0 +1,249 @@
+ ---
+title: Bangladesh Payment API
+permalink: /en/api/version2/Bangladesh/
+---
+
+# **Bangladesh Payment API**
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+:::warning
+**Before reading this API documentation, please make sure to review [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
+:::
+
+### **Transaction Limits**
+
+| Transaction Type | Limit          |
+| :--------------- | :------------- |
+| Collection       | BDT: 100-50000 |
+| Disbursement     | BDT: 100-50000 |
+
+## **Collection API**
+
+### **Collection Application**
+
+**Description:**
+
+* Create a collection order
+
+**URL:**
+
+BDT: `/bdt/collect/apply`  
+Note: appId needs to use BDT corresponding, user payment success will increase BDT balance 
+
+**Parameters:**
+
+| Parameter       | Required | Type   | Description                                                                                                                                                                                                    |
+| :-------------- | :------- | :----- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| appId           | Yes      | Long   | Business ID (obtained from backend, must pass the corresponding business ID according to the currency in the URL)                                                                                              |
+| orderId         | Yes      | String | Merchant order number (must be unique, maximum length 48)                                                                                                                                                      |
+| name            | Yes      | String | User’s full name, recommended to use real name. Format: include firstName and lastName, separated by a space. Example: Donald John Trump                                                                       |
+| phone           | Yes      | String | Valid phone number (format reference: [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format))                                                                                       |
+| email           | Yes      | String | Valid email                                                                                                                                                                                                    |
+| amount          | Yes      | String | Transaction amount (accurate to two decimal places; punctuation marks such as “,” are prohibited)                                                                                                              |
+| payType         | Yes      | String | Transaction type                                                                                                                                                                                               |
+| inBankCode      | Yes      | String | [Payment Method](#inBankCode)                                                                                                                                                                                  |
+| callBackUrl     | Yes      | String | Redirect URL after successful payment                                                                                                                                                                          |
+| callBackFailUrl | Yes      | String | Redirect URL after failed payment                                                                                                                                                                              |
+| notifyUrl       | No       | String | Callback URL                                                                                                                                                                                                   |
+| subject         | Yes      | String | Payment remark                                                                                                                                                                                                 |
+| body            | No       | String | Remark details                                                                                                                                                                                                 |
+| country         | No       | String | Required for cashier mode, pass: 458                                                                                                                                                                           |
+| partnerUserId   | Yes      | String | Unique user identifier (e.g., userId),used for risk control purposesfor the risk control system and must be valid, otherwise it will affect the transaction. Format: digits, letters, or symbols -~!@#$%&*()_. |
+| sign            | Yes      | String | Signature                                                                                                                                                                                                      |
+
+Return Data Parameters
+
+| Parameter | Type   | Description       |
+| :-------- | :----- | :---------------- |
+| orderId   | String | Merchant order ID |
+| orderNo   | String | Platform order ID |
+| payUrl    | String | Payment link      |
+| sign      | String | Signature         |
+
+### **Collection Query**
+
+**Description:**
+
+* Query a collection order
+
+**URL:**
+
+BDT: `/bdt/collect/query`
+
+**Parameters:**
+
+| Parameter | Required | Type   | Description                                                                                                       |
+| :-------- | :------- | :----- | :---------------------------------------------------------------------------------------------------------------- |
+| appId     | Yes      | Long   | Business ID (obtained from backend, must pass the corresponding business ID according to the currency in the URL) |
+| orderId   | Yes      | String | Merchant order number                                                                                             |
+| orderNo   | No       | String | Platform order number (faster response)                                                                           |
+| sign      | Yes      | String | Signature                                                                                                         |
+
+Return Data Parameters
+
+| Parameter    | Type    | Description                                                                                                            |
+| :----------- | :------ |:-----------------------------------------------------------------------------------------------------------------------|
+| orderId      | String  | Merchant order ID                                                                                                      |
+| orderNo      | String  | Platform order ID                                                                                                      |
+| amount       | String  | Transaction amount                                                                                                     |
+| actualAmount | String  | Received amount                                                                                                        |
+| fee          | String  | Fee                                                                                                                    |
+| status       | Integer | Status (0 = Not started, 1 = Processing, 2 = Success (final), 3 = Failed (final), -1 = Exception pending confirmation) |
+| payTime      | String  | Payment success time (present when status=2) (local currency time UTC+06:00), format: yyyy-MM-dd HH:mm:ss                       |
+| errorMsg     | String  | Failure reason (present when status=3)                                                                                 |
+| sign         | String  | Signature                                                                                                              |
+
+### **Payment Methods**<a id="inBankCode"></a>
+
+<table style="border-collapse:collapse;table-layout:fixed;width:1040px;margin:0">
+    <colgroup >
+        <col style="width:80px" />
+        <col style="width:170px" />
+        <col style="width:200px" />
+        <col style="width:155px" />
+        <col style="width:80px" />
+        <col style="width:100px" />
+    </colgroup>
+ <thead>
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (payType)</b></td>
+        <td><b>Payment Code (inBankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>BDT</td>
+            <td>EWALLET</td>
+            <td>BDT_BKASH</td>
+            <td>100-50000</td>
+            <td>Available</td>
+            <td>bkash</td>
+        </tr>
+        <tr>
+            <td>BDT</td>
+            <td>EWALLET</td>
+            <td>BDT_NAGAD</td>
+            <td>100-50000</td>
+            <td>Available</td>
+            <td>nagad</td>
+        </tr>
+    </tbody>
+</table>
+
+## **Disbursement API**
+
+### **Disbursement Application**
+
+**Description:**
+
+* Create a disbursement order
+
+**URL: `/bdt/pay/apply`**
+
+**Parameters:**
+
+| Parameter     | Required | Type   | Description                                                                                                                                                                  |
+| :------------ | :------- | :----- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| appId         | Yes      | Long   | Business ID (obtained from backend, must pass the corresponding business ID according to the currency in the URL)                                                            |
+| orderId       | Yes      | String | Merchant order number (must be unique, maximum length 48)                                                                                                                    |
+| amount        | Yes      | String | Transaction amount (accurate to two decimal places; punctuation marks such as “,” are prohibited)                                                                            |
+| accountType   | Yes      | String | Account type: EWALLET (e-wallet), BANK_ACCOUNT (bank)                                                                                                                        |
+| bankCode      | Yes      | String | [Payment Method](#bankCode)                                                                                                                                                  |
+| accountNo     | Yes      | String | User account number                                                                                                                                                          |
+| name          | Yes      | String | Recipient’s name (format: English letters, case-insensitive, spaces allowed, 1-30 chars, “firstName middleName lastName” (middleName optional, special chars supported '.-)) |
+| phone         | Yes      | String | Valid phone number (format reference: [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format))                                                     |
+| email         | Yes      | String | Valid email                                                                                                                                                                  |
+| notifyUrl     | No       | String | Callback URL                                                                                                                                                                 |
+| subject       | No       | String | Payment remark (transaction title, product name, or payment reason)                                                                                                          |
+| body          | No       | String | Remark details                                                                                                                                                               |
+| partnerUserId | Yes      | String | Unique user identifier (e.g., userId). Must be valid, otherwise it will affect the transaction. Format: digits, letters, or symbols -~!@#$%&*()_.                            |
+| sign          | Yes      | String | Signature                                                                                                                                                                    |
+
+Return Data Parameters
+
+| Parameter | Type   | Description                            |
+| :-------- | :----- | :------------------------------------- |
+| orderId   | String | Merchant order number (must be unique) |
+| orderNo   | String | Platform order number                  |
+| sign      | String | Signature                              |
+
+### **Disbursement Query**
+
+**URL: `/bdt/pay/query`**
+
+**Parameters:**
+
+| Parameter | Required | Type   | Description                                                                                                       |
+| :-------- | :------- | :----- | :---------------------------------------------------------------------------------------------------------------- |
+| appId     | Yes      | Long   | Business ID (obtained from backend, must pass the corresponding business ID according to the currency in the URL) |
+| orderId   | Yes      | String | Merchant order number                                                                                             |
+| orderNo   | No       | String | Platform order number (faster response)                                                                           |
+| sign      | Yes      | String | Signature                                                                                                         |
+
+Return Data Parameters
+
+| Parameter | Type    | Description                                                                                                            |
+| :-------- | :------ |:-----------------------------------------------------------------------------------------------------------------------|
+| orderId   | String  | Merchant order number (must be unique)                                                                                 |
+| orderNo   | String  | Platform order number                                                                                                  |
+| amount    | String  | Transaction amount                                                                                                     |
+| fee       | String  | Fee                                                                                                                    |
+| status    | Integer | Status (0 = Not started, 1 = Processing, 2 = Success (final), 3 = Failed (final), -1 = Exception pending confirmation) |
+| payTime   | String  | Payment success time (exists when status=2) (local currency Time UTC+06:00), format: yyyy-MM-dd HH:mm:ss               |
+| errorMsg  | String  | Failure reason (exists when status=3)                                                                                  |
+| sign      | String  | Signature                                                                                                              |
+
+### **Payment Methods**<a id="bankCode"></a>
+
+<table style="border-collapse:collapse;table-layout:fixed;width:1050px;margin:0">
+    <colgroup >
+        <col style="width:80px" />
+        <col style="width:190px" />
+        <col style="width:190px" />
+        <col style="width:155px" />
+        <col style="width:80px" />
+        <col style="width:100px" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>Currency</th>
+            <th>Payment Type (accountType)</th>
+            <th>Payment Code (bankCode)</th>
+            <th>Limit</th>
+            <th>Status</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>BDT</td>
+            <td>EWALLET</td>
+            <td>BDT_BKASH</td>
+            <td>100-50000</td>
+            <td>Available</td>
+            <td>bkash</td>
+        </tr>
+        <tr>
+            <td>BDT</td>
+            <td>EWALLET</td>
+            <td>BDT_NAGAD</td>
+            <td>100-50000</td>
+            <td>Available</td>
+            <td>nagad</td>
+        </tr>
+    </tbody>
+</table>
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

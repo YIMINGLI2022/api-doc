@@ -1,0 +1,1350 @@
+---
+title: Mexico Payment API
+permalink: /en/api/version2/Mexico/
+---
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+:::warning
+**Before reading this API document, please make sure to check [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
+:::
+
+## **Limits**
+
+| Transaction Type | Limits (Unit: MXN) |
+| :--------------- |:-------------------|
+| Collection (OXXO) | 10-8000            |
+| Collection (CASH) | 10-8000            |
+| Collection (CLABE) | 3-50000            |
+| Disbursement (CLABE) | 3-50000            |
+
+## **Collection API**
+
+### **Collection Application**
+
+**Brief Description:**
+
+* Create a collection order
+
+**URL：`/mxn/collect/apply`**
+
+Note: Use the appId corresponding to Mexican Peso. User balance will increase in Mexican Peso after successful payment.
+
+**Parameters:**
+
+| Parameter       | Required | Type     | Description                                                                                                                                                                                                  |
+|:----------------|:---------|:---------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| appId           | Yes      | Long     | Business ID (obtained from the backend, must correspond to the currency in the URL)                                                                                                                                                                     |
+| orderId         | Yes      | String   | Merchant Order Number (must be unique, no longer than 48 characters)                                                                                                                                                                              |
+| name            | Yes      | String   | Payer's Name (format: English letters, spaces allowed, 1–30 characters, "firstName middleName lastName"; middleName optional; special characters allowed: '.-)                                                                                                           |
+| phone           | Yes      | String   | Valid phone number (format reference: [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format))                                                                                   |
+| email           | Yes      | String   | Valid email address                                                                                                                                                       |
+| amount          | Yes      | String   | Transaction Amount (unit: Mex$, precise to two decimal places; do not use punctuation such as ",")                                                                                                                                                             |
+| payType         | Yes      | String   | Payment Method: QR (Barcode Payment) or VA (Virtual Account)                                                                                                                                                                          |
+| inBankCode      | Yes      | String   | Collection Code. When payType is QR, inBankCode supports: OXXO, CASH payment methods; when payType is VA, inBankCode is CLABE                                                                                                                   |
+| callBackUrl     | Yes      | String   | Redirect URL after successful payment                                                                                                                                                                                         |
+| callBackFailUrl | Yes      | String   | Redirect URL after failed payment                                                                                                                                                                                         
+| notifyUrl       | No       | String   | Callback URL                                                                                                                                                                                                |
+| subject         | No       | String   | Payment Note                                                                                                                                                                                                |
+| body            | No       | String   | Additional Details                                                                                                                                                                                                |
+| partnerUserId   | Yes      | String   | Unique User Identifier (e.g., userId), used for risk control. Must be valid; otherwise, the transaction may be affected. Allowed format: numbers, letters, or common symbols -~!@#$%&*()_.                                                                                                                         |
+| sign            | Yes      | String   | Signature                                                                                                                                                                                                  |
+
+:::warning
+**Important Notes:**
+1. This interface supports QR (Barcode Payment) and VA (CLABE Virtual Account) payment methods
+2. CLABE virtual accounts are for single collection and do not support multiple collections
+3. For callback description, please refer to [Common API - Asynchronous Notification](/en/docs/api/version2/CommonApi.md#2asynchronous-notification)
+:::
+
+##### 
+
+request — QR Payment Example
+
+```json
+{
+    "amount": "20.00",
+    "callBackFailUrl": "https://www.example.com/failed",
+    "payType": "QR",
+    "callBackUrl": "https://www.example.com/success",
+    "inBankCode": "CASH",
+    "orderId": "SINGLE_1763358741905",
+    "phone": "1234567890",
+    "appId": "4755",
+    "name": "TEST NAME",
+    "partnerUserId": "dfff@fg43123",
+    "sign": "Si8+iTS7zZ4oX1bMCZ9PPFoJwgw9mGEwMc1UIADOrbs7xlCL+f5e+OYcvhKa4HXCxybqu6MTft6t6Smy9gvu8bPw/erwHdKbP/QzRDU5qHfMj9+1IZzZvJQJR/i5/TW9Y+L4xkOOsaTXfEYuDsZTjyNqy/si5EbUgl1CzVMuH3BORpB7H2f0P34RHqt8t5SZet7YfZLs+dcriczmqHAKhILHgIc7VHSfiAna00J2KjM93qO6kXa8LIjw7FVbX5f6ZMOUjrl13M3DDx01qSW0JVCSxRqEN9yTYTPMV8eFCSk+Picr78/vyMEKnRjnccUx4OZy1cK/9rIfi538xTEAbQ==",
+    "email": "test.single@example.com"
+}
+```
+
+request — VA Payment Example
+
+```json
+{
+    "appId": "4755",
+    "orderId": "VA_1763358741905",
+    "payType": "VA",
+    "inBankCode": "CLABE",
+    "amount": "43.43",
+    "name": "Sofía López Martínez",
+    "email": "test@example.com",
+    "callBackUrl": "https://www.example.com/success",
+    "callBackFailUrl": "https://www.example.com/failed",
+    "partnerUserId": "dfff@fg43123",
+    "sign": "hYNVZTSCTWeR8X0HfhQ2zxoCTeM5ilX8tElAaNbfGDNzjpklR6r/LQZQ/IEO6SQvAc7EdKnAObcBhOxoUvQbeUNy1o8xcp4TV8ZX32McBPbAB/fu+lPF2SbtahoFs3W5w4Gg3ZMa9nLsStP6m1qER7rfaBOBDmGjUIbwDXUaXYwhLKVepB4N9dmE/r9/kch3SKXkFD/2NlT7HgN4CSWKTr04dd7awgYZm6PFlL9U3F0ZvgCEJouNBezNu2fuVz1ylgPtsXTKn2xLgCekrvwG+9WmQPnQzUC5kVlyLGpKvyVK9EMgHHTfg/12Lu1fyxcqLY8Zm/RAU55lAs/kxLQvpQ=="
+}
+```
+
+response — QR Payment
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "SINGLE_1763358111905",
+        "orderNo": "2025111713522220822",
+        "payUrl": "https://www.paycashglobal.com/formato.php?referencia=MTQ3MTMyNDEwMjQzNQ==&interno=1",
+        "bankCode": "CASH",
+        "qrCode": "1471324102431",
+        "sign": "mpcB0wfbvGpCSNbT8Gs+D4Tt1eMDqTgnuY6yVUAdemccC07nnWrxSPk4srHFXeoXpdWm+CKFh89rghU16kZq2pm9dw0jSlns0dj5c7sDO8Te0KMNGfleuQ+N/16sGZr/LE7MAWj6Z902ymiff6q+N1ljTfIDypHTztbGDpJvemZ9OkB2BCemsoAX6ukkXyZJPI+gkyJEDCPfOcWfXeNmdWOKxyXLOJEjIBno2oyZoDs3yJqkMtCyQW1cjgTTOQbnxgCjHV9YQ+OcLVdkFroC/HrP8p9c8qRICDX/NMEt4Z0Zo1eBV07rkebuY60+A1kSuD7axO0UxSq6BbXKjgNqyQ=="
+    }
+}
+```
+
+response — VA Payment
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "VA_1763358741905",
+        "orderNo": "2025111713522220823",
+        "payUrl": "https://checkout-mx.fusionpay.net?checkout=MjAyNTExMTQxMTAyNTIzNjM0OSZHVjE5ODkxNjY5MzI0MzEwNzczNzYmNjg0MTgwMjkyMDE5ODQ0MDAw",
+        "bankCode": "CLABE",
+        "bankNo": "684180292019844000",
+        "bankUserName": "Sofía López Martínez",
+        "sign": "QwXUII9P895b0008Avsep0OqxuxuQai56vAP1ks1saVJnT/hIWiE9rM4i5uI1CQ0yGNGVkVV25evO+7MssalgWqQNr0tTE0RHCJ6nK0baNz680CHp4IFxLp5TV4OLlNpLfyTNxiYLu4TzsFQuOAsDyTzOH6LnBBLC+syn1S8r4OkkcxrjDnonPc6E4wPZyJouiXe7+cxvSWxl+QSn8dXudxBVddhhTbiwJb2+ATZTDDMmeD7BlU9e8x8IKlR9j7l9Xa4hGU/GRvBqNAIhHXiQVldIlOP1I5L9Ez78kty8dyB2+YIgm5q2gRyl+XotAlOjq8cWti4dau1B7gi3bfqtw=="
+    }
+}
+```
+
+Return Data Parameters Description
+
+| Parameter     | Type   | Description                                                                 |
+|:--------------|:-------|:----------------------------------------------------------------------------|
+| orderId       | String | Merchant Order Number (must be unique)                                      |
+| orderNo       | String | Platform Order Number                                                       |
+| payUrl        | String | Payment URL (QR returns barcode payment URL, VA returns CLABE virtual account payment URL) |
+| bankCode      | String | Channel Code (QR returns barcode, VA returns CLABE)                         |
+| qrCode        | String | Barcode, returns the barcode number (only returned for QR payment)          |
+| bankNo        | String | CLABE Virtual Account Number (only returned for VA payment)                |
+| bankUserName  | String | Account Name (only returned for VA payment)                                |
+| sign          | String | Signature                                                                   |
+
+### **Collection Query**
+
+**Brief Description:**
+
+* Query a collection order
+* After asynchronous notification, use orderNo for second confirmation
+
+**URL：`/mxn/collect/query`**
+
+
+
+**Parameters:**
+
+| Parameter | Required | Type   | Description                                                    |
+| :-------- | :------- | :----- | :------------------------------------------------------------- |
+| appId     | Yes      | Long   | Business ID (obtained from the backend, must correspond to the currency in the URL) |
+| orderId   | Yes      | String | Merchant Order Number                                          |
+| orderNo   | No       | String | Platform Order Number (faster response)                        |
+| sign      | Yes      | String | Signature                                                      |
+
+request
+
+```json
+{
+    "appId": 1054,
+    "orderId": "M22222000028",
+    "sign": "EmyJGm3ELzG4FsOc0Krs9ncbSjo4oTGuXWML+7djYla3+VAwa9wS17z38p/7U2ZAjroO04XrE7YXcB1o76Dtyipj3h3bJzs7FYma1QNkMUdt9hh7m8U6hMsMQX7vIWHtXNwz4pbTSC75+kQWXaCew7KoE6LXECdJU8AISgNgeki2TK9R0pCfshr0Z2SZBPeuT6OvIH5LdmqgdZhuqnffGU2qnXk4KMkO848e6/WALLBR+LE1wyKHfPnYVcuKSMVYxkvKyyIL5JIPEgW0o5bh4RCbaUn3NZtyYwrU1uQ3ZDFRThm9j6XAQP+LBlmq3nOePqBtp/VDVarRaV+7FbQg3A=="
+}
+```
+
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M22222000028",
+        "orderNo": "6023042811314347",
+        "amount": "50000.00",
+        "actualAmount": "0.00",
+        "fee": "0.00",
+        "status": 1,
+        "sign": "fP433ygWVDLVGxYkVnGJj7riGq0U3vyVX+MbBAImxfGLZkZcEAHVEoVYuULZSmXAAXKRSyd67WlDNm+24pougM54ofAoH4HMtCL2tfCoBReFyz3z02AGKkrKE2xWhSpWoqfQoBvzwuN5iGMMu0s9Q1YvqiwJ8WDVIENnmiIyD8qDJN7caHTW2US14/faG+69AvnuIgJ/nu7/jogOlgEYdZdVYU7gcRDE+d47KjlFGswQkJ/h/uzV7cWtUqrtOO7ZnZ3/z33Xx8awokX36QoYcPSWAU0h+Ij9O9402HNhm1eTbYcLU0uI/z8xCAtyAI/tTyiFijpiNlxUKQj+zKsILw=="
+    }
+}
+```
+
+Return Data Parameters Description
+
+| Parameter    | Type    | Description                                                                 |
+| :----------- | :------ | :-------------------------------------------------------------------------- |
+| orderId      | String  | Merchant Order Number (must be unique)                                       |
+| orderNo      | String  | Platform Order Number                                                        |
+| amount       | String  | Transaction Amount                                                           |
+| actualAmount | String  | Received Amount                                                              |
+| fee          | String  | Transaction Fee                                                              |
+| status       | Integer | Status (0 = Not Started, 1 = In Progress, 2 = Success (Final), 3 = Failed (Final), -1 = Exception Pending Confirmation) |
+| payTime      | String  | Payment Success Time (available when status = 2, 4, or 5) (Mexico Time), format: yyyy-MM-dd HH:mm:ss |
+| errorMsg     | String  | Failure Reason (available when status = 3)                                   |
+| sign         | String  | Signature                                                                    |
+
+## **Disbursement API**
+
+### **Disbursement Application**
+
+**Brief Description:**
+
+* Create a disbursement order
+
+**URL：`/mxn/pay/apply`**
+
+Note: appId Mexican Peso, amount Mexican Peso, actual settlement Mexican Peso
+
+**Parameters:**
+
+| Parameter       | Required | Type   | Description                                                                                                                                               |
+|:----------------|:---------|:-------|:----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| appId           | Yes      | Long   | Business ID (obtained from the backend, must correspond to the currency in the URL)                                                                                                                             |
+| orderId         | Yes      | String | Merchant Order Number (must be unique, no longer than 48 characters)                                                                                                                         |
+| amount          | Yes      | String | Transaction Amount (unit: Mex$, precise to two decimal places; do not use punctuation such as ",")                                                                             |
+| accountType     | Yes      | String | Account Type: BANK_CARD (Debit Card (16 digits)), BANK_ACCOUNT (CLABE (18 digits))                                                                      |
+| bankCode        | Yes      | String | Bank Code. For specific values, see [Complete Bank Code List](/en/docs/api/version2/Mexico_BankCodes.md) |
+| accountNo       | Yes      | String | User Bank Account Number                                                                                                                                       |
+| name            | Yes      | String | Recipient Name (format: English letters, spaces allowed, 1-30 characters, "firstName middleName lastName" (middleName optional, special characters '.- supported))                  |
+| phone           | Yes      | String | Valid phone number (format reference: [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format))                                                                                                                            |
+| email           | Yes      | String | Valid email address                                                                                                                                           |
+| notifyUrl       | No       | String | Callback URL                 |
+| subject         | No       | String | Payment Note (transaction title, product name, payment reason)                                                                                                           |
+| body            | No       | String | Additional Details                                                                                                                                           |
+| partnerUserId   | Yes      | String | Unique User Identifier (e.g., userId), used for risk control. Must be valid; otherwise, the transaction may be affected. Allowed format: numbers, letters, or common symbols -~!@#$%&*()_.       |
+| sign            | Yes      | String | Signature                                                                                                                                               |
+
+##### 
+
+request
+
+```json
+{
+    "appId": 1054,
+    "orderId": "M100000450012",
+    "amount": "55.00",
+    "accountType": "BANK_ACCOUNT",
+    "bankCode": "STP",
+    "accountNo": "99418029201a844099",
+    "name": "John Doe",
+    "email": "johndoe@example.com",
+    "subject": "Payment for services",
+    "body": "Payment description",
+    "partnerUserId": "73744645@f233",
+    "sign": "I1PeK3eJEVsFFNowxVRqMXpeWa1lr/BcRpBi8SsW4wVo1+5AC1JsrFq/m/L3214NzKHvtDWi4zia3DL3dPut0yMyUyqL91LNCSaeISbGsQPlhEsQpyTOryS/RKOfsrn2Xo37SCF/phAvndOk2jwwGwqM5xLz1ms9Ukl85wv27QFNrXIMxK2p181e7MpMYrgf+xvEBE/VqCtKMtN9pO449wWwXzHWNPbZ76s4pAvKwRE9yXQDr7Iw14Dktcnl1FoLM4gWM/obkO+mz6SyAGDuXhVh/+OD/IGNiCyTCNq6ciQY28UnCFV6ZIP40gxsFhfBJKbK+Raw7y1Bh912ifYfug=="
+}
+```
+
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M1000245001F4",
+        "orderNo": "3023022014149638",
+        "sign": "LmhUnkw5j0pMiimsG6rKwdNNZGvX6GMpSmD1mdHZwq112wuK5BohmdEoqKB/jkMk28o3da4Cxh6Q+t97+yTCemRrF+dMaHA73rpOeUuujKQl/UcFvJuMhfLBa2tp09L71NzoBqpPD6aXf37mYAz8E1HmERwFPpac5FVxIYanHG8cqmMLJYsVmHTSxWavgWU03ys9UczBePkBiR8sl2FSOhFABB0wAP28lswrV/ABS68IsLKtyd1fyI3GBfSbIK5nDEEnlE+EdElFdLs9taAxJImeVF1x4eT47+bkPJ2qS8z3K8QGzKLF3W+8SiRZGfSwDTsLKH+2Vycvy5auRl+ag=="
+    }
+}
+```
+
+Return Data Parameters Description
+
+| Parameter | Type   | Description                       |
+|:----------|:-------|:----------------------------------|
+| orderId   | String | Merchant Order Number (must be unique) |
+| orderNo   | String | Platform Order Number                 |
+| sign      | String | Signature                       |
+
+### **Disbursement Query**
+
+**Brief Description:**
+
+* Query a disbursement order status
+
+**URL：`/mxn/pay/query`**
+
+**Parameters:**
+
+| Parameter | Required | Type   | Description                                               |
+| :-------- | :------- | :----- | :-------------------------------------------------------- |
+| appId     | Yes      | Long   | Business ID (obtained from the backend, must correspond to the currency in the URL) |
+| orderId   | Yes      | String | Merchant Order Number                                     |
+| orderNo   | No       | String | Platform Order Number (faster response)                  |
+| sign      | Yes      | String | Signature                                                 |
+
+request
+
+```json
+{
+    "appId": 1000,
+    "orderId": "M1234567111",
+    "orderNo": "3022111516571436",
+    "sign": "ZxkVZL+GAyv0VhVWn4IvGYahTzxgQuthkuV2ONWiqIfIDb2avvHlFOUJVzqZi1q8CPHXZm1ltanRTRVTxfsuftLvGeDioUHglWt46/RU6c1OPznpLGsZ35Q3n5tW2y1EnOsxPynXBFLuDQy+aZ3l9u6AQ30T0zQexMGT+IxuFkmUp02g/6juaHa5ZgNMv7lN67ixIp162wrM7OJuaOif872QijSceRdZhzaMGImAwB0D4MosRV4WMBOKkwgPdmS7GuZN66YUidXk3wTGqX3MYRw6M0kj4eNegSUwPXvp4q4p0KO8Y3xUMld54GY2ApX3WN3CBtC/vpJqEszjGBbbGg=="
+}
+```
+
+response — Order Failed
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M1234567111",
+        "orderNo": "3022111516571436",
+        "amount": "100000.00",
+        "fee": "0.00",
+        "status": 3,
+        "errorMsg": "Đơn hàng không tồn tại",
+        "sign": "KKuvCl0SuNANJs+l2ogAaJm8pmV+Hi+Xa7q27vJ6D1Ehs4aOp13kRbITfJAhczh3T81BE9qwHeJaYwf+r0EypKM9TL6pMwfG8Az4gRy1D57wiUaVjl2PWcvbEqrn1hL0b+btkjvAM9I+CcSv+wuOW3/uku17Ws3FhgJLj9sFsQUBAPjDO+758VnwBytCOLBmljLBXyKgNgpmFQ1/DNkqWl0UNzyLK45Zw3yf5NiwhEFbvW0jlOWlfu/ql4hluISUQG573jEoFCBEnQLb2tQoRZj1QYNRCXPf5lbej0vzqbEwvR9h+ZOf255t1MocJkdIe463DTV5U3KZdVT87HMagw=="
+    }
+}
+```
+
+response — Order Successful
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M1234567112",
+        "orderNo": "3022111517401574",
+        "amount": "100000.00",
+        "fee": "1003.00",
+        "status": 2,
+        "payTime": "2024-03-01 23:59:59",
+        "sign": "khPtOmGq+cpKX0HFAI/lbP0dx4oFyNAnL5oLsdmhDJdASlQm0yg5I3o+MhImYggEsL6c2bo5fP29t54OZFqSdQDfIuNDvGbAMAr4mRBxc0hoHLkBLyyagfVPBLyQA1JY8XV3ZL4ySzQ3ZQnMCfrh2K39ueUuz6HpZ03Hj0KYijVRCXAZaio/L5jfLBT12QXmvIfAHa8s/k9flhK05ENHPep3zjj/MZGOEaX7jkEJLfjK0duypDCa61BRQjM+oePOdVsgleIl1Yf98UAxMDZ/A3912KFHEb+/jvmdnulNbiJFyuT1fEe+j2teUgw3vFsZAtwNWAgxhC7UO+N0Q5z4EA=="
+    }
+}
+```
+
+Return Data Parameters Description
+
+| Parameter | Type    | Description                                                                 |
+|:----------|:--------|:----------------------------------------------------------------------------|
+| orderId   | String  | Merchant Order Number (must be unique)                                      |
+| orderNo   | String  | Platform Order Number                                                       |
+| amount    | String  | Transaction Amount                                                          |
+| fee       | String  | Transaction Fee                                                             |
+| status    | Integer | Order Status (0 Not Started, 1 Processing, 2 Success (final), 3 Failed (final), -1 Exception Pending Confirmation) |
+| payTime   | String  | Payment Success Time (available when status=2) (Mexico Time), format: yyyy-MM-dd HH:mm:ss |
+| errorMsg  | String  | Payment Failure Reason (available when status=3)                            |
+| sign      | String  | Signature                                                                   |
+
+### **Bank Codes**
+
+:::warning
+**Important Notes:**
+- When calling the disbursement interface, please use the corresponding bank name as the `bankCode` parameter value
+- If the bank name contains spaces, please replace them with "_", for example, "VE POR MAS" should be "VE_POR_MAS"
+- CLABE account numbers are 18-digit numbers, with the first 3 digits being the bank code
+- BANK_CARD (debit card) account numbers are 16-digit numbers
+:::
+
+<table style='border-collapse: collapse;table-layout:fixed;width:1200px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752; width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032; width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496; width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784; width:120px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480; width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480; width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040; width:440px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (accountType)</b></td>
+        <td><b>Payment Code (bankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>ABM Code</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BANXICO</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>--</td>
+        <td>BANXICO</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BANCOMEXT</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>006</td>
+        <td>BANCOMEXT</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BANOBRAS</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>009</td>
+        <td>BANOBRAS</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BANJERCITO</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>019</td>
+        <td>BANJERCITO</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>NAFIN</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>135</td>
+        <td>NAFIN</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BANSEFI</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>166</td>
+        <td>BANSEFI</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>HIPOTECARIA_FED</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>168</td>
+        <td>HIPOTECARIA FED</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BANAMEX</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>002</td>
+        <td>BANAMEX</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BBVA_MEXICO</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>012</td>
+        <td>BBVA MEXICO</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>SANTANDER</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>014</td>
+        <td>SANTANDER</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>HSBC</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>021</td>
+        <td>HSBC</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BAJIO</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>030</td>
+        <td>BAJIO</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>INBURSA</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>036</td>
+        <td>INBURSA</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>MIFEL</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>042</td>
+        <td>MIFEL</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>SCOTIABANK</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>044</td>
+        <td>SCOTIABANK</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BANREGIO</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>058</td>
+        <td>BANREGIO</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>INVEX</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>059</td>
+        <td>INVEX</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BANSI</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>060</td>
+        <td>BANSI</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>AFIRME</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>062</td>
+        <td>AFIRME</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BANORTE</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>072</td>
+        <td>BANORTE</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>ACCENDO_BANCO</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>102</td>
+        <td>ACCENDO BANCO</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>AMERICAN_EXPRES</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>103</td>
+        <td>AMERICAN EXPRES</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BANK_OF_AMERICA</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>106</td>
+        <td>BANK OF AMERICA</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>MUFG</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>108</td>
+        <td>MUFG</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>JP_MORGAN</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>110</td>
+        <td>JP MORGAN</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BMONEX</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>112</td>
+        <td>BMONEX</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>VE_POR_MAS</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>113</td>
+        <td>VE POR MAS</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>CREDIT_SUISSE</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>126</td>
+        <td>CREDIT SUISSE</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>AZTECA</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>127</td>
+        <td>AZTECA</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>AUTOFIN</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>128</td>
+        <td>AUTOFIN</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BARCLAYS</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>129</td>
+        <td>BARCLAYS</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>COMPARTAMOS</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>130</td>
+        <td>COMPARTAMOS</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>MULTIVA_BANCO</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>132</td>
+        <td>MULTIVA BANCO</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>ACTINVER</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>133</td>
+        <td>ACTINVER</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>INTERCAM_BANCO</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>136</td>
+        <td>INTERCAM BANCO</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BANCOPPEL</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>137</td>
+        <td>BANCOPPEL</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>ABC_CAPITAL</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>138</td>
+        <td>ABC CAPITAL</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>CONSUBANCO</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>140</td>
+        <td>CONSUBANCO</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>VOLKSWAGEN</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>141</td>
+        <td>VOLKSWAGEN</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>CIBANCO</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>143</td>
+        <td>CIBANCO</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BBASE</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>145</td>
+        <td>BBASE</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BANKAOOL</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>147</td>
+        <td>BANKAOOL</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>PAGATODO</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>148</td>
+        <td>PAGATODO</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>INMOBILIARIO</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>150</td>
+        <td>INMOBILIARIO</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>DONDE</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>151</td>
+        <td>DONDE</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BANCREA</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>152</td>
+        <td>BANCREA</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BANCO_FINTERRA</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>154</td>
+        <td>BANCO FINTERRA</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>ICBC</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>155</td>
+        <td>ICBC</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>SABADELL</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>156</td>
+        <td>SABADELL</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>SHINHAN</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>157</td>
+        <td>SHINHAN</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>MIZUHO_BANK</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>158</td>
+        <td>MIZUHO BANK</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BANK_OF_CHINA</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>159</td>
+        <td>BANK OF CHINA</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BANCO_S3</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>160</td>
+        <td>BANCO S3</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>HEY_BANCO</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>167</td>
+        <td>HEY BANCO</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>MONEXCB</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>600</td>
+        <td>MONEXCB</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>GBM</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>601</td>
+        <td>GBM</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>MASARI</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>602</td>
+        <td>MASARI</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>VALUE</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>605</td>
+        <td>VALUE</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>ESTRUCTURADORES</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>606</td>
+        <td>ESTRUCTURADORES</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>VECTOR</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>608</td>
+        <td>VECTOR</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>MULTIVA_CBOLSA</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>613</td>
+        <td>MULTIVA CBOLSA</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>FINAMEX</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>616</td>
+        <td>FINAMEX</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>VALMEX</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>617</td>
+        <td>VALMEX</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>PROFUTURO</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>620</td>
+        <td>PROFUTURO</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>CB_INTERCAM</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>630</td>
+        <td>CB INTERCAM</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>CI_BOLSA</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>631</td>
+        <td>CI BOLSA</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>FINCOMUN</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>634</td>
+        <td>FINCOMUN</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>HDI_SEGUROS</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>636</td>
+        <td>HDI SEGUROS</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>NU_MEXICO</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>638</td>
+        <td>NU MEXICO</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>REFORMA</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>642</td>
+        <td>REFORMA</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>STP</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>646</td>
+        <td>STP</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>TACTIV_CB</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>648</td>
+        <td>TACTIV CB</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>CREDICAPITAL</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>652</td>
+        <td>CREDICAPITAL</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>KUSPIT</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>653</td>
+        <td>KUSPIT</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>UNAGRA</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>656</td>
+        <td>UNAGRA</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>ASP_INTEGRA_OPC</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>659</td>
+        <td>ASP INTEGRA OPC</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>ALTERNATIVOS</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>661</td>
+        <td>ALTERNATIVOS</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>LIBERTAD</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>670</td>
+        <td>LIBERTAD</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>C_B_INBURSA</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>676</td>
+        <td>C B INBURSA</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>CAJA_POP_MEXICA</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>677</td>
+        <td>CAJA POP MEXICA</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>CRISTOBAL_COLON</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>680</td>
+        <td>CRISTOBAL COLON</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>CAJA_TELEFONIST</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>683</td>
+        <td>CAJA TELEFONIST</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>TRANSFER</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>684</td>
+        <td>TRANSFER</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>FONDO_(FIRA)</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>685</td>
+        <td>FONDO (FIRA)</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>INVERCAP</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>686</td>
+        <td>INVERCAP</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>CREDICLUB</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>688</td>
+        <td>CREDICLUB</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>FOMPED</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>689</td>
+        <td>FOMPED</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>OPORMEX</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>694</td>
+        <td>OPORMEX</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>TE_CREEMOS</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>695</td>
+        <td>TE CREEMOS</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>SC_PROM_Y_OP</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>696</td>
+        <td>SC PROM Y OP</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>CAPITAL_ACTIVO</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>697</td>
+        <td>CAPITAL ACTIVO</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BURSAMETRICA</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>698</td>
+        <td>BURSAMETRICA</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>FONDEADORA</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>699</td>
+        <td>FONDEADORA</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>TESORED</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>703</td>
+        <td>TESORED</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>ARCUS</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>706</td>
+        <td>ARCUS</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>NVIO</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>710</td>
+        <td>NVIO</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>Albo</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>721</td>
+        <td>Albo</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>Mercado_Pago_W</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>722</td>
+        <td>Mercado Pago W</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>CUENCA</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>723</td>
+        <td>CUENCA</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>SPIN_BY_OXXO</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>728</td>
+        <td>SPIN BY OXXO</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>CLS</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>901</td>
+        <td>CLS</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>INDEVAL</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>902</td>
+        <td>INDEVAL</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>CoDi_Valida</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>903</td>
+        <td>CoDi Valida</td>
+    </tr>
+    <tr>
+        <td>MXN</td>
+        <td>BANK_ACCOUNT/BANK_CARD</td>
+        <td>BanCobro</td>
+        <td>3-50000</td>
+        <td>Available</td>
+        <td>996</td>
+        <td>BanCobro</td>
+    </tr>
+</table>
+
+## **CLABE Account Bank Code Description**
+
+CLABE (Clave Bancaria Estandarizada) account numbers are 18-digit numbers with the following structure:
+
+- **First 3 digits**: Bank Code
+- **Digits 4-6**: Branch Office Code
+- **Digits 7-17**: Account Number (11 digits)
+- **Digit 18**: Control Digit (Check Digit)
+
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+
+</div>
+
+</div> */}

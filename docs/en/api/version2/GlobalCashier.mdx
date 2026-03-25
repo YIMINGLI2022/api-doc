@@ -1,0 +1,176 @@
+---
+title: Global Cashier Payment API
+permalink: /en/api/version2/GlobalCashier/
+---
+
+# **Global Cashier Payment API**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+:::warning
+**Before reading this API documentation, please make sure to check [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
+:::
+
+**If needed, you may contact <font color="red">HaiPay</font> to unify all business key configuration information into one set.**
+
+## **Collection API**
+
+### **Collection Apply**
+
+**Description:**
+
+* Create a collection order
+
+**URL:**
+
+`/global/cashier/collect/apply`  
+
+
+**Parameters:**
+
+| Parameter Name   | Required | Type   | Description                                                                                  |
+|:-----------------|:---------|:-------|:---------------------------------------------------------------------------------------------|
+| appId            | Yes      | Long   | Business ID (retrieved from the backend; must use the Cashier-specific APPID, currency = CASHIER) |
+| orderId          | Yes      | String | Merchant order number (must be unique, max length 48)                                        |
+| name             | Yes      | String | User full name (recommended to use real name). Format: firstName + lastName, separated by a space, e.g., Donald John Trump |
+| email            | Yes      | String | Valid email address                                                                          |
+| amount           | Yes      | String | Transaction amount (accurate to two decimals; do not use punctuation symbols such as “,”)    |
+| currency         | Yes      | String | Transaction currency. Supported: USD (minimum 0.99 USD). For other currencies, see [Region Codes](#region-code). |
+| callBackUrl      | Yes      | String | Redirect URL after successful payment                                                        |
+| callBackFailUrl  | Yes      | String | Redirect URL after failed payment                                                            |
+| notifyUrl        | No       | String | Callback URL                                                                                 |
+| subject          | Yes      | String | Payment note (transaction title, product name, reason for payment, etc.)                     |
+| body             | No       | String | Detailed remarks                                                                             |
+| region           | Yes      | String | [Region Code](#region-code), use 2-letter code                                               |
+| partnerUserId    | Yes      | String | Unique user identifier (e.g., userId), used for risk control. Must be real/valid, otherwise it may affect transactions. Allowed format: numbers, letters, or symbols -~!@#$%&*()_. |
+| sign             | Yes      | String | Signature                                                                                    |
+
+**Response Data**
+
+| Parameter Name | Type   | Description         |
+|:---------------|:-------|:--------------------|
+| orderId        | String | Merchant order ID   |
+| orderNo        | String | Platform order ID   |
+| payUrl         | String | Payment URL         |
+| sign           | String | Signature           |
+
+---
+
+### **Collection Query**
+
+**Description:**
+
+* Query collection order
+
+**URL:**
+
+`/global/cashier/collect/query`
+
+**Parameters:**
+
+| Parameter Name | Required | Type   | Description                                                                 |
+|:---------------|:---------|:-------|:----------------------------------------------------------------------------|
+| appId          | Yes      | Long   | Business ID (retrieved from the backend; must use the Cashier-specific APPID, currency = CASHIER) |
+| orderId        | Yes      | String | Merchant order ID                                                           |
+| orderNo        | Yes      | String | Platform order ID                                                           |
+| sign           | Yes      | String | Signature                                                                   |
+
+**Response Data**
+
+| Parameter Name  | Type    | Description                                                                                                   |
+|:----------------|:--------|:--------------------------------------------------------------------------------------------------------------|
+| orderId         | String  | Merchant order ID                                                                                             |
+| orderNo         | String  | Platform order ID                                                                                             |
+| amount          | String  | Order amount                                                                                                  |
+| actualAmount    | String  | Actual received amount                                                                                        |
+| fee             | String  | Transaction fee                                                                                               |
+| status          | Integer | Status (0 Not Started, 1 In Progress, 2 Success (final), 3 Failed (final), -1 Exception Pending Confirmation) |
+| payTime         | String  | Payment success time (present when status=2, local time), format: yyyy-MM-dd HH:mm:ss                         |
+| errorMsg        | String  | Failure reason (present when status=3)                                                                        |
+| sign            | String  | Signature                                                                                                     |
+
+---
+
+### **Collection Query v2**
+
+**Description:**
+
+* Query collection order
+
+**URL:**
+
+`/global/cashier/collect/query/v2`
+
+**Parameters:**
+
+| Parameter Name | Required | Type   | Description                                                                 |
+|:---------------|:---------|:-------|:----------------------------------------------------------------------------|
+| appId          | Yes      | Long   | Business ID (retrieved from the backend; must use the Cashier-specific APPID, currency is CASHIER) |
+| orderId        | Yes      | String | Merchant order ID                                                           |
+| orderNo        | Yes      | String | Platform order ID                                                           |
+| sign           | Yes      | String | Signature                                                                   |
+
+**Response Data**
+
+| Parameter Name     | Type    | Description                                                                                                   |
+|:-------------------|:--------|:--------------------------------------------------------------------------------------------------------------|
+| orderId            | String  | Merchant order ID                                                                                             |
+| orderNo            | String  | Platform order ID                                                                                             |
+| currency           | String  | Currency (available after selecting a specific payment method)                                                |
+| amount             | String  | Order amount                                                                                                  |
+| actualAmount       | String  | Actual received amount                                                                                        |
+| fee                | String  | Transaction fee                                                                                               |
+| status             | Integer | Status (0 Not Started, 1 In Progress, 2 Success (final), 3 Failed (final), -1 Exception Pending Confirmation) |
+| payTime            | String  | Payment success time (present when status=2, local time), format: yyyy-MM-dd HH:mm:ss                         |
+| errorMsg           | String  | Failure reason (present when status=3)                                                                        |
+| originalCurrency   | String  | Original payment currency                                                                                     |
+| floatExchangeRate  | String  | Exchange rate used in currency conversion                                                                     |
+| originalAmount     | String  | Original payment amount                                                                                       |
+| sign               | String  | Signature                                                                                                     |
+
+---
+
+### **Region Codes** <a id="region-code"></a>
+
+| Code | Region Name           | Supported Currency |
+|:-----|:----------------------|:-------------------|
+| AE   | United Arab Emirates  | AED                |
+| AT   | Austria               | EUR                |
+| BE   | Belgium               | EUR                |
+| BH   | Bahrain               | BHD                |
+| BR   | Brazil                | BRL                |
+| EG   | Egypt                 | EGP                |
+| GB   | United Kingdom        | GBP                |
+| HK   | Hong Kong             | HKD, USD           |
+| ID   | Indonesia             | IDR, USD           |
+| IN   | India                 | INR                |
+| JP   | Japan                 | JPY, USD           |
+| KR   | South Korea           | KRW, USD           |
+| KW   | Kuwait                | KWD                |
+| MY   | Malaysia              | MYR, USD           |
+| NL   | Netherlands           | EUR                |
+| OM   | Oman                  | OMR                |
+| PH   | Philippines           | PHP                |
+| PK   | Pakistan              | PKR                |
+| PL   | Poland                | EUR                |
+| QA   | Qatar                 | QAR                |
+| SA   | Saudi Arabia          | SAR                |
+| SG   | Singapore             | SGD, USD           |
+| TH   | Thailand              | THB, USD           |
+| TR   | Türkiye               | TRY                |
+| TW   | Taiwan                | TWD, USD           |
+| US   | United States         | USD                |
+| VN   | Vietnam               | VND, USD           |
+| IT   | Italy                 | EUR                |
+| EU   | European Union        | EUR                |
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div>
+ */}

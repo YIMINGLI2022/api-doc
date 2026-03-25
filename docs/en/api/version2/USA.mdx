@@ -1,0 +1,201 @@
+---
+title: USA Local Wallet Payment API
+permalink: /en/api/version2/USA/
+---
+# **USA Local Wallet API Documentation**
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+:::warning
+**Before reading this API documentation, please make sure to check [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
+:::
+
+## **Limits**
+
+| Transaction Type | Limit (Unit: USD) |
+| :--------------- | ----------------- |
+| Collection       | 0.99-1000         |
+
+## **Collection API**
+
+### **Collection Request**
+
+**Brief Description:**
+
+* Create a collection order
+
+**URL:**
+
+USD: `/usd/collect/apply`  
+Note: appId USD, amount USD, settlement USD
+
+**Parameters:**
+
+| Parameter      | Required | Type   | Description                                                                                  |
+| :------------- | :------- | :----- |:--------------------------------------------------------------------------------------------|
+| appId          | Yes      | Long   | Business ID (obtained from the backend, must pass the corresponding business ID according to the currency in the URL) |
+| orderId        | Yes      | String | Merchant Order ID (must be unique)                                                           |
+| name           | Yes      | String | User’s full name, recommended to use real name. Format: includes firstName and lastName separated by a space. Example: Donald John Trump |
+| phone          | Yes      | String | Valid phone number (format reference: [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format)) |
+| email          | Yes      | String | Valid email address                                                                          |
+| amount         | Yes      | String | Transaction amount (accurate to two decimal places; punctuation symbols such as “,” are not allowed) |
+| payType        | Yes      | String | **EWALLET**                                                                                  |
+| inBankCode     | Yes      | String | CASH_APP                                                                                     |
+| callBackUrl    | Yes      | String | Redirect URL after successful payment                                                        |
+| callBackFailUrl| Yes      | String | Redirect URL after failed payment                                                            |
+| notifyUrl      | No       | String | Callback URL                                                                                 |
+| subject        | Yes      | String | Payment note                                                                                 |
+| body           | No       | String | Additional remarks                                                                           |
+| partnerUserId  | Yes      | String | Unique user identifier (e.g., user ID userId), required for risk control. Must be valid, otherwise it may affect the transaction. Format: numbers, upper/lowercase letters, or commonly used symbols -~!@#$%&*()_. |
+| sign           | Yes      | String | Signature                                                                                    |
+
+##### 
+
+request
+
+```json
+{
+    "appId": 1054,
+    "orderId": "M233323000059",
+    "amount": "300",
+    "phone": "09230219312",
+    "email": "23423@qq.com",
+    "name": "test",
+    "inBankCode": "CASH_APP",
+    "payType": "EWALLET",
+    "partnerUserId": "149597870",
+    "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="
+}
+```
+
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M233323000059",
+        "orderNo": "6023071013539074",
+        "payUrl": "",
+        "sign": "YEoA8Y2JzQFGVzwJSqmemm1Kfv/bfyIfCqv2dp7RNzT5B72AQvdD+nt2nR4sL1HWscvmNHyVt5ovAi7MMhy3ziih/sMph+wPx4YjH3W1h5DyBvSlWvaKfKrK5ViomZ0pPYWydwRHnnRnicxToHK9S6qtSy7Q73O0hdz4hJ9p41Th3ycBl2Q9SeqSZYSY1ohcPDhdyRf2y0prb8rHgpBKzxZ5BKX/1bsE9OmsSEHAEYT8OGgko6aNe8XPAhr4G48cpWTftvnGQuzh0O65nuZRI/PF+Axt2zJCVbFHDDSREI9NlAT82ebDqhlVdxQzKE67D1nxgjb3dPmDUYHOBpmwxQ=="
+    }
+}
+```
+Response Data Parameters
+
+| Parameter | Type   | Description                     |
+| :-------- | :----- | :------------------------------ |
+| orderId   | String | Merchant order number (must be unique) |
+| orderNo   | String | Platform order number           |
+| payUrl    | String | Payment link                    |
+| sign      | String | Signature                       |
+
+### **Collection Query**
+
+**Brief Description:**
+
+* Query collection order
+
+**URL：**
+
+USD: `/usd/collect/query`
+
+**Parameters:**
+
+| Parameter | Required | Type   | Description                                                                 |
+| :-------- | :------- | :----- | :--------------------------------------------------------------------------- |
+| appId     | Yes      | Long   | Business ID (obtained from backend, must match the currency in the URL)     |
+| orderId   | Yes      | String | Merchant order number                                                        |
+| orderNo   | No       | String | Platform order number (faster response)                                     |
+| sign      | Yes      | String | Signature                                                                   |
+
+request
+
+```json
+{
+    "appId": 1054,
+    "orderId": "M22222000028",
+    "sign": "EmyJGm3ELzG4FsOd0Krs9ncbSjo4oTGuXWML+7djYla3+VAwd9wS17z38p/7U2ZAjroO04XrE7YXcB1o76Dtyipj3h3bJzs7FYma1QNkMUdt9hh7m8U6hMsMQX7vIWHtXNwz4pbTSC75+kQWXaCew7KoE6LXECdJU8AISgNgeki2TK9R0pCfshr0Z2SZBPeuT6OvIH5LdmqgdZhuqnffGU2qnXk4KMkO848e6/WALLBR+LE1wyKHfPnYVcuKSMVYxkvKyyIL5JIPEgW0o5bh4RCbaUn3NZtyYwrU1uQ3ZDFRThm9j6XAQP+LBlmq3nOePqBtp/VDVarRaV+7FbQg3A=="
+}
+```
+
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M22222000028",
+        "orderNo": "6023042811314347",
+        "amount": "50.00",
+        "actualAmount": "0.00",
+        "fee": "0.00",
+        "status": 1,
+        "sign": "fP433ygWVDLVGxYkVnIJj7riGq0U3vyVX+MbBAImxfGLZkZcEAHVEoVYuULZSmXAAXKRSyd67WlDNm+24pougM54ofAoH4HMtCL2tfCoBReFyz3z02AGKkrKE2xWhSpWoqfQoBvzwuN5iGMMu0s9Q1YvqiwJ8WDVIENnmiIyD8qDJN7caHTW2US14/faG+69AvnuIgJ/nu7/jogOlgEYdZdVYU7gcRDE+d47KjlFGswQkJ/h/uzV7cWtUqrtOO7ZnZ3/z33Xx8awokX36QoYcPSWAU0h+Ij9O9402HNhm1eTbYcLU0uI/z8xCAtyAI/tTyiFijpiNlxUKQj+zKsILw=="
+    }
+}
+```
+
+### Response Data Parameters
+
+| Parameter    | Type    | Description                                                                 |
+| :----------- | :------ | :--------------------------------------------------------------------------- |
+| orderId      | String  | Merchant order number (must be unique)                                       |
+| orderNo      | String  | Platform order number                                                        |
+| amount       | String  | Transaction amount                                                           |
+| actualAmount | String  | Received amount                                                              |
+| fee          | String  | Fee                                                                          |
+| status       | Integer | Status (0 Not started, 1 Processing, 2 Success (final), 3 Failed (final), -1 Exception pending confirmation) |
+| payTime      | String  | Payment success time (present when status=2) (local time), format: yyyy-MM-dd HH:mm:ss |
+| errorMsg     | String  | Failure reason (present when status=3)                                       |
+| sign         | String  | Signature                                                                    |
+
+### **Refund**
+
+**Refund Request**
+
+**URL:**
+
+USD: `/usd/refund/apply`
+
+**Parameters:**
+
+| Parameter | Required | Type   | Description                                                              |
+| :-------- | :------- | :----- | :------------------------------------------------------------------------ |
+| appId     | Yes      | Long   | Business ID (obtained from backend, must match the currency in the URL)  |
+| orderId   | Yes      | String | Merchant order number                                                     |
+| orderNo   | Yes      | String | Platform order number                                                     |
+| sign      | Yes      | String | Signature                                                                 |
+
+返回 data parameter description
+
+| Parameter | Type   | Description                                                        |
+| :-------- | :----- | :------------------------------------------------------------------ |
+| appId     | String | Merchant order number (must be unique)                              |
+| orderNo   | String | Platform order number                                               |
+| orderId   | String | Merchant order number                                               |
+| status    | String | Status: 1 = Refund request submitted successfully, others = Failed |
+| errorMsg  | String | Error message                                                       |
+| sign      | String | Signature                                                           |
+
+### **Payment Methods** <a id="inBankCode"></a>
+
+| payType | inBankCode  | Limit (USD) | Description |
+|:--------|:------------| :-----------|:------------|
+| EWALLET | GOOGLE_PAY  | 0.99~1000   | Google Pay  |
+| EWALLET | APPLE_PAY   | 0.99~1000   | Apple Pay   |
+
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

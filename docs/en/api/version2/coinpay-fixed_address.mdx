@@ -1,0 +1,143 @@
+---
+title: Stablecoin Payment (Fixed Address) API
+permalink: /en/api/version2/coinpay-fixed_address/
+---
+
+# **Stablecoin Payment (Fixed Address) API**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+:::warning
+**Before reading this API documentation, please review the [**API Documentation Guide**](/en/docs/guide/api_description_guide.md)**
+:::
+
+## **Collection API**
+
+### **Collection Application**
+
+**Brief Description:**
+
+* Create a collection order.
+
+**This address is permanent, please review the [Notes](#Notes) before integration.**
+
+**URL:**
+
+USDT
+
+`/usdt/collect/apply/multiple`
+Description: appId USDT, settlement in USDT.
+
+
+
+**Parameters:**
+
+| Parameter Name | Required | Type   | Description                                                                 |
+| :------------- | :------  | :----- | :-------------------------------------------------------------------------- |
+| appId          | Yes      | Long   | Business ID (obtained from the backend, needs to be passed according to the currency in the URL) |
+| payType        | Yes      | String | [payType](#inBankCode)                                                |
+| inBankCode     | Yes      | String | [inBankCode](#inBankCode)                |
+| sign           | Yes      | String | Signature                                                                  |
+
+Return data parameter description:
+
+| Parameter Name | Type   | Description                       |
+| :------------- | :----- | :-------------------------------- |
+| payUrl         | String | Payment link                      |
+| bankNo         | String | Address (wallet address)          |
+| sign           | String | Signature                          |
+
+### **Asynchronous Notification**
+
+**URL:** `Your provided URL`
+
+
+
+
+Parameters:
+
+| Parameter Name | Type   | Description                                        |
+| :------------- | :----- | :------------------------------------------------ |
+| appId          | Long   | Business ID                                       |
+| currency       | String | Currency                                           |
+| orderId        | String | Merchant order number, different for each callback |
+| orderNo        | String | Platform order number, different for each callback |
+| amount         | String | Amount received                                    |
+| fee            | String | Service fee                                       |
+| status         | Integer| Status (2 for successful collection)               |
+| payTime        | String | Payment successful time (New York time), format: yyyy-MM-dd HH:mm:ss |
+| hash           | String | Transaction hash                                   |
+| sign           | String | Signature                                          |
+
+Request:
+
+```json
+{
+    "appId": 10002,
+    "currency": "USD",
+    "orderId": "M123456789",
+    "orderNo": "PLAT123456789",
+    "amount": "21.00",
+    "fee": "1.00",
+    "status": 2,
+    "payTime": "2024-03-01 23:59:59",
+    "sign": "SIGN123456789"
+}
+```
+
+
+Note: After receiving the callback notification, please return **SUCCESS** (**uppercase**) or the system will continue to notify 5 times.
+
+### **Payment Methods**<a id="inBankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (payType)</b></td>
+        <td><b>Payment Code (inBankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>USDT</td>
+        <td>EWALLET</td>
+        <td>FIX_TRX</td>
+        <td>1-200000</td>
+        <td>Available</td>
+        <td>USDT on TRON chain, TRC-20 token standard</td>
+    </tr>
+</table>
+
+### **Notes**
+
+1. The address after placing the order is permanent. After each payment, a callback will be triggered, and the platform order number (orderNo) and merchant order number (orderId) will be different each time. However, **the same order** will trigger repeated callbacks (up to 5 retries) with the same values.
+
+2. If a collection address already exists for a particular network protocol, the requested **currencies** will be updated to the already bound address. The update method is **overwrite**, and the original currency will no longer be supported. Please proceed with caution.
+
+3. Only the selected [**Payment Methods**](#inBankCode) can be used for the order. Unselected currencies are not supported for payment. If funds are forcefully transferred, they will not be credited and no callback notification will occur. To avoid financial loss, please confirm before making the payment.
+
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

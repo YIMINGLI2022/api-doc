@@ -1,0 +1,25 @@
+---
+title: Onboarding Checklist
+permalink: /en/guide/onboarding_checklist/
+---
+
+## 1. Set Up Production Environment Account
+::: warning
+Test environment and production environment accounts are independent, and appId cannot be shared between them.
+:::
+
+## 2. Configure Server IP Whitelist
+1. Add your company’s server IP to the business system whitelist and notify customer service to include this IP in the firewall’s allowed list to avoid API request failures.
+2. Add our IP addresses `110.239.95.6, 190.92.219.18` to the whitelist to ensure the callback functionality works correctly.
+3. Since our servers are mainly concentrated in the Singapore region, if your server is located in Europe or the Americas, please set the HTTP connection timeout and read timeout to at least 2 seconds to prevent connection issues.
+
+## 3. Production Environment Testing
+1. Use real information for testing to validate business functionalities.
+2. Ensure compliance with collection and payment limit requirements.
+3. Test order status and API integration, including:
+   - Incomplete, invalid, or illegal parameters.
+   - Duplicate request behavior.
+   - It is recommended to involve non-developers in the testing process.
+4. Test all error codes and statuses to ensure that the code is robust and can handle common errors and potential exceptions.
+5. Configure the production environment callback URL, handle real-time and duplicate callbacks appropriately, and ensure system idempotency.
+6. Regularly update and protect the API keys to avoid exposure in code repositories or version control systems.

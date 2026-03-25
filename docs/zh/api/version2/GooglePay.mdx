@@ -1,0 +1,596 @@
+---
+title: GooglePay支付接口
+permalink: /api/version2/GooglePay/
+---
+
+# **GooglePay接口文档**
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+:::warning
+**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
+:::
+
+## **检查您的设备和浏览器设置**
+
+如果您在支付页面中看不到您想要的钱包，则您的设备或浏览器可能不符合以下 Apple Pay 或 Google Pay 条件。
+
+- 钱包里必须至少有一张卡。
+- 您必须使用兼容的 [Apple Pay 设备](https://support.apple.com/zh-cn/102896) 和 [Google Pay 设备](https://developers.google.com/pay/issuers/overview/supported-devices#compatibility_requirements)。
+- 您必须使用 必须使用**HTTPS**和[支持的浏览器](#支持的浏览器) 来测试您正在测试的钱包。
+- 允许适用的浏览器访问您的钱包。
+  - Chrome：**设置** > **自动填充和密码** > **付款方式** > **允许网站检查您是否已保存付款方式**
+  - Safari：**设置** > **高级** > **允许网站检查 Apple Pay 和 Apple 卡**
+- 不要使用 Chrome 隐身窗口或 Safari 私人窗口。
+- 确认您在受支持的 Apple Pay 地区 和 Google Pay 地区 进行操作。
+- 对于 Apple Pay，请确认您的设备支持[生物识别身份验证](https://support.apple.com/zh-cn/102626#:~:text=iPhone%20or%20.iPad,on%20all%20devices.)。
+  
+### **支持的浏览器**
+
+#### **桌面浏览器**
+- Chrome 38+
+- Safari 10.1+
+- Firefox 29+
+- Edge 15+
+- Opera 25+
+
+#### **移动浏览器**
+- iOS Safari 9+ 以及其他使用系统提供的 WebKit 引擎的浏览器和 Web 视图
+- Android Chrome 38+
+- 三星浏览器 7.1+
+
+#### **其他说明**
+对于未明确支持的浏览器，我们限制支持如下：
+
+- 要求浏览器支持 **TLS 1.2**
+- 需要足够现代的浏览器来支持 JavaScript 中的 **Promises**
+- 我们会响应错误报告，但不会主动测试其他浏览器
+
+
+::: danger 警告
+以下地区禁止使用！！！
+::: details 禁用地区列表
+
+AD-安道尔
+
+AE-阿拉伯联合酋长国
+
+AF-阿富汗
+
+AG-安提瓜和巴布达
+
+AI-安圭拉
+
+AL-阿尔巴尼亚
+
+AM-亚美尼亚
+
+AO-安哥拉
+
+AQ-南极洲
+
+AR-阿根廷
+
+AS-美属萨摩亚
+
+AW-阿鲁巴
+
+AX-奥兰群岛
+
+BA-波斯尼亚和黑塞哥维那
+
+BB-巴巴多斯
+
+BD-孟加拉国
+
+BF-布基纳法索
+
+BH-巴林
+
+BI-布隆迪
+
+BJ-贝宁
+
+BL-圣巴泰勒米
+
+BM-百慕大
+
+BN-文莱
+
+BQ-博内尔、圣尤斯特歇斯和萨巴
+
+BS-巴哈马
+
+BT-不丹
+
+BV-布韦岛
+
+BW-博茨瓦纳
+
+BY-白俄罗斯
+
+BZ-伯利兹
+
+CC-科科斯（基林）群岛
+
+CD-刚果民主共和国
+
+CF-中非共和国
+
+CG-刚果共和国
+
+CI-科特迪瓦
+
+CK-库克群岛
+
+CM-喀麦隆
+
+CO-哥伦比亚
+
+CU-古巴
+
+CV-佛得角
+
+CW-库拉索
+
+CX-圣诞岛
+
+CY-塞浦路斯
+
+DJ-吉布提
+
+DM-多米尼克
+
+DO-多米尼加共和国
+
+DZ-阿尔及利亚
+
+EC-厄瓜多尔
+
+EE-爱沙尼亚
+
+EG-埃及
+
+EH-西撒哈拉
+
+ER-厄立特里亚
+
+ET-埃塞俄比亚
+
+FJ-斐济
+
+FK-福克兰群岛
+
+FM-密克罗尼西亚联邦
+
+FO-法罗群岛
+
+GA-加蓬
+
+GD-格林纳达
+
+GE-格鲁吉亚
+
+GF-法属圭亚那
+
+GG-根西岛
+
+GH-加纳
+
+GI-直布罗陀
+
+GL-格陵兰
+
+GM-冈比亚
+
+GN-几内亚
+
+GP-瓜德罗普
+
+GQ-赤道几内亚
+
+GS-南乔治亚和南桑威奇群岛
+
+GT-危地马拉
+
+GW-几内亚比绍
+
+HK-香港
+
+HM-赫德岛和麦克唐纳群岛
+
+HN-洪都拉斯
+
+HT-海地
+
+ID-印度尼西亚
+
+IL-以色列
+
+IM-马恩岛
+
+IN-印度
+
+IO-英属印度洋领地
+
+IQ-伊拉克
+
+IR-伊朗
+
+JM-牙买加
+
+JO-约旦
+
+JP-日本
+
+KE-肯尼亚
+
+KH-柬埔寨
+
+KI-基里巴斯
+
+KM-科摩罗
+
+KN-圣基茨和尼维斯
+
+KP-朝鲜
+
+KR-韩国
+
+KW-科威特
+
+KY-开曼群岛
+
+KZ-哈萨克斯坦
+
+LA-老挝
+
+LB-黎巴嫩
+
+LC-圣卢西亚
+
+LI-列支敦士登
+
+LK-斯里兰卡
+
+LR-利比里亚
+
+LS-莱索托
+
+LV-拉脱维亚
+
+LY-利比亚
+
+MD-摩尔多瓦
+
+ME-黑山
+
+MF-法属圣马丁
+
+MG-马达加斯加
+
+MH-马绍尔群岛
+
+MK-北马其顿
+
+ML-马里
+
+MM-缅甸
+
+MN-蒙古
+
+MP-北马里亚纳群岛
+
+MQ-马提尼克
+
+MR-毛里塔尼亚
+
+MS-蒙特塞拉特
+
+MU-毛里求斯
+
+MV-马尔代夫
+
+MW-马拉维
+
+MY-马来西亚
+
+MZ-莫桑比克
+
+NA-纳米比亚
+
+NC-新喀里多尼亚
+
+NE-尼日尔
+
+NF-诺福克岛
+
+NG-尼日利亚
+
+NI-尼加拉瓜
+
+NP-尼泊尔
+
+NR-瑙鲁
+
+NU-纽埃
+
+OM-阿曼
+
+PA-巴拿马
+
+PE-秘鲁
+
+PF-法属波利尼西亚
+
+PG-巴布亚新几内亚
+
+PH-菲律宾
+
+PK-巴基斯坦
+
+PM-圣皮埃尔和密克隆
+
+PN-皮特凯恩群岛
+
+PR-波多黎各
+
+PS-巴勒斯坦
+
+PW-帕劳
+
+RE-留尼汪
+
+RU-俄罗斯
+
+RW-卢旺达
+
+SA-沙特阿拉伯
+
+SB-所罗门群岛
+
+SC-塞舌尔
+
+SD-苏丹
+
+SH-圣赫勒拿
+
+SJ-斯瓦尔巴和扬马延
+
+SK-斯洛伐克
+
+SL-塞拉利昂
+
+SM-圣马力诺
+
+SN-塞内加尔
+
+SO-索马里
+
+SR-苏里南
+
+SS-南苏丹
+
+ST-圣多美和普林西比
+
+SV-萨尔瓦多
+
+SX-荷属圣马丁
+
+SY-叙利亚
+
+SZ-斯威士兰
+
+TC-特克斯和凯科斯群岛
+
+TD-乍得
+
+TF-法属南部领地
+
+TG-多哥
+
+TH-泰国
+
+TK-托克劳
+
+TL-东帝汶
+
+TM-土库曼斯坦
+
+TN-突尼斯
+
+TO-汤加
+
+TR-土耳其
+
+TT-特立尼达和多巴哥
+
+TV-图瓦卢
+
+TW-台湾
+
+TZ-坦桑尼亚
+
+UA-乌克兰
+
+UG-乌干达
+
+UM-美国本土外小岛屿
+
+UY-乌拉圭
+
+UZ-乌兹别克斯坦
+
+VA-梵蒂冈
+
+VC-圣文森特和格林纳丁斯
+
+VE-委内瑞拉
+
+VG-英属维尔京群岛
+
+VI-美属维尔京群岛
+
+VN-越南
+
+VU-瓦努阿图
+
+WF-瓦利斯和富图纳
+
+WS-萨摩亚
+
+YE-也门
+
+YT-马约特
+
+ZA-南非
+
+ZM-赞比亚
+
+ZW-津巴布韦
+:::
+
+## **限额**
+
+| 交易类型 | 限额(单位:USD) |
+| :------- | -------------- |
+| 代收     | 0.99-1000      |
+
+## **代收API**
+
+### **代收申请**
+
+**简要描述：**
+
+* 创建代收订单
+
+**URL：**
+
+美元: `/usd/collect/apply`
+说明：appId需使用美元对应的，用户支付成功后增加美元余额
+
+**参数：**
+
+| 参数名      | 必选 | 类型   | 说明                                                                                           |
+| :---------- | :--- | :----- | :--------------------------------------------------------------------------------------------- |
+| appId       | 是   | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                                             |
+| orderId     | 是   | String | 商户订单号(必须保证唯一性，长度不超过48)                                                                     |
+| name        | 是   | String | 用户姓名，推荐使用真实姓名，格式：包含firstName和lastName，以空格分割的，示例：Donald John Trump                                                         |
+| phone       | 是   | String | 真实手机号（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ） |
+| email       | 是   | String | 真实电子邮件                                                                                       |
+| amount      | 是   | String | 交易金额（精确到小数点后两位；禁止添加标点符号，例如：”,”）                                    |
+| payType     | 是   | String | **EWALLET**                                                                             |
+| inBankCode  | 是   | String | **GOOGLE_PAY**                                                                          |
+| callBackUrl | 是   | String |  用户支付成功后跳转地址                                                                             |
+| callBackFailUrl | 是   | String | 用户支付失败后跳转地址                                                                             
+| notifyUrl   | 否  | String | 回调地址                 |
+| subject     | 是   | String | 支付备注                                                                                       |
+| body        | 否   | String | 备注详情                                                                                       |
+| partnerUserId | 是  | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。 |
+| sign        | 是   | String | 签名                                                                                           |
+
+
+返回data参数说明
+
+| 参数名  | 类型   | 说明                       |
+| :------ | :----- | :------------------------- |
+| orderId | String | 商户订单号(必须保证唯一性) |
+| orderNo | String | 平台订单号                 |
+| payUrl  | String | 支付链接                   |
+| sign    | String | 签名                       |
+
+### **代收查询**
+
+**简要描述：**
+
+* 查询代收订单
+
+**URL：**
+
+美元: `/usd/collect/query`
+
+
+
+**参数：**
+
+| 参数名  | 必选 | 类型   | 说明                 |
+| :------ | :--- | :----- | :------------------- |
+| appId   | 是   | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）   |
+| orderId | 是   | String | 商户订单号           |
+| orderNo | 否   | String | 平台订单号（响应快） |
+| sign    | 是   | String | 签名                 |
+
+返回data参数说明
+
+| 参数名       | 类型    | 说明                                                                  |
+| :----------- | :------ | :-------------------------------------------------------------------- |
+| orderId      | String  | 商户订单号(必须保证唯一性)                                            |
+| orderNo      | String  | 平台订单号                                                            |
+| amount       | String  | 交易金额                                                              |
+| actualAmount | String  | 收到金额                                                              |
+| fee          | String  | 手续费                                                                |
+| status       | Integer | 状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)    |
+| payTime      | String  | 支付成功时间（当status=2时有值）(本地时间), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg     | String  | 支付失败原因（当status=3时有值）                                      |
+| sign         | String  | 签名                                                                  |
+
+
+### **HaiPaySDK 对接文档（Apple Pay & Google Pay）**
+HaiPaySDK 提供了便捷的 Apple Pay 和 Google Pay 支付集成方案，通过简单配置即可在网页中快速集成支付功能。
+- 引入 HaiPaySDK 脚本([https://cdn.jsdelivr.net/gh/hpth/payment/cashier/js/applePayGooglePay_1.0.0.js])
+- 页面结构要求
+  - 支付按钮容器：用于 Apple Pay/Google Pay 按钮的渲染。
+  - 错误信息容器：用于展示支付流程中的错误提示（如参数错误、支付失败等）。
+- 快速集成示例
+```json
+  <script src="https://cdn.jsdelivr.net/gh/hpth/payment/cashier/js/applePayGooglePay_1.0.0.js"></script>
+
+  <div id="appId">
+      <div id="applePay-googlePay"></div>
+      <div id="error-message-pay"></div>
+  </div
+
+   const elements = new HaiPay({
+        env: 'test',
+        orderNo: '6cgjnxvc6kdb',
+        buttonContainerId: 'applePay-googlePay',
+        errorContainerId: 'error-message-pay',
+        onCallback: (status) => {},
+        onReady: () => {}
+    });
+    elements.createPay();
+```
+- 参数说明
+  - 1.初始化配置参数（HaiPay 构造函数参数）
+
+| 参数名              | 必选 | 类型     | 说明                 |
+| :----------------  | :--- | :-----   | :------------------------------------------------------------------------------------------ |
+| env                | 是   | String   | 环境类型，可选值 ：<br /> - test：测试环境（用于联调测试） <br /> - prod：生产环境（上线使用）   |
+| orderNo            | 是   | String   | 平台订单号           |
+| buttonContainerId  | 是   | String   | 支付按钮容器的 DOM ID，<b> 无需携带 # 前缀 </b> |
+| errorContainerId   | 是   | String   | 错误信息容器的 DOM ID，<b> 无需携带 # 前缀 </b>                |
+| buttonType         | 否   | String   | 按钮文本类型，默认值 buy, 可选值：<br /> - plain："只显示支付徽标，无文字" <br /> - add-money："添加资金" <br /> - book："预定" <br /> - buy："购买"（默认）<br /> - check-out："结账" <br /> - contribute："捐款" <br /> - order："下单" <br /> - reload："重新加载" <br /> - rent: "租赁" <br /> -subscribe: "订阅" <br /> -support: "支持" <br /> -tip: "付小费" <br /> -top-up: "充值" |
+| buttonTheme        | 否   | String   | 按钮主题样式，默认值 black，可选值： <br /> - black：黑色背景 <br /> - white：白色背景          |
+| buttonHeight       | 否   | number   | 按钮高度，默认值 50    |  
+| onCallback         | 否   | function | 订单状态回调函数，参数为状态码： <br /> - 成功："2"/"4"/"5" <br /> - 失败："3" |
+| onReady            | 否   | function | 支付按钮渲染完成回调函数    |             |
+
+  - 2.常见错误类型及解决方案
+
+| 错误信息	                                 | 错误原因                         | 解决方案                                                                  |
+| :---------------------------------------  | :------------------------------ | :-------------------------------------------------------------------- |
+| Missing required parameters: env, orderNo | 缺少必需的初始化参数              | 检查 env、orderNo 等参数是否传入                                            |
+| The env parameter must be test or prod    | env 参数值非法                   | 将 env 改为 test 或 prod                                               |
+| Button container does not exist：#xxx     | 支付按钮容器 ID 不存在            | 确认支付地区是否在支持范围内，或切换至测试环境                             |
+| Unsupported region: CN                    | 生产环境下不支持中国地区          | 检查页面中是否有对应 ID 的 DOM 元素                                       |
+
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

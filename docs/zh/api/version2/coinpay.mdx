@@ -1,0 +1,374 @@
+---
+title: 稳定币支付接口
+permalink: /api/version2/coinpay/
+---
+# **稳定币支付接口**
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+:::warning
+**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
+
+### **<font color='red'>稳定币代收付须知：</font>**
+
+***如收单或下发交易涉及国际制裁地区（如联合国、OFAC 等制裁名单中的国家/地区），或资金来源/去向被识别为与洗钱组织或其他高风险主体相关，平台将依规启动必要的资金管控措施，包括在极端情况下的资金冻结。***
+
+***在个别触发资金冻结的情况下，如贵司申请资金返还，将根据交易风险等级，要求贵司配合提供相关信息以证明交易合法（如交易发起方姓名、国籍、职业、交易货物等），或采取必要的合规措施（如清退相关付款方账户）。***
+
+***请贵司务必避免向制裁地区用户提供服务，并遵循日常合规要求，以有效规避触发风险管控。***
+:::
+
+## **代收API**
+
+### **代收申请**
+
+**简要描述：**
+
+* 创建代收订单
+
+:::warning
+**此地址只用作一次性（临时）转账，有效期为生成地址后的<font color='red'>60分钟</font>.**
+
+**1. 请不要保存地址做二次转账操作**
+
+**2. 请不要在过期后操作转账**
+:::
+
+**URL：**
+
+USDT: `/usdt/collect/apply`
+说明：appId需使用USDT对应的，用户支付成功后增加USDT余额
+
+USDC: `/usdc/collect/apply`
+说明：appId需使用USDC对应的，用户支付成功后增加USDC余额
+
+**参数：**
+
+| 参数名          | 必选 | 类型   | 说明                                                                                |
+| :-------------- | :--- | :----- |:----------------------------------------------------------------------------------|
+| appId           | 是   | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                   |
+| orderId         | 是   | String | 商户订单号(必须保证唯一性，长度不超过48)                                                            |
+| name            | 是   | String | 用户姓名，推荐使用真实姓名，格式：包含firstName和lastName，以空格分割的，示例：Donald John Trump                 |
+| phone           | 是   | String | 真实手机号（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ） |
+| email           | 是   | String | 真实电子邮件                                                                            |
+| amount          | 是   | String | 交易金额(禁止添加标点符号，例如：”,”） 范围参考：0.01-5000000                                           |
+| payType         | 是   | String | [支付方式类型](#inBankCode)                                                             |
+| inBankCode      | 是   | String | [支付方式编码](#inBankCode)                                                             |
+| callBackUrl     | 是   | String | 用户支付成功后跳转地址                                                                       |
+| callBackFailUrl | 是   | String | 用户支付失败后跳转地址                                                                       |
+| subject         | 否   | String | 支付备注                                                                              |
+| body            | 否   | String | 备注详情                                                                              |
+| clientType      | 是   | String | APP、WEB、WAP、MINIAPP、OTHERS                                                        |
+| currency        | 是   | String | 法币，若不需要币种转换，请传USDT/USDC                                                           |
+| notifyUrl       | 否   | String | 回调地址                                                                              |
+| partnerUserId   | 是   | String | 用户唯一标识,格式：数字                                                                      |
+| sign            | 是   | String | 签名                                                                                |
+
+
+返回data参数说明
+
+| 参数名       | 类型   | 说明                       |
+| :----------- | :----- | :------------------------- |
+| orderId      | String | 商户订单号(必须保证唯一性) |
+| orderNo      | String | 平台订单号                 |
+| payUrl       | String | 支付链接                   |
+| exchangeRate | String | 汇率                       |
+| orderAmount  | String | 转换后的币种金额           |
+| amount       | String | 下单原始币种金额           |
+| bankNo       | String | 链地址                     |
+| sign         | String | 签名                       |
+
+### **代收查询**
+
+**URL：**
+
+USDT: `/usdt/collect/query`
+
+USDC: `/usdc/collect/query`
+
+**参数：**
+
+| 参数名  | 必选 | 类型   | 说明                                                    |
+| :------ | :--- | :----- | :------------------------------------------------------ |
+| appId   | 是   | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| orderId | 是   | String | 商户订单号                                              |
+| orderNo | 否   | String | 平台订单号（响应快）                                    |
+| sign    | 是   | String | 签名                                                    |
+
+
+返回data参数说明
+
+| 参数名       | 类型    | 说明                                                                                                     |
+| :----------- | :------ | :------------------------------------------------------------------------------------------------------- |
+| orderId      | String  | 商户订单号(必须保证唯一性)                                                                               |
+| orderNo      | String  | 平台订单号                                                                                               |
+| amount       | String  | 交易金额                                                                                                 |
+| actualAmount | String  | 收到金额                                                                                                 |
+| fee          | String  | 手续费                                                                                                   |
+| status       | Integer | 状态(0未开始，1支付中，2成功（终态），3失败（终态），4部分收款（终态），5超额收款（终态）, -1异常待确认) |
+| payTime      | String  | 支付成功时间（当status=2时有值）(纽约时间), 格式: yyyy-MM-dd HH:mm:ss                                    |
+| errorMsg     | String  | 支付失败原因（当status=3时有值）                                                                         |
+| sign         | String  | 签名                                                                                                     |
+
+
+### **支付方式**<a id="inBankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+<colgroup >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+</colgroup>
+<thead>
+<tr>
+        <th><b>币种</b></th>
+        <th><b>支付类型(payType)</b></th>
+        <th><b>支付编码(inBankCode)</b></th>
+        <th><b>限额</b></th>
+        <th><b>状态</b></th>
+        <th><b>说明</b></th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>USDT</td>
+        <td>EWALLET</td>
+        <td>EWALLET</td>
+        <td>1-200000</td>
+        <td>可用</td>
+        <td>收银台</td>
+    </tr>
+    <tr>
+        <td>USDT</td>
+        <td>EWALLET</td>
+        <td>TRX</td>
+        <td>1-200000</td>
+        <td>可用</td>
+        <td>TRON 链上的 USDT，TRC-20 代币标准</td>
+    </tr>
+    <tr>
+        <td>USDT</td>
+        <td>EWALLET</td>
+        <td>ETH</td>
+        <td>1-200000</td>
+        <td>可用</td>
+        <td>以太坊链上的 USDT，ERC-20 代币标准</td>
+    </tr>
+    <tr>
+        <td>USDT</td>
+        <td>EWALLET</td>
+        <td>BSC</td>
+        <td>1-200000</td>
+        <td>可用</td>
+        <td>币安智能链上的 USDT，BEP-20 代币标准</td>
+    </tr>
+    <tr>
+        <td>USDC</td>
+        <td>EWALLET</td>
+        <td>EWALLET</td>
+        <td>1-200000</td>
+        <td>可用</td>
+        <td>收银台</td>
+    </tr>
+<tr>
+        <td>USDC</td>
+        <td>EWALLET</td>
+        <td>ETH</td>
+        <td>1-200000</td>
+        <td>可用</td>
+        <td>以太坊链上的 USDC，ERC-20 代币标准</td>
+    </tr>
+</tbody>
+</table>
+
+## **代付API**
+
+### **代付申请**
+
+**简要描述：**
+
+* 创建代付订单
+
+**USDT：`/usdt/pay/apply`**
+
+**USDC：`/usdc/pay/apply`**
+
+**参数：**
+
+| 参数名        | 必选 | 类型   | 说明                                                                                             |
+| :------------ | :--- | :----- |:-----------------------------------------------------------------------------------------------|
+| appId         | 是   | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                                |
+| orderId       | 是   | String | 商户订单号(必须保证唯一性，长度不超过48)                                                                         |
+| amount        | 是   | String | 交易金额（单位：usdt，精确到小数点后两位；禁止添加标点符号，例如：”,”） 范围:0.0001-5000000                                      |
+| accountType   | 是   | String | [支付方式类型](#bankCode)                                                                            |
+| bankCode      | 是   | String | [支付方式编码](#bankCode)                                                                            |
+| accountNo     | 是   | String | 地址                                                                                             |
+| name          | 是   | String | 收款人姓名(收款人姓名 格式：英文大小写且允许有空格，1-30位,"firstName middleName lastName" (middleName 非必填, 特殊字符支持 '.-)) |
+| phone         | 是   | String | 真实手机号（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ）              |
+| email         | 是   | String | 真实电子邮件                                                                                         |
+| subject       | 否   | String | 支付备注（交易标题，商品名称，支付原因）                                                                           |
+| body          | 否   | String | 备注详情                                                                                           |
+| partnerUserId | 是   | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。                    |
+| notifyUrl       | 否   | String | 回调地址                                                                              |
+| sign          | 是   | String | 签名                                                                                             |
+
+返回data参数说明
+
+| 参数名  | 必选   | 类型                       |
+| :------ | :----- | :------------------------- |
+| orderId | String | 商户订单号(必须保证唯一性) |
+| orderNo | String | 平台订单号                 |
+| sign    | String | 签名                       |
+
+### **代付查询**
+
+**简要描述：**
+
+* 查询代付订单
+
+**USDT：`/usdt/pay/query`**
+
+**USDC：`/usdc/pay/query`**
+
+**参数：**
+
+| 参数名  | 必选 | 类型   | 说明                                                    |
+| :------ | :--- | :----- | :------------------------------------------------------ |
+| appId   | 是   | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| orderId | 是   | String | 商户订单号                                              |
+| orderNo | 否   | String | 平台订单号（响应快）                                    |
+| sign    | 是   | String | 签名                                                    |
+
+返回data参数说明
+
+| 参数名   | 类型    | 说明                                                                  |
+| :------- | :------ | :-------------------------------------------------------------------- |
+| orderId  | String  | 商户订单号(必须保证唯一性)                                            |
+| orderNo  | String  | 平台订单号                                                            |
+| amount   | String  | 交易金额                                                              |
+| fee      | String  | 手续费                                                                |
+| status   | Integer | 状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)    |
+| payTime  | String  | 支付成功时间（当status=2时有值）(纽约时间), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg | String  | 支付失败原因（当status=3时有值）                                      |
+| sign     | String  | 签名                                                                  |
+
+### **支付方式**<a id="bankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1050px;margin:0' >
+<colgroup >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+</colgroup>
+<thead>
+<tr>
+        <th><b>币种</b></th>
+        <th><b>支付类型(accountType)</b></th>
+        <th><b>支付编码(bankCode)</b></th>
+        <th><b>限额</b></th>
+        <th><b>状态</b></th>
+        <th><b>说明</b></th>
+</tr>
+</thead>
+<tbody>
+    <tr>
+        <td>USDT</td>
+        <td>EWALLET</td>
+        <td>TRX</td>
+        <td>10-200000</td>
+        <td>可用</td>
+        <td>TRON 链上的 USDT，TRC-20 代币标准</td>
+    </tr>
+    <tr>
+        <td>USDT</td>
+        <td>EWALLET</td>
+        <td>ETH</td>
+        <td>10-200000</td>
+        <td>可用</td>
+        <td>以太坊链上的 USDT，ERC-20 代币标准</td>
+    </tr>
+    <tr>
+        <td>USDT</td>
+        <td>EWALLET</td>
+        <td>BSC</td>
+        <td>10-200000</td>
+        <td>可用</td>
+        <td>币安智能链上的 USDT，BEP-20 代币标准</td>
+    </tr>
+    <tr>
+        <td>USDC</td>
+        <td>EWALLET</td>
+        <td>BSC</td>
+        <td>10-200000</td>
+        <td>可用</td>
+        <td>币安智能链上的 USDC，BEP-20 代币标准</td>
+    </tr>
+    <tr>
+        <td>USDC</td>
+        <td>EWALLET</td>
+        <td>ETH</td>
+        <td>10-200000</td>
+        <td>可用</td>
+        <td>以太坊链上的 USDC，ERC-20 代币标准</td>
+    </tr>
+    <tr>
+        <td>USDC</td>
+        <td>EWALLET</td>
+        <td>TRX</td>
+        <td>10-200000</td>
+        <td>可用</td>
+        <td>TRON 链上的 USDC，TRC-20 代币标准</td>
+    </tr>
+    <tr>
+        <td>USDC</td>
+        <td>EWALLET</td>
+        <td>BASEEVM</td>
+        <td>10-200000</td>
+        <td>可用</td>
+        <td>EVM（Ethereum Virtual Machine） 链上的 USDC，EVM 兼容链上的 ERC-20 代币标准</td>
+    </tr>
+</tbody>
+</table>
+
+## **注意事项**
+
+:::warning
+1. 支付时效性：涉及到链上交易情况的话，还是取决于各条链的处理速度和拥堵情况
+2. 有效期内足额支付成功，实时发送回调信息，不用等订单过了有效期，即使支付多笔才足额，只要足额后就会实时回调给商户
+3. 有效期内支付多笔都还没有足额，就会等有效期过后，统一回调商户，回调金额为实际支付金额，与订单金额可能有差异
+4. 有效期外支付的，需要人工核对，若未收到，则会造成资金损失，若收到，进行补单操作即可，因此，为避免资金损失，请在有效期内支付
+5. 链上支付会有链处理费（GAS费，与本平台无关），与实际到账金额有差异，具体参考第三方公开网站：[USDT Fees](https://gasfeesnow.com)
+6. 代付操作时，如果链与地址不匹配，则可能造成资金损失，请确保无误
+:::
+
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div>
+ */}

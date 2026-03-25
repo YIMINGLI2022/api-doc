@@ -1,0 +1,745 @@
+---
+title: 埃及支付接口
+permalink: /api/version2/Egypt/
+---
+
+# **埃及支付接口**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+:::warning
+**阅读该接口文档前,务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
+:::
+
+## **限额**
+
+| 交易类型 | 限额(单位:EGP)    |
+|:-----|---------------|
+| 代收   | 埃及镑: 5-30000  |
+| 代付   | 埃及镑: 20-30000 |
+
+## **代收API**
+
+### **代收申请**
+
+**简要描述：**
+
+* 创建代收订单
+
+**URL：`/egp/collect/apply`**
+说明：appId需使用埃及磅对应的,用户支付成功后增加埃及磅余额
+
+**参数：**
+
+| 参数名             | 必选 | 类型     | 说明                                                                          |
+|:----------------|:---|:-------|:----------------------------------------------------------------------------|
+| appId           | 是  | Long   | 业务ID(后台获取,需要根据URL中的币种传递对应的业务ID)                                             |
+| orderId         | 是  | String | 商户订单号(必须保证唯一性,长度不超过48)                                                      |
+| name            | 是  | String | 付款人姓名                                                                       |
+| phone           | 是  | String | 付款人手机号                                                                      |
+| email           | 是  | String | 付款人电子邮件                                                                     |
+| amount          | 是  | String | 交易金额                                                                        |
+| payType         | 是  | String | [支付方式类型](#inBankCode)                                                       |
+| inBankCode      | 是  | String | [支付方式编码](#inBankCode)                                                       |
+| callBackUrl     | 是  | String | 用户支付成功后跳转地址                                                                 |
+| callBackFailUrl | 是  | String | 用户支付失败后跳转地址                                                                 
+| notifyUrl       | 否  | String | 回调地址                                                                        |
+| subject         | 是  | String | 支付备注                                                                        |
+| body            | 否  | String | 备注详情                                                                        |
+| partnerUserId   | 是  | String | 用户唯一标识(如用户ID userId),用于风控系统,必须真实有效,否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。 |
+| sign            | 是  | String | 签名                                                                          |
+
+#####           
+
+request
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M233323000059",
+  "amount": "500",
+  "phone": "+201012345678",
+  "email": "test123@gmail.com",
+  "name": "Test Test",
+  "inBankCode": "VODAFONE",
+  "payType": "EWALLET",
+  "partnerUserId": "149597870",
+  "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M233323000059",
+    "orderNo": "6023071013539074",
+    "payUrl": "https://a.api-uat.php.com/1L9zQS2",
+    "sign": "YEoA8Y2JzQFGVzwJSqmemm1Kfv/bfyIfCqv2dp7RNzT5B72AQvdD+nt2nR4sL1HWscvmNHyVt5ovAi7MMhy3ziih/sMph+wPx4YjH3W1h5DyBvSlWvaKfKrK5ViomZ0pPYWydwRHnnRnicxToHK9S6qtSy7Q73O0hdz4hJ9p41Th3ycBl2Q9SeqSZYSY1ohcPDhdyRf2y0prb8rHgpBKzxZ5BKX/1bsE9OmsSEHAEYT8OGgko6aNe8XPAhr4G48cpWTftvnGQuzh0O65nuZRI/PF+Axt2zJCVbFHDDSREI9NlAT82ebDqhlVdxQzKE67D1nxgjb3dPmDUYHOBpmwxQ=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名           | 类型     | 说明             |
+|:--------------|:-------|:---------------|
+| orderId       | String | 商户订单号(必须保证唯一性) |
+| orderNo       | String | 平台订单号          |
+| payUrl        | String | 支付链接           |
+| bankNo        | String | 参考码(可能为空)      |
+| referenceCode | String | 参考码(可能为空)      |
+| sign          | String | 签名             |
+
+### **代收查询**
+
+**简要描述：**
+
+* 查询代收订单
+
+**URL：`/egp/collect/query`**
+
+**参数：**
+
+| 参数名     | 必选 | 类型     | 说明                              |
+|:--------|:---|:-------|:--------------------------------|
+| appId   | 是  | Long   | 业务ID(后台获取,需要根据URL中的币种传递对应的业务ID) |
+| orderId | 是  | String | 商户订单号                           |
+| orderNo | 否  | String | 平台订单号(响应快)                      |
+| sign    | 是  | String | 签名                              |
+
+request
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M22222000028",
+  "sign": "EmyJGm3ELzG4FsOd0Krs9ncbSjo4oTGuXWML+7djYla3+VAwd9wS17z38p/7U2ZAjroO04XrE7YXcB1o76Dtyipj3h3bJzs7FYma1QNkMUdt9hh7m8U6hMsMQX7vIWHtXNwz4pbTSC75+kQWXaCew7KoE6LXECdJU8AISgNgeki2TK9R0pCfshr0Z2SZBPeuT6OvIH5LdmqgdZhuqnffGU2qnXk4KMkO848e6/WALLBR+LE1wyKHfPnYVcuKSMVYxkvKyyIL5JIPEgW0o5bh4RCbaUn3NZtyYwrU1uQ3ZDFRThm9j6XAQP+LBlmq3nOePqBtp/VDVarRaV+7FbQg3A=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M22222000028",
+    "orderNo": "6023042811314347",
+    "amount": "500",
+    "actualAmount": "0",
+    "fee": "0",
+    "status": 1,
+    "sign": "fP433ygWVDLVGxYkVnIJj7riGq0U3vyVX+MbBAImxfGLZkZcEAHVEoVYuULZSmXAAXKRSyd67WlDNm+24pougM54ofAoH4HMtCL2tfCoBReFyz3z02AGKkrKE2xWhSpWoqfQoBvzwuN5iGMMu0s9Q1YvqiwJ8WDVIENnmiIyD8qDJN7caHTW2US14/faG+69AvnuIgJ/nu7/jogOlgEYdZdVYU7gcRDE+d47KjlFGswQkJ/h/uzV7cWtUqrtOO7ZnZ3/z33Xx8awokX36QoYcPSWAU0h+Ij9O9402HNhm1eTbYcLU0uI/z8xCAtyAI/tTyiFijpiNlxUKQj+zKsILw=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名          | 类型      | 说明                                                  |
+|:-------------|:--------|:----------------------------------------------------|
+| orderId      | String  | 商户订单号(必须保证唯一性)                                      |
+| orderNo      | String  | 平台订单号                                               |
+| amount       | String  | 交易金额                                                |
+| actualAmount | String  | 实收金额                                                |
+| fee          | String  | 手续费                                                 |
+| status       | Integer | 状态(0未开始,1支付中,2成功(终态),3失败(终态), -1异常待确认)              |
+| payTime      | String  | 支付成功时间(当status=2时有值)(埃及时间), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg     | String  | 失败原因(当status=3时有值)                                  |
+| sign         | String  | 签名                                                  |
+
+### **支付方式**<a id="inBankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>币种</b></td>
+        <td><b>支付类型(payType)</b></td>
+        <td><b>收款编码(inBankCode)</b></td>
+        <td><b>限额</b></td>
+        <td><b>状态</b></td>
+        <td><b>说明</b></td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>EWALLET</td>
+        <td>REFERENCE_CODE</td>
+        <td>10-30000</td>
+        <td>可用</td>
+        <td>Fawry钱包</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>EWALLET</td>
+        <td>VODAFONE</td>
+        <td>5-30000</td>
+        <td>可用</td>
+        <td>Vodafone钱包</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>EWALLET</td>
+        <td>R2P</td>
+        <td>10-30000</td>
+        <td>维护</td>
+        <td>MWallet USSD推送支付</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>EWALLET</td>
+        <td>OTP</td>
+        <td>5-30000</td>
+        <td>维护</td>
+        <td>Vodafone OTP验证支付</td>
+    </tr>
+</table>
+
+## **代付API**
+
+:::tip 埃及代付到账提示
+1. 工作日当天下午 3:00 之前进行的交易将在当天到账(工作日是指周日至周四，埃及的周末是周五和周六)。
+2. 工作日当天下午 3:00 之后进行的交易将在下一个工作日成功。
+   - 例如：周四下午3：00之后提交的交易，则交易将在周日处理成功。
+3. 当地周末或者公众节假日，不处理代付交易，需到下一个工作日才处理
+:::
+
+### **代付申请**
+
+**简要描述：**
+
+* 创建代付订单
+
+**URL：`/egp/pay/apply`**
+
+**参数：**
+
+| 参数名           | 必选 | 类型     | 说明                                                                             |
+|:--------------|:---|:-------|:-------------------------------------------------------------------------------|
+| appId         | 是  | Long   | 业务ID(后台获取,需要根据URL中的币种传递对应的业务ID)                                                |
+| orderId       | 是  | String | 商户订单号(必须保证唯一性,长度不超过48)                                                         |
+| amount        | 是  | String | 交易金额(单位: 埃及镑)                                                                  |
+| accountType   | 是  | String | [支付方式类型](#bankCode)                                                            |
+| bankCode      | 是  | String | [支付方式编码](#bankCode)                                                            |
+| accountNo     | 是  | String | 用户银行/钱包账号(钱包账号请使用+2开头的手机号格式)                                                   |
+| name          | 是  | String | 收款人姓名                                                                          |
+| phone         | 是  | String | 收款人手机号(请使用+2开头的手机号格式)                                                          |
+| email         | 是  | String | 收款人电子邮件                                                                        |
+| notifyUrl     | 否  | String | 回调地址                                                                           |
+| subject       | 否  | String | 支付备注(交易标题,商品名称,支付原因)                                                           |
+| body          | 否  | String | 备注详情                                                                           |
+| partnerUserId | 是  | String | 用户唯一标识(如用户ID userId), 用于风控系统, 必须真实有效, 否则会影响交易. 格式要求: 数字、大小写字母或常用符号-~!@#$%&*()_ |
+| sign          | 是  | String | 签名                                                                             |
+
+#####         
+
+request(accountType为EWALLET类型时)
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M100000450012",
+  "amount": "500",
+  "accountType": "EWALLET",
+  "bankCode": "MEEZA",
+  "accountNo": "+201012345678",
+  "name": "john doe",
+  "phone": "+201012345678",
+  "email": "johndoe@cashfree.com",
+  "partnerUserId": "149597870",
+  "sign": "I1PeK3eJOVsFFNowxVRqMXpeWm1lr/BcRpBi8WsW4wVo1+5CC3JsrFq/m/L2O69NzKHvtDWi4zia3DL3dPut0yMyUyqL91LNCSaeISbGsQPlhEsQpyTOryS/RKOfsrn2Xo37SCF/phAvndOk2jwwGwqM5xLz1ms9Ukl85wv27QFNrXIMxK2p18oe7MpMYrgf+xvEBE/VqCtKMtN9pO449wWwXzHWNPbZ76s4pAvKwRE9yXQDr7Iw14Dktcnl1FoLM4gWM/obkO+mz6SyAGDuXhVh/+OD/IGNiCyTCNq6ciQY28UnCFV6ZIP40gxsFhfBJKbK+Raw7y1Bh912ifYfug=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M100000450012",
+    "orderNo": "1525091710234210109",
+    "sign": "LmhUnkw5j0pMiimsG8rKwdNNZGvXH5MpSmD6mdHZwq1SQwuK5BohmdEoqKB/jkMk28o3da4Cxh6Q+tW97+yTCemRrF+dMaHA73rpOeUuujKQl/UcFvJuMhfLBa2tp09L71NzoBqpPD6aXf37mYAz8E1HmERwFPpac5FVxIYanHG8cqmMLJYsVmHTSxWavgWU03ys9UczBePkBiR8sl2FSOhFABB0wAP28lswrV/ABS68IsLKtyd1fyI3GBfSbIK5nDEEnlE+EdElFdLs9taAxJImeVF1x4eT47+bkPJ2qS8z3K8QGzKLF3W+8SiRZGfSwDTsLKH+2Vycvy5auRl+ag=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名     | 必选     | 类型             |
+|:--------|:-------|:---------------|
+| orderId | String | 商户订单号(必须保证唯一性) |
+| orderNo | String | 平台订单号          |
+| sign    | String | 签名             |
+
+### **代付查询**
+
+**简要描述：**
+
+* 查询代付订单
+
+**URL：`/egp/pay/query`**
+
+**参数：**
+
+| 参数名     | 必选 | 类型     | 说明                              |
+|:--------|:---|:-------|:--------------------------------|
+| appId   | 是  | Long   | 业务ID(后台获取,需要根据URL中的币种传递对应的业务ID) |
+| orderId | 是  | String | 商户订单号                           |
+| orderNo | 否  | String | 平台订单号(响应快)                      |
+| sign    | 是  | String | 签名                              |
+
+request
+
+```json
+{
+  "appId": 1000,
+  "orderId": "M100000450012",
+  "orderNo": "1525091710234210109",
+  "sign": "ZxkVZL+GAyv0VhvWn4IvuYahTzxgQuthkuV2ONWiqIfIDb2avvHlFOUJVzqZi1q8CPHXZm1ltanRTRVTxfsuftLvGeDioUHglWt46/RU6c1OPznpLGsZ35Q3n5tW2y1EnOsxPynXBFLuDQy+aZ3l9u6AQ30T0zQexMGT+IxuFkmUp02g/6juaHa5ZgNMv7lN67ixIp162wrM7OJuaOif872QijSceRdZhzaMGImAwB0D4MosRV4WMBOKkwgPdmS7GuZN66YUidXk3wTGqX3MYRw6M0kj4eNegSUwPXvp4q4p0KO8Y3xUMld54GY2ApX3WN3CBtC/vpJqEszjGBbbGg=="
+}
+```
+
+response — 订单失败
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M100000450012",
+    "orderNo": "1525091710234210109",
+    "amount": "500",
+    "fee": "0",
+    "status": 3,
+    "errorMsg": "الطلب غير موجود",
+    "sign": "KKuvCl0SuNANJs+l2ogDaJm8pmV+Hi+Xa7q27vJ6D1Ehs4aOp13kRbITfJAhczh3T81BE9qwHeJaYwf+r0EypKM9TL6pMwfG8Az4gRy1D57wiUaVjl2PWcvbEqrn1hL0b+btkjvAM9I+CcSv+wuOW3/uku17Ws3FhgJLj9sFsQUBAPjDO+758VnwBytCOLBmljLBXyKgNgpmFQ1/DNkqWl0UNzyLK45Zw3yf5NiwhEFbvW0jlOWlfu/ql4hluISUQG573jEoFCBEnQLb2tQoRZj1QYNRCXPf5lbej0vzqbEwvR9h+ZOf255t1MocJkdIe463DTV5U3KZdVT87HMagw=="
+  }
+}
+```
+
+response — 订单成功
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M100000450012",
+    "orderNo": "1525091710234210109",
+    "amount": "500",
+    "fee": "10",
+    "status": 2,
+    "payTime": "2024-03-01 23:59:59",
+    "sign": "khPtOmGq+cpKX0HFAI/lbP0dx4oVyNAnL5oLsdmhDJdASlQm0yg5I3o+MhImYggEsL6c2bo5fP29t54OZFqSdQDfIuNDvGbAMAr4mRBxc0hoHLkBLyyagfVPBLyQA1JY8XV3ZL4ySzQ3ZQnMCfrh2K39ueUuz6HpZ03Hj0KYijVRCXAZaio/L5jfLBT12QXmvIfAHa8s/k9flhK05ENHPep3zjj/MZGOEaX7jkEJLfjK0duypDCa61BRQjM+oePOdVsgleIl1Yf98UAxMDZ/A3912KFHEb+/jvmdnulNbiJFyuT1fEe+j2teUgw3vFsZAtwNWAgxhC7UO+N0Q5z4EA=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名      | 类型      | 说明                                                  |
+|:---------|:--------|:----------------------------------------------------|
+| orderId  | String  | 商户订单号(必须保证唯一性)                                      |
+| orderNo  | String  | 平台订单号                                               |
+| amount   | String  | 交易金额                                                |
+| fee      | String  | 手续费                                                 |
+| status   | Integer | 状态(0未开始,1支付中,2成功(终态),3失败(终态), -1异常待确认)              |
+| payTime  | String  | 支付成功时间(当status=2时有值)(埃及时间), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg | String  | 支付失败原因(当status=3时有值)                                |
+| sign     | String  | 签名                                                  |
+
+### **支付方式**<a id="bankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1050px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>币种</b></td>
+        <td><b>支付类型(accountType)</b></td>
+        <td><b>支付编码(bankCode)</b></td>
+        <td><b>限额</b></td>
+        <td><b>状态</b></td>
+        <td><b>说明</b></td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>EWALLET</td>
+        <td>MEEZA</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>MeezaWallet 为埃及 Meeza 网络下的手机号电子钱包，支持根据号码识别账户类型，并向 Vodafone Cash、Orange Money、Etisalat Cash 等本地钱包进行代付。</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>EWALLET</td>
+        <td>OPAY</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>OpayCard</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ABP</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>AllBank Inc</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>AAIB</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Arab African International Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ABC</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Arab Banking Corporation - Egypt</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ABK</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Al Ahli Bank of Kuwait – Egypt</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ABRK</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Al Baraka Bank Egypt</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ADIB</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Abu Dhabi Islamic Bank – Egypt</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>AIB</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Arab Investment Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ARAB</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Arab Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ARIB</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Arab International Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>AUB</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Ahly United Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>AUDI</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Audi Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BBE</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>ATTIJARIWAFA BANK EGYPT S.A.E</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BDC</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Banque Du Caire</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BLOM</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Blom Bank Egypt</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BOA</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Bank of Alexandria</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CAE</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Credit Agricole</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CIB</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Commercial International Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CITI</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Citibank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>EALB</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Egyptian Arab Land Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>EDBE</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Export Development Bank of Egypt</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>EGB</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Egyptian Gulf Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ENBD</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Emirates National Bank of Dubai</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>FAIB</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Faisal Islamic Bank of Egypt</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>HDB</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Housing And Development Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>HSBC</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>HSBC</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>IDBE</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Industrial Development Bank of Egypt</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MASH</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Mashreq Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MIDB</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Misr Iran Development Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MISR</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Banque Misr</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NBAD</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>National Bank of Abu Dhabi</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NBE</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>National Bank of Egypt</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NBG</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>National Bank of Greece</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NBK</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>National Bank of Kuwait – Egypt</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NSB</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Nasser Social Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PDAC</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>The Principal Bank for Development and Agri.</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>QNB</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Qatar National Bank Alahli</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SAIB</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Societe Arabe Internationale De Banque</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SCB</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>Suez Canal Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>UB</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>The United Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>UNB</td>
+        <td>20-30000</td>
+        <td>可用</td>
+        <td>United National Bank</td>
+    </tr>
+</table>
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

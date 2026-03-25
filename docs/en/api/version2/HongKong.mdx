@@ -1,0 +1,174 @@
+---
+title: Hong Kong Payment API
+permalink: /en/api/version2/HongKong/
+---
+
+# **Hong Kong Payment API**
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+:::warning
+**Before reading this document, please make sure to review [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
+:::
+
+## **限额**
+
+| Transaction Type       | Limit Range                   |
+|:-----------------------|-------------------------------|
+| Collection             | USD: 0.99-499.99, HKD: 1-5000 |
+
+
+## **Collection API**
+
+### **Collection Request**
+
+**Description:**
+
+* Create a collection order
+
+**URL:**
+
+- HKD: `/hkd/collect/apply`  
+  Note: appId HKD, amount HKD, settlement HKD  
+
+- USD: `/usd/collect/apply`  
+  Note: appId USD, amount USD, settlement USD  
+
+
+
+**Parameters:**
+
+| Name          | Required | Type   | Description                                                                                       |
+| :------------ | :------- | :----- | :------------------------------------------------------------------------------------------------ |
+| appId         | Yes      | Long   | Business ID (retrieved from the backend, must correspond to the currency in the URL)              |
+| orderId       | Yes      | String | Merchant order number (must be unique, max length: 48)                                            |
+| name          | Yes      | String | Customer name, recommended to use the real name. Format: firstName + lastName separated by a space, e.g. `Donald John Trump` |
+| phone         | Yes      | String | Real phone number (format reference: [Phone Format](/en/docs/guide/frequently_asked_question.html#phone_format)) |
+| email         | Yes      | String | Valid email address                                                                               |
+| amount        | Yes      | String | Transaction amount, up to 2 decimal places                                                        |
+| payType       | Yes      | String | Transaction type                                                                                  |
+| inBankCode    | Yes      | String | [Payment method](#inBankCode)                                                                     |
+| callBackUrl   | Yes      | String | Redirect URL after successful payment                                                             |
+| callBackFailUrl | Yes    | String | Redirect URL after failed payment                                                                 |
+| notifyUrl     | No       | String | Notification URL                                                                                  |
+| subject       | No       | String | Payment note                                                                                      |
+| body          | No       | String | Payment details                                                                                   |
+| partnerUserId | Yes      | String | Unique user identifier (e.g., userId). Must be valid, otherwise it may affect risk control. Allowed characters: digits, letters, and common symbols `-~!@#$%&*()_` |
+| sign          | Yes      | String | Signature                                                                                         |
+
+**Response Data**
+
+| Name    | Type   | Description                 |
+| :------ | :----- | :-------------------------- |
+| orderId | String | Merchant order number (must be unique)       |
+| orderNo | String | Platform order number       |
+| payUrl  | String | Payment URL                 |
+| sign    | String | Signature                   |
+
+---
+
+### **Collection Query**
+
+**Description:**
+
+* Query collection order
+
+**URL:**
+
+- HKD: `/hkd/collect/query`  
+
+- USD: `/usd/collect/query`  
+
+**Parameters:**
+
+| Name    | Required | Type   | Description                                          |
+| :------ | :------- | :----- | :--------------------------------------------------- |
+| appId   | Yes      | Long   | Business ID (retrieved from the backend, must correspond to the currency in the URL) |
+| orderId | Yes      | String | Merchant order number                                |
+| orderNo | No       | String | Platform order number (faster response)              |
+| sign    | Yes      | String | Signature                                            |
+
+**Response Data**
+
+| Name         | Type    | Description                                                                                             |
+| :----------- | :------ |:--------------------------------------------------------------------------------------------------------|
+| orderId      | String  | Merchant order number (must be unique)                                                                  |
+| orderNo      | String  | Platform order number                                                                                   |
+| amount       | String  | Transaction amount                                                                                      |
+| actualAmount | String  | Amount received                                                                                         |
+| fee          | String  | Fee                                                                                                     |
+| status       | Integer | Status (0: Not started, 1: Processing, 2: Success (final), 3: Failed (final), -1: Pending confirmation) |
+| payTime      | String  | Payment success time (present when status=2)(local currency time), <br/>format: `yyyy-MM-dd HH:mm:ss`   |
+| errorMsg     | String  | Error message (present when status=3)                                                                   |
+| sign         | String  | Signature                                                                                               |
+
+---
+
+### **Payment Methods** <a id="inBankCode"></a>
+
+<table style='border-collapse: collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752; width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032; width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496; width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784; width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480; width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040; width:355px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (payType)</b></td>
+        <td><b>Payment Code (inBankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>HKD</td>
+        <td>EWALLET</td>
+        <td>WXPAY_SCANCODE</td>
+        <td>1-1000</td>
+        <td>Available</td>
+        <td>WeChat QR Code Payment</td>
+    </tr>
+    <tr>
+        <td>HKD</td>
+        <td>EWALLET</td>
+        <td>ALIPAY_HKD</td>
+        <td>1-5000</td>
+        <td>Available</td>
+        <td>AlipayHK</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>HK_WXPAY_SCANCODE_USD</td>
+        <td>0.99-120</td>
+        <td>Available</td>
+        <td>WeChat QR Code Payment</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>ALIPAY_USD</td>
+        <td>0.99-499.99</td>
+        <td>Available</td>
+        <td>AlipayHK</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>PAYME_USD</td>
+        <td>1-1000</td>
+        <td>Maintenance</td>
+        <td>PayMe</td>
+    </tr>
+</table>
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div>
+ */}

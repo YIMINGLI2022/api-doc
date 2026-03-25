@@ -1,0 +1,177 @@
+---
+title: Frequently Asked Questions
+permalink: /en/guide/frequently_asked_question/
+---
+
+# Frequently Asked Questions
+
+This document covers various common issues encountered when using HaiPay. If you face any issues while using HaiPay, please refer to this document first.
+
+## General
+::: details After logging into HaiPay, there are no other functions besides the homepage.
+You need to authorize the previous sub-account roles again with the main account.
+:::
+
+{/* Old system */}
+::: details Error when triggering payment, error message: No permission to pay for products, please contact the administrator.
+Possible reasons:
+1. The client's product configuration is incorrect.
+2. The payment method requested by the client is incorrect.
+:::
+
+::: details Error when triggering payment, response body: 
+```json
+{"status":"0","error":"4002","msg":"system:channel code does not exist"}
+```
+
+Channel configuration error.
+:::
+
+::: details Customer payment error, authentication failure message.
+Possible reason: The bank's risk control mechanism was triggered, so it was rejected. Try using a different card to retry.
+:::
+
+::: details What is the phone number format? <a id="phone_format"></a>
+- Taiwan: Starts with 09, total of 10 digits. Example: 09XX XXX XXX
+- Korea: Starts with 01X, total of 10 digits. Example: 010 XXXX XXXX.
+- Belgium: Starts with 04, total of 10 digits. Example: 04XX XX XX XX.
+- Austria: Starts with 06, total of 9 digits. Example: 0664 XXXXXXX.
+- Germany: Starts with 01, total of 11 digits. Example: 0151 XXXXXXXX.
+- Poland: Starts with 5, 6, 7, 8, 9, total of 9 digits. Example: 5XX XXX XXX.
+- Indonesia: Starts with 08, total of 10 digits. Example: 081X XXXX XXXX.
+- Philippines: Starts with 09, total of 11 digits. Example: 09XX XXX XXXX.
+- Singapore: Starts with 8 or 9, total of 8 digits. Example: 8XXX XXXX or 9XXX XXXX.
+- Vietnam: Starts with 09, total of 10 digits. Example: 09XX XXX XXX.
+- Thailand: Starts with 08, total of 10 digits. Example: 08XX XXX XXX.
+- Malaysia: Starts with 01, total of 10 digits. Example: 01X XXX XXXX.
+- Brazil: Starts with 9, total of 11 digits. Example: 9XXXX XXXX.
+- Russia: Starts with 9, total of 10 digits. Example: 9XX XXX XX XX.
+- Japan: Starts with 0, total of 11 digits. Example: 0XX XXXX XXXX.
+- Egypt: Starts with 01, total of 11 digits. Example: 01X XXXX XXXX.
+- Bangladesh: Starts with 01, the third position is 3-9，with a total of 11 digits. Example: 013 XXXX XXXX.
+:::
+
+::: details Some payment methods fail to trigger the app, how to handle this?
+![](/images/app.png)
+```java
+    // WebView interception processing is required
+    @Override
+    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+        if (request.getUrl().toString().startsWith("http")) {
+            view.loadUrl(request.getUrl().toString());
+            return super.shouldOverrideUrlLoading(view, request);
+        } else {
+            view.onPause();
+            view.stopLoading();
+            try {
+                Intent intent = Intent.parseUri(uri, Intent.URI_INTENT_SCHEME);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                view.getContext().startActivity(intent);
+            } catch (URISyntaxException e) {
+                // Alert: scheme not supported
+                return false;
+            }
+        }
+    }
+```
+:::
+
+## Taiwan
+::: details Are there any issues with convenience store or ATM payments? Low success rate.
+Hello, after checking, we found no issues with convenience store and ATM payments. We looked at the orders, and one user had multiple orders, so some users may not make payments on time. Convenience store and ATM payments are offline services, and both have a payment window period. The success rate depends on how many payments the user makes.
+:::
+
+## Brazil
+::: details What should be filled in the "Cash Source" column in CDD?
+Game operation.
+:::
+
+::: details PIX collection order failed, error message: FAILED-invalid cpf or cnpj.
+This could be due to missing CPF.
+:::
+
+## PayPal / ACH / ECASHAPP
+::: details When testing the disbursement API, is the name and account number required to be real accounts?
+The name can be random, but the recipient’s account number must be real.
+:::
+
+::: details PayPal disbursement error, reason: bank return.
+The user’s account has been flagged by PayPal, and payments cannot be received.
+:::
+
+::: details Issue with PayPal disbursement mistake recovery.
+We are directly connected to PayPal’s official API, and the payment was sent to the wrong account. It cannot be recovered via disbursement, so you will need to contact the recipient to recover the funds.
+:::
+
+::: details How long does it take for PayPal withdrawals to be credited?
+Real-time crediting, but orders stuck in "payment in progress" need the recipient to confirm via email (for dormant or long-unused accounts).
+:::
+
+::: details Is the email field required when the bankCode is PayPal?
+Yes, it is required because the account is the email address.
+:::
+
+## Merchant Payout & Funding
+
+::: details What is the Recharge process?
+1. After logging into the dashboard, go to "Financial Mgmt - Recharge" to recharge in USD or cryptocurrency.
+2. Enter the recharge amount and upload the proof of successful transfer.  
+   :::
+
+::: details What should I pay attention to when recharging?
+2.1 Verify Amount: Confirm your recharge amount before proceeding and ensure it matches the actual transfer amount.
+
+2.2 Upload Voucher: You must upload a clear and legible proof of payment after a successful transaction.
+
+2.3 Verify Account Information: Before recharging, contact us in the group to verify the account details shown in the backend to ensure funds are sent to the correct account. The balance will be added to your account once the funds arrive.
+
+2.4 Processing Time: Staff will process the request as quickly as possible upon receiving the voucher.
+
+2.5 Customer Support: For any issues or questions, contact the customer service team. Support is available 24/7.
+:::
+
+::: details How to bind or change the login email?
+2.1 Before account activation, you need to provide an email address, which will be used for backend login verification.
+
+2.2 Primary Accounts: To change the login email for a main account, please contact our operations team for assistance.
+
+![Merchant email binding example](/images/商户绑定邮箱-英文.png)
+
+2.3 Sub-accounts: If you are using a sub-account, you can update your email manually by navigating to 'Settings Center - Security - Email'.
+
+:::
+
+::: details How to initiate a single payout? What are the precautions?
+3.1 Under "Business Mgmt - payout", you can initiate a single payout.
+
+Precautions:
+- For your first manual payout operation, it is recommended to start with a small test amount. After you are familiar with the operation, then proceed with other amounts.
+- Currency selection: make sure you select the correct currency for the payout.
+- Choose the correct account type according to the recipient's actual account information, such as bank account or e-wallet.
+
+Important reminders:
+- Please make sure the recipient's account number is entered correctly. Any error may cause the funds to be sent to a wrong account, leading to unnecessary trouble and loss.
+- Enter the exact payout amount you wish to send, and make sure it does not exceed your account balance or any configured limits.
+- Before submitting the payout request, double-check that all the information filled in is correct.
+- Keep your login credentials and email verification codes confidential and do not share them with others to prevent unauthorized access to your account.  
+  :::
+
+::: details How to initiate batch payout? What are the precautions?
+3.3 In "Business Mgmt - Payout", click "Batch Payout" and follow these steps:
+
+1. Click "Download Template" to download the payout template and fill in the recipient account information according to the template requirements.
+2. For your first batch payout, you can start with a single order with a small amount to get familiar with the process before submitting more orders.
+3. After uploading the template, if there are any errors in the data, you can download the file with error messages, correct the data according to the prompts, and upload it again.
+4. After a successful upload, pay attention to the order status to avoid submitting duplicate payouts.  
+   :::
+
+::: details How to download the payout (remittance) voucher after a successful payout?
+4.1 In "Business Mgmt - Payout", for each successful payout order, there is a "Voucher" button at the far right.  
+Click "Voucher" to obtain or download the proof of successful payout.  
+![凭证下载示意图](/images/凭证下载-英文.png)
+:::
+
+::: details Where can I view the Balance details and fees?
+5.1 In "Finance Mgmt - Balance Details", you can view detailed records of each transaction, including fees and balance changes.  
+The system supports exporting data to Excel files to facilitate reconciliation and record keeping.  
+:::

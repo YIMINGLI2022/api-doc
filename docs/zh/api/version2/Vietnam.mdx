@@ -1,0 +1,730 @@
+---
+title: 越南支付接口
+permalink: /api/version2/Vietnam/
+---
+
+# **越南支付接口**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+:::warning
+**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
+:::
+
+## **限额**
+
+| 交易类型 | 限额                                 |
+|:-----|------------------------------------|
+| 代收   | 美元: 0.99-2000, 越南盾: 100000-10000000 |
+| 代付   | 越南盾: 10000-50000000                |
+
+## **代收API**
+
+### **代收申请**
+
+**简要描述：**
+
+* 创建代收订单
+
+**URL：`/vnd/collect/apply`**
+说明：appId需使用越南盾对应的，用户支付成功后增加越南盾余额
+
+**URL：`/usd/collect/apply`**
+说明：appId需使用美元对应的，用户支付成功后增加美元余额
+
+**请求方式：**
+
+*
+
+| 参数名             | 必选 | 类型     | 说明                                                                                            |
+|:----------------|:---|:-------|:----------------------------------------------------------------------------------------------|
+| appId           | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                               |
+| orderId         | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                                        |
+| name            | 是  | String | 付款人姓名(付款人姓名格式:英文或越南语大小写且允许有空格,1-30位,"firstName middleName lastName" (middleName非必填,特殊字符支持\!-) |
+| outBankNo       | 否  | String | 付款人卡号, payType为 PAYMENT\_GATEWAY时必填                                                           |
+| phone           | 是  | String | 真实手机号                                                                                         |
+| email           | 是  | String | 真实电子邮件                                                                                        |
+| amount          | 是  | String | 交易金额(单位：**₫**，越南盾） 范围:100,000-10,000,000 金额需要是100的倍数                                          |
+| payType         | 是  | String | 交易类型：QR，PAYMENT\_GATEWAY,BANK\_TRANSFER，EWALLET                                               |
+| inBankCode      | 否  | String | 支付方式，当payType=EWALLET时，支持传MOMO_VND，代表跳转MoMo钱包支付                                               |
+| callBackUrl     | 是  | String | 用户支付成功后跳转地址                                                                                   |
+| callBackFailUrl | 是  | String | 用户支付失败后跳转地址                                                                                   
+| notifyUrl       | 否  | String | 回调地址                                                                                          |
+| currency        | 否  | String | 币种(默认VND 支持下单币种: USD,VND)                                                                     |
+| subject         | 否  | String | 支付备注                                                                                          |
+| body            | 否  | String | 备注详情                                                                                          |
+| partnerUserId   | 是  | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。                   |
+| sign            | 是  | String | 签名                                                                                            |
+
+#####      
+
+request
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M233323000059",
+  "amount": "300",
+  "phone": "08230219312",
+  "email": "23423@qq.com",
+  "name": "test",
+  "inBankCode": "VCB",
+  "payType": "QR",
+  "partnerUserId": "149597870",
+  "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="
+}
+```
+
+va-response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M233323000059",
+    "orderNo": "6023071013539074",
+    "payUrl": "https://a.api-uat.vnd.com/1L9zQS2",
+    "bankCode": "VCB",
+    "qrCode": "00020101021228760011ph.ppmi.p2m0111OPDVPHM1XXX0315777148000000017041652948137245442930503001520460165303608540810000.vnd Of Mandalu62310010ph.allbank05062110000803***88310012ph.ppmi.qrph0111OPDVPHM1XXX63042763",
+    "sign": "YEoA8Y2JzQFGVzwJSqmemm1Kfv/bfyIfCqv2dp7RNzT5B72AQvdD+nt2nR4sL1HWscvmNHyVt5ovAi7MMhy3ziih/sMph+wPx4YjH3W1h5DyBvSlWvaKfKrK5ViomZ0pPYWydwRHnnRnicxToHK9S6qtSy7Q73O0hdz4hJ9p41Th3ycBl2Q9SeqSZYSY1ohcPDhdyRf2y0prb8rHgpBKzxZ5BKX/1bsE9OmsSEHAEYT8OGgko6aNe8XPAhr4G48cpWTftvnGQuzh0O65nuZRI/PF+Axt2zJCVbFHDDSREI9NlAT82ebDqhlVdxQzKE67D1nxgjb3dPmDUYHOBpmwxQ=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名          | 类型     | 说明                      |
+|:-------------|:-------|:------------------------|
+| orderId      | String | 商户订单号(必须保证唯一性)          |
+| orderNo      | String | 平台订单号                   |
+| payUrl       | String | 返回的是收款地址 其他时候返回的是指引或者详情 |
+| bankNo       | String | 收款卡号(,BANK\_TRANSFER)   |
+| bankCode     | String | 收款银行                    |
+| bankUserName | String | 收款人姓名(,BANK\_TRANSFER)  |
+| qrCode       | String | 二维码内容-可自行生成二维码(QR)      |
+| sign         | String | 签名                      |
+
+### **代收查询**
+
+**简要描述：**
+
+* 查询代收订单
+* 当"payType=PAYMENT\_GATEWAY" 时同步返回orderNo可以直接查询
+* 其他支付方式异步通知后，通过orderNo查询二次确认状态
+
+**URL：`/vnd/collect/query`**
+
+**参数：**
+
+| 参数名     | 必选 | 类型     | 说明                              |
+|:--------|:---|:-------|:--------------------------------|
+| appId   | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| orderId | 是  | String | 商户订单号                           |
+| orderNo | 否  | String | 平台订单号（响应快）                      |
+| sign    | 是  | String | 签名                              |
+
+request
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M22222000028",
+  "sign": "EmyJGm3ELzG4FsOd0Krs9ncbSjo4oTGuXWML+7djYla3+VAwd9wS17z38p/7U2ZAjroO04XrE7YXcB1o76Dtyipj3h3bJzs7FYma1QNkMUdt9hh7m8U6hMsMQX7vIWHtXNwz4pbTSC75+kQWXaCew7KoE6LXECdJU8AISgNgeki2TK9R0pCfshr0Z2SZBPeuT6OvIH5LdmqgdZhuqnffGU2qnXk4KMkO848e6/WALLBR+LE1wyKHfPnYVcuKSMVYxkvKyyIL5JIPEgW0o5bh4RCbaUn3NZtyYwrU1uQ3ZDFRThm9j6XAQP+LBlmq3nOePqBtp/VDVarRaV+7FbQg3A=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M22222000028",
+    "orderNo": "6023042811314347",
+    "amount": "50000.00",
+    "actualAmount": "0.00",
+    "fee": "0.00",
+    "status": 1,
+    "sign": "fP433ygWVDLVGxYkVnIJj7riGq0U3vyVX+MbBAImxfGLZkZcEAHVEoVYuULZSmXAAXKRSyd67WlDNm+24pougM54ofAoH4HMtCL2tfCoBReFyz3z02AGKkrKE2xWhSpWoqfQoBvzwuN5iGMMu0s9Q1YvqiwJ8WDVIENnmiIyD8qDJN7caHTW2US14/faG+69AvnuIgJ/nu7/jogOlgEYdZdVYU7gcRDE+d47KjlFGswQkJ/h/uzV7cWtUqrtOO7ZnZ3/z33Xx8awokX36QoYcPSWAU0h+Ij9O9402HNhm1eTbYcLU0uI/z8xCAtyAI/tTyiFijpiNlxUKQj+zKsILw=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名          | 类型      | 说明                                                      |
+|:-------------|:--------|:--------------------------------------------------------|
+| orderId      | String  | 商户订单号(必须保证唯一性)                                          |
+| orderNo      | String  | 平台订单号                                                   |
+| amount       | String  | 交易金额                                                    |
+| actualAmount | String  | 收到金额                                                    |
+| fee          | String  | 手续费                                                     |
+| status       | Integer | 状态(0未开始,1收款中,2收款成功3:收款失败,4:部分收款,5:超额收款, \-1异常待确认)       |
+| payTime      | String  | 支付成功时间（当status=2,4,5时有值）(越南时间), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg     | String  | 失败原因（当status=3时有值）                                      |
+| sign         | String  | 签名                                                      |
+
+### **支付方式**
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>币种</b></td>
+        <td><b>支付类型(payType)</b></td>
+        <td><b>支付编码(inBankCode)</b></td>
+        <td><b>限额</b></td>
+        <td><b>状态</b></td>
+        <td><b>说明</b></td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>QR</td>
+        <td>QR</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>QR二维码</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_TRANSFER</td>
+        <td>BANK</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>银行转账</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>EWALLET</td>
+        <td>MOMO_VND</td>
+        <td>20000-5000000</td>
+        <td>可用</td>
+        <td>MOMO钱包</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>QR</td>
+        <td>VN_QR_USD</td>
+        <td>0.99-2000</td>
+        <td>可用</td>
+        <td>QR二维码</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>VN_BANK_USD</td>
+        <td>0.99-2000</td>
+        <td>可用</td>
+        <td>银行转账</td>
+    </tr>
+</table>
+
+## **代付API**
+
+### **代付申请**
+
+**简要描述：**
+
+* 创建代付订单
+
+**URL：`/vnd/pay/apply`**
+
+**参数：**
+
+| 参数名           | 必选 | 类型     | 说明                                                                                                 |
+|:--------------|:---|:-------|:---------------------------------------------------------------------------------------------------|
+| appId         | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                                    |
+| orderId       | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                                             |
+| amount        | 是  | String | 交易金额(单位：**₫**） 范围:50,000-10,000,000                                                                |
+| accountType   | 是  | String | 账户类型： BANK\_ACCOUNT                                                                                |
+| bankCode      | 是  | String | 银行代码                                                                                               |
+| accountNo     | 是  | String | 用户银行账号                                                                                             |
+| name          | 是  | String | 收款人姓名(收款人姓名 格式：英文或越南语大小写且允许有空格，1-30位,"firstName middleName lastName" (middleName 非必填, 特殊字符支持 '.-)) |
+| phone         | 是  | String | 真实手机号                                                                                              |
+| email         | 是  | String | 真实电子邮件                                                                                             |
+| notifyUrl     | 否  | String | 回调地址                                                                                               |
+| subject       | 否  | String | 支付备注（交易标题，商品名称，支付原因）                                                                               |
+| body          | 否  | String | 备注详情                                                                                               |
+| partnerUserId | 是  | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。                        |
+| sign          | 是  | String | 签名                                                                                                 |
+
+#####      
+
+request（accountType为BANK\_CARD类型时）
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M100000450012",
+  "amount": "500",
+  "accountType": "BANK_CARD",
+  "bankCode": "BDO",
+  "accountNo": "09876543210",
+  "name": "john doe",
+  "phone": "08276543210",
+  "email": "johndoe@cashfree.com",
+  "subject": "iphone13",
+  "body": "ProMotion technology with adaptive refresh rates up to 120Hz",
+  "partnerUserId": "149597870",
+  "sign": "I1PeK3eJOVsFFNowxVRqMXpeWm1lr/BcRpBi8WsW4wVo1+5CC3JsrFq/m/L2O69NzKHvtDWi4zia3DL3dPut0yMyUyqL91LNCSaeISbGsQPlhEsQpyTOryS/RKOfsrn2Xo37SCF/phAvndOk2jwwGwqM5xLz1ms9Ukl85wv27QFNrXIMxK2p18oe7MpMYrgf+xvEBE/VqCtKMtN9pO449wWwXzHWNPbZ76s4pAvKwRE9yXQDr7Iw14Dktcnl1FoLM4gWM/obkO+mz6SyAGDuXhVh/+OD/IGNiCyTCNq6ciQY28UnCFV6ZIP40gxsFhfBJKbK+Raw7y1Bh912ifYfug=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M100000450013",
+    "orderNo": "3023062014149637",
+    "sign": "LmhUnkw5j0pMiimsG8rKwdNNZGvXH5MpSmD6mdHZwq1SQwuK5BohmdEoqKB/jkMk28o3da4Cxh6Q+tW97+yTCemRrF+dMaHA73rpOeUuujKQl/UcFvJuMhfLBa2tp09L71NzoBqpPD6aXf37mYAz8E1HmERwFPpac5FVxIYanHG8cqmMLJYsVmHTSxWavgWU03ys9UczBePkBiR8sl2FSOhFABB0wAP28lswrV/ABS68IsLKtyd1fyI3GBfSbIK5nDEEnlE+EdElFdLs9taAxJImeVF1x4eT47+bkPJ2qS8z3K8QGzKLF3W+8SiRZGfSwDTsLKH+2Vycvy5auRl+ag=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名     | 必选     | 类型             |
+|:--------|:-------|:---------------|
+| orderId | String | 商户订单号(必须保证唯一性) |
+| orderNo | String | 平台订单号          |
+| sign    | String | 签名             |
+
+### **代付查询**
+
+**简要描述：**
+
+* 查询代付订单
+
+**URL：`/vnd/pay/query`**
+
+**参数：**
+
+| 参数名     | 必选 | 类型     | 说明                              |
+|:--------|:---|:-------|:--------------------------------|
+| appId   | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| orderId | 是  | String | 商户订单号                           |
+| orderNo | 否  | String | 平台订单号（响应快）                      |
+| sign    | 是  | String | 签名                              |
+
+request
+
+```json
+{
+  "appId": 1000,
+  "orderId": "M1234567111",
+  "orderNo": "3022111516571436",
+  "sign": "ZxkVZL+GAyv0VhvWn4IvuYahTzxgQuthkuV2ONWiqIfIDb2avvHlFOUJVzqZi1q8CPHXZm1ltanRTRVTxfsuftLvGeDioUHglWt46/RU6c1OPznpLGsZ35Q3n5tW2y1EnOsxPynXBFLuDQy+aZ3l9u6AQ30T0zQexMGT+IxuFkmUp02g/6juaHa5ZgNMv7lN67ixIp162wrM7OJuaOif872QijSceRdZhzaMGImAwB0D4MosRV4WMBOKkwgPdmS7GuZN66YUidXk3wTGqX3MYRw6M0kj4eNegSUwPXvp4q4p0KO8Y3xUMld54GY2ApX3WN3CBtC/vpJqEszjGBbbGg=="
+}
+```
+
+response — 订单失败
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M1234567111",
+    "orderNo": "3022111516571436",
+    "amount": "100000.00",
+    "fee": "0.00",
+    "status": 3,
+    "errorMsg": "Đơn hàng không tồn tại",
+    "sign": "KKuvCl0SuNANJs+l2ogDaJm8pmV+Hi+Xa7q27vJ6D1Ehs4aOp13kRbITfJAhczh3T81BE9qwHeJaYwf+r0EypKM9TL6pMwfG8Az4gRy1D57wiUaVjl2PWcvbEqrn1hL0b+btkjvAM9I+CcSv+wuOW3/uku17Ws3FhgJLj9sFsQUBAPjDO+758VnwBytCOLBmljLBXyKgNgpmFQ1/DNkqWl0UNzyLK45Zw3yf5NiwhEFbvW0jlOWlfu/ql4hluISUQG573jEoFCBEnQLb2tQoRZj1QYNRCXPf5lbej0vzqbEwvR9h+ZOf255t1MocJkdIe463DTV5U3KZdVT87HMagw=="
+  }
+}
+```
+
+response — 订单成功
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M1234567112",
+    "orderNo": "3022111517401574",
+    "amount": "100000.00",
+    "fee": "1003.00",
+    "status": 2,
+    "payTime": "2024-03-01 23:59:59",
+    "sign": "khPtOmGq+cpKX0HFAI/lbP0dx4oVyNAnL5oLsdmhDJdASlQm0yg5I3o+MhImYggEsL6c2bo5fP29t54OZFqSdQDfIuNDvGbAMAr4mRBxc0hoHLkBLyyagfVPBLyQA1JY8XV3ZL4ySzQ3ZQnMCfrh2K39ueUuz6HpZ03Hj0KYijVRCXAZaio/L5jfLBT12QXmvIfAHa8s/k9flhK05ENHPep3zjj/MZGOEaX7jkEJLfjK0duypDCa61BRQjM+oePOdVsgleIl1Yf98UAxMDZ/A3912KFHEb+/jvmdnulNbiJFyuT1fEe+j2teUgw3vFsZAtwNWAgxhC7UO+N0Q5z4EA=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名      | 类型      | 说明                                                  |
+|:---------|:--------|:----------------------------------------------------|
+| orderId  | String  | 商户订单号(必须保证唯一性)                                      |
+| orderNo  | String  | 平台订单号                                               |
+| amount   | String  | 交易金额                                                |
+| fee      | String  | 手续费                                                 |
+| status   | Integer | 订单状态(0未开始, 1放款中 2放款成功（终态） 3放款失败（终态） \-1异常待确认)       |
+| payTime  | String  | 支付成功时间（当status=2时有值）(越南时间), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg | String  | 支付失败原因（当status=3时有值）                                |
+| sign     | String  | 签名                                                  |
+
+### **支付方式**
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1050px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>币种</b></td>
+        <td><b>支付类型(accountType)</b></td>
+        <td><b>支付编码(bankCode)</b></td>
+        <td><b>限额</b></td>
+        <td><b>状态</b></td>
+        <td><b>说明</b></td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>VCB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Vietcombank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>DAB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>DongA Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>TCB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Techcombank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Military Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>VIB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Vietnam International Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ICB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>VietinBank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>EXB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Eximbank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ACB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Asia Commercial Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>HDB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>HDBank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MSB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Maritime Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NCB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>National Citizen Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>VAB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Viet A Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>VPB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>VPBank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>STB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Sacombank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BAB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Bac A Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>GPB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>GPBank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>AGB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Agribank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BIDV</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BIDV</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>OJB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>OceanBank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PGB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>PG Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SHB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Saigon - Hanoi Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>TPB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>TienPhong Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NAB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Nam A Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SGB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Saigon Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ABB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>An Binh Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SCB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Saigon Commercial Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>IVB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Indovina Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>VCCB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Viet Capital Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>OCB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Orient Commercial Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SEA</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Dong Nam A Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>LVB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>LienVietPostBank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>WRB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Woori Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PVCOMBANK</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>PVcomBank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SHNB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Shinhan Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>KLB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Kien Long Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BVB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BaoViet Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>GAB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Dai A Bank</td>
+    </tr>
+    <tr>
+        <td>VND</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NVB</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>Navibank</td>
+    </tr>
+
+</table>
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}
+

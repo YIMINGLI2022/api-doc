@@ -1,0 +1,256 @@
+---
+title: 公共接口
+permalink: /api/version2/CommonApi/
+---
+
+# **公共接口**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+## **1.账户查询**
+
+**简要描述：**
+
+* **查询当前业务对应账号的账户的余额**
+
+**URL：**
+
+currency为路径参数，需更换为要查询的币种，如美元：/usd/account/ledger
+
+币种采用国际标准编码，三位英文字母，参考：[Wikipedia-ISO_4217](https://en.wikipedia.org/wiki/ISO_4217)
+
+`/{currency}/account/ledger`
+
+**参数：**
+
+| 参数名   | 必选 | 类型     | 说明                              |
+|:------|:---|:-------|:--------------------------------|
+| appId | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| sign  | 是  | String | 签名                              |
+
+**返回data参数说明**
+
+| 参数名          | 类型     | 说明    |
+|:-------------|:-------|:------|
+| bal          | String | 账户余额  |
+| availableBal | String | 可用金额  |
+| frzBal       | String | 冻结金额  |
+| unSettleBal  | String | 待入账金额 |
+| sign         | String | 签名    |
+
+## **2.异步通知**
+
+**简要描述：**
+
+* **当客户代收成功或失败，我方会推送订单状态，若首次通知失败，则每隔5分钟回调一次，持续5次**
+
+**URL：`贵方提供`**，**请配置在HaiPay后台或在请求参数中传递**
+::: tip 强烈建议
+> 为保障接口的扩展性和兼容性，请遵循以下回调参数接收方式：
+>
+> 1. **禁止**声明具体POJO对象接收回调参数
+> 2. **必须**使用通用数据结构（如JSONObject、Map等）进行参数解析
+> 3. 此设计可确保后续我方扩展回调字段时，不会影响贵方的验签逻辑
+>
+> **原因**：保持松耦合设计可避免因字段增减导致的验签失败问题。
+:::
+> 代收回调参数：
+
+| 参数名              | 类型      | 说明                                                                                |
+|:-----------------|:--------|:----------------------------------------------------------------------------------|
+| appId            | Long    | 业务ID                                                                              |
+| currency         | String  | 币种                                                                                |
+| orderId          | String  | 商户订单号                                                                             |
+| orderNo          | String  | 平台订单号                                                                             |
+| amount           | String  | 本次收款金额                                                                            |
+| fee              | String  | 手续费金额                                                                             |
+| status           | Integer | 状态(2成功（终态），3失败（终态），4部分收款（终态），5超额收款（终态）)；目前只有[稳定币](/api/version2/coinpay/)存在4和5的状态 |
+| payTime          | String  | 支付成功时间（当status=2，4，5时有值）(本地时间), 格式: yyyy-MM-dd HH:mm:ss                           |
+| errorMsg         | String  | 支付失败原因（当status=3时有值）                                                              |
+| originalCurrency | String  | 订单原始币种，可能为空，涉及汇率转换时有值                                                             |
+| originalAmount   | String  | 订单原始金额，可能为空，涉及汇率转换时有值                                                             |
+| inBankCode       | String  | 用户支付方式，可以参考每个地区的接口文档，与下单一致,可能为空                                                   |
+| bankNo           | String  | 收款账号，可能为空                                                                         |
+| description      | String  | 收款备注，可能为空                                                                         |
+| cardNo           | String  | 支付卡号，信用卡支付一般为前六后四，ApplePay和GooglePay只有后四位，可能为空                                    |
+| tokenID          | String  | 支付令牌，用于MIT模式交易，可能为空                                                               |
+| name             | String  | 用户姓名，可能为空                                                                         |
+| email            | String  | 用户邮箱，MIT模式交易时有值，可能为空                                                              |
+| expMonth            | String  | 支付卡号有效期月份，可能为空                                                                    |
+| expYear            | String  | 支付卡号有效期年份，可能为空                                                                    |
+| ip            | String  | 用户IP，可能为空                                                                         |
+| is3DS            | String  | 是否3DS支付，true表示是，false表示否，但只代表建议银行是否要求3DS支付，不表示是否实际使用了3DS支付，可能为空                   |
+| sign             | String  | 签名，<font color='red'>（需要使用币种对应的业务密钥信息进行验签）</font>                                 |
+
+代付回调参数：
+
+| 参数名      | 类型      | 说明                                                  |
+|:---------|:--------|:----------------------------------------------------|
+| appId    | Long    | 业务ID                                                |
+| currency | String  | 币种                                                  |
+| orderId  | String  | 商户订单号                                               |
+| orderNo  | String  | 平台订单号                                               |
+| amount   | String  | 本次收款金额                                              |
+| fee      | String  | 手续费金额                                               |
+| status   | Integer | 状态(2成功（终态），3失败（终态）)                                 |
+| payTime  | String  | 支付成功时间（当status=2时有值）(本地时间), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg | String  | 支付失败原因（当status=3时有值）                                |
+| hash     | String  | 交易hash（稳定币（USDT）时有值）                                |
+| sign     | String  | 签名，<font color='red'>（需要使用币种对应的业务密钥信息进行验签）</font>   |
+
+收款链接订单回调参数：
+
+| 参数名              | 类型      | 说明                                                                                |
+|:-----------------|:--------|:----------------------------------------------------------------------------------|
+| appId            | Long    | 业务ID                                                                              |
+| currency         | String  | 币种                                                                                |
+| orderId          | String  | 商户订单号                                                                             |
+| orderNo          | String  | 平台订单号                                                                             |
+| amount           | String  | 本次收款金额                                                                            |
+| fee              | String  | 手续费金额                                                                             |
+| status           | Integer | 状态(2成功（终态），3失败（终态），4部分收款（终态），5超额收款（终态）)；目前只有[稳定币](/api/version2/coinpay/)存在4和5的状态 |
+| payTime          | String  | 支付成功时间（当status=2，4，5时有值）(本地时间), 格式: yyyy-MM-dd HH:mm:ss                           |
+| errorMsg         | String  | 支付失败原因（当status=3时有值）                                                              |
+| originalCurrency | String  | 订单原始币种，可能为空，涉及汇率转换时有值                                                             |
+| originalAmount   | String  | 订单原始金额，可能为空，涉及汇率转换时有值                                                             |
+| inBankCode       | String  | 用户支付方式，可以参考每个地区的接口文档，与下单一致,可能为空                                                   |
+| bankNo           | String  | 收款账号,可能为空                                                                         |
+| description      | String  | 收款备注,可能为空                                                                         |
+| cardNo           | String  | 支付卡号后四位,可能为空                                                                      |
+| createTime       | String  | 订单创建时间(本地时间), 格式: yyyy-MM-dd HH:mm:ss                                             |
+| linkNo           | String  | 收款链接编号                                                                            |
+| linkName         | String  | 收款链接名称                                                                            |
+| agentId          | Long    | 代理商ID(如无代理商则为空)                                                                   |
+| email            | String  | 付款用户邮箱(收款链接页面填写,未填写为随机邮箱)                                                         |
+| name             | String  | 付款用户昵称(收款链接页面填写)                                                                  |
+| subject          | String  | 备注(收款链接页面填写，未填写为随机生成)                                                             |
+| sign             | String  | 签名，<font color='red'>（需要使用币种对应的业务密钥信息进行验签）</font>                                 |
+
+说明
+
+收到回到通知之后,请在响应体中返回**SUCCESS** (**大写**)，不需要前后引号，否则会持续通知5次
+
+## **3.对帐文件链接获取**
+
+**说明：**
+
+* **文件格式与商户后台导出的文件格式一样，当天的数据会在第二天13点后生成对帐文件**
+
+**URL：**
+
+`/common/document/download`
+
+**参数：**
+
+| 参数名   | 必选 | 类型     | 说明                               |
+|:------|:---|:-------|:---------------------------------|
+| appId | 是  | Long   | 业务ID（后台获取）                       |
+| type  | 是  | Long   | 类型，15：代付订单数据，20：代收订单数据，40：资金流水数据 |
+| date  | 是  | String | 时间，格式yyyyMMdd                    |
+| sign  | 是  | String | 签名                               |
+
+返回data参数说明
+
+| 参数名     | 类型     | 说明                               |
+|:--------|:-------|:---------------------------------|
+| appId   | Long   | 业务ID（后台获取）                       |
+| type    | Long   | 类型，15：代付订单数据，20：代收订单数据，40：资金流水数据 |
+| date    | String | 时间，格式yyyyMMdd                    |
+| fileUrl | String | 文件下载地址                           |
+| expired | String | 有效期，1小时                          |
+| sign    | String | 签名                               |
+
+### 字段说明
+
+#### 代收
+
+- **Error**：收款异常
+- **Not Started**：未开始
+- **Paying**：收款中
+- **Success**：收款成功
+- **Failed**：收款失败
+- **Payment Part Success**：部分收款
+- **Payment Excess Success**：超额收款
+
+#### 代付
+
+- **Submit Error**：提交异常
+- **Error**：出款异常
+- **Not Started**：未开始
+- **Pending**：出款中
+- **Success**：出款成功
+- **Failed**：出款失败
+
+#### 通知状态
+
+- **Not Start**：未通知
+- **Success**：通知成功
+- **Failed**：通知失败
+- **Error**：通知异常
+
+#### 结算状态
+
+- **Error**：异常待确认
+- **Not Start**：未开始
+- **Settling**：结算中
+- **Success**：结算成功
+- **Settlement Failed (Reversed)**：结算失败（已冲正）
+
+## **4.代付订单凭证**
+
+**URL：**
+
+`/common/voucher`
+
+**参数：**
+
+| 参数名     | 必选 | 类型     | 说明         |
+|:--------|:---|:-------|:-----------|
+| appId   | 是  | Long   | 业务ID（后台获取） |
+| orderNo | 是  | Long   | 平台订单号      |
+| sign    | 是  | String | 签名         |
+
+返回data参数说明：图片的base64
+
+## **5.实时汇率查询**
+
+**说明：**
+
+* **查询USD转换其他币种汇率，仅支持usd结算支付方式**
+
+**URL：**
+
+`/common/quote/v1/exchange-rate`
+
+**参数：**
+
+| 参数名            | 必选 | 类型     | 说明         |
+|:---------------|:---|:-------|:-----------|
+| appId          | 是  | Long   | 业务ID（后台获取） |
+| sourceCurrency | 是  | String | 源币种(USD)   |
+| targetCurrency | 是  | String | 目标币种       |
+| payType        | 否  | String | 支付类型       |
+| inBankCode     | 否  | String | 支付方式       |
+| sign           | 是  | String | 签名         |
+
+返回data参数说明
+
+| 参数名            | 类型     | 说明      |
+|:---------------|:-------|:--------|
+| sourceCurrency | String | 币种(USD) |
+| targetCurrency | String | 目标币种    |
+| payType        | String | 支付类型    |
+| inBankCode     | String | 支付方式    |
+| exchangeRate   | String | 汇率      |
+| sign           | String | 签名      |
+
+{/*
+</div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}
