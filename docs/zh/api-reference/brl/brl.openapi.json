@@ -1,0 +1,637 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "默认模块",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "tags": [],
+  "paths": {
+    "/brl/collect/apply": {
+      "post": {
+        "summary": "代收申请",
+        "deprecated": false,
+        "description": "appId 巴西雷亚尔， amount 巴西雷亚尔，实收结算巴西雷亚尔",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "appId": {
+                    "type": "integer",
+                    "description": "业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）"
+                  },
+                  "orderId": {
+                    "type": "string",
+                    "description": "商户订单号(必须保证唯一性，长度不超过48)",
+                    "maxLength": 48
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "收款人姓名（收款人姓名格式:英文大小写且允许有空格,1-30位,\"firstName middleName lastName\" (middleName非必填,特殊字符支持!-)",
+                    "minLength": 1,
+                    "maxLength": 30,
+                    "pattern": "^[A-Za-z\\s!-]+$"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "真实手机号（格式参考 电话号码格式 ）"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "真实电子邮件",
+                    "format": "email"
+                  },
+                  "amount": {
+                    "type": "string",
+                    "description": "交易金额(单位：巴西雷纳尔，精确到小数点后两位；禁止添加标点符号，例如：\",\"） 范围:1-99999",
+                    "pattern": "^(?:[1-9]\\d{0,4}|0)(?:\\.\\d{2})$"
+                  },
+                  "payType": {
+                    "type": "string",
+                    "description": "支付方式类型"
+                  },
+                  "inBankCode": {
+                    "type": "string",
+                    "description": "支付方式编码"
+                  },
+                  "inBankNo": {
+                    "type": "string",
+                    "description": "CPF（仅限11位数字）",
+                    "pattern": "^\\d{11}$",
+                    "minLength": 11,
+                    "maxLength": 11
+                  },
+                  "callBackUrl": {
+                    "type": "string",
+                    "description": "用户支付成功后跳转地址",
+                    "format": "uri"
+                  },
+                  "callBackFailUrl": {
+                    "type": "string",
+                    "description": "用户支付失败后跳转地址",
+                    "format": "uri"
+                  },
+                  "notifyUrl": {
+                    "type": "string",
+                    "description": "回调地址",
+                    "format": "uri"
+                  },
+                  "subject": {
+                    "type": "string",
+                    "description": "支付备注"
+                  },
+                  "body": {
+                    "type": "string",
+                    "description": "备注详情"
+                  },
+                  "partnerUserId": {
+                    "type": "string",
+                    "description": "用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。",
+                    "pattern": "^[A-Za-z0-9\\-~!@#$%&*()_]+$"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "签名"
+                  }
+                },
+                "required": [
+                  "appId",
+                  "orderId",
+                  "name",
+                  "phone",
+                  "email",
+                  "amount",
+                  "payType",
+                  "inBankCode",
+                  "callBackUrl",
+                  "callBackFailUrl",
+                  "partnerUserId",
+                  "sign"
+                ]
+              },
+              "example": {
+                "appId": 1054,
+                "orderId": "M233323000059",
+                "amount": "300",
+                "phone": "09230219312",
+                "email": "23423@qq.com",
+                "name": "test",
+                "inBankCode": "PIX",
+                "payType": "QR",
+                "partnerUserId": "149597870",
+                "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "msg": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "orderId": {
+                          "type": "string",
+                          "description": "商户订单号(必须保证唯一性)"
+                        },
+                        "orderNo": {
+                          "type": "string",
+                          "description": "平台订单号"
+                        },
+                        "payUrl": {
+                          "type": "string",
+                          "description": "返回的是还款地址 其他时候返回的是指引或者详情"
+                        },
+                        "bankCode": {
+                          "type": "string",
+                          "description": "通道Code(VA)"
+                        },
+                        "bankNo": {
+                          "type": "string",
+                          "description": "还款卡号（VA）"
+                        },
+                        "qrCode": {
+                          "type": "string",
+                          "description": "二维码内容-可自行生成二维码(QR)"
+                        },
+                        "sign": {
+                          "type": "string",
+                          "description": "签名"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "example": {
+                  "status": "1",
+                  "error": "00000000",
+                  "msg": "",
+                  "data": {
+                    "orderId": "M233323000059",
+                    "orderNo": "6023071013539074",
+                    "payUrl": "https://a.api-uat.php.com/1L9zQS2",
+                    "bankCode": "PIX",
+                    "bankNo": "PC0007I10000035",
+                    "qrCode": "00020101021228760011ph.ppmi.p2m0111OPDVPHM1XXX0315777148000000017041652948137245442930503001520460165303608540810000.php Of Mandalu62310010ph.allbank05062110000803***88310012ph.ppmi.qrph0111OPDVPHM1XXX63042763",
+                    "sign": "YEoA8Y2JzQFGVzwJSqmemm1Kfv/bfyIfCqv2dp7RNzT5B72AQvdD+nt2nR4sL1HWscvmNHyVt5ovAi7MMhy3ziih/sMph+wPx4YjH3W1h5DyBvSlWvaKfKrK5ViomZ0pPYWydwRHnnRnicxToHK9S6qtSy7Q73O0hdz4hJ9p41Th3ycBl2Q9SeqSZYSY1ohcPDhdyRf2y0prb8rHgpBKzxZ5BKX/1bsE9OmsSEHAEYT8OGgko6aNe8XPAhr4G48cpWTftvnGQuzh0O65nuZRI/PF+Axt2zJCVbFHDDSREI9NlAT82ebDqhlVdxQzKE67D1nxgjb3dPmDUYHOBpmwxQ=="
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/brl/collect/query": {
+      "post": {
+        "summary": "代收查询",
+        "deprecated": false,
+        "description": "创建代收订单\n异步通知后，通过orderNo查询二次确认状态",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "appId": {
+                    "type": "integer",
+                    "description": "业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）"
+                  },
+                  "orderId": {
+                    "type": "string",
+                    "description": "商户订单号"
+                  },
+                  "orderNo": {
+                    "type": "string",
+                    "description": "平台订单号（响应快）"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "签名"
+                  }
+                },
+                "required": [
+                  "appId",
+                  "orderId",
+                  "sign"
+                ]
+              },
+              "examples": {}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "状态码"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "错误码"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "消息"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "orderId": {
+                          "type": "string",
+                          "description": "商户订单号(必须保证唯一性)"
+                        },
+                        "orderNo": {
+                          "type": "string",
+                          "description": "平台订单号"
+                        },
+                        "amount": {
+                          "type": "string",
+                          "description": "交易金额"
+                        },
+                        "actualAmount": {
+                          "type": "string",
+                          "description": "收到金额"
+                        },
+                        "fee": {
+                          "type": "string",
+                          "description": "手续费"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "description": "状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)"
+                        },
+                        "payTime": {
+                          "type": "string",
+                          "description": "支付成功时间（当status=2,4,5时有值）(巴西时间), 格式: yyyy-MM-dd HH:mm:ss"
+                        },
+                        "errorMsg": {
+                          "type": "string",
+                          "description": "失败原因（当status=3时有值）"
+                        },
+                        "sign": {
+                          "type": "string",
+                          "description": "签名"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "example": {
+                  "status": "1",
+                  "error": "00000000",
+                  "msg": "",
+                  "data": {
+                    "orderId": "M22222000028",
+                    "orderNo": "6023042811314347",
+                    "amount": "50000.00",
+                    "actualAmount": "0.00",
+                    "fee": "0.00",
+                    "status": 1,
+                    "sign": "fP433ygWVDLVGxYkVnIJj7riGq0U3vyVX+MbBAImxfGLZkZcEAHVEoVYuULZSmXAAXKRSyd67WlDNm+24pougM54ofAoH4HMtCL2tfCoBReFyz3z02AGKkrKE2xWhSpWoqfQoBvzwuN5iGMMu0s9Q1YvqiwJ8WDVIENnmiIyD8qDJN7caHTW2US14/faG+69AvnuIgJ/nu7/jogOlgEYdZdVYU7gcRDE+d47KjlFGswQkJ/h/uzV7cWtUqrtOO7ZnZ3/z33Xx8awokX36QoYcPSWAU0h+Ij9O9402HNhm1eTbYcLU0uI/z8xCAtyAI/tTyiFijpiNlxUKQj+zKsILw=="
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/brl/pay/apply": {
+      "post": {
+        "summary": "代付申请",
+        "deprecated": false,
+        "description": "创建代付订单",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "appId": {
+                    "type": "integer",
+                    "description": "业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）"
+                  },
+                  "orderId": {
+                    "type": "string",
+                    "description": "商户订单号(必须保证唯一性，长度不超过48)",
+                    "maxLength": 48
+                  },
+                  "amount": {
+                    "type": "string",
+                    "description": "交易金额(单位：巴西雷纳尔，精确到小数点后两位；禁止添加标点符号，例如：\",\"） 范围:1-99999",
+                    "pattern": "^(?:[1-9]\\d{0,4}|99999)(?:\\.\\d{2})?$"
+                  },
+                  "accountType": {
+                    "type": "string",
+                    "description": "支付方式类型"
+                  },
+                  "bankCode": {
+                    "type": "string",
+                    "description": "支付方式编码"
+                  },
+                  "identifyType": {
+                    "type": "string",
+                    "description": "账号类型(CPF/PHONE/EMAIL)"
+                  },
+                  "accountNo": {
+                    "type": "string",
+                    "description": "用户收款账号"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "收款人姓名(收款人姓名 格式：英文大小写且允许有空格，1-30位,\"firstName middleName lastName\" (middleName 非必填, 特殊字符支持 '.-))",
+                    "minLength": 1,
+                    "maxLength": 30,
+                    "pattern": "^[A-Za-z\\s'\\.\\-]+$"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "真实手机号（格式参考 电话号码格式 ）"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "真实电子邮件",
+                    "format": "email"
+                  },
+                  "notifyUrl": {
+                    "type": "string",
+                    "description": "回调地址",
+                    "format": "uri"
+                  },
+                  "subject": {
+                    "type": "string",
+                    "description": "支付备注（交易标题，商品名称，支付原因）"
+                  },
+                  "body": {
+                    "type": "string",
+                    "description": "备注详情"
+                  },
+                  "partnerUserId": {
+                    "type": "string",
+                    "description": "用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。",
+                    "pattern": "^[A-Za-z0-9\\-~!@#$%&*()_]+$"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "签名"
+                  }
+                },
+                "required": [
+                  "appId",
+                  "orderId",
+                  "amount",
+                  "accountType",
+                  "bankCode",
+                  "identifyType",
+                  "accountNo",
+                  "name",
+                  "phone",
+                  "email",
+                  "partnerUserId",
+                  "sign"
+                ],
+                "additionalProperties": false
+              },
+              "example": {
+                "appId": 1054,
+                "orderId": "M100000450012",
+                "amount": "500",
+                "accountType": "EWALLET",
+                "bankCode": "PIX",
+                "identifyType": "CPF",
+                "accountNo": "09876543210",
+                "name": "john doe",
+                "phone": "09876543210",
+                "email": "johndoe@cashfree.com",
+                "subject": "iphone13",
+                "body": "ProMotion technology with adaptive refresh rates up to 120Hz",
+                "partnerUserId": "149597870",
+                "sign": "I1PeK3eJOVsFFNowxVRqMXpeWm1lr/BcRpBi8WsW4wVo1+5CC3JsrFq/m/L2O69NzKHvtDWi4zia3DL3dPut0yMyUyqL91LNCSaeISbGsQPlhEsQpyTOryS/RKOfsrn2Xo37SCF/phAvndOk2jwwGwqM5xLz1ms9Ukl85wv27QFNrXIMxK2p18oe7MpMYrgf+xvEBE/VqCtKMtN9pO449wWwXzHWNPbZ76s4pAvKwRE9yXQDr7Iw14Dktcnl1FoLM4gWM/obkO+mz6SyAGDuXhVh/+OD/IGNiCyTCNq6ciQY28UnCFV6ZIP40gxsFhfBJKbK+Raw7y1Bh912ifYfug=="
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "msg": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "orderId": {
+                          "type": "string",
+                          "description": "商户订单号(必须保证唯一性)"
+                        },
+                        "orderNo": {
+                          "type": "string",
+                          "description": "平台订单号"
+                        },
+                        "sign": {
+                          "type": "string",
+                          "description": "签名"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/brl/pay/query": {
+      "post": {
+        "summary": "代付查询",
+        "deprecated": false,
+        "description": "代付订单查询",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "appId": {
+                    "type": "integer",
+                    "description": "业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）"
+                  },
+                  "orderId": {
+                    "type": "string",
+                    "description": "商户订单号"
+                  },
+                  "orderNo": {
+                    "type": "string",
+                    "description": "平台订单号（响应快）"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "签名"
+                  }
+                },
+                "required": [
+                  "appId",
+                  "orderId",
+                  "sign"
+                ]
+              },
+              "example": {
+                "appId": 1000,
+                "orderId": "M1234567111",
+                "orderNo": "3022111516571436",
+                "sign": "ZxkVZL+GAyv0VhvWn4IvuYahTzxgQuthkuV2ONWiqIfIDb2avvHlFOUJVzqZi1q8CPHXZm1ltanRTRVTxfsuftLvGeDioUHglWt46/RU6c1OPznpLGsZ35Q3n5tW2y1EnOsxPynXBFLuDQy+aZ3l9u6AQ30T0zQexMGT+IxuFkmUp02g/6juaHa5ZgNMv7lN67ixIp162wrM7OJuaOif872QijSceRdZhzaMGImAwB0D4MosRV4WMBOKkwgPdmS7GuZN66YUidXk3wTGqX3MYRw6M0kj4eNegSUwPXvp4q4p0KO8Y3xUMld54GY2ApX3WN3CBtC/vpJqEszjGBbbGg=="
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "响应状态码"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "错误码"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "返回信息"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "orderId": {
+                          "type": "string",
+                          "description": "商户订单号(必须保证唯一性)"
+                        },
+                        "orderNo": {
+                          "type": "string",
+                          "description": "平台订单号"
+                        },
+                        "amount": {
+                          "type": "string",
+                          "description": "交易金额"
+                        },
+                        "fee": {
+                          "type": "string",
+                          "description": "手续费"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "description": "状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)"
+                        },
+                        "payTime": {
+                          "type": "string",
+                          "description": "支付成功时间（当status=2时有值）(巴西时间), 格式: yyyy-MM-dd HH:mm:ss"
+                        },
+                        "errorMsg": {
+                          "type": "string",
+                          "description": "支付失败原因（当status=3时有值）"
+                        },
+                        "sign": {
+                          "type": "string",
+                          "description": "签名"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "example": {
+                  "status": "1",
+                  "error": "00000000",
+                  "msg": "",
+                  "data": {
+                    "orderId": "M1234567111",
+                    "orderNo": "3022111516571436",
+                    "amount": "100000.00",
+                    "fee": "0.00",
+                    "status": 3,
+                    "errorMsg": "Đơn hàng không tồn tại",
+                    "sign": "KKuvCl0SuNANJs+l2ogDaJm8pmV+Hi+Xa7q27vJ6D1Ehs4aOp13kRbITfJAhczh3T81BE9qwHeJaYwf+r0EypKM9TL6pMwfG8Az4gRy1D57wiUaVjl2PWcvbEqrn1hL0b+btkjvAM9I+CcSv+wuOW3/uku17Ws3FhgJLj9sFsQUBAPjDO+758VnwBytCOLBmljLBXyKgNgpmFQ1/DNkqWl0UNzyLK45Zw3yf5NiwhEFbvW0jlOWlfu/ql4hluISUQG573jEoFCBEnQLb2tQoRZj1QYNRCXPf5lbej0vzqbEwvR9h+ZOf255t1MocJkdIe463DTV5U3KZdVT87HMagw=="
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "responses": {},
+    "securitySchemes": {}
+  },
+  "servers": [
+    {
+      "url": "https://uat-interface.haipay.asia",
+      "description": "测试-interface"
+    }
+  ],
+  "security": []
+}

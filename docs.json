@@ -144,9 +144,68 @@
           },
           {
             "tab": "API reference",
-            "openapi": "docs/zh/openapi.json",
-            "pages": [
-              "docs/zh/api-reference/global/cashier/collect-apply"
+            "groups": [
+              {
+                "group": "收银台",
+                "pages": [
+                  "docs/zh/api-reference/cashier/api/collectApply",
+                  "docs/zh/api-reference/cashier/api/collectQuery",
+                  "docs/zh/api-reference/cashier/api/collectQueryV2"
+                ]
+              },
+              {
+                "group": "国际信用卡",
+                "pages": [
+                  "docs/zh/api-reference/card/api/collectApply",
+                  "docs/zh/api-reference/card/api/collectQuery",
+                  "docs/zh/api-reference/card/api/mitApply",
+                  "docs/zh/api-reference/card/api/refundApply",
+                  "docs/zh/api-reference/card/api/refundQuery"
+                ]
+              },
+              {
+                "group": "信用卡订阅",
+                "pages": [
+                  "docs/zh/api-reference/subscription/api/subscriptionApply",
+                  "docs/zh/api-reference/subscription/api/subscriptionQuery",
+                  "docs/zh/api-reference/subscription/api/subscriptionCancel",
+                  "docs/zh/api-reference/subscription/api/refundApply"
+                ]
+              },
+              {
+                "group": "PayPal",
+                "pages": [
+                  "docs/zh/api-reference/paypal/api/payApply",
+                  "docs/zh/api-reference/paypal/api/payQuery"
+                ]
+              },
+              {
+                "group": "墨西哥",
+                "pages": [
+                  "docs/zh/api-reference/mxn/api/collectApply",
+                  "docs/zh/api-reference/mxn/api/collectQuery",
+                  "docs/zh/api-reference/mxn/api/payApply",
+                  "docs/zh/api-reference/mxn/api/payQuery"
+                ]
+              },
+              {
+                "group": "土耳其",
+                "pages": [
+                  "docs/zh/api-reference/try/api/collectApply",
+                  "docs/zh/api-reference/try/api/collectQuery",
+                  "docs/zh/api-reference/try/api/payApply",
+                  "docs/zh/api-reference/try/api/payQuery"
+                ]
+              },
+              {
+                "group": "巴西",
+                "pages": [
+                  "docs/zh/api-reference/brl/api/collectApply",
+                  "docs/zh/api-reference/brl/api/collectQuery",
+                  "docs/zh/api-reference/brl/api/payApply",
+                  "docs/zh/api-reference/brl/api/payQuery"
+                ]
+              }
             ]
           }
         ]
