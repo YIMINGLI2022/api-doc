@@ -1,0 +1,1389 @@
+---
+title: 国际信用卡(VISA/MASTER)支付接口
+permalink: /api/version2/creditcard/
+---
+
+# **国际信用卡接口文档**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+:::warning **阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
+:::
+
+:::tip 信用卡争议处理重要说明
+  - **针对信用卡交易,消费者有权在交易发生后180天内发起争议申请。当争议被提起时,每笔交易将产生20美元的争议处理费。**
+  - **在收到争议通知后,您有两种应对方式可供选择**
+    - **其一:您可以选择接受争议,即向发卡银行提交回复,确认您不对退款金额提出异议。**
+    - **其二:您可以选择对争议进行抗辩,通过完成一个引导式的提交流程,根据提示提供相关证据和支持性文件来阐述您的立场。**
+  - **若您选择对争议进行抗辩,将额外收取20美元的抗辩费。如果发卡银行不接受您提交的抗辩材料并判定消费者胜诉,抗辩费将被扣除,同时消费者的付款将被退还。**
+  - **关于费用退还政策,如果您成功赢得争议,Haipay将退还抗辩费。然而,除非您的Haipay合同中另有明确规定,否则最初收取的争议处理费在任何情况下均不予退还。**
+:::
+
+:::danger **PCI DSS（支付卡行业数据安全标准）严格禁止在 WebView 或 iframe 中嵌入信用卡输入页面，主要原因如下：**
+1. PCI 合规性：直接违反 PCI DSS 要求
+2. 安全风险：WebView 和 iframe 可能无法提供足够的安全隔离
+3. 中间人攻击：恶意应用可能拦截或篡改支付数据
+4. 钓鱼风险：无法确保用户是在可信的环境中输入敏感信息
+:::
+
+## 设备环境要求
+:::tip 检查您的设备和浏览器设置
+
+如果您在支付页面中看不到您想要的钱包，则您的设备或浏览器可能不符合以下 Apple Pay 或 Google Pay 条件。
+
+- 钱包里必须至少有一张卡。
+- 您必须使用兼容的 [Apple Pay 设备](https://support.apple.com/zh-cn/102896) 和 [Google Pay 设备](https://developers.google.com/pay/issuers/overview/supported-devices#compatibility_requirements)。
+- 您必须使用 必须使用**HTTPS**和[支持的浏览器](#supported-browsers) 来测试您正在测试的钱包。
+- 允许适用的浏览器访问您的钱包。
+  - Chrome：**设置** > **自动填充和密码** > **付款方式** > **允许网站检查您是否已保存付款方式**
+  - Safari：**设置** > **高级** > **允许网站检查 Apple Pay 和 Apple 卡**
+- 不要使用 Chrome 隐身窗口或 Safari 私人窗口。
+- 确认您在受支持的 Apple Pay 地区 和 Google Pay 地区 进行操作。
+- 对于 Apple Pay，请确认您的设备支持[生物识别身份验证](https://support.apple.com/zh-cn/102626#:~:text=iPhone%20or%20.iPad,on%20all%20devices.)。
+
+:::tip **支持的浏览器**<a id="supported-browsers"></a>
+
+**桌面浏览器**
+- Chrome 38+
+- Safari 10.1+
+- Firefox 29+
+- Edge 15+
+- Opera 25+
+
+**移动浏览器**
+- iOS Safari 9+ 以及其他使用系统提供的 WebKit 引擎的浏览器和 Web 视图
+- Android Chrome 38+
+- 三星浏览器 7.1+
+
+**其他说明**
+
+对于未明确支持的浏览器，我们限制支持如下：
+
+- 要求浏览器支持 **TLS 1.2**
+- 需要足够现代的浏览器来支持 JavaScript 中的 **Promises**
+- 我们会响应错误报告，但不会主动测试其他浏览器
+:::
+
+## 地区限制
+::: details 不支持的地区列表
+
+AD-安道尔
+
+AE-阿拉伯联合酋长国
+
+AF-阿富汗
+
+AG-安提瓜和巴布达
+
+AI-安圭拉
+
+AL-阿尔巴尼亚
+
+AM-亚美尼亚
+
+AO-安哥拉
+
+AQ-南极洲
+
+AR-阿根廷
+
+AS-美属萨摩亚
+
+AW-阿鲁巴
+
+AX-奥兰群岛
+
+BA-波斯尼亚和黑塞哥维那
+
+BB-巴巴多斯
+
+BD-孟加拉国
+
+BF-布基纳法索
+
+BH-巴林
+
+BI-布隆迪
+
+BJ-贝宁
+
+BL-圣巴泰勒米
+
+BM-百慕大
+
+BN-文莱
+
+BQ-博内尔、圣尤斯特歇斯和萨巴
+
+BS-巴哈马
+
+BT-不丹
+
+BV-布韦岛
+
+BW-博茨瓦纳
+
+BY-白俄罗斯
+
+BZ-伯利兹
+
+CC-科科斯（基林）群岛
+
+CD-刚果民主共和国
+
+CF-中非共和国
+
+CG-刚果共和国
+
+CI-科特迪瓦
+
+CK-库克群岛
+
+CM-喀麦隆
+
+CO-哥伦比亚
+
+CU-古巴
+
+CV-佛得角
+
+CW-库拉索
+
+CX-圣诞岛
+
+CY-塞浦路斯
+
+DJ-吉布提
+
+DM-多米尼克
+
+DO-多米尼加共和国
+
+DZ-阿尔及利亚
+
+EC-厄瓜多尔
+
+EE-爱沙尼亚
+
+EG-埃及
+
+EH-西撒哈拉
+
+ER-厄立特里亚
+
+ET-埃塞俄比亚
+
+FJ-斐济
+
+FK-福克兰群岛
+
+FM-密克罗尼西亚联邦
+
+FO-法罗群岛
+
+GA-加蓬
+
+GD-格林纳达
+
+GE-格鲁吉亚
+
+GF-法属圭亚那
+
+GG-根西岛
+
+GH-加纳
+
+GI-直布罗陀
+
+GL-格陵兰
+
+GM-冈比亚
+
+GN-几内亚
+
+GP-瓜德罗普
+
+GQ-赤道几内亚
+
+GS-南乔治亚和南桑威奇群岛
+
+GT-危地马拉
+
+GW-几内亚比绍
+
+HK-香港
+
+HM-赫德岛和麦克唐纳群岛
+
+HN-洪都拉斯
+
+HT-海地
+
+ID-印度尼西亚
+
+IL-以色列
+
+IM-马恩岛
+
+IN-印度
+
+IO-英属印度洋领地
+
+IQ-伊拉克
+
+IR-伊朗
+
+JM-牙买加
+
+JO-约旦
+
+JP-日本
+
+KE-肯尼亚
+
+KH-柬埔寨
+
+KI-基里巴斯
+
+KM-科摩罗
+
+KN-圣基茨和尼维斯
+
+KP-朝鲜
+
+KR-韩国
+
+KW-科威特
+
+KY-开曼群岛
+
+KZ-哈萨克斯坦
+
+LA-老挝
+
+LB-黎巴嫩
+
+LC-圣卢西亚
+
+LI-列支敦士登
+
+LK-斯里兰卡
+
+LR-利比里亚
+
+LS-莱索托
+
+LV-拉脱维亚
+
+LY-利比亚
+
+MD-摩尔多瓦
+
+ME-黑山
+
+MF-法属圣马丁
+
+MG-马达加斯加
+
+MH-马绍尔群岛
+
+MK-北马其顿
+
+ML-马里
+
+MM-缅甸
+
+MN-蒙古
+
+MP-北马里亚纳群岛
+
+MQ-马提尼克
+
+MR-毛里塔尼亚
+
+MS-蒙特塞拉特
+
+MU-毛里求斯
+
+MV-马尔代夫
+
+MW-马拉维
+
+MY-马来西亚
+
+MZ-莫桑比克
+
+NA-纳米比亚
+
+NC-新喀里多尼亚
+
+NE-尼日尔
+
+NF-诺福克岛
+
+NG-尼日利亚
+
+NI-尼加拉瓜
+
+NP-尼泊尔
+
+NR-瑙鲁
+
+NU-纽埃
+
+OM-阿曼
+
+PA-巴拿马
+
+PE-秘鲁
+
+PF-法属波利尼西亚
+
+PG-巴布亚新几内亚
+
+PH-菲律宾
+
+PK-巴基斯坦
+
+PM-圣皮埃尔和密克隆
+
+PN-皮特凯恩群岛
+
+PR-波多黎各
+
+PS-巴勒斯坦
+
+PW-帕劳
+
+RE-留尼汪
+
+RU-俄罗斯
+
+RW-卢旺达
+
+SA-沙特阿拉伯
+
+SB-所罗门群岛
+
+SC-塞舌尔
+
+SD-苏丹
+
+SH-圣赫勒拿
+
+SJ-斯瓦尔巴和扬马延
+
+SK-斯洛伐克
+
+SL-塞拉利昂
+
+SM-圣马力诺
+
+SN-塞内加尔
+
+SO-索马里
+
+SR-苏里南
+
+SS-南苏丹
+
+ST-圣多美和普林西比
+
+SV-萨尔瓦多
+
+SX-荷属圣马丁
+
+SY-叙利亚
+
+SZ-斯威士兰
+
+TC-特克斯和凯科斯群岛
+
+TD-乍得
+
+TF-法属南部领地
+
+TG-多哥
+
+TH-泰国
+
+TK-托克劳
+
+TL-东帝汶
+
+TM-土库曼斯坦
+
+TN-突尼斯
+
+TO-汤加
+
+TR-土耳其
+
+TT-特立尼达和多巴哥
+
+TV-图瓦卢
+
+TW-台湾
+
+TZ-坦桑尼亚
+
+UA-乌克兰
+
+UG-乌干达
+
+UM-美国本土外小岛屿
+
+UY-乌拉圭
+
+UZ-乌兹别克斯坦
+
+VA-梵蒂冈
+
+VC-圣文森特和格林纳丁斯
+
+VE-委内瑞拉
+
+VG-英属维尔京群岛
+
+VI-美属维尔京群岛
+
+VN-越南
+
+VU-瓦努阿图
+
+WF-瓦利斯和富图纳
+
+WS-萨摩亚
+
+YE-也门
+
+YT-马约特
+
+ZA-南非
+
+ZM-赞比亚
+
+ZW-津巴布韦
+
+:::
+
+## **HaiPay.js 对接（Apple Pay & Google Pay）**<a id="haipaysdk"></a>
+
+HaiPay 提供了便捷的 Apple Pay 和 Google Pay 支付集成方案，通过简单配置即可在网页中快速集成支付功能。
+
+- 引入 HaiPay 脚本([https://cashier.haipay.top/js/applePayGooglePay_1.0.0.min.js])
+- 页面结构要求
+    - 支付按钮容器：用于 Apple Pay/Google Pay 按钮的渲染。
+- 快速集成示例
+
+```javascript
+<script src="https://cashier.haipay.top/js/applePayGooglePay_1.0.0.min.js"></script>
+
+<div>
+  <div id="applePay-googlePay"></div>
+</div>
+
+  // 创建实列
+  const elements = applePayGooglePay.create('applePayGooglePay', {
+      sandbox: true,
+      clientToken: '6cgjnxvc6kdb',
+      buttonType: 'buy',
+      buttonTheme: 'black',
+      buttonHeight: 50
+  });
+
+  // 挂载组件
+  elements.mount('#applePay-googlePay');
+
+  // 支付按钮渲染完成回调函数
+  elements.on('ready', (data) => {
+      console.log('Button rendered successfully:', data);
+  });
+
+ // 错误信息
+  elements.on('error', (data) => {
+      console.error('Payment error:', data);
+  });
+
+
+```
+
+- 参数说明
+  - 1.初始化配置参数（HaiPay 构造函数参数）
+
+| 参数名              | 必选 | 类型     | 说明                 |
+| :----------------  | :--- | :-----   | :------------------------------------------------------------------------------------------ |
+| sandbox            | 是   | Boolean   | 环境类型，默认值 true，可选值 ：<br /> - true：测试环境（用于联调测试） <br /> - false：生产环境（上线使用）   |
+| clientToken        | 是   | String   | 客户端令牌clientToken           |              |
+| buttonType         | 否   | String   | 按钮文本类型，默认值 buy, 可选值：<br /> - plain："只显示支付徽标，无文字" <br /> - add-money："添加资金" <br /> - book："预定" <br /> - buy："购买"（默认）<br /> - check-out："结账" <br /> - contribute："捐款" <br /> - order："下单" <br /> - reload："重新加载" <br /> - rent: "租赁" <br /> -subscribe: "订阅" <br /> -support: "支持" <br /> -tip: "付小费" <br /> -top-up: "充值" |
+| buttonTheme        | 否   | String   | 按钮主题样式，默认值 black，可选值： <br /> - black：黑色背景 <br /> - white：白色背景          |
+| buttonHeight       | 否   | number   | 按钮高度，默认值 50    |  
+
+  - 2.常见错误类型及解决方案
+
+| 错误信息	                                 | 错误原因                         | 解决方案                                                                  |
+| :---------------------------------------  | :------------------------------ | :-------------------------------------------------------------------- |
+| Missing required parameters: env, orderNo | 缺少必需的初始化参数              | 检查 clientToken 等参数是否传入                                            |
+| Unsupported region: CN                    | 生产环境下不支持中国地区          |                                      |
+
+## **HaiPay.js 对接（creditCard）**<a id="haipaysdk"></a>
+
+HaiPay 提供了便捷的 creditCard 支付集成方案，通过简单配置即可在网页中快速集成支付功能。
+
+- 引入 HaiPay 脚本([https://cashier.haipay.top/js/creditCard_1.0.0.min.js])
+- 页面结构要求
+    - 页面容器：用于 creditCard 页面的渲染。
+- 快速集成示例
+
+```javascript
+<script src="https://cashier.haipay.top/js/creditCard_1.0.0.min.js"></script>
+
+<div>
+  <div id="creditCard"></div>
+</div>
+
+elements.createPay();
+  // 创建实列
+  const elements = creditCard.create('card', {
+      sandbox: true,
+      clientToken: '6cgjnxvc6kdb'
+  });
+
+  // 挂载组件
+  elements.mount('#creditCard');
+
+  // 信用卡页面渲染完成回调函数
+  elements.on('ready', (data) => {
+      console.log('Card rendered successfully:', data);
+  });
+
+
+ // 错误信息
+  elements.on('error', (data) => {
+      console.error('Payment error:', data);
+  });
+
+ // 提交表单信息
+ elements.submit()
+
+
+```
+
+- 参数说明
+  - 1.初始化配置参数（HaiPay 构造函数参数）
+
+| 参数名              | 必选 | 类型     | 说明                 |
+| :----------------  | :--- | :-----   | :------------------------------------------------------------------------------------------ |
+| sandbox            | 是   | Boolean   | 环境类型，默认值 true，可选值 ：<br /> - true：测试环境（用于联调测试） <br /> - false：生产环境（上线使用）   |
+| clientToken        | 是   | String   | 客户端令牌clientToken           |              |
+| cardTheme        | 否   | String   | 主题样式，默认值 white，可选值： <br /> - black：黑色背景 <br /> - white：白色背景          |
+
+  - 2.常见错误类型及解决方案
+
+| 错误信息	                                 | 错误原因                         | 解决方案                                                                  |
+| :---------------------------------------  | :------------------------------ | :-------------------------------------------------------------------- |
+| Missing required parameters: env, orderNo | 缺少必需的初始化参数              | 检查 clientToken 等参数是否传入                                            |
+| Unsupported region: CN                    | 生产环境下不支持中国地区          |                                      |
+
+## **限额**
+
+| 交易类型 | 限额(单位:USD) |
+|:-----|------------|
+| 代收   | 0.99-1000  |
+
+## **代收API**
+
+### **1.代收申请**
+
+**简要描述：**
+
+* 创建代收订单
+
+**URL：**
+
+美元: `/usd/collect/apply`
+说明：appId需使用美元对应的，用户支付成功后增加美元余额
+
+**参数：**
+
+| 参数名             | 必选 | 类型     | 说明                                                                                |
+|:----------------|:---|:-------|:----------------------------------------------------------------------------------|
+| appId           | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                   |
+| orderId         | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                            |
+| name            | 是  | String | 用户姓名，推荐使用真实姓名，格式：包含firstName和lastName，以空格分割的，示例：Donald John Trump                 |
+| phone           | 是  | String | 真实手机号（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ） |
+| email           | 是  | String | 真实电子邮件                                                                            |
+| amount          | 是  | String | 交易金额（精确到小数点后两位；禁止添加标点符号，例如：”,”）                                                   |
+| payType         | 是  | String | [支付方式类型](#inBankCode)                                                             |
+| inBankCode      | 是  | String | [支付方式编码](#inBankCode)                                                             |
+| clientIp        | 否  | String | 用户端ip                                                                             |
+| callBackUrl     | 是  | String | 用户支付成功后跳转地址                                                                       |
+| callBackFailUrl | 是  | String | 用户支付失败后跳转地址                                                                       
+| notifyUrl       | 否  | String | 回调地址                                                                              |
+| subject         | 是  | String | 支付备注                                                                              |
+| body            | 否  | String | 备注详情                                                                              |
+| partnerUserId   | 是  | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。       |
+| sign            | 是  | String | 签名                                                                                |
+
+#####   
+
+request
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M233323000059",
+  "amount": "300",
+  "phone": "09230219312",
+  "email": "23423@qq.com",
+  "name": "test",
+  "inBankCode": "USA",
+  "payType": "BANK_TRANSFER",
+  "partnerUserId": "149597870",
+  "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M233323000059",
+    "orderNo": "6023071013539074",
+    "payUrl": "",
+    "clientToken": "",
+    "sign": "YEoA8Y2JzQFGVzwJSqmemm1Kfv/bfyIfCqv2dp7RNzT5B72AQvdD+nt2nR4sL1HWscvmNHyVt5ovAi7MMhy3ziih/sMph+wPx4YjH3W1h5DyBvSlWvaKfKrK5ViomZ0pPYWydwRHnnRnicxToHK9S6qtSy7Q73O0hdz4hJ9p41Th3ycBl2Q9SeqSZYSY1ohcPDhdyRf2y0prb8rHgpBKzxZ5BKX/1bsE9OmsSEHAEYT8OGgko6aNe8XPAhr4G48cpWTftvnGQuzh0O65nuZRI/PF+Axt2zJCVbFHDDSREI9NlAT82ebDqhlVdxQzKE67D1nxgjb3dPmDUYHOBpmwxQ=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名         | 类型     | 说明                                                        |
+|:------------|:-------|:----------------------------------------------------------|
+| orderId     | String | 商户订单号(必须保证唯一性)                                            |
+| orderNo     | String | 平台订单号                                                     |
+| payUrl      | String | 支付链接                                                      |
+| bankCode    | String | 支付方式编码                                                    |
+| clientToken | String | 在JavaScript Web SDK中使用的客户端令牌(见[HaiPaySDK.js](#haipaysdk)) |
+| sign        | String | 签名                                                        |
+
+
+### **2.代收申请 [MIT模式](#mit)**
+
+**简要描述：**
+
+* 创建MIT模式代收订单
+
+**URL：**
+
+美元: `/usd/mit/apply`
+说明：appId需使用美元对应的，用户支付成功后增加美元余额
+
+**参数：**
+
+| 参数名             | 必选 | 类型     | 说明                                                                                |
+|:----------------|:---|:-------|:----------------------------------------------------------------------------------|
+| appId           | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                   |
+| orderId         | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                            |
+| name            | 否  | String | 用户姓名，推荐使用真实姓名，格式：包含firstName和lastName，以空格分割的，示例：Donald John Trump                 |
+| phone           | 否  | String | 真实手机号（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ） |
+| email           | 否  | String | 真实电子邮件                                                                            |
+| amount          | 是  | String | 交易金额（精确到小数点后两位；禁止添加标点符号，例如：”,”）                                                   |
+| payType         | 是  | String | [支付方式类型](#inBankCode)                                                             |
+| inBankCode      | 是  | String | [支付方式编码](#inBankCode)                                                             |
+| clientIp        | 否  | String | 用户端ip                                                                             |
+| callBackUrl     | 是  | String | 用户支付成功后跳转地址                                                                       |
+| callBackFailUrl | 是  | String | 用户支付失败后跳转地址                                                                       
+| notifyUrl       | 否  | String | 回调地址                                                                              |
+| subject         | 是  | String | 支付备注                                                                              |
+| body            | 否  | String | 备注详情                                                                              |
+| partnerUserId   | 是  | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。       |
+| tokenID            | 否  | String | 支付令牌，首次交易不需要，后续主动扣款需要，通过回调获取                                                                                |
+| token            | 否  | String | Apple Pay / Google Pay Token，自行获取传递或使用HaiPay页面，[如何获取？](#token)                                                                                |
+| loadingType            | 否  | Integer | 0（默认） – 显示正常的支付结果页面; 1 – 显示加载中动画（loading 转圈），不展示订单信息。                                                                             |
+| cancelUrl            | 否  | String | 用户取消支付URL，如果传递，用户可在支付页面点击返回到此页面                                                                                |
+| sign            | 是  | String | 签名                                                                                |
+
+#####   
+
+request
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M233323000059",
+  "amount": "300",
+  "phone": "09230219312",
+  "email": "23423@qq.com",
+  "name": "test",
+  "inBankCode": "USA",
+  "payType": "BANK_TRANSFER",
+  "partnerUserId": "149597870",
+  "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M233323000059",
+    "orderNo": "6023071013539074",
+    "payUrl": "",
+    "clientToken": "",
+    "sign": "YEoA8Y2JzQFGVzwJSqmemm1Kfv/bfyIfCqv2dp7RNzT5B72AQvdD+nt2nR4sL1HWscvmNHyVt5ovAi7MMhy3ziih/sMph+wPx4YjH3W1h5DyBvSlWvaKfKrK5ViomZ0pPYWydwRHnnRnicxToHK9S6qtSy7Q73O0hdz4hJ9p41Th3ycBl2Q9SeqSZYSY1ohcPDhdyRf2y0prb8rHgpBKzxZ5BKX/1bsE9OmsSEHAEYT8OGgko6aNe8XPAhr4G48cpWTftvnGQuzh0O65nuZRI/PF+Axt2zJCVbFHDDSREI9NlAT82ebDqhlVdxQzKE67D1nxgjb3dPmDUYHOBpmwxQ=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名         | 类型     | 说明                                                        |
+|:------------|:-------|:----------------------------------------------------------|
+| orderId     | String | 商户订单号(必须保证唯一性)                                            |
+| orderNo     | String | 平台订单号                                                     |
+| payUrl      | String | 支付链接                                                      |
+| clientToken | String | 在JavaScript Web SDK中使用的客户端令牌(见[HaiPaySDK.js](#haipaysdk)) |
+| sign        | String | 签名                                                        |
+
+
+### **3.代收查询**
+
+**简要描述：**
+
+* 查询代收订单
+
+**URL：**
+
+美元: `/usd/collect/query`
+
+**参数：**
+
+| 参数名     | 必选 | 类型     | 说明                              |
+|:--------|:---|:-------|:--------------------------------|
+| appId   | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| orderId | 是  | String | 商户订单号                           |
+| orderNo | 否  | String | 平台订单号（响应快）                      |
+| sign    | 是  | String | 签名                              |
+
+request
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M22222000028",
+  "sign": "EmyJGm3ELzG4FsOd0Krs9ncbSjo4oTGuXWML+7djYla3+VAwd9wS17z38p/7U2ZAjroO04XrE7YXcB1o76Dtyipj3h3bJzs7FYma1QNkMUdt9hh7m8U6hMsMQX7vIWHtXNwz4pbTSC75+kQWXaCew7KoE6LXECdJU8AISgNgeki2TK9R0pCfshr0Z2SZBPeuT6OvIH5LdmqgdZhuqnffGU2qnXk4KMkO848e6/WALLBR+LE1wyKHfPnYVcuKSMVYxkvKyyIL5JIPEgW0o5bh4RCbaUn3NZtyYwrU1uQ3ZDFRThm9j6XAQP+LBlmq3nOePqBtp/VDVarRaV+7FbQg3A=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M22222000028",
+    "orderNo": "6023042811314347",
+    "amount": "50.00",
+    "actualAmount": "0.00",
+    "fee": "0.00",
+    "status": 1,
+    "sign": "fP433ygWVDLVGxYkVnIJj7riGq0U3vyVX+MbBAImxfGLZkZcEAHVEoVYuULZSmXAAXKRSyd67WlDNm+24pougM54ofAoH4HMtCL2tfCoBReFyz3z02AGKkrKE2xWhSpWoqfQoBvzwuN5iGMMu0s9Q1YvqiwJ8WDVIENnmiIyD8qDJN7caHTW2US14/faG+69AvnuIgJ/nu7/jogOlgEYdZdVYU7gcRDE+d47KjlFGswQkJ/h/uzV7cWtUqrtOO7ZnZ3/z33Xx8awokX36QoYcPSWAU0h+Ij9O9402HNhm1eTbYcLU0uI/z8xCAtyAI/tTyiFijpiNlxUKQj+zKsILw=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名          | 类型      | 说明                                                  |
+|:-------------|:--------|:----------------------------------------------------|
+| orderId      | String  | 商户订单号(必须保证唯一性)                                      |
+| orderNo      | String  | 平台订单号                                               |
+| amount       | String  | 交易金额                                                |
+| actualAmount | String  | 收到金额                                                |
+| fee          | String  | 手续费                                                 |
+| status       | Integer | 状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)              |
+| payTime      | String  | 支付成功时间（当status=2时有值）(本地时间), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg     | String  | 支付失败原因（当status=3时有值）                                |
+| sign         | String  | 签名                                                  |
+
+### **4.退款申请**
+
+**简要描述：**
+
+* 发起原信用卡交易订单的退款操作，同步返回的退款状态请注意状态值，建议以查询接口为主。
+
+**URL：**
+
+美元: `/usd/refund/apply`
+
+**参数：**
+
+| 参数名     | 必选 | 类型     | 说明                               |
+|:--------|:---|:-------|:---------------------------------|
+| appId   | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）  |
+| orderId | 是  | String | 商户申请退款订单号（商户新的订单号，不能使用原代收的商户订单号） |
+| orderNo | 是  | String | 平台订单号（原代收返回的平台单号）                |
+| sign    | 是  | String | 签名                               |
+
+返回data参数说明
+
+| 参数名      | 类型     | 说明                                                      |
+|:---------|:-------|:--------------------------------------------------------|
+| appId    | String | 业务ID                                                    |
+| orderNo  | String | 平台订单号 （原代收返回的平台单号）                                      |
+| orderId  | String | 商户退款申请订单号                                               |
+| refundNo | String | 本次退款平台单号                                                |
+| status   | String | 退款状态，1表示退款申请成功，0表示处理中，2表示失败，正常下发起就是返回处理中，后续需要调用查询接口查询状态 |
+| errorMsg | String | 错误信息，不一定有值                                              |
+| sign     | String | 签名                                                      |
+
+### **5.退款查询**
+
+**简要描述：**
+
+* 发起退款的订单的结果查询。
+
+**URL：**
+
+美元: `/usd/refund/refundQuery`
+
+**参数：**
+
+| 参数名      | 必选 | 类型     | 说明                              |
+|:---------|:---|:-------|:--------------------------------|
+| appId    | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| orderId  | 否  | String | 商户退款申请订单号                       |
+| refundNo | 否  | String | 平台退款单号（申请退款返回的平台单号，如果有值优先查询此字段） |
+| sign     | 是  | String | 签名                              |
+
+返回data参数说明
+
+| 参数名      | 类型     | 说明                                     |
+|:---------|:-------|:---------------------------------------|
+| appId    | String | 商户订单号(必须保证唯一性)                         |
+| orderNo  | String | 平台订单号(原代收返回的平台单号）                      |
+| orderId  | String | 商户申请订单号                                |
+| refundNo | String | 平台退款单号                                 |
+| status   | String | 退款状态，1表示退款申请成功，0表示处理中，2表示失败，退款结果以此状态为准 |
+| errorMsg | String | 错误信息，不一定有值                             |
+| sign     | String | 签名                                     |
+
+### **6.支付方式** <a id="inBankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+ <colgroup >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+ </colgroup>
+  <thead>
+    <tr>
+        <td><b>币种</b></td>
+        <td><b>支付类型(payType)</b></td>
+        <td><b>支付编码(inBankCode)</b></td>
+        <td><b>限额</b></td>
+        <td><b>状态</b></td>
+        <td><b>说明</b></td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>CREDIT_CARD</td>
+        <td>0.99-1000</td>
+        <td>可用</td>
+        <td>VISA</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>CREDIT_CARD</td>
+        <td>0.99-1000</td>
+        <td>可用</td>
+        <td>MasterCard</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>CREDIT_CARD</td>
+        <td>0.99-1000</td>
+        <td>可用</td>
+        <td>JCB</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>GOOGLE_PAY</td>
+        <td>0.99-1000</td>
+        <td>可用</td>
+        <td>Google Pay</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>APPLE_PAY</td>
+        <td>0.99-1000</td>
+        <td>可用</td>
+        <td>Apple Pay</td>
+    </tr>
+    </tbody>
+</table>
+
+### 7.测试卡号
+
+:::warning
+**只能在测试环境使用**
+:::
+
+#### 模拟成功支付
+
+使用以下测试卡号，输入任意 CVC（3位数字）和有效期（未来日期）来模拟支付成功：
+
+- 卡号 1：4242424242424242
+
+#### 模拟支付失败
+
+使用以下测试卡号、无效数据来模拟支付失败：
+
+- 卡号 1：4000000000009995
+- 无效月份：13
+- 无效 CVV：99
+
+
+
+### 8.MIT（Merchant Initiated Transaction）模式说明 <a id="mit"></a>
+
+**MIT（Merchant Initiated Transaction，商户发起交易）**  
+指在用户完成一次性支付授权后，商户可在用户不在场的情况下主动发起的扣款。  
+该模式广泛应用于 **订阅支付、分期付款、会员续费、延迟扣款** 等业务场景。  
+
+#### 基本流程
+1. **用户授权**  
+   - 用户在首次支付时输入支付信息，并完成必要的身份验证。  
+   - 商户保存用户的支付凭证，用于后续的扣款请求。  
+
+2. **商户发起扣款**  
+   - 商户根据约定的周期或条件，直接使用已保存的支付凭证发起扣款请求。  
+   - 由于交易为 **离线场景（off-session）**，即用户不参与交易，系统会依据用户授权和合规要求完成处理。  
+
+3. **认证要求**  
+   - 在大多数情况下，交易会直接完成。  
+   - 若发卡行或风控系统要求再次验证，交易可能进入待用户确认的状态，需要用户补充验证才能完成。  
+
+#### 模式特点
+- **提升体验**：用户无需每次手动输入支付信息。  
+- **合规安全**：符合国际支付法规和强客户认证（SCA）等要求。  
+- **应用广泛**：适用于订阅收费、自动续费、分期扣款、延迟结算等场景。  
+
+#### MIT流程图
+```mermaid
+flowchart TD
+    A[用户：在商户平台下单] --> B{交易类型判断}
+
+    subgraph S2 [场景二：后续交易]
+        direction TB
+        I[后续交易] --> J[商户：向Haipay发送<br>交易请求与“令牌”]
+        J --> K{Haipay：验证“令牌”}
+        K -- 有效 --> L[Haipay：执行自动扣款]
+        L --> N
+        K -- 无效/失败 --> M[支付失败]
+        M --> P[商户：通知用户支付失败]
+    end
+
+    subgraph S1 [场景一：首次交易]
+        direction TB
+        C[首次交易] --> D[Haipay：提供支付链接]
+        D --> E[用户：确认支付]
+        E --> F[支付成功]
+        F --> G[Haipay：生成安全“令牌”<br>（绑定用户与商户）]
+        G --> N[支付回调]
+        N --> O[商户：提供服务/发货]
+    end
+
+    B --> C
+    B --> I
+```
+
+
+### 9.Apple Pay / Google Pay Token 获取方式说明 <a id="token"></a>
+::: tip 在线体验(测试环境，不会真实扣款)
+  - [Apple Pay && Google Pay](https://uat-cashier.haipay.top/pay/mit/apple-google/)
+:::
+
+#### 对接流程
+  - 无需申请Apple Pay/Google Pay开发者账号，由HaiPay完成
+  - 引入 JavaScript 脚本([https://js.stripe.com/v3/])
+  - 页面结构要求
+    - 支付按钮容器：用于 Apple Pay/Google Pay 按钮的渲染。
+  - 快速集成示例
+
+```javascript
+<script src="https://js.stripe.com/v3"></script>
+
+<div id="appId">
+  <div id="applePay-googlePay"></div>
+</div>
+
+      initApplePayGooglePay() {
+            const stripe = Stripe('需要一个密钥，请联系HaiPay获取'); //此密钥生产和测试不共用
+            const paymentRequest = stripe.paymentRequest({
+            country: "HK",
+            currency: "usd",
+            total: {
+                label: "Haipay",
+                amount: 0.99 * 100, // 单位是分
+            },
+            requestPayerName: true,
+            requestPayerEmail: true,
+            });
+
+            // 用 paymentRequestButton 创建一个 Apple Pay / Goole Pay 按钮
+            const elements = stripe.elements();
+            const prButton = elements.create("paymentRequestButton", {
+               paymentRequest: paymentRequest,
+            });
+
+            // 检查浏览器是否支持 Apple Pay Goole Pay
+            paymentRequest.canMakePayment().then((result) => {
+                if (result && (result.applePay || result.googlePay)) {
+                    prButton.mount("#applePay-googlePay");
+                } else {
+                    document.getElementById("applePay-googlePay").style.display = "none";
+                    document.getElementById("applePay-googlePay-not-supported").style.display = 'block';
+                }
+            });
+
+            paymentRequest.on("paymentmethod", async (ev) => {
+                //ev.paymentMethod.id 这个就是需要的token，用于调用/usd/mit/apply接口传参
+            });
+          }
+```
+
+::: details 完整代码参考(JavaScript)
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"/>
+    <meta name="description" content="You have a payment link that needs to be paid. Please click the link below to make the payment." />
+    <title>Google Pay and Apple Pay Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/8.0.20/jsrsasign-all-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.15.14/theme-chalk/index.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.15.14/index.js"></script>    
+    <script src="https://js.stripe.com/v3/"></script>
+
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .apple-pay-button {
+                background-color: black;
+                color: white;
+                border-radius: 9999px;
+                padding: 12px 24px;
+                font-size: 17px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: background-color 0.2s;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .apple-pay-button:hover {
+                background-color: #333;
+            }
+            .apple-pay-button img {
+                margin-right: 8px;
+                height: 20px;
+            }
+        }
+      .content {
+        width: 100%;
+        max-width: 600px;
+        background: #fff;
+        box-sizing: border-box;
+        box-shadow: 0 0 calc(8.53333vmin / 32 * 8) #ccc;
+        padding:calc(8.53333vmin / 32 * 20) calc(8.53333vmin / 32 * 10) calc(8.53333vmin / 32 * 10);
+        margin: 0 auto 20px;
+        border-radius: calc(8.53333vmin / 32 * 6);
+      }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <div id="app">
+        <div class="container mx-auto px-4 py-12 max-w-4xl">
+            <header class="mb-10 text-center">
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">Google Pay And Apple Pay Demo</h1>
+                <p class="text-gray-600">体验安全快捷的支付方式</p>
+            </header>
+
+         <div class="content">
+            <el-form ref="form" :rules="rules" :model="form">
+                <el-form-item label="appId" prop="appId">
+                  <el-input v-model="form.appId" placeholder="请输入业务ID" />
+                </el-form-item>
+                <el-form-item label="金额" prop="amount">
+                  <el-input v-model="form.amount" placeholder="请输入金额" />
+                </el-form-item>
+                <el-form-item label="手机号" prop="phone">
+                  <el-input v-model="form.phone" placeholder="请输入手机号码" />
+                </el-form-item>
+                <el-form-item label="邮箱" prop="email">
+                  <el-input v-model="form.email" placeholder="请输入邮箱" />
+                </el-form-item>
+                <el-form-item label="加密字段" prop="key">
+                  <el-input v-model="form.key" placeholder="请输入加密字段key" />
+                </el-form-item>
+                <el-form-item label="商户私钥" prop="privateKey">
+                  <el-input v-model="form.privateKey" placeholder="请输入商户私钥privateKey"  type="textarea" resize="none" :autosize="{ minRows: 4, maxRows: 10 }"  />
+                </el-form-item>
+            </el-form>  
+            </div>
+
+
+            <div class="text-center">
+                
+                <div id="applePay-googlePay"></div>
+                
+                {/* 不支持Apple Pay时显示 */}
+                <div id="applePay-googlePay-not-supported" class="text-gray-500 mb-6 hidden">
+                    <p><i class="fa fa-info-circle mr-2"></i>此设备不支持googlePay 和 applePay</p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+  <script>
+      // 初始化Vue实例
+      new Vue({
+        el: "#app",
+        data() {
+          return {
+             form: {
+                token: '',
+                appId: ,
+                orderId: Date.now(),
+                amount: "0.99",
+                phone: "18801234567",
+                email: "test@haipay.tech",
+                name: "Haipay",
+                inBankCode: "APPLE_PAY",
+                payType: "EWALLET",
+                partnerUserId: Date.now(),
+                key: '',
+                privateKey: ''
+            },
+            rules: {
+              appId: [
+                { required: true, trigger: 'blur' }
+              ],
+              amount: [
+                { required: true, trigger: 'blur' }
+              ],
+              phone: [
+                { required: true, trigger: 'blur' }
+              ],
+              email: [
+                { required: true, trigger: 'blur' }
+              ],
+              name: [
+                { required: true, trigger: 'blur' }
+              ],
+              key: [
+                { required: true, trigger: 'blur' }
+              ],
+              privateKey: [
+                { required: true, trigger: 'blur' }
+              ],
+            },
+            baseURL: 'https://uat-interface.haipay.asia',
+            isH5: true,
+            applePayButton: null,
+          };
+        },
+        computed: {},
+        created() {
+          this.isMobileDevice()
+          this.applePayButton = document.getElementById('applePay-googlePay');
+          this.initApplePay()
+        },
+        methods: {
+          isMobileDevice() { 
+            let self = this
+            if(typeof window.orientation !== 'undefined'){
+              self.isH5 = true
+            } else {
+              self.isH5 = false
+            }
+          },
+          initApplePay() {
+            const self = this
+            const stripe = Stripe('需要一个密钥，请联系HaiPay获取'); //此密钥生产和测试不共用
+            const paymentRequest = stripe.paymentRequest({
+            country: "HK",
+            currency: "usd",
+            total: {
+                label: "Haipay",
+                amount: Number(self.form.amount) * 100, // 单位是分
+            },
+            requestPayerName: true,
+            requestPayerEmail: true,
+            });
+
+            // 用 paymentRequestButton 创建一个 Apple Pay 按钮
+            const elements = stripe.elements();
+            const prButton = elements.create("paymentRequestButton", {
+               paymentRequest: paymentRequest,
+            });
+
+            // 检查浏览器是否支持 Apple Pay
+            paymentRequest.canMakePayment().then((result) => {
+                if (result && (result.applePay || result.googlePay)) {
+                    prButton.mount("#applePay-googlePay");
+                } else {
+                    document.getElementById("applePay-googlePay").style.display = "none";
+                    document.getElementById("applePay-googlePay-not-supported").style.display = 'block';
+                }
+            });
+
+            paymentRequest.on("paymentmethod", async (ev) => {
+                if(ev.walletName === 'googlePay') {
+                  self.form.inBankCode = 'GOOGLE_PAY'
+                } else if(ev.walletName === 'applePay') {
+                  self.form.inBankCode = 'APPLE_PAY'
+                }
+                self.form.token = ev.paymentMethod.id //这个就是需要的token，用于调用/usd/mit/apply接口传参
+                const requestData = {
+                    headers: { 'content-type': 'application/json' },
+                    body: self.form
+                };
+                    const signedBody = self.generateSign(requestData);
+                    const response = await fetch(`${self.baseURL}/usd/mit/apply`,
+                        {
+                            method: 'POST',
+                            headers: {
+                            'Content-Type': 'application/json',
+                            },
+                            body: signedBody
+                        });
+                    const res = await response.json()
+                    if(res.status === '1') {
+                        self.orderNo = res.data.orderNo
+                        if(self.isH5) {
+                            window.location.href = res.data.payUrl
+                        }else {
+                            window.open(res.data.payUrl, "_blank");
+                        }
+                    }
+
+                // 你可以选择立即支付或只是保存
+                ev.complete("success");
+            });
+          },
+         generateSign(requestData) {
+            let param = {};
+
+            // 处理Body参数
+            if (requestData.body) {
+                const contentType = requestData.headers['content-type'] || '';
+                if (contentType.toLowerCase().includes('application/json')) {
+                    try {
+                        const jsonData = typeof requestData.body === 'string' 
+                            ? JSON.parse(requestData.body) 
+                            : requestData.body;
+                        
+                        // 收集非空参数
+                        for (let key in jsonData) {
+                            if (jsonData[key] !== '') {
+                                param[key] = jsonData[key];
+                            }
+                        }
+                    } catch (e) {
+                        console.log('请求body不是JSON格式');
+                    }
+                }
+            }
+
+            // 排序参数（排除指定字段）
+            const sortedKeys = Object.keys(param)
+                .filter(key => !['privateKey', 'sign', 'key'].includes(key))
+                .sort();
+            const paramString = sortedKeys.map(key => `${key}=${param[key]}`).join('&');
+
+            // 解析原始body数据
+            let body = typeof requestData.body === 'string' 
+                ? requestData.body 
+                : JSON.stringify(requestData.body);
+            let jsonData = JSON.parse(body);
+            let key = jsonData.key;
+            
+            // 生成待签名字符串
+            const stringSignTemp = `${paramString}&key=${key}`;
+            console.log('待签名字符串:', stringSignTemp);
+
+            // 处理私钥
+            let privateKey = `
+        -----BEGIN PRIVATE KEY-----
+        ${jsonData.privateKey}
+        -----END PRIVATE KEY-----
+            `.trim();
+
+            // 生成签名
+            const sig = new KJUR.crypto.Signature({ alg: 'SHA256withRSA' });
+            sig.init(privateKey);
+            sig.updateString(stringSignTemp);
+            const signatureHex = sig.sign();
+            const sign = hextob64(signatureHex);
+
+            // 添加签名到请求数据
+            jsonData.sign = sign;
+            return JSON.stringify(jsonData);
+         },
+        },
+      });
+    </script>
+</body>
+</html>
+
+
+```
+
+:::
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

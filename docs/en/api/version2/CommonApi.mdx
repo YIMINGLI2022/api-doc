@@ -1,0 +1,260 @@
+---
+title: Common API
+permalink: /en/api/version2/CommonApi/
+---
+
+# **Common API**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+## **1. Account Inquiry**
+
+**Brief Description:**
+
+* **Query the balance of the account corresponding to the current business.**
+
+**URL:**
+
+The currency is a path parameter, which should be replaced by the currency you want to query, for example, for USD: `/usd/account/ledger`.
+
+Currencies use the international standard code, three-letter uppercase code, refer to: [Wikipedia-ISO_4217](https://en.wikipedia.org/wiki/ISO_4217)
+
+`/{currency}/account/ledger`
+
+**Parameters:**
+
+| Parameter   | Required | Type    | Description                                |
+|-------------|----------|---------|--------------------------------------------|
+| appId       | Yes      | Long    | Business ID (obtained from the backend, must pass the corresponding business ID based on the currency in the URL) |
+| sign        | Yes      | String  | Signature                                  |
+
+**Response Data:**
+
+| Parameter   | Type    | Description  |
+|-------------|---------|--------------|
+| bal         | String  | Account balance |
+| availableBal| String  | Available amount |
+| frzBal      | String  | Frozen amount |
+| unSettleBal | String  | Amount awaiting settlement |
+| sign        | String  | Signature |
+
+## **2. Asynchronous Notification**
+
+**Brief Description:**
+
+* **When the customer's collection is successful or failed, we will push the order status. If the first notification fails, it will retry every 5 minutes, up to 5 times.**
+
+**URL:** `Your provided URL`, **Please configure it in HaiPay's backend or pass it in the request parameters.**
+::: tip Strongly Recommended
+> To ensure the extensibility and compatibility of the interface, please follow the callback parameters reception method outlined below:
+>
+> 1. **Do not** declare a specific POJO object to receive callback parameters.
+> 2. **Must** use a generic data structure (like JSONObject, Map, etc.) to parse parameters.
+> 3. This design ensures that if we later extend the callback fields, it will not affect your signature verification logic.
+>
+> **Reason**: Keeping a loosely coupled design can prevent signature verification failures due to the addition or removal of fields.
+:::
+
+**Collection Callback Parameters:**
+
+| Parameter        | Type    | Description                                                                                                                                                                                            |
+|------------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| appId            | Long    | Business ID                                                                                                                                                                                            |
+| currency         | String  | Currency                                                                                                                                                                                               |
+| orderId          | String  | Merchant order ID                                                                                                                                                                                      |
+| orderNo          | String  | Platform order ID                                                                                                                                                                                      |
+| amount           | String  | Amount collected this time                                                                                                                                                                             |
+| fee              | String  | Fee amount                                                                                                                                                                                             |
+| status           | Integer | Status (2: Success(Final), 3: Failure(Final), 4: Partial Collection(Final), 5: Excess Collection(Final)). Status 4 and 5 only exist for [Stablecoin](/api/version2/coinpay/) |
+| payTime          | String  | Payment success time (present when status=2, 4, 5) (Local time), format: yyyy-MM-dd HH:mm:ss                                                                                                           |
+| errorMsg         | String  | Payment failure reason (present when status=3)                                                                                                                                                         |
+| originalCurrency | String  | Original order currency, may be empty, only present when currency conversion is involved                                                                                                               |
+| originalAmount   | String  | Original order amount, may be empty, only present when currency conversion is involved                                                                                                                 |
+| inBankCode       | String  | Payment method used by the user, refer to each region's documentation, may be empty                                                                                                                    |
+| bankNo           | String  | Receiving account, may be empty                                                                                                                                                                        |
+| description      | String  | Payment note, may be empty                                                                                                                                                                             |
+| cardNo           | String  | Payment card number, credit card payments typically display the first six and last four digits, while ApplePay and GooglePay show only the last four digits, which may be blank                                                                                                                                       |
+| tokenID          | String  | Payment token, for MIT mode transactions, may be empty                                                                                                                                                 |
+| name             | String  | User name, may be empty                                                                                                                                                           |
+| email            | String  | User email, present for MIT mode transactions                                                                                                                                                          |
+| expMonth         | String  | Payment card expiration month, may be empty                                                                                                                              |
+| expYear          | String  | Payment card expiration year, may be empty                                                                                                                               |
+| ip               | String  | User IP, may be empty                                                                                                                                                  |
+| is3DS            | String  | Whether 3DS payment is required, true indicates yes, false indicates no, but it only represents whether the bank recommends 3DS payment, not whether 3DS payment was actually used, may be empty                        |
+| sign             | String  | Signature, <font color='red'> (Must use the business secret key for the currency for verification)</font>                                                                                              |
+
+**Payout Callback Parameters:**
+
+| Parameter | Type    | Description                                                                                           |
+|-----------|---------|-------------------------------------------------------------------------------------------------------|
+| appId     | Long    | Business ID                                                                                           |
+| currency  | String  | Currency                                                                                              |
+| orderId   | String  | Merchant order ID                                                                                     |
+| orderNo   | String  | Platform order ID                                                                                     |
+| amount    | String  | Amount collected this time                                                                            |
+| fee       | String  | Fee amount                                                                                            |
+| status    | Integer | Status (2: Success(Final), 3: Failure(Final))                                             |
+| payTime   | String  | Payment success time (present when status=2)(Local time), format: yyyy-MM-dd HH:mm:ss                 |
+| errorMsg  | String  | Payment failure reason (present when status=3)                                                        |
+| hash      | String  | Transaction hash (present when using Stablecoin, e.g., USDT)                                      |
+| sign      | String  | Signature, <font color='red'> (Must use the business secret for the currency for verification)</font> |
+
+**Collection Link Order Callback Parameters:**
+
+| Parameter        | Type    | Description                                                                                                                                                                                                   |
+|------------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| appId            | Long    | Business ID                                                                                                                                                                                                   |
+| currency         | String  | Currency                                                                                                                                                                                                      |
+| orderId          | String  | Merchant order ID                                                                                                                                                                                             |
+| orderNo          | String  | Platform order ID                                                                                                                                                                                             |
+| amount           | String  | Amount collected this time                                                                                                                                                                                    |
+| fee              | String  | Fee amount                                                                                                                                                                                                    |
+| status           | Integer | Status (2: Success(Final), 3: Failure(Final), 4: Partial Collection(Final), 5: Excess Collection(Final)). Currently, status codes 4 and 5 are exclusive to Stablecoin transactions. |
+| payTime          | String  | Payment success time (present when status=2, 4, 5), format: yyyy-MM-dd HH:mm:ss                                                                                                                               |
+| errorMsg         | String  | Payment failure reason (present when status=3)                                                                                                                                                                |
+| originalCurrency | String  | Original order currency, may be empty, only present when currency conversion is involved                                                                                                                      |
+| originalAmount   | String  | Original order amount, may be empty, only present when currency conversion is involved                                                                                                                        |
+| inBankCode       | String  | Payment method used by the user, refer to each region's documentation, may be empty                                                                                                                           |
+| bankNo           | String  | Receiving account, may be empty                                                                                                                                                                               |
+| description      | String  | Payment note, may be empty                                                                                                                                                                                    |
+| cardNo           | String  | Last four digits of the payment card number , may be empty                                                                                                                                                    |
+| createTime       | String  | Order creation time (Local time), format: yyyy-MM-dd HH:mm:ss                                                                                                                                                 |
+| linkNo           | String  | Collection link number                                                                                                                                                                                        |
+| linkName         | String  | Collection link name                                                                                                                                                                                          |
+| agentId          | Long    | Agent ID (empty if there's no agent)                                                                                                                                                                          |
+| email            | String  | Payer's email (from the collection link page, random email if not filled)                                                                                                                                     |
+| name             | String  | Payer's nickname (from the collection link page)                                                                                                                                                              |
+| subject          | String  | Note (filled in the collection link page, randomly generated if not filled)                                                                                                                                   |
+| sign             | String  | Signature, <font color='red'> (Must use the business secret for the currency for verification)</font>                                                                                                         |
+
+**Note:**
+
+After receiving the callback notification, please return **SUCCESS** (in uppercase) in the response body without surrounding quotation marks. Otherwise, the notification will continue for 5 more times.
+
+## **3. Statement File Link Retrieval**
+
+**Description:**
+
+* **The file format is the same as the one exported from the merchant backend. The data for the day will be generated the next day after 1:00 PM.**
+
+**URL:**
+
+`/common/document/download`
+
+**Parameters:**
+
+| Parameter   | Required | Type    | Description                                    |
+|-------------|----------|---------|------------------------------------------------|
+| appId       | Yes      | Long    | Business ID (obtained from the backend)        |
+| type        | Yes      | Long    | Type: 15 for payout orders, 20 for collection orders, 40 for fund flow data |
+| date        | Yes      | String  | Date, format: yyyyMMdd                         |
+| sign        | Yes      | String  | Signature                                      |
+
+**Response Data:**
+
+| Parameter   | Type    | Description                                    |
+|-------------|---------|------------------------------------------------|
+| appId       | Long    | Business ID (obtained from the backend)        |
+| type        | Long    | Type: 15 for payout orders, 20 for collection orders, 40 for fund flow data |
+| date        | String  | Date, format: yyyyMMdd                         |
+| fileUrl     | String  | File download URL                              |
+| expired     | String  | Expiry time, 1 hour                            |
+| sign        | String  | Signature                                      |
+
+### Field Descriptions
+
+#### Collection
+
+- **Error**: Collection exception
+- **Not Started**: Not started
+- **Paying**: Collecting
+- **Success**: Collection successful
+- **Failed**: Collection failed
+- **Payment Part Success**: Partial collection
+- **Payment Excess Success**: Excess collection
+
+#### Payout
+
+- **Submit Error**: Submission exception
+- **Error**: Payout exception
+- **Not Started**: Not started
+- **Pending**: Payout in progress
+- **Success**: Payout successful
+- **Failed**: Payout failed
+
+#### Notification Status
+
+- **Not Start**: Not notified
+- **Success**: Notification successful
+- **Failed**: Notification failed
+- **Error**: Notification exception
+
+#### Settlement Status
+
+- **Error**: Exception pending confirmation
+- **Not Start**: Not started
+- **Settling**: Settling
+- **Success**: Settlement successful
+- **Settlement Failed (Reversed)**: Settlement failed (reversed)
+
+## **4. Payout Order Voucher**
+
+**URL:**
+
+`/common/voucher`
+
+**Parameters:**
+
+| Parameter   | Required | Type    | Description                                |
+|-------------|----------|---------|--------------------------------------------|
+| appId       | Yes      | Long    | Business ID (obtained from the backend)    |
+| orderNo     | Yes      | Long    | Platform order ID                          |
+| sign        | Yes      | String  | Signature                                  |
+
+**Response Data:**
+
+- The base64 encoded image of the voucher.
+
+## **5. Real-Time Exchange Rate Query**
+
+**Description:**
+
+* **Query exchange rates for converting USD to other currencies, only USD settlement payment methods are supported**
+
+**URL:**
+
+`/common/quote/v1/exchange-rate`
+
+**Parameters:**
+
+| Parameter Name   | Required | Type   | Description |
+|:---------------|:---|:-------|:-----------|
+| appId          | Yes | Long   | Business ID (obtained from the admin console) |
+| sourceCurrency | Yes | String | Source currency (USD) |
+| targetCurrency | Yes | String | Target currency |
+| payType        | No  | String | Payment type |
+| inBankCode     | No  | String | Payment method |
+| sign           | Yes | String | Signature |
+
+Return **data** parameter description
+
+| Parameter Name   | Type   | Description |
+|:---------------|:-------|:-----------|
+| sourceCurrency | String | Source currency (USD) |
+| targetCurrency | String | Target currency |
+| payType        | String | Payment type |
+| inBankCode     | String | Payment method |
+| exchangeRate   | String | Exchange rate |
+| sign           | String | Signature |
+
+
+{/*
+</div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

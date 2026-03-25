@@ -1,0 +1,1371 @@
+---
+title: International Credit Card (VISA/MASTER) Payment API
+permalink: /en/api/version2/creditcard/
+---
+
+# **International Credit Card (VISA/MASTER) API Documentation**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+:::warning **Before reading this API documentation, be sure to review the [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
+:::
+
+:::tip mportant Information Regarding Credit Card Disputes
+  - **For credit card transactions, consumers maintain the right to initiate a dispute within 180 days of the charge date. When a dispute is filed, a dispute fee of $20 will be assessed per transaction.**
+  - **Upon receiving a dispute notification, you have two options for response**
+    - **First: you may accept the dispute by submitting a response to the issuing bank affirming that you do not contest the refunded amount.**
+    - **Second, you may counter the dispute by completing a guided submission process that prompts you to provide relevant evidence and supporting documentation for your case.**
+  - **Should you elect to counter a dispute, an additional dispute countered fee of $20 will be applied. In the event that the issuing bank does not accept your counter materials and rules in favor of the consumer, both the dispute countered fee will be deducted and the consumer's payment will be refunded to them.**
+  - **Regarding fee refunds, Haipay will return the dispute countered fee if you successfully win the dispute. However, unless explicitly stated otherwise in your Haipay contract, the initial dispute fee is non-refundable under all circumstances.**
+:::
+
+:::danger **PCI DSS (Payment Card Industry Data Security Standard) strictly prohibits embedding credit card input pages in WebView or iframe for the following reasons:**
+1. PCI Compliance: Direct violation of PCI DSS requirements
+2. Security Risks: WebView and iframe may not provide sufficient security isolation
+3. Man-in-the-Middle Attacks: Malicious applications may intercept or tamper with payment data
+4. Phishing Risks: Cannot ensure users are entering sensitive information in a trusted environment
+:::
+
+## Device Environment Requirements
+:::tip Check Your Device and Browser Settings
+
+If you cannot see the wallet you want on the payment page, your device or browser may not meet the following Apple Pay or Google Pay requirements.
+
+- You must have at least one card in your wallet.
+- You must use compatible [Apple Pay devices](https://support.apple.com/en-us/102896) and [Google Pay devices](https://developers.google.com/pay/issuers/overview/supported-devices#compatibility_requirements).
+- You must use **HTTPS** and [supported browsers](#supported-browsers) to test the wallet you are testing.
+- Allow applicable browsers to access your wallet.
+  - Chrome: **Settings** > **Autofill and passwords** > **Payment methods** > **Allow sites to check if you have saved payment methods**
+  - Safari: **Settings** > **Advanced** > **Allow websites to check for Apple Pay and Apple Card**
+- Do not use Chrome incognito window or Safari private window.
+- Confirm you are operating in supported Apple Pay and Google Pay regions.
+- For Apple Pay, confirm your device supports [biometric authentication](https://support.apple.com/en-us/102626#:~:text=iPhone%20or%20.iPad,on%20all%20devices.).
+
+:::tip **Supported Browsers**<a id="supported-browsers"></a>
+
+**Desktop Browsers**
+- Chrome 38+
+- Safari 10.1+
+- Firefox 29+
+- Edge 15+
+- Opera 25+
+
+**Mobile Browsers**
+- iOS Safari 9+ and other browsers and web views using the system-provided WebKit engine
+- Android Chrome 38+
+- Samsung Browser 7.1+
+
+**Other Notes**
+
+For browsers not explicitly supported, we limit support as follows:
+
+- Requires browser support for **TLS 1.2**
+- Requires a sufficiently modern browser to support **Promises** in JavaScript
+- We respond to error reports but do not actively test other browsers
+:::
+
+## Regional Restrictions
+::: details Unsupported Regions List
+
+AD - Andorra
+
+AE - United Arab Emirates
+
+AF - Afghanistan
+
+AG - Antigua and Barbuda
+
+AI - Anguilla
+
+AL - Albania
+
+AM - Armenia
+
+AO - Angola
+
+AQ - Antarctica
+
+AR - Argentina
+
+AS - American Samoa
+
+AW - Aruba
+
+AX - Åland Islands
+
+BA - Bosnia and Herzegovina
+
+BB - Barbados
+
+BD - Bangladesh
+
+BF - Burkina Faso
+
+BH - Bahrain
+
+BI - Burundi
+
+BJ - Benin
+
+BL - Saint Barthélemy
+
+BM - Bermuda
+
+BN - Brunei
+
+BQ - Bonaire, Sint Eustatius, and Saba
+
+BS - Bahamas
+
+BT - Bhutan
+
+BV - Bouvet Island
+
+BW - Botswana
+
+BY - Belarus
+
+BZ - Belize
+
+CC - Cocos (Keeling) Islands
+
+CD - Democratic Republic of the Congo
+
+CF - Central African Republic
+
+CG - Republic of the Congo
+
+CI - Ivory Coast
+
+CK - Cook Islands
+
+CM - Cameroon
+
+CO - Colombia
+
+CU - Cuba
+
+CV - Cape Verde
+
+CW - Curaçao
+
+CX - Christmas Island
+
+CY - Cyprus
+
+DJ - Djibouti
+
+DM - Dominica
+
+DO - Dominican Republic
+
+DZ - Algeria
+
+EC - Ecuador
+
+EE - Estonia
+
+EG - Egypt
+
+EH - Western Sahara
+
+ER - Eritrea
+
+ET - Ethiopia
+
+FJ - Fiji
+
+FK - Falkland Islands
+
+FM - Federated States of Micronesia
+
+FO - Faroe Islands
+
+GA - Gabon
+
+GD - Grenada
+
+GE - Georgia
+
+GF - French Guiana
+
+GG - Guernsey
+
+GH - Ghana
+
+GI - Gibraltar
+
+GL - Greenland
+
+GM - Gambia
+
+GN - Guinea
+
+GP - Guadeloupe
+
+GQ - Equatorial Guinea
+
+GS - South Georgia and the South Sandwich Islands
+
+GT - Guatemala
+
+GW - Guinea-Bissau
+
+HK - Hong Kong
+
+HM - Heard Island and McDonald Islands
+
+HN - Honduras
+
+HT - Haiti
+
+ID - Indonesia
+
+IL - Israel
+
+IM - Isle of Man
+
+IN - India
+
+IO - British Indian Ocean Territory
+
+IQ - Iraq
+
+IR - Iran
+
+JM - Jamaica
+
+JO - Jordan
+
+JP - Japan
+
+KE - Kenya
+
+KH - Cambodia
+
+KI - Kiribati
+
+KM - Comoros
+
+KN - Saint Kitts and Nevis
+
+KP - North Korea
+
+KR - South Korea
+
+KW - Kuwait
+
+KY - Cayman Islands
+
+KZ - Kazakhstan
+
+LA - Laos
+
+LB - Lebanon
+
+LC - Saint Lucia
+
+LI - Liechtenstein
+
+LK - Sri Lanka
+
+LR - Liberia
+
+LS - Lesotho
+
+LV - Latvia
+
+LY - Libya
+
+MD - Moldova
+
+ME - Montenegro
+
+MF - Saint Martin (French part)
+
+MG - Madagascar
+
+MH - Marshall Islands
+
+MK - North Macedonia
+
+ML - Mali
+
+MM - Myanmar
+
+MN - Mongolia
+
+MP - Northern Mariana Islands
+
+MQ - Martinique
+
+MR - Mauritania
+
+MS - Montserrat
+
+MU - Mauritius
+
+MV - Maldives
+
+MW - Malawi
+
+MY - Malaysia
+
+MZ - Mozambique
+
+NA - Namibia
+
+NC - New Caledonia
+
+NE - Niger
+
+NF - Norfolk Island
+
+NG - Nigeria
+
+NI - Nicaragua
+
+NP - Nepal
+
+NR - Nauru
+
+NU - Niue
+
+OM - Oman
+
+PA - Panama
+
+PE - Peru
+
+PF - French Polynesia
+
+PG - Papua New Guinea
+
+PH - Philippines
+
+PK - Pakistan
+
+PM - Saint Pierre and Miquelon
+
+PN - Pitcairn Islands
+
+PR - Puerto Rico
+
+PS - Palestine
+
+PW - Palau
+
+RE - Réunion
+
+RU - Russia
+
+RW - Rwanda
+
+SA - Saudi Arabia
+
+SB - Solomon Islands
+
+SC - Seychelles
+
+SD - Sudan
+
+SH - Saint Helena
+
+SJ - Svalbard and Jan Mayen
+
+SK - Slovakia
+
+SL - Sierra Leone
+
+SM - San Marino
+
+SN - Senegal
+
+SO - Somalia
+
+SR - Suriname
+
+SS - South Sudan
+
+ST - São Tomé and Príncipe
+
+SV - El Salvador
+
+SX - Sint Maarten (Dutch part)
+
+SY - Syria
+
+SZ - Eswatini
+
+TC - Turks and Caicos Islands
+
+TD - Chad
+
+TF - French Southern Territories
+
+TG - Togo
+
+TH - Thailand
+
+TK - Tokelau
+
+TL - East Timor
+
+TM - Turkmenistan
+
+TN - Tunisia
+
+TO - Tonga
+
+TR - Turkey
+
+TT - Trinidad and Tobago
+
+TV - Tuvalu
+
+TW - Taiwan
+
+TZ - Tanzania
+
+UA - Ukraine
+
+UG - Uganda
+
+UM - United States Minor Outlying Islands
+
+UY - Uruguay
+
+UZ - Uzbekistan
+
+VA - Vatican City
+
+VC - Saint Vincent and the Grenadines
+
+VE - Venezuela
+
+VG - British Virgin Islands
+
+VI - U.S. Virgin Islands
+
+VN - Vietnam
+
+VU - Vanuatu
+
+WF - Wallis and Futuna
+
+WS - Samoa
+
+YE - Yemen
+
+YT - Mayotte
+
+ZA - South Africa
+
+ZM - Zambia
+
+ZW - Zimbabwe
+
+:::
+
+## **HaiPay.js Integration (Apple Pay & Google Pay)** <a id="haipaysdk"></a>
+
+HaiPay provides a convenient Apple Pay and Google Pay payment integration solution that allows you to quickly integrate payment functionality into web pages through simple configuration.
+
+- Import HaiPay script ([https://cashier.haipay.top/js/applePayGooglePay_1.0.0.min.js])
+- Page structure requirements
+    - Payment button container: Used for rendering Apple Pay/Google Pay buttons.
+- Quick integration example
+
+```javascript
+<script src="https://cashier.haipay.top/js/applePayGooglePay_1.0.0.min.js"></script>
+
+<div>
+  <div id="applePay-googlePay"></div>
+</div>
+
+  // Create instance
+  const elements = applePayGooglePay.create('applePayGooglePay', {
+      sandbox: true,
+      clientToken: '6cgjnxvc6kdb',
+      buttonType: 'buy',
+      buttonTheme: 'black',
+      buttonHeight: 50
+  });
+
+  // Mount component
+  elements.mount('#applePay-googlePay');
+
+ // Payment button render completion callback
+  elements.on('ready', (data) => {
+      console.log('Button rendered successfully:', data);
+  });
+
+ // Error message
+  elements.on('error', (data) => {
+      console.error('Payment error:', data);
+  });
+
+```
+
+- Parameter description
+  - 1. Initialization configuration parameters (HaiPay constructor parameters)
+
+| Parameter Name      | Required | Type     | Description                                                                       |
+| :------------------ | :------- | :------- | :-------------------------------------------------------------------------------- |
+| sandbox                 | Yes      | Boolean   | Environment type,default value true, optional values: <br /> - true: Test environment (for integration testing) <br /> - false: Production environment (for live use) |
+| clientToken             | Yes      | String   | Client Toke(clientToken)                                                             |
+| buttonType          | No       | String   | Button text type, default value buy, optional values: <br /> - plain: "Display payment logo only, no text" <br /> - add-money: "Add funds" <br /> - book: "Book" <br /> - buy: "Buy" (default) <br /> - check-out: "Checkout" <br /> - contribute: "Donate" <br /> - order: "Order" <br /> - reload: "Reload" <br /> - rent: "Rent" <br /> - subscribe: "Subscribe" <br /> - support: "Support" <br /> - tip: "Tip" <br /> - top-up: "Top-up" |
+| buttonTheme         | No       | String   | Button theme style, default value black, optional values: <br /> - black: Black background <br /> - white: White background |
+| buttonHeight        | No       | number   | Button height, default value 50                                                   |
+
+  - 2. Common error types and solutions
+
+| Error Message                                    | Error Cause                        | Solution                                                                  |
+| :----------------------------------------------- | :--------------------------------- | :------------------------------------------------------------------------ |
+| Missing required parameters: clientToken       | Missing required initialization parameters | Check if parameters clientToken are passed                          | 
+| Unsupported region: CN                          | Production environment does not support China region | Check if there is a DOM element with the corresponding ID in the page     |
+
+## **HaiPay.js Integration (creditCard)** <a id="haipaysdk"></a>
+
+HaiPay provides a convenient creditCard payment integration solution that allows you to quickly integrate payment functionality into web pages through simple configuration.
+
+- Import HaiPay script ([https://cashier.haipay.top/js/creditCard_1.0.0.min.js])
+- Page structure requirements
+    - Page Container: used for rendering the creditCard page.
+- Quick integration example
+
+```javascript
+<script src="https://cashier.haipay.top/js/creditCard_1.0.0.min.js"></script>
+
+<div>
+  <div id="creditCard"></div>
+</div>
+
+  // Create instance
+  const elements = creditCard.create('card', {
+      sandbox: true,
+      clientToken: '6cgjnxvc6kdb',
+  });
+
+  // Mount component
+  elements.mount('#creditCard');
+
+  // Card render completion callback
+  elements.on('ready', (data) => {
+      console.log('Card rendered successfully:', data);
+  });
+
+
+ // Error message
+  elements.on('error', (data) => {
+      console.error('Payment error:', data);
+  });
+
+  // Submit Form Information
+ elements.submit()
+
+```
+
+- Parameter description
+  - 1. Initialization configuration parameters (HaiPay constructor parameters)
+
+| Parameter Name      | Required | Type     | Description                                                                       |
+| :------------------ | :------- | :------- | :-------------------------------------------------------------------------------- |
+| sandbox                 | Yes      | Boolean   | Environment type,default value true, optional values: <br /> - true: Test environment (for integration testing) <br /> - false: Production environment (for live use) |
+| clientToken             | Yes      | String   | Client Toke(clientToken)                                                             |
+| cardTheme        | No  | String   | Theme style, default value white, optional values: <br /> - black: Black background <br /> - white: White background          |
+
+  - 2. Common error types and solutions
+
+| Error Message                                    | Error Cause                        | Solution                                                                  |
+| :----------------------------------------------- | :--------------------------------- | :------------------------------------------------------------------------ |
+| Missing required parameters: clientToken       | Missing required initialization parameters | Check if parameters clientToken are passed                          | 
+| Unsupported region: CN                          | Production environment does not support China region | Check if there is a DOM element with the corresponding ID in the page     |
+
+## **Transaction Limits**
+
+| Transaction Type | Limit (USD) |
+|:-----------------|-------------|
+| Collection       | 0.99-1000   |
+
+## **Collection API**
+
+### **1. Collection Application**
+
+**Brief Description:**
+
+* Create a collection order
+
+**URL:**
+
+USD: `/usd/collect/apply`
+Note: appId for USD, amount in USD, settlement in USD
+
+**Parameters:**
+
+| Parameter Name     | Required | Type     | Description                                                                       |
+|:-------------------|:---------|:---------|:---------------------------------------------------------------------------------|
+| appId              | Yes      | Long     | Business ID (obtained from backend, must pass corresponding business ID based on currency in URL) |
+| orderId            | Yes      | String   | Merchant order number (must be unique, length not exceeding 48)                  |
+| name               | Yes      | String   | User name, recommended to use real name, format: firstName and lastName separated by space, example: Donald John Trump |
+| phone              | Yes      | String   | Real phone number (format reference [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format)) |
+| email              | Yes      | String   | Real email address                                                               |
+| amount             | Yes      | String   | Transaction amount (accurate to two decimal places; do not add punctuation, e.g., ",") |
+| payType            | Yes      | String   | [Payment method type](#inBankCode)                                               |
+| inBankCode         | Yes      | String   | [Payment method code](#inBankCode)                                               |
+| clientIp           | No       | String   | Client IP address                                                                |
+| callBackUrl        | Yes      | String   | URL to redirect after successful payment                                         |
+| callBackFailUrl    | Yes      | String   | URL to redirect after failed payment                                             |
+| notifyUrl          | No       | String   | Callback URL                                                                     |
+| subject            | Yes      | String   | Payment remark                                                                    |
+| body               | No       | String   | Remark details                                                                    |
+| partnerUserId      | Yes      | String   | Unique user identifier (e.g., userId), used for risk control, must be real and valid, otherwise it will affect transactions. Format requirements: digits, uppercase and lowercase letters or common symbols -~!@#$%&*()_. |
+| sign               | Yes      | String   | Signature                                                                        |
+
+##### 
+
+request
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M233323000059",
+  "amount": "300",
+  "phone": "09230219312",
+  "email": "23423@qq.com",
+  "name": "test",
+  "inBankCode": "USA",
+  "payType": "BANK_TRANSFER",
+  "partnerUserId": "149597870",
+  "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M233323000059",
+    "orderNo": "6023071013539074",
+    "payUrl": "",
+    "clientToken": "",
+    "sign": "YEoA8Y2JzQFGVzwJSqmemm1Kfv/bfyIfCqv2dp7RNzT5B72AQvdD+nt2nR4sL1HWscvmNHyVt5ovAi7MMhy3ziih/sMph+wPx4YjH3W1h5DyBvSlWvaKfKrK5ViomZ0pPYWydwRHnnRnicxToHK9S6qtSy7Q73O0hdz4hJ9p41Th3ycBl2Q9SeqSZYSY1ohcPDhdyRf2y0prb8rHgpBKzxZ5BKX/1bsE9OmsSEHAEYT8OGgko6aNe8XPAhr4G48cpWTftvnGQuzh0O65nuZRI/PF+Axt2zJCVbFHDDSREI9NlAT82ebDqhlVdxQzKE67D1nxgjb3dPmDUYHOBpmwxQ=="
+  }
+}
+```
+
+Response data parameter description
+
+| Parameter Name | Type     | Description                                                        |
+|:---------------|:---------|:------------------------------------------------------------------|
+| orderId        | String   | Merchant order number (must be unique)                            |
+| orderNo        | String   | Platform order number                                             |
+| payUrl         | String   | Payment link                                                      |
+| bankCode       | String   | Payment Method Code                                                      |
+| clientToken    | String   | Client token used in JavaScript Web SDK (see [HaiPaySDK.js](#haipaysdk)) |
+| sign           | String   | Signature                                                         |
+
+
+### **2. Collection Application [MIT Mode](#mit)**
+
+**Brief Description:**
+
+* Create MIT mode collection order
+
+**URL:**
+
+USD: `/usd/mit/apply`
+Note: appId for USD, amount in USD, settlement in USD
+
+**Parameters:**
+
+| Parameter Name     | Required | Type     | Description                                                                       |
+|:-------------------|:---------|:---------|:---------------------------------------------------------------------------------|
+| appId              | Yes      | Long     | Business ID (obtained from backend, must pass corresponding business ID based on currency in URL) |
+| orderId            | Yes      | String   | Merchant order number (must be unique, length not exceeding 48)                  |
+| name               | No       | String   | User name, recommended to use real name, format: firstName and lastName separated by space, example: Donald John Trump |
+| phone              | No       | String   | Real phone number (format reference [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format)) |
+| email              | No       | String   | Real email address                                                               |
+| amount             | Yes      | String   | Transaction amount (accurate to two decimal places; do not add punctuation, e.g., ",") |
+| payType            | Yes      | String   | [Payment method type](#inBankCode)                                               |
+| inBankCode         | Yes      | String   | [Payment method code](#inBankCode)                                               |
+| clientIp           | No       | String   | Client IP address                                                                |
+| callBackUrl        | Yes      | String   | URL to redirect after successful payment                                         |
+| callBackFailUrl    | Yes      | String   | URL to redirect after failed payment                                             |
+| notifyUrl          | No       | String   | Callback URL                                                                     |
+| subject            | Yes      | String   | Payment remark                                                                    |
+| body               | No       | String   | Remark details                                                                    |
+| partnerUserId      | Yes      | String   | Unique user identifier (e.g., userId), used for risk control, must be real and valid, otherwise it will affect transactions. Format requirements: digits, uppercase and lowercase letters or common symbols -~!@#$%&*()_. |
+| tokenID            | No       | String   | Payment token, not required for first transaction, required for subsequent active deductions, obtained through callback |
+| token              | No       | String   | Apple Pay / Google Pay Token, you can obtain and transfer the data yourself or use the HaiPay page., [How to get?](#token) |
+| loadingType            | No  | Integer | 0 (default) – Display the current/normal payment result view; 1 – Show a loading spinner with no order information.                                                                                |
+| cancelUrl            | No  | String | If provided, the user can click “Back” on the payment page to return to this URL after canceling the payment.                                                                                |
+| sign               | Yes      | String   | Signature                                                                        |
+
+##### 
+
+request
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M233323000059",
+  "amount": "300",
+  "phone": "09230219312",
+  "email": "23423@qq.com",
+  "name": "test",
+  "inBankCode": "USA",
+  "payType": "BANK_TRANSFER",
+  "partnerUserId": "149597870",
+  "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M233323000059",
+    "orderNo": "6023071013539074",
+    "payUrl": "",
+    "clientToken": "",
+    "sign": "YEoA8Y2JzQFGVzwJSqmemm1Kfv/bfyIfCqv2dp7RNzT5B72AQvdD+nt2nR4sL1HWscvmNHyVt5ovAi7MMhy3ziih/sMph+wPx4YjH3W1h5DyBvSlWvaKfKrK5ViomZ0pPYWydwRHnnRnicxToHK9S6qtSy7Q73O0hdz4hJ9p41Th3ycBl2Q9SeqSZYSY1ohcPDhdyRf2y0prb8rHgpBKzxZ5BKX/1bsE9OmsSEHAEYT8OGgko6aNe8XPAhr4G48cpWTftvnGQuzh0O65nuZRI/PF+Axt2zJCVbFHDDSREI9NlAT82ebDqhlVdxQzKE67D1nxgjb3dPmDUYHOBpmwxQ=="
+  }
+}
+```
+
+Response data parameter description
+
+| Parameter Name | Type     | Description                                                        |
+|:---------------|:---------|:------------------------------------------------------------------|
+| orderId        | String   | Merchant order number (must be unique)                            |
+| orderNo        | String   | Platform order number                                             |
+| payUrl         | String   | Payment link                                                      |
+| clientToken    | String   | Client token used in JavaScript Web SDK (see [HaiPaySDK.js](#haipaysdk)) |
+| sign           | String   | Signature                                                         |
+
+
+### **3. Collection Query**
+
+**Brief Description:**
+
+* Query collection order
+
+**URL:**
+
+USD: `/usd/collect/query`
+
+**Parameters:**
+
+| Parameter Name | Required | Type     | Description                                                       |
+|:---------------|:---------|:---------|:-----------------------------------------------------------------|
+| appId          | Yes      | Long     | Business ID (obtained from backend, must pass corresponding business ID based on currency in URL) |
+| orderId        | Yes      | String   | Merchant order number                                            |
+| orderNo        | No       | String   | Platform order number (faster response)                         |
+| sign           | Yes      | String   | Signature                                                        |
+
+request
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M22222000028",
+  "sign": "EmyJGm3ELzG4FsOd0Krs9ncbSjo4oTGuXWML+7djYla3+VAwd9wS17z38p/7U2ZAjroO04XrE7YXcB1o76Dtyipj3h3bJzs7FYma1QNkMUdt9hh7m8U6hMsMQX7vIWHtXNwz4pbTSC75+kQWXaCew7KoE6LXECdJU8AISgNgeki2TK9R0pCfshr0Z2SZBPeuT6OvIH5LdmqgdZhuqnffGU2qnXk4KMkO848e6/WALLBR+LE1wyKHfPnYVcuKSMVYxkvKyyIL5JIPEgW0o5bh4RCbaUn3NZtyYwrU1uQ3ZDFRThm9j6XAQP+LBlmq3nOePqBtp/VDVarRaV+7FbQg3A=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M22222000028",
+    "orderNo": "6023042811314347",
+    "amount": "50.00",
+    "actualAmount": "0.00",
+    "fee": "0.00",
+    "status": 1,
+    "sign": "fP433ygWVDLVGxYkVnIJj7riGq0U3vyVX+MbBAImxfGLZkZcEAHVEoVYuULZSmXAAXKRSyd67WlDNm+24pougM54ofAoH4HMtCL2tfCoBReFyz3z02AGKkrKE2xWhSpWoqfQoBvzwuN5iGMMu0s9Q1YvqiwJ8WDVIENnmiIyD8qDJN7caHTW2US14/faG+69AvnuIgJ/nu7/jogOlgEYdZdVYU7gcRDE+d47KjlFGswQkJ/h/uzV7cWtUqrtOO7ZnZ3/z33Xx8awokX36QoYcPSWAU0h+Ij9O9402HNhm1eTbYcLU0uI/z8xCAtyAI/tTyiFijpiNlxUKQj+zKsILw=="
+  }
+}
+```
+
+Response data parameter description
+
+| Parameter Name | Type      | Description                                                                                                    |
+|:---------------|:----------|:---------------------------------------------------------------------------------------------------------------|
+| orderId        | String    | Merchant order number (must be unique)                                                                         |
+| orderNo        | String    | Platform order number                                                                                          |
+| amount         | String    | Transaction amount                                                                                             |
+| actualAmount   | String    | Amount received                                                                                                |
+| fee            | String    | Handling fee                                                                                                   |
+| status         | Integer   | Status (0 - Not started, 1 - In progress, 2 - Success (final), 3 - Failure (final), -1 - Pending confirmation) |
+| payTime        | String    | Payment success time (present when status=2) (local time), format: yyyy-MM-dd HH:mm:ss                         |
+| errorMsg       | String    | Payment failure reason (present when status=3)                                                                 |
+| sign           | String    | Signature                                                                                                      |
+
+### **4. Refund Application**
+
+**Brief Description:**
+
+* Initiate a refund operation for the original credit card transaction order. Please pay attention to the status values returned synchronously. It is recommended to use the query interface for status checks.
+
+**URL:**
+
+USD: `/usd/refund/apply`
+
+**Parameters:**
+
+| Parameter Name | Required | Type     | Description                                                               |
+|:---------------|:---------|:---------|:-------------------------------------------------------------------------|
+| appId          | Yes      | Long     | Business ID (obtained from backend, must pass corresponding business ID based on currency in URL) |
+| orderId        | Yes      | String   | Merchant refund application order number (new merchant order number, cannot use original collection merchant order number) |
+| orderNo        | Yes      | String   | Platform order number (original collection platform order number returned) |
+| sign           | Yes      | String   | Signature                                                                |
+
+Response data parameter description
+
+| Parameter Name | Type     | Description                                                      |
+|:---------------|:---------|:----------------------------------------------------------------|
+| appId          | String   | Business ID                                                      |
+| orderNo        | String   | Platform order number (original collection platform order number returned) |
+| orderId        | String   | Merchant refund application order number                         |
+| refundNo       | String   | Platform refund number for this refund                           |
+| status         | String   | Refund status: 1 indicates refund application success, 0 indicates processing, 2 indicates failure. Initially returns processing, status needs to be checked via query interface later |
+| errorMsg       | String   | Error message (may not always have a value)                      |
+| sign           | String   | Signature                                                        |
+
+### **5. Refund Query**
+
+**Brief Description:**
+
+* Query the result of the refunded order.
+
+**URL:**
+
+USD: `/usd/refund/refundQuery`
+
+**Parameters:**
+
+| Parameter Name | Required | Type     | Description                                                       |
+|:---------------|:---------|:---------|:-----------------------------------------------------------------|
+| appId          | Yes      | Long     | Business ID (obtained from backend, must pass corresponding business ID based on currency in URL) |
+| orderId        | No       | String   | Merchant refund application order number                         |
+| refundNo       | No       | String   | Platform refund number (platform order number returned when refund was applied, if provided, prioritize checking this field) |
+| sign           | Yes      | String   | Signature                                                        |
+
+Response data parameter description
+
+| Parameter Name | Type     | Description                                                |
+|:---------------|:---------|:----------------------------------------------------------|
+| appId          | String   | Merchant order number (must be unique)                    |
+| orderNo        | String   | Platform order number (original collection platform order number) |
+| orderId        | String   | Merchant application order number                          |
+| refundNo       | String   | Platform refund number                                     |
+| status         | String   | Refund status: 1 indicates refund application success, 0 indicates processing, 2 indicates failure. Refund result is based on this status |
+| errorMsg       | String   | Error message (may not always have a value)                |
+| sign           | String   | Signature                                                  |
+
+### **6. Payment Methods** <a id="inBankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (payType)</b></td>
+        <td><b>Payment Code (inBankCode)</b></td>
+        <td><b>Limits</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>CREDIT_CARD</td>
+        <td>0.99-1000</td>
+        <td>Available</td>
+        <td>VISA</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>CREDIT_CARD</td>
+        <td>0.99-1000</td>
+        <td>Available</td>
+        <td>MasterCard</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>CREDIT_CARD</td>
+        <td>0.99-1000</td>
+        <td>Available</td>
+        <td>JCB</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>GOOGLE_PAY</td>
+        <td>0.99-1000</td>
+        <td>Available</td>
+        <td>Google Pay</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>APPLE_PAY</td>
+        <td>0.99-1000</td>
+        <td>Available</td>
+        <td>Apple Pay</td>
+    </tr>
+</table>
+
+### 7. Test Card Numbers
+
+:::warning
+**For use in test environment only**
+:::
+
+#### Simulate Successful Payment
+
+Use the following test card numbers, enter any CVC (3-digit number) and expiration date (future date) to simulate successful payment:
+
+- Card Number 1: 4242424242424242
+
+#### Simulate Payment Failure
+
+Use the following test card numbers with invalid data to simulate payment failure:
+
+- Card Number 1: 4000000000009995
+- Invalid month: 13
+- Invalid CVV: 99
+
+
+
+### 8. MIT (Merchant Initiated Transaction) Mode Description <a id="mit"></a>
+
+**MIT (Merchant Initiated Transaction)**  
+Refers to transactions that merchants can initiate without the user being present after the user completes a one-time payment authorization.  
+This mode is widely used in business scenarios such as **subscription payments, installment payments, membership renewals, delayed deductions**, etc.  
+
+#### Basic Process
+1. **User Authorization**  
+   - User enters payment information during the first payment and completes necessary identity verification.  
+   - Merchant saves the user's payment credentials for subsequent deduction requests.  
+
+2. **Merchant-Initiated Deduction**  
+   - Merchant directly uses saved payment credentials to initiate deduction requests based on agreed cycles or conditions.  
+   - Since the transaction is an **offline scenario (off-session)**, meaning the user is not involved in the transaction, the system will complete processing based on user authorization and compliance requirements.  
+
+3. **Authentication Requirements**  
+   - In most cases, transactions will complete directly.  
+   - If the issuing bank or risk control system requires re-verification, the transaction may enter a pending user confirmation state, requiring user supplementary verification to complete.  
+
+#### Mode Features
+- **Enhanced Experience**: Users don't need to manually enter payment information each time.  
+- **Compliant and Secure**: Meets international payment regulations and Strong Customer Authentication (SCA) requirements.  
+- **Wide Application**: Suitable for subscription billing, auto-renewal, installment deductions, delayed settlement, etc.  
+
+#### MIT Flow Diagram
+```mermaid
+flowchart TD
+    A["User: order on merchant platform"] --> B{"Transaction Type Judgment"}
+
+    subgraph S2 ["Scenario 2: Subsequent Transactions"]
+        direction TB
+        I["Subsequent Transaction"] --> J["Merchant: Sends transaction request and token to Haipay<br>&nbsp"]
+        J --> K{"Haipay: Verifies token"}
+        K -->|Valid| L["Haipay: Executes automatic deduction<br>&nbsp"]
+        L --> N
+        K -->|Invalid/Failed| M["Payment Failed"]
+        M --> P["Merchant: Notifies user of payment failure<br>&nbsp"]
+    end
+
+    subgraph S1 ["Scenario 1: First Transaction"]
+        direction TB
+        C["First Transaction"] --> D["Haipay: Provides payment link"]
+        D --> E["User: Confirms payment"]
+        E --> F["Payment Success"]
+        F --> G["Haipay: Generates secure token<br>(binds user and merchant)<br>&nbsp"]
+        G --> N["Payment Callback"]
+        N --> O["Merchant: Provides service/ships goods<br>&nbsp"]
+    end
+
+    B --> C
+    B --> I
+```
+
+
+### 9. Apple Pay / Google Pay Token Acquisition Method Description <a id="token"></a>
+
+::: tip Online Demo (Test Environment, No Real Charges)
+- [Apple Pay && Google Pay](https://uat-cashier.haipay.top/pay/mit/apple-google/)
+:::
+
+#### Integration Process
+  - No need to apply for an Apple Pay or Google Pay developer account — HaiPay handles it for you.
+  - Include the JavaScript script ([https://js.stripe.com/v3/])
+  - Page structure requirements:
+    - Payment button container: used for rendering the Apple Pay / Google Pay button.
+  - Quick integration example
+
+```javascript
+<script src="https://js.stripe.com/v3"></script>
+
+<div id="appId">
+  <div id="applePay-googlePay"></div>
+</div>
+
+      initApplePayGooglePay() {
+            const stripe = Stripe('A key is required — please contact HaiPay to obtain it.'); //This key is not shared between production and testing environments.
+            const paymentRequest = stripe.paymentRequest({
+            country: "HK",
+            currency: "usd",
+            total: {
+                label: "Haipay",
+                amount: 0.99 * 100, // The unit is cents.
+            },
+            requestPayerName: true,
+            requestPayerEmail: true,
+            });
+
+            // Use `paymentRequestButton` to create an Apple Pay / Google Pay button.
+            const elements = stripe.elements();
+            const prButton = elements.create("paymentRequestButton", {
+               paymentRequest: paymentRequest,
+            });
+
+            // Check whether the browser supports Apple Pay or Google Pay.
+            paymentRequest.canMakePayment().then((result) => {
+                if (result && (result.applePay || result.googlePay)) {
+                    prButton.mount("#applePay-googlePay");
+                } else {
+                    document.getElementById("applePay-googlePay").style.display = "none";
+                    document.getElementById("applePay-googlePay-not-supported").style.display = 'block';
+                }
+            });
+
+            paymentRequest.on("paymentmethod", async (ev) => {
+                //`ev.paymentMethod.id` is the required token, which should be passed as a parameter when calling the `/usd/mit/apply` API.
+            });
+          }
+```
+
+::: details Full code reference (JavaScript)
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"/>
+    <meta name="description" content="You have a payment link that needs to be paid. Please click the link below to make the payment." />
+    <title>Google Pay and Apple Pay Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/8.0.20/jsrsasign-all-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.15.14/theme-chalk/index.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.15.14/index.js"></script>    
+    <script src="https://js.stripe.com/v3/"></script>
+
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .apple-pay-button {
+                background-color: black;
+                color: white;
+                border-radius: 9999px;
+                padding: 12px 24px;
+                font-size: 17px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: background-color 0.2s;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .apple-pay-button:hover {
+                background-color: #333;
+            }
+            .apple-pay-button img {
+                margin-right: 8px;
+                height: 20px;
+            }
+        }
+      .content {
+        width: 100%;
+        max-width: 600px;
+        background: #fff;
+        box-sizing: border-box;
+        box-shadow: 0 0 calc(8.53333vmin / 32 * 8) #ccc;
+        padding:calc(8.53333vmin / 32 * 20) calc(8.53333vmin / 32 * 10) calc(8.53333vmin / 32 * 10);
+        margin: 0 auto 20px;
+        border-radius: calc(8.53333vmin / 32 * 6);
+      }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <div id="app">
+        <div class="container mx-auto px-4 py-12 max-w-4xl">
+            <header class="mb-10 text-center">
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">Google Pay And Apple Pay Demo</h1>
+                <p class="text-gray-600">Experience a safe and fast payment method.</p>
+            </header>
+
+         <div class="content">
+            <el-form ref="form" :rules="rules" :model="form">
+                <el-form-item label="appId" prop="appId">
+                  <el-input v-model="form.appId" placeholder="Please enter the appId." />
+                </el-form-item>
+                <el-form-item label="amount" prop="amount">
+                  <el-input v-model="form.amount" placeholder="Please enter the amount." />
+                </el-form-item>
+                <el-form-item label="phone" prop="phone">
+                  <el-input v-model="form.phone" placeholder="Please enter the phone." />
+                </el-form-item>
+                <el-form-item label="email" prop="email">
+                  <el-input v-model="form.email" placeholder="Please enter the email." />
+                </el-form-item>
+                <el-form-item label="key" prop="key">
+                  <el-input v-model="form.key" placeholder="Please enter the key." />
+                </el-form-item>
+                <el-form-item label="privateKey" prop="privateKey">
+                  <el-input v-model="form.privateKey" placeholder="Please enter the privateKey."  type="textarea" resize="none" :autosize="{ minRows: 4, maxRows: 10 }"  />
+                </el-form-item>
+            </el-form>  
+            </div>
+
+
+            <div class="text-center">
+                
+                <div id="applePay-googlePay"></div>
+                
+                <div id="applePay-googlePay-not-supported" class="text-gray-500 mb-6 hidden">
+                    <p><i class="fa fa-info-circle mr-2"></i>This device does not support Google Pay or Apple Pay.</p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+  <script>
+      new Vue({
+        el: "#app",
+        data() {
+          return {
+             form: {
+                token: '',
+                appId: ,
+                orderId: Date.now(),
+                amount: "0.99",
+                phone: "18801234567",
+                email: "test@haipay.tech",
+                name: "Haipay",
+                inBankCode: "APPLE_PAY",
+                payType: "EWALLET",
+                partnerUserId: Date.now(),
+                key: '',
+                privateKey: ''
+            },
+            rules: {
+              appId: [
+                { required: true, trigger: 'blur' }
+              ],
+              amount: [
+                { required: true, trigger: 'blur' }
+              ],
+              phone: [
+                { required: true, trigger: 'blur' }
+              ],
+              email: [
+                { required: true, trigger: 'blur' }
+              ],
+              name: [
+                { required: true, trigger: 'blur' }
+              ],
+              key: [
+                { required: true, trigger: 'blur' }
+              ],
+              privateKey: [
+                { required: true, trigger: 'blur' }
+              ],
+            },
+            baseURL: 'https://uat-interface.haipay.asia',
+            isH5: true,
+            applePayButton: null,
+          };
+        },
+        computed: {},
+        created() {
+          this.isMobileDevice()
+          this.applePayButton = document.getElementById('applePay-googlePay');
+          this.initApplePay()
+        },
+        methods: {
+          isMobileDevice() { 
+            let self = this
+            if(typeof window.orientation !== 'undefined'){
+              self.isH5 = true
+            } else {
+              self.isH5 = false
+            }
+          },
+          initApplePay() {
+            const self = this
+            const stripe = Stripe('A key is required — please contact HaiPay to obtain it.'); //This key is not shared between production and testing environments.
+            const paymentRequest = stripe.paymentRequest({
+            country: "HK",
+            currency: "usd",
+            total: {
+                label: "Haipay",
+                amount: Number(self.form.amount) * 100, // The unit is cents.
+            },
+            requestPayerName: true,
+            requestPayerEmail: true,
+            });
+
+            // Use `paymentRequestButton` to create an Apple Pay / Google Pay button.
+            const elements = stripe.elements();
+            const prButton = elements.create("paymentRequestButton", {
+               paymentRequest: paymentRequest,
+            });
+
+            // Check whether the browser supports Apple Pay or Google Pay.
+            paymentRequest.canMakePayment().then((result) => {
+                if (result && (result.applePay || result.googlePay)) {
+                    prButton.mount("#applePay-googlePay");
+                } else {
+                    document.getElementById("applePay-googlePay").style.display = "none";
+                    document.getElementById("applePay-googlePay-not-supported").style.display = 'block';
+                }
+            });
+
+            paymentRequest.on("paymentmethod", async (ev) => {
+                if(ev.walletName === 'googlePay') {
+                  self.form.inBankCode = 'GOOGLE_PAY'
+                } else if(ev.walletName === 'applePay') {
+                  self.form.inBankCode = 'APPLE_PAY'
+                }
+                self.form.token = ev.paymentMethod.id //`ev.paymentMethod.id` is the required token, which should be passed as a parameter when calling the `/usd/mit/apply` API.
+                const requestData = {
+                    headers: { 'content-type': 'application/json' },
+                    body: self.form
+                };
+                    const signedBody = self.generateSign(requestData);
+                    const response = await fetch(`${self.baseURL}/usd/mit/apply`,
+                        {
+                            method: 'POST',
+                            headers: {
+                            'Content-Type': 'application/json',
+                            },
+                            body: signedBody
+                        });
+                    const res = await response.json()
+                    if(res.status === '1') {
+                        self.orderNo = res.data.orderNo
+                        if(self.isH5) {
+                            window.location.href = res.data.payUrl
+                        }else {
+                            window.open(res.data.payUrl, "_blank");
+                        }
+                    }
+
+                ev.complete("success");
+            });
+          },
+         generateSign(requestData) {
+            let param = {};
+            if (requestData.body) {
+                const contentType = requestData.headers['content-type'] || '';
+                if (contentType.toLowerCase().includes('application/json')) {
+                    try {
+                        const jsonData = typeof requestData.body === 'string' 
+                            ? JSON.parse(requestData.body) 
+                            : requestData.body;
+                        
+                        for (let key in jsonData) {
+                            if (jsonData[key] !== '') {
+                                param[key] = jsonData[key];
+                            }
+                        }
+                    } catch (e) {
+                        console.log('The request body is not in JSON format.');
+                    }
+                }
+            }
+
+            const sortedKeys = Object.keys(param)
+                .filter(key => !['privateKey', 'sign', 'key'].includes(key))
+                .sort();
+            const paramString = sortedKeys.map(key => `${key}=${param[key]}`).join('&');
+
+            let body = typeof requestData.body === 'string' 
+                ? requestData.body 
+                : JSON.stringify(requestData.body);
+            let jsonData = JSON.parse(body);
+            let key = jsonData.key;
+            
+            const stringSignTemp = `${paramString}&key=${key}`;
+            console.log('signstring:', stringSignTemp);
+
+            let privateKey = `
+        -----BEGIN PRIVATE KEY-----
+        ${jsonData.privateKey}
+        -----END PRIVATE KEY-----
+            `.trim();
+
+            // sign
+            const sig = new KJUR.crypto.Signature({ alg: 'SHA256withRSA' });
+            sig.init(privateKey);
+            sig.updateString(stringSignTemp);
+            const signatureHex = sig.sign();
+            const sign = hextob64(signatureHex);
+
+            // add sign to request body
+            jsonData.sign = sign;
+            return JSON.stringify(jsonData);
+         },
+        },
+      });
+    </script>
+</body>
+</html>
+
+
+```
+
+:::
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

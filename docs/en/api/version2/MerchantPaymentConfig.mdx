@@ -1,0 +1,312 @@
+---
+title: Get Merchant Payment Config
+permalink: /en/api/version2/MerchantPaymentConfig/
+---
+
+
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+
+
+## **1. Brief Description:**
+
+* **Query merchant available payment configuration information based on application ID, including payment methods, fee rates, settlement periods, and other configurations**
+
+**URL：** `/common/payment/config`
+
+**HTTP Method：** `POST`
+
+**Content-Type：** `application/json`
+
+::: tip Matters Need Attention
+> 1. The request requires signature verification and the signature algorithm should be consistent with other interfaces.
+> 2. tranType and tranCode are optional parameters used to filter specific types of payment configurations.
+> 3. If the application has not configured the payment product, the returned configs list will be empty.
+> 4. The response data will also be signed. The signature is the same as other methods, but note that the returned data of this interface has multiple levels of nesting.
+> 5. If the input currency is "Cashier", it will return all the available app payment configuration information for this user.
+:::
+
+
+## **2. Request Parameters:**
+
+| Parameter | Required | Type    | Description                                                                                                 |
+|-----------|----------|---------|-------------------------------------------------------------------------------------------------------------|
+| appId     | Yes      | Long    | Business ID (obtained from the backend)                                                                     |
+| tranType  | No       | String  | Payment type (optional). If provided, filter by payment type. See [tranType](#trantype-payment-type) |
+| tranCode  | No       | String  | tranCode type (optional). If provided, filter by tranCode type. See [tranCode](#tranCode-transaction-type) |
+| sign      | Yes      | String  | Signature                                                                                                    |
+
+
+## **3. Response Data:**
+
+| Parameter   | Type                      | Description    |
+|-------------|---------------------------|----------------|
+| userId      | Long                      | User ID        |
+| configs     | List&lt;PaymentConfig&gt; | Configuration list |
+| sign        | String                    | Signature      |
+
+**PaymentConfig Object:**
+
+| Parameter     | Type                    | Description                                    |
+|---------------|-------------------------|------------------------------------------------|
+| appId         | Long                    | Application ID                                 |
+| appName       | String                  | Application name                               |
+| tranCode   | String                  | tranCode type: pay=payout, collect=collection |
+| tranType      | String                  | Payment type (transaction method). See [tranType](#trantype-payment-type) |
+| currNo        | String                  | Currency code (e.g., USD, CNY)                 |
+| payMethods    | List&lt;PayMethod&gt;   | Payment method information list                 |
+| feeRate       | FeeRate                 | Fee rate information                           |
+| settlement    | Settlement              | Settlement period information                  |
+| supportRefund | Boolean                 | Whether refund is supported, see [refund support section](#refund-support) |
+
+**PayMethod Object:**
+
+| Parameter | Type   | Description                                                      |
+|-----------|--------|------------------------------------------------------------------|
+| inBankCode | String | Payment method code (inBankCode)                                              |
+| name      | String | Payment method name                                              |
+| limit     | Limit  | Payment method limit information (intersection of t_pay_code and t_mer_app) |
+
+**Limit Object:**
+
+| Parameter        | Type   | Description        |
+|------------------|--------|--------------------|
+| singleMinAmount  | String | Minimum single transaction amount |
+| singleMaxAmount  | String | Maximum single transaction amount |
+
+**FeeRate Object:**
+
+| Parameter     | Type                    | Description                                    |
+|---------------|-------------------------|------------------------------------------------|
+| feeType       | Integer                 | Fee collection method. See [feeType](#feetype-fee-collection-method) |
+| feeMode       | Integer                 | Fee collection type. See [feeMode](#feemode-fee-collection-type) |
+| feeRate       | String                  | Fee rate                                       |
+| feeFixedValue | String                  | Fixed fee                                      |
+| degrees       | List&lt;FeeDegree&gt;   | Tiered fee rate list (if fee_mode=2)          |
+
+**FeeDegree Object:**
+
+| Parameter | Type   | Description            |
+|-----------|--------|------------------------|
+| start     | Long   | Range start            |
+| end       | Long   | Range end              |
+| value     | String | Range value (tiered fee rate) |
+| name      | String | Range name             |
+
+**Settlement Object:**
+
+| Parameter | Type    | Description                                    |
+|-----------|---------|------------------------------------------------|
+| stlMode   | String | Settlement method. See [stlMode ](#stlmode-settlement-method) |
+| stlCycle  | Integer | Settlement cycle value                         |
+
+## **4. Request and Response Examples**
+
+```json
+{
+  "appId": 2065,
+  "sign": "PjQFVs4HxYM+skZ+9+O6LzrmgAeDRn6YgaM9ka+kynv8WH36HU6soMGWSV0GiO5ApPMdnpWbRdGt2jkcTFQ4+ZZ/2JxJsV0MGbwH5EGCxXb5vJar2v3l43WwpI9DDwpSjpYqrCA+XlXMA2oD3ZuOsqTKa49E2EgEhWa9mvS/5id+R6V03Zf1wy/sEsFya2zLVF2jK9zRVpQ+pOgAlT++EUPHzMtnAkfj2/CcSFE8Pl0v//HCcw/5dzLFIgpoUH/h6xSgzinndCQVA6Yy4JX9av/K554GpHHE1jw+PqZSW5JbYss/XpT2ltb3ieUdhiqvEHM9NGncBlWptk1KmDywKg\u003d\u003d"
+}
+```
+
+**Response Example:**
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "userId": 672,
+    "configs": [{
+      "appId": 2065,
+      "appName": "jiwushanghu_MXN1",
+      "tranCode": "pay",
+      "tranType": "BANK_ACCOUNT",
+      "currNo": "MXN",
+      "payMethods": [{
+        "inBankCode": "ACCENDO_BANCO",
+        "name": "ACCENDO_BANCO",
+        "limit": {
+          "singleMinAmount": "3",
+          "singleMaxAmount": "2000"
+        }
+      }, {
+        "inBankCode": "ABC_CAPITAL",
+        "name": "ABC_CAPITAL",
+        "limit": {
+          "singleMinAmount": "3",
+          "singleMaxAmount": "2000"
+        }
+      }],
+      "feeRate": {
+        "feeType": 1,
+        "feeMode": 1,
+        "feeRate": "0",
+        "feeFixedValue": "8.8"
+      },
+      "settlement": {
+        "stlMode": "WN",
+        "stlCycle": 4
+      },
+      "supportRefund": false
+    }, {
+      "appId": 2065,
+      "appName": "jiwushanghu_MXN1",
+      "tranCode": "collect",
+      "tranType": "QR",
+      "currNo": "MXN",
+      "payMethods": [{
+        "inBankCode": "CASH",
+        "name": "Pay Cash",
+        "limit": {
+          "singleMinAmount": "5.1",
+          "singleMaxAmount": "2000"
+        }
+      }],
+      "feeRate": {
+        "feeType": 1,
+        "feeMode": 0,
+        "feeRate": "0.035",
+        "feeFixedValue": "0.2"
+      },
+      "settlement": {
+        "stlMode": "TN",
+        "stlCycle": 2
+      },
+      "supportRefund": false
+    }, {
+      "appId": 2065,
+      "appName": "jiwushanghu_MXN1",
+      "tranCode": "collect",
+      "tranType": "VA",
+      "currNo": "MXN",
+      "payMethods": [{
+        "inBankCode": "CLABE",
+        "name": "CLABE",
+        "limit": {
+          "singleMinAmount": "5.1",
+          "singleMaxAmount": "2000"
+        }
+      }],
+      "feeRate": {
+        "feeType": 1,
+        "feeMode": 0,
+        "feeRate": "0.035",
+        "feeFixedValue": "0.2"
+      },
+      "settlement": {
+        "stlMode": "TN",
+        "stlCycle": 2
+      },
+      "supportRefund": false
+    }, {
+      "appId": 2065,
+      "appName": "jiwushanghu_MXN1",
+      "tranCode": "collect",
+      "tranType": "VA",
+      "currNo": "MXN",
+      "payMethods": [{
+        "inBankCode": "CLABE",
+        "name": "CLABE",
+        "limit": {
+          "singleMinAmount": "5.1",
+          "singleMaxAmount": "2000"
+        }
+      }],
+      "feeRate": {
+        "feeType": 1,
+        "feeMode": 0,
+        "feeRate": "0.035",
+        "feeFixedValue": "0.2"
+      },
+      "settlement": {
+        "stlMode": "TN",
+        "stlCycle": 2
+      },
+      "supportRefund": false
+    }],
+    "sign": "Uw3xtKg3c772USUDvd5SDv9HjRU/WUAco/UJk+obJckJttwHyxNMfFVr1ADg2TDh2A+1VF5Klba2zmJ3L6DLkv+VXBUvHvvXPLxDLPnRXCzdp0wIxMeCdXZgvbFvtXB/teCOUpN0CocBkVmFtlE6uPoL74bj9l40ZqeDlHLRRbK+BS8d+0zDURINeQLFCTnvgygZof1GjfY6jbYfwfVnY9iJwjpYOc/+InPHSQJpzeVPw4c8fPK3V3rfzdwg1trpwgqnMYOFl1sr+t8ShkUiCpOBRb9E2iVM14cXbHrk3DqYO5p2pf6Ol0zeVMwAQG+oH66gGUCQT4DRcgWHFTtZtg=="
+  }
+}
+```
+
+
+**Error Response Example:**
+
+```json
+{
+  "status": "0",
+  "error": "1002",
+  "msg": "Please configure the merchant public key"
+}
+```
+## **5. Return parameter details description**
+
+### **<span id="trantype-payment-type">tranType (Payment Type)</span>**
+
+| Value | Description |
+|:------|:------------|
+| BANK_TRANSFER | Bank Transfer |
+| BANK_ACCOUNT | Bank Account |
+| BANK_CARD | Bank Card |
+| EWALLET | E-wallet |
+| UPI | UPI |
+
+### **<span id="tranCode-transaction-type">transaction (Transaction Type)</span>**
+
+| Value | Description |
+|:------|:------------|
+| pay | Payout |
+| collect | Collection |
+
+### **<span id="feetype-fee-collection-method">feeType (Fee Collection Method)</span>**
+
+| Value | Description |
+|:------|:------------|
+| 0 | External deduction (fee deducted from balance account) |
+| 1 | Internal deduction (fee deducted from order amount) |
+
+### **<span id="feemode-fee-collection-type">feeMode (Fee Collection Type)</span>**
+
+| Value | Description |
+|:------|:------------|
+| 0 | Rate |
+| 1 | Per transaction |
+| 2 | Tiered |
+| 3 | Floor price |
+
+### **<span id="stlmode-settlement-method">stlMode (Settlement Method)</span>**
+
+| Value | Description |
+|:------|:------------|
+| D0 | Natural Day |
+| TN | Working Day |
+| WN | Weekly Settlement |
+| MN | Monthly Settlement |
+
+### **<span id="refund-support">Refund Support</span>**
+
+Refund functionality is only supported for the following payment method combinations:
+
+| Currency | Payment Type (payType) | Payment Code (inBankCode) |
+|:---------|:----------------------|:-------------------------|
+| USD      | BANK_TRANSFER         | CREDIT_CARD              |
+| USD      | EWALLET               | GOOGLE_PAY               |
+| USD      | EWALLET               | APPLE_PAY                |
+
+
+
+{/*
+</div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}
+

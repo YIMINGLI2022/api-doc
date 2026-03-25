@@ -1,0 +1,559 @@
+---
+title: 订阅支付接口
+permalink: /api/version2/Subscription/
+---
+
+# **订阅接口文档**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+:::warning
+**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)和[**订阅流程**](/zh/docs/api/version2/subscription-process.md)**
+
+**涉及到扣款，为避免投诉，平台需提供以下功能或服务：**
+
+**1、客服24小时在线服务，或者主推地区在工作时间需有人在线值班**
+
+**2、在平台的个人中心页面需要明确展示订阅扣款入口，有清晰的页面指引让客户知悉扣款周期等信息**
+
+**3、需有明确的退订入口**
+
+**4、订阅成功和扣款前后都要有邮件或者其他（非平台内）通知给到客户服务相关事宜，告知客户扣款内容等**
+
+**5、需要提供平台上订阅服务的协议内容，并经过客户操作确认才能发起订阅扣款申请**
+:::
+:::tip 信用卡争议处理重要说明
+  - **针对信用卡交易,消费者有权在交易发生后180天内发起争议申请。当争议被提起时,每笔交易将产生20美元的争议处理费。**
+  - **在收到争议通知后,您有两种应对方式可供选择**
+    - **其一:您可以选择接受争议,即向发卡银行提交回复,确认您不对退款金额提出异议。**
+    - **其二:您可以选择对争议进行抗辩,通过完成一个引导式的提交流程,根据提示提供相关证据和支持性文件来阐述您的立场。**
+  - **若您选择对争议进行抗辩,将额外收取20美元的抗辩费。如果发卡银行不接受您提交的抗辩材料并判定消费者胜诉,抗辩费将被扣除,同时消费者的付款将被退还。**
+  - **关于费用退还政策,如果您成功赢得争议,Haipay将退还抗辩费。然而,除非您的Haipay合同中另有明确规定,否则最初收取的争议处理费在任何情况下均不予退还。**
+:::
+
+:::danger **PCI DSS（支付卡行业数据安全标准）严格禁止在 WebView 或 iframe 中嵌入信用卡输入页面，主要原因如下：**
+
+1. PCI 合规性：直接违反 PCI DSS 要求
+2. 安全风险：WebView 和 iframe 可能无法提供足够的安全隔离
+3. 中间人攻击：恶意应用可能拦截或篡改支付数据
+4. 钓鱼风险：无法确保用户是在可信的环境中输入敏感信息
+:::
+
+## **HaiPay.js 对接（Apple Pay & Google Pay 订阅）**<a id="haipaysdk"></a>
+
+HaiPay 提供了便捷的 Apple Pay 订阅 和 Google Pay 订阅支付集成方案，通过简单配置即可在网页中快速集成支付功能。
+
+- 引入 HaiPay 脚本([https://cashier.haipay.top/js/applePayGooglePaySubscribe_1.0.0.min.js])
+- 页面结构要求
+    - 支付按钮容器：用于 Apple Pay/Google Pay 订阅按钮的渲染。
+- 快速集成示例
+
+```javascript
+<script src="https://cashier.haipay.top/js/applePayGooglePaySubscribe_1.0.0.min.js"></script>
+
+<div id="appId">
+  <div id="applePay-googlePay"></div>
+</div>
+
+  // 创建实列
+  const elements = applePayGooglePaySubscribe.create('applePayGooglePaySubscribe', {
+      sandbox: true,
+      clientToken: '6cgjnxvc6kdb',
+      buttonType: 'buy',
+      buttonTheme: 'black',
+      buttonHeight: 50
+  });
+
+  // 挂载组件
+  elements.mount('#applePay-googlePay');
+
+  // 支付按钮渲染完成回调函数
+  elements.on('ready', (data) => {
+      console.log('Button rendered successfully:', data);
+  });
+
+ // 错误信息
+  elements.on('error', (data) => {
+      console.error('Payment error:', data);
+  });
+
+
+```
+
+- 参数说明
+  - 1.初始化配置参数（HaiPay 构造函数参数）
+
+| 参数名              | 必选 | 类型     | 说明                 |
+| :----------------  | :--- | :-----   | :------------------------------------------------------------------------------------------ |
+| sandbox            | 是   | Boolean   | 环境类型，默认值 true，可选值 ：<br /> - true：测试环境（用于联调测试） <br /> - false：生产环境（上线使用）   |
+| clientToken        | 是   | String   | 客户端令牌clientToken           |              |
+| buttonType         | 否   | String   | 按钮文本类型，默认值 buy, 可选值：<br /> - plain："只显示支付徽标，无文字" <br /> - add-money："添加资金" <br /> - book："预定" <br /> - buy："购买"（默认）<br /> - check-out："结账" <br /> - contribute："捐款" <br /> - order："下单" <br /> - reload："重新加载" <br /> - rent: "租赁" <br /> -subscribe: "订阅" <br /> -support: "支持" <br /> -tip: "付小费" <br /> -top-up: "充值" |
+| buttonTheme        | 否   | String   | 按钮主题样式，默认值 black，可选值： <br /> - black：黑色背景 <br /> - white：白色背景          |
+| buttonHeight       | 否   | number   | 按钮高度，默认值 50    |  
+
+  - 2.常见错误类型及解决方案
+
+| 错误信息	                                 | 错误原因                         | 解决方案                                                                  |
+| :---------------------------------------  | :------------------------------ | :-------------------------------------------------------------------- |
+| Missing required parameters: env, orderNo | 缺少必需的初始化参数              | 检查 clientToken 等参数是否传入                                            |
+| Unsupported region: CN                    | 生产环境下不支持中国地区          |                                      |
+
+## **HaiPay.js 对接（creditCard 订阅）**<a id="haipaysdk"></a>
+
+HaiPay 提供了便捷的 creditCard 订阅支付集成方案，通过简单配置即可在网页中快速集成支付功能。
+
+- 引入 HaiPay 脚本([https://cashier.haipay.top/js/creditCardSubscription_1.0.0.min.js])
+- 页面结构要求
+    - 支付按钮容器：用于 creditCard 页面的渲染。
+- 快速集成示例
+
+```javascript
+<script src="https://cashier.haipay.top/js/creditCardSubscription_1.0.0.min.js"></script>
+
+<div id="appId">
+  <div id="creditCard"></div>
+</div>
+
+elements.createPay();
+  // 创建实列
+  const elements = creditCardSubscription.create('card', {
+      sandbox: true,
+      clientToken: '6cgjnxvc6kdb'
+  });
+
+  // 挂载组件
+  elements.mount('#creditCard');
+
+  // 信用卡页面渲染完成回调函数
+  elements.on('ready', (data) => {
+      console.log('Card rendered successfully:', data);
+  });
+
+ // 错误信息
+  elements.on('error', (data) => {
+      console.error('Payment error:', data);
+  });
+
+ // 提交表单信息
+ elements.submit()
+
+
+```
+
+- 参数说明
+  - 1.初始化配置参数（HaiPay 构造函数参数）
+
+| 参数名              | 必选 | 类型     | 说明                 |
+| :----------------  | :--- | :-----   | :------------------------------------------------------------------------------------------ |
+| sandbox            | 是   | Boolean   | 环境类型，默认值 true，可选值 ：<br /> - true：测试环境（用于联调测试） <br /> - false：生产环境（上线使用）   |
+| clientToken        | 是   | String   | 客户端令牌clientToken           |              |
+| cardTheme        | 否   | String   | 主题样式，默认值 white，可选值： <br /> - black：黑色背景 <br /> - white：白色背景          |
+
+  - 2.常见错误类型及解决方案
+
+| 错误信息	                                 | 错误原因                         | 解决方案                                                                  |
+| :---------------------------------------  | :------------------------------ | :-------------------------------------------------------------------- |
+| Missing required parameters: env, orderNo | 缺少必需的初始化参数              | 检查 clientToken 等参数是否传入                                            |
+| Unsupported region: CN                    | 生产环境下不支持中国地区          |                                      |
+
+
+> ⚠️ **特别说明**  
+> Apple Pay 不支持W（周）作为订阅周期，如果您需要实现每周订阅，正确的做法是使用 **D** 作为单位，并将间隔设置为 **7 天**。
+
+## **限额**
+
+| 交易类型 | 限额(单位:USD) |
+|:-----|------------|
+| 订阅   | 0.99-1000  |
+
+## **1.订阅API**
+
+### **订阅申请**
+
+**简要描述：**
+
+* 创建订阅订单
+
+**URL：**
+
+`/subscription/apply`
+
+**参数：**
+
+| 参数名                    | 必选 | 类型      | 说明                                                                                |
+|:-----------------------|:---|:--------|:----------------------------------------------------------------------------------|
+| appId                  | 是  | Long    | 业务ID（后台获取，需要根据参数currency传递对应的业务ID）                                                |
+| subscriptionOrderId    | 是  | String  | 商户订单号(必须保证唯一性，长度不超过48)                                                            |
+| amount                 | 是  | String  | 交易金额（精确到小数点后两位；禁止添加标点符号，例如：”,”）                                                   |
+| name                   | 是  | String  | 用户姓名，推荐使用真实姓名，格式：包含firstName和lastName，以空格分割的，示例：Donald John Trump                 |
+| phone                  | 是  | String  | 真实手机号（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ） |
+| email                  | 是  | String  | 真实电子邮件                                                                            |
+| subject                | 是  | String  | 订阅标题                                                                              |
+| body                   | 否  | String  | 备注详情                                                                              |
+| inBankCode             | 是  | String  | CREDIT_CARD,GOOGLE_PAY,APPLE_PAY                                                  |
+| payType                | 是  | String  | SUBSCRIPTION                                                                      |
+| callBackUrl            | 是  | String  | 用户支付成功后跳转地址                                                                       |
+| notifyUrl              | 是  | String  | 异步通知地址                                                                            |
+| country                | 是  | String  | 国家                                                                                |
+| currency               | 是  | String  | 币种，目前支持：USD                                                                       |
+| partnerUserId          | 是  | String  | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。       |
+| recurringInterval      | 是  | String  | 循环周期类型 D（天）,W（周）,M（月）,Y（年）                                                        |
+| recurringIntervalCount | 是  | Integer | 循环周期间隔                                                                            |
+| recurringMaxNumber     | 是  | Integer | 最大循环次数，无论循环周期是哪个，最长时间不能超过三年，到期订阅自动取消                                              |
+| website                | 是  | String  | 交易网站                                                                              |
+| retryTimes             | 是  | Integer | 定期扣款失败重试次数，默认为3                                                                   |
+| cancelUrl              | 否  | String  | 用户取消支付URL，如果传递，用户可在支付页面点击返回到此页面                                                   |
+| couponPeriod              | 否  | Integer | 优惠期数(暂时只支持首期优惠与全期优惠，即couponPeriod只能等于1或者等于recurringMaxNumber)                     |
+| couponAmountPerPeriod              | 否  | String  | 每期优惠金额                                                                            |
+| sign                   | 是  | String  | 签名                                                                                |
+
+#####               
+
+request
+
+```json
+{
+  "country": "USA",
+  "referer": "https://test.com",
+  "amount": "0.5",
+  "callBackUrl": "https://www.google.com",
+  "inBankCode": "CREDIT_CARD",
+  "subject": "Test subscription",
+  "subscriptionOrderId": "1736739758574",
+  "recurringIntervalCount": 1,
+  "sign": "JeJR4N40eKncoohebUN31aNqPqpBxR799rmMutqrSmMaBn0Sjmqbskl4Wiitmatvvx6tqvuwkOYtk6ryrYj7YqJxDeNfDqthWzOxv2ixkKY0YDoWEAra9sWc4CnXBBssP0VIKg0jSTMNzdvmvuNBa7sLEQj5YjgswUnCGtYCmsz154JHSSRpdeYDLL+Nt5b96pzQn8WyRr6b/9SSCrLCWSdt22gJmY5sQh7cc9OcJfAGb5E1XflTq5Va78cV+fw9hHhaZmFzKncg4wxrdaatxg9tCElMJpL1OuWO7XLfcfqgA/8Y/qRCWmNf11Ji3ZSrr7rU4+V7Egrfu1Fcr5DTlw==",
+  "partnerUserId": "H20241231",
+  "payType": "SUBSCRIPTION",
+  "phone": "0845632145871",
+  "appId": 1724,
+  "name": "howard",
+  "notifyUrl": "https://www.google.com",
+  "currency": "USD",
+  "email": "howard@gmail.com",
+  "recurringInterval": "D"
+}
+
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "subscriptionNo": "4025011311423010028",
+    "subscriptionOrderId": "1736739758574",
+    "appId": 1724,
+    "subject": "Test subscription",
+    "payType": "SUBSCRIPTION",
+    "inBankCode": "CREDIT_CARD",
+    "amount": 0.5,
+    "recurringInterval": "D",
+    "recurringIntervalCount": 1,
+    "status": "2",
+    "sign": "QrOo7yPJMTRk92bP9WU8P0ATdRvCm8dWElhbxqV6qmZEWZDRXeJAwUvd3839zErg+3tN/U4Rwyru219AkXg9CJZtocna3fiYj7uLxwD6bpAp+i9DGz5ZKV9ab5mwIEPWIQXKuY6wATzmlz6W4TvAkRqgGtqLkwYUaeqsmgJrh4WlIMK13GW/zvoCmYfFD6pNZUByVixpll8JPeZG7F9d+x7yjDigJZ2S1wm4F307OzZJkUSKSvQn6Q0lOvp1JS0feXSC+hwCfrdllFXIE10TDV0itoPY5G7+3QdmHpINWp3kWmepR/1pOsN+09hLxe8xKAIZrX2GFHY00xo3QnxBIw=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名                    | 类型     | 说明                                                |
+|:-----------------------|:-------|:--------------------------------------------------|
+| subscriptionOrderId    | String | 商户订阅号(必须保证唯一性)                                    |
+| subscriptionNo         | String | 平台订阅号                                             |
+| appId                  | String | 业务ID                                              |
+| subject                | String | 支付备注                                              |
+| payType                | String | 订阅固定为**SUBSCRIPTION**                             |
+| inBankCode             | String | 银行编码                                              |
+| amount                 | String | 金额                                                |
+| payUrl                 | String | 授权链接                                              |
+| recurringInterval      | String | 循环周期 W,M,Y                                        |
+| recurringIntervalCount | String | 环周期间隔                                             |
+| status                 | String | 订阅状态(-1: 订阅异常, 1: 处理中, 2: 订阅成功, 3: 订阅失败, 4: 订阅取消) |
+| clientToken | String | 在JavaScript Web SDK中使用的客户端令牌(见[HaiPaySDK.js](#haipaysdk)) |
+| sign                   | String | 签名                                                |
+
+### **查询订阅**
+
+**简要描述：**
+
+* 查询订阅订单
+
+**URL：**
+
+`/subscription/query`
+
+**参数：**
+
+| 参数名            | 必选 | 类型     | 说明                              |
+|:---------------|:---|:-------|:--------------------------------|
+| appId          | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| subscriptionNo | 是  | String | 平台订阅号                           |
+| sign           | 是  | String | 签名                              |
+
+request
+
+```json
+{
+  "appId": 1724,
+  "sign": "gETp00ngwiG0qPVcpldPGEsWRCShOJUbwxWizbL9xGbWCtlBsTPFshQtClLtBCRAdhoVNZAD7UQXjdiAsr74neYu1akj1a6d3sNapGaqoTdBgykXyr1hLVe14AIUhLRg0Mj2elOlMPiWMdccSC+i4G/lfPpJLpS/T08S8qttExTOjML5Rrny5jNsYedjf+Jo3jrPsLcfZFX3QrWA4txPG+x7ZrShXUonOiZMoH6hwU8PcETrC0vpGqTwySJ6siS2AwyPOZElR6nf3geIx7GAllFUuZSyjCvRDE+9JeZl5Y2Ohlm9xcRxqHgMi4YB3jSJcwo7GqGqnPapZnO2GvcbGw==",
+  "subscriptionNo": "4025011311423010028"
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "subscriptionOrderId": "1736739758574",
+    "subscriptionNo": "4025011311423010028",
+    "appId": 1724,
+    "subject": "Test subscription",
+    "payType": "SUBSCRIPTION",
+    "inBankCode": "CREDIT_CARD",
+    "amount": 0.50000000,
+    "recurringInterval": "D",
+    "recurringIntervalCount": 1,
+    "status": "2",
+    "deductList": [
+      {
+        "deductNo": "4125011311423010028",
+        "amount": "0.99",
+        "status": 2,
+        "orderNo": "2025011311423010028",
+        "startTime": "2024-12-18 09:25:11",
+        "endTime": "2024-12-25 09:25:11"
+      }
+    ],
+    "sign": "fscM1XiVPqDb/NxrZuVv33zvqFxsXsKri6+MzIsWqdMlcsa7E3ayGNHg6ChiVxFVdow3NAlmg4szGXp0AtvOLDdQ/BAfC8DWpbktjDXeiEQ7ma1/ZKsmVrrLHzF01B5UI33xYX+qMsjMQ/yJBHwY1LTOhPq3lIwShwhB92CCd6IfPPkSi1EPDL6QLKAll3NNRVUw3vktIx+ghePojrmkgOesD7ujCPlXPjvznJ4o99BFhwPr6i+a0w++ZvfoE/NuClTCP4mf1n4umnw70GqHDv3OfwVk9FeE27SC/TMJIgVJiVc9L3o+mJNUyaIT3o9EyKkfUl+lNsz1KnUyfjycUg=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名                    | 类型     | 说明                                                |
+|:-----------------------|:-------|:--------------------------------------------------|
+| subscriptionOrderId    | String | 商户订阅号(必须保证唯一性)                                    |
+| subscriptionNo         | String | 平台订阅号                                             |
+| appId                  | String | 业务ID                                              |
+| subject                | String | 支付备注                                              |
+| currency               | String | 币种                                                |
+| payType                | String | 订阅固定为**SUBSCRIPTION**                             |
+| inBankCode             | String | 银行编码                                              |
+| amount                 | String | 金额                                                |
+| recurringInterval      | String | 循环周期 W,M,Y                                        |
+| recurringIntervalCount | String | 循环周期间隔                                            |
+| status                 | String | 订阅状态(-1: 订阅异常, 1: 处理中, 2: 订阅成功, 3: 订阅失败, 4: 订阅取消) |
+| deductList             | String | 扣款列表                                              |
+| sign                   | String | 签名                                                |
+
+deductList参数说明
+
+| 参数名       | 类型      | 说明                          |
+|:----------|:--------|:----------------------------|
+| deductNo  | String  | 订阅扣款号                       |
+| amount    | String  | 扣款金额                        |
+| status    | Integer | 扣款状态(0未开始,1扣款中,2扣款成功,3扣款失败) |
+| orderNo   | String  | 支付备注                        |
+| startTime | String  | 订阅扣款周期-起始时间                 |
+| endTime   | String  | 订阅扣款周期-结束时间                 |
+
+### **取消订阅**
+
+**简要描述：**
+
+* 取消订阅
+
+**URL：**
+
+`/subscription/cancel`
+
+**参数：**
+
+| 参数名            | 必选 | 类型     | 说明                              |
+|:---------------|:---|:-------|:--------------------------------|
+| appId          | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| subscriptionNo | 是  | String | 平台订阅号                           |
+| sign           | 是  | String | 签名                              |
+
+#####               
+
+request
+
+```json
+{
+  "appId": 1724,
+  "sign": "gETp00ngwiG0qPVcpldPGEsWRCShOJUbwxWizbL9xGbWCtlBsTPFshQtClLtBCRAdhoVNZAD7UQXjdiAsr74neYu1akj1a6d3sNapGaqoTdBgykXyr1hLVe14AIUhLRg0Mj2elOlMPiWMdccSC+i4G/lfPpJLpS/T08S8qttExTOjML5Rrny5jNsYedjf+Jo3jrPsLcfZFX3QrWA4txPG+x7ZrShXUonOiZMoH6hwU8PcETrC0vpGqTwySJ6siS2AwyPOZElR6nf3geIx7GAllFUuZSyjCvRDE+9JeZl5Y2Ohlm9xcRxqHgMi4YB3jSJcwo7GqGqnPapZnO2GvcbGw==",
+  "subscriptionNo": "4025011311423010028"
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "appId": 1724,
+    "subscriptionNo": "4025011311423010028",
+    "status": "4",
+    "payType": "SUBSCRIPTION",
+    "inBankCode": "CREDIT_CARD",
+    "sign": "lynHvI+9JhVbhwHiinJGlDEq7CVU67WkNUsNURs1wu4bI2/2ePVORGqbVdnaU+L9qV4JN35gM2hHadn4pye/Xk+iztLVSbDh5F9XpKAmLeLCcYj+II0pt4Eo4QPxnYJjmMzbDu6fdWgjgi/go2M75N7Fqv2QgV/tIu1O2pe4/LRPe3l/IODvW+ppvbf5FHk5hO2AaLUX/Fn7H0MIv6kcKAhu7ImBrNpF79VPj9YC1qXghJE11q4aHx7xfDDCn4GiqDJBXbzLtqGP6cS2CVXlyLxGziKDxM1+Bv02XNbjzYKwcaS1VDNfmzlglVH+GHZcgVpiEa3u4ffezu2NN2B4Yg=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名                 | 类型     | 说明                                                |
+|:--------------------|:-------|:--------------------------------------------------|
+| subscriptionOrderId | String | 商户订阅号(必须保证唯一性)                                    |
+| subscriptionNo      | String | 平台订阅号                                             |
+| appId               | String | 业务ID                                              |
+| payType             | String | 订阅固定为**SUBSCRIPTION**                             |
+| inBankCode          | String | 银行编码                                              |
+| status              | String | 订阅状态(-1: 订阅异常, 1: 处理中, 2: 订阅成功, 3: 订阅失败, 4: 订阅取消) |
+| sign                | String | 签名                                                |
+
+### **订阅退款**
+
+**简要描述：**
+
+* 订阅退款
+
+**URL：**
+
+`/subscription/refund/apply`
+
+**参数：**
+
+| 参数名            | 必选 | 类型     | 说明                              |
+|:---------------|:---|:-------|:--------------------------------|
+| appId          | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| subscriptionNo | 是  | String | 平台订阅号                           |
+| orderNo        | 是  | String | 平台订单号                           |
+| sign           | 是  | String | 签名                              |
+
+request
+
+```json
+{
+  "appId": 1091,
+  "subscriptionNo": "4025050711174217272",
+  "orderNo": "2025050711174213012",
+  "sign": "Zs9W0md9b+z5zdswnr5ItJio+TU8xzXe/2CXjEUY7bA9y56fECE54xtPIq70agEChhc/b06OtHHASojuYW55TmTAeFIgQMBT5hrlC+m5jf845OBs2KmG+RRODn3hwp6bjTnnkg37mueRvs+1pXEU7DbucYmlRrRmyOywpf+t3RHjU+5qrnK9Bw6RDwT5LtfhHIMCYQA3mLhHlJkSN5oQq1j5F0xQjy51A8Gp6e1Sp2ZeHDr1SsPsh8K7XN2kxDyenpDhhFRU2tZkIYRJFYyrwFfUsCtg7t6V8dzwHDGrU8EuCC1CGcmn/sQ1FYk0V3FnVmiL5FW1eBPgWdahtxWolg=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "appId": 1091,
+    "subscriptionNo": "4025050711174217272",
+    "orderNo": "2025050711174213012",
+    "refundNo": "2525050711193210376",
+    "sign": "fseIFahsO8jttM7T3hNnmJiLmEBr4mRlcM/two4SeODZ262+T3nnymNEVMRyvQwDRp9OULBrQlD7ZQI6T9M7ub0qni3bjv/cF1cY/LE4VGhR3rrAnBr30JFBQlcpLzqtxrPokgdhUoP5P5lbhSCnBl9s5mVFIhGDeJArZ76rG1LfoFgw3osZdk5D6GcdIjNYOn1QvucK2TZeJiEVxGk0fwAJMGTxknqBRU1XttX1OPILHs8U1sF5RL7aDG5N1Oarxd6CiLCvyHE242RKgvdN9GYiVjXNHjoO+M1VmxFFlMzryEA7d2d0cHygf0PjuaiOiKDQ98Kyy7fmj1VuA4WiHg=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名            | 类型     | 说明    |
+|:---------------|:-------|:------|
+| orderNo        | String | 平台订单号 |
+| subscriptionNo | String | 平台订阅号 |
+| appId          | String | 业务ID  |
+| refundNo       | String | 退款单号  |
+| sign           | String | 签名    |
+
+## **2.异步通知**
+
+**简要描述：**
+
+* **当客户订阅状态发生变化或订阅周期扣款，我方会推送回调通知**
+
+**URL：`贵方提供`**
+
+订阅状态变更回调参数：
+
+| 参数名                 | 类型   | 说明                                                                      |
+| :--------------------- | :----- | :------------------------------------------------------------------------ |
+| type                   | String | 固定值 SUBSCRIPTION                                                       |
+| appId                  | Long   | 业务ID                                                                    |
+| currency               | String | 币种                                                                      |
+| subscriptionOrderId    | String | 商户订阅号                                                                |
+| subscriptionNo         | String | 平台订阅号                                                                |
+| status                 | Integer | 订阅状态(-1: 订阅异常, 1: 处理中, 2: 订阅成功, 3: 订阅失败, 4: 订阅取消)  |
+| recurringInterval      | String | 循环周期 W,M,Y                                                            |
+| recurringIntervalCount | String | 循环周期间隔                                                              |
+| subject                | String | 订阅标题                                                                  |
+| sign                   | String | 签名，<font color='red'>（需要使用币种对应的业务密钥信息进行验签）</font> |
+
+订阅扣款回调参数：
+
+| 参数名                 | 类型      | 说明                                                |
+|:--------------------|:--------|:--------------------------------------------------|
+| type                | String  | 固定值 SUBSCRIPTIONS_DEDUCT                          |
+| appId               | Long    | 业务ID                                              |
+| currency            | String  | 币种                                                |
+| subscriptionOrderId | String  | 商户订阅号                                             |
+| subscriptionNo      | String  | 平台订阅号                                             |
+| deductNo            | String  | 订阅扣款号                                             |
+| orderNo             | String  | 扣款订单号                                             |
+| amount              | String  | 本次扣款金额                                            |
+| status              | Integer | 扣款状态(0:未开始,1:扣款中,2:扣款成功,3:扣款失败)                   |
+| startTime           | String  | 订阅周期扣款-起始时间 格式: yyyy-MM-dd HH:mm:ss               |
+| endTime             | String  | 订阅周期扣款-结束时间 格式: yyyy-MM-dd HH:mm:ss               |
+| sign                | String  | 签名，<font color='red'>（需要使用币种对应的业务密钥信息进行验签）</font> |
+
+说明
+
+收到回到通知之后,请在响应体中返回**SUCCESS** (**大写**)，不需要前后引号
+
+## 3.测试卡号
+
+:::warning
+**只能在测试环境使用**
+:::
+
+#### 模拟成功支付
+
+使用以下测试卡号，输入任意 CVC（3位数字）和有效期（未来日期）来模拟支付成功：
+
+- 卡号 1：4242424242424242
+
+#### 模拟支付失败
+
+使用以下测试卡号、无效数据来模拟支付失败：
+
+- 卡号 1：4000000000009995
+- 无效月份：13
+- 无效 CVV：99
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

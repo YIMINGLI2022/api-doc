@@ -1,0 +1,1032 @@
+---
+title: 菲律宾支付接口
+permalink: /api/version2/Philippines/
+---
+
+# **菲律宾支付接口**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+:::warning
+**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
+:::
+
+### **限额**
+
+| 交易类型 | 限额(单位：PHP) |
+|:-----|------------|
+| 代收   | 100-50000  |
+| 代付   | 1-50000    |
+
+## **代收API**
+
+### **代收申请**
+
+**简要描述：**
+
+* 创建代收订单
+
+**URL：`/php/collect/apply`**
+说明：appId需使用菲律宾比索对应的，用户支付成功后增加菲律宾比索余额
+
+**参数：**
+
+| 参数名             | 必选 | 类型     | 说明                                                                                        |
+|:----------------|:---|:-------|:------------------------------------------------------------------------------------------|
+| appId           | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                           |
+| orderId         | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                                    |
+| name            | 是  | String | 收款人姓名(收款人姓名格式:英文大小写且允许有空格,1-30位,"firstName middleName lastName" (middleName非必填,特殊字符支持\!-) |
+| phone           | 是  | String | 真实手机号(格式：09 开头，纯数字, 共11位)，，符合格式即可                                                         |
+| email           | 是  | String | 真实电子邮件                                                                                    |
+| amount          | 是  | String | 交易金额(单位：₱，精确到小数点后两位；禁止添加标点符号，例如：”,”） 范围:50-49999                                          |
+| payType         | 是  | String | 交易类型                                                                                      |
+| inBankCode      | 是  | String | [支付方式](#收款编码)                                                                             |
+| callBackUrl     | 是  | String | 用户支付成功后跳转地址                                                                               |
+| callBackFailUrl | 是  | String | 用户支付失败后跳转地址                                                                               
+| notifyUrl       | 否  | String | 回调地址                                                                                      |
+| subject         | 否  | String | 支付备注                                                                                      |
+| body            | 否  | String | 备注详情                                                                                      |
+| partnerUserId   | 是  | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。               |
+| sign            | 是  | String | 签名                                                                                        |
+
+request
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M233323000059",
+  "amount": "300",
+  "phone": "09230219312",
+  "email": "23423@qq.com",
+  "name": "test",
+  "inBankCode": "PH_QRPH_DYNAMIC",
+  "payType": "QR",
+  "partnerUserId": "149597870",
+  "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M233323000059",
+    "orderNo": "6023071013539074",
+    "payUrl": "https://a.api-uat.php.com/1L9zQS2",
+    "bankCode": "GCASH_STATIC_VA",
+    "bankNo": "PC0007I10000035",
+    "qrCode": "00020101021228760011ph.ppmi.p2m0111OPDVPHM1XXX0315777148000000017041652948137245442930503001520460165303608540810000.php Of Mandalu62310010ph.allbank05062110000803***88310012ph.ppmi.qrph0111OPDVPHM1XXX63042763",
+    "sign": "YEoA8Y2JzQFGVzwJSqmemm1Kfv/bfyIfCqv2dp7RNzT5B72AQvdD+nt2nR4sL1HWscvmNHyVt5ovAi7MMhy3ziih/sMph+wPx4YjH3W1h5DyBvSlWvaKfKrK5ViomZ0pPYWydwRHnnRnicxToHK9S6qtSy7Q73O0hdz4hJ9p41Th3ycBl2Q9SeqSZYSY1ohcPDhdyRf2y0prb8rHgpBKzxZ5BKX/1bsE9OmsSEHAEYT8OGgko6aNe8XPAhr4G48cpWTftvnGQuzh0O65nuZRI/PF+Axt2zJCVbFHDDSREI9NlAT82ebDqhlVdxQzKE67D1nxgjb3dPmDUYHOBpmwxQ=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名      | 类型     | 说明                 |
+|:---------|:-------|:-------------------|
+| orderId  | String | 商户订单号(必须保证唯一性)     |
+| orderNo  | String | 平台订单号              |
+| payUrl   | String | 支付链接               |
+| bankNo   | String | 还款卡号（VA）           |
+| bankCode | String | 通道Code(VA)         |
+| qrCode   | String | 二维码内容-可自行生成二维码(QR) |
+| sign     | String | 签名                 |
+
+### **代收查询**
+
+**简要描述：**
+
+* 创建代付订单
+* 当“payType=PAYMENT\_GATEWAY” 时同步返回orderNo可以直接查询
+* 其他支付方式异步通知后，通过orderNo查询二次确认状态
+
+**URL：`/php/collect/query`**
+
+**参数：**
+
+| 参数名     | 必选 | 类型     | 说明                              |
+|:--------|:---|:-------|:--------------------------------|
+| appId   | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| orderId | 是  | String | 商户订单号                           |
+| orderNo | 否  | String | 平台订单号（响应快）                      |
+| sign    | 是  | String | 签名                              |
+
+request
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M22222000028",
+  "sign": "EmyJGm3ELzG4FsOd0Krs9ncbSjo4oTGuXWML+7djYla3+VAwd9wS17z38p/7U2ZAjroO04XrE7YXcB1o76Dtyipj3h3bJzs7FYma1QNkMUdt9hh7m8U6hMsMQX7vIWHtXNwz4pbTSC75+kQWXaCew7KoE6LXECdJU8AISgNgeki2TK9R0pCfshr0Z2SZBPeuT6OvIH5LdmqgdZhuqnffGU2qnXk4KMkO848e6/WALLBR+LE1wyKHfPnYVcuKSMVYxkvKyyIL5JIPEgW0o5bh4RCbaUn3NZtyYwrU1uQ3ZDFRThm9j6XAQP+LBlmq3nOePqBtp/VDVarRaV+7FbQg3A=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M22222000028",
+    "orderNo": "6023042811314347",
+    "amount": "50000.00",
+    "actualAmount": "0.00",
+    "fee": "0.00",
+    "status": 1,
+    "sign": "fP433ygWVDLVGxYkVnIJj7riGq0U3vyVX+MbBAImxfGLZkZcEAHVEoVYuULZSmXAAXKRSyd67WlDNm+24pougM54ofAoH4HMtCL2tfCoBReFyz3z02AGKkrKE2xWhSpWoqfQoBvzwuN5iGMMu0s9Q1YvqiwJ8WDVIENnmiIyD8qDJN7caHTW2US14/faG+69AvnuIgJ/nu7/jogOlgEYdZdVYU7gcRDE+d47KjlFGswQkJ/h/uzV7cWtUqrtOO7ZnZ3/z33Xx8awokX36QoYcPSWAU0h+Ij9O9402HNhm1eTbYcLU0uI/z8xCAtyAI/tTyiFijpiNlxUKQj+zKsILw=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名          | 类型      | 说明                                                       |
+|:-------------|:--------|:---------------------------------------------------------|
+| orderId      | String  | 商户订单号(必须保证唯一性)                                           |
+| orderNo      | String  | 平台订单号                                                    |
+| amount       | String  | 交易金额                                                     |
+| actualAmount | String  | 收到金额                                                     |
+| fee          | String  | 手续费                                                      |
+| status       | Integer | 状态(0未开始,1收款中,2收款成功3:收款失败,4:部分收款,5:超额收款, \-1异常待确认)        |
+| payTime      | String  | 支付成功时间（当status=2,4,5时有值）(菲律宾时间), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg     | String  | 失败原因（当status=3时有值）                                       |
+| sign         | String  | 签名                                                       |
+
+### **支付方式**<a id="inBankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>币种</b></td>
+        <td><b>支付类型(payType)</b></td>
+        <td><b>支付编码(inBankCode)</b></td>
+        <td><b>限额</b></td>
+        <td><b>状态</b></td>
+        <td><b>说明</b></td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>QR</td>
+        <td>PH_QRPH_DYNAMIC</td>
+        <td>100-50000</td>
+        <td>可用</td>
+        <td>QRPH动态码</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>GCASH_QR</td>
+        <td>100-50000</td>
+        <td>可用</td>
+        <td>Gcash钱包(唤醒)</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>GCASH_URL</td>
+        <td>100-50000</td>
+        <td>可用</td>
+        <td>Gcash钱包(直连)</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>GRPY_URL</td>
+        <td>100-50000</td>
+        <td>可用</td>
+        <td>GrabPay钱包</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>PAYMAYA_URL</td>
+        <td>100-50000</td>
+        <td>可用</td>
+        <td>PayMaya钱包</td>
+    </tr>
+</table>
+
+## **代付API**
+
+### **代付申请**
+
+**简要描述：**
+
+* 创建代付订单
+
+**URL：`/php/pay/apply`**
+
+**参数：**
+
+| 参数名           | 必选 | 类型     | 说明                                                                                             |
+|:--------------|:---|:-------|:-----------------------------------------------------------------------------------------------|
+| appId         | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                                |
+| orderId       | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                                         |
+| amount        | 是  | String | 交易金额（单位：₱，精确到小数点后两位；禁止添加标点符号，例如：”,”）                                                           |
+| accountType   | 是  | String | 账户类型：EWALLET（电子钱包） , BANK\_ACCOUNT（银行）                                                         |
+| bankCode      | 是  | String | [钱包编码和银行代码](#钱包编码和银行代码)                                                                        |
+| accountNo     | 是  | String | 用户银行/钱包账号                                                                                      |
+| name          | 是  | String | 收款人姓名(收款人姓名 格式：英文大小写且允许有空格，1-30位,"firstName middleName lastName" (middleName 非必填, 特殊字符支持 '.-)) |
+| phone         | 是  | String | 真实手机号（格式：09 开头，纯数字, 共11位）                                                                      |
+| email         | 是  | String | 真实电子邮件                                                                                         |
+| notifyUrl     | 否  | String | 回调地址                                                                                           |
+| subject       | 否  | String | 支付备注（交易标题，商品名称，支付原因）                                                                           |
+| body          | 否  | String | 备注详情                                                                                           |
+| partnerUserId | 是  | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。                    |
+| sign          | 是  | String | 签名                                                                                             |
+
+#####  
+
+request（accountType为BANK\_ACCOUNT类型时）
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M100000450012",
+  "amount": "500",
+  "accountType": "BANK_ACCOUNT",
+  "bankCode": "BDO",
+  "accountNo": "09876543210",
+  "name": "john doe",
+  "phone": "09876543210",
+  "email": "johndoe@cashfree.com",
+  "subject": "iphone13",
+  "body": "ProMotion technology with adaptive refresh rates up to 120Hz",
+  "partnerUserId": "149597870",
+  "sign": "I1PeK3eJOVsFFNowxVRqMXpeWm1lr/BcRpBi8WsW4wVo1+5CC3JsrFq/m/L2O69NzKHvtDWi4zia3DL3dPut0yMyUyqL91LNCSaeISbGsQPlhEsQpyTOryS/RKOfsrn2Xo37SCF/phAvndOk2jwwGwqM5xLz1ms9Ukl85wv27QFNrXIMxK2p18oe7MpMYrgf+xvEBE/VqCtKMtN9pO449wWwXzHWNPbZ76s4pAvKwRE9yXQDr7Iw14Dktcnl1FoLM4gWM/obkO+mz6SyAGDuXhVh/+OD/IGNiCyTCNq6ciQY28UnCFV6ZIP40gxsFhfBJKbK+Raw7y1Bh912ifYfug=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M100000450013",
+    "orderNo": "3023062014149637",
+    "sign": "LmhUnkw5j0pMiimsG8rKwdNNZGvXH5MpSmD6mdHZwq1SQwuK5BohmdEoqKB/jkMk28o3da4Cxh6Q+tW97+yTCemRrF+dMaHA73rpOeUuujKQl/UcFvJuMhfLBa2tp09L71NzoBqpPD6aXf37mYAz8E1HmERwFPpac5FVxIYanHG8cqmMLJYsVmHTSxWavgWU03ys9UczBePkBiR8sl2FSOhFABB0wAP28lswrV/ABS68IsLKtyd1fyI3GBfSbIK5nDEEnlE+EdElFdLs9taAxJImeVF1x4eT47+bkPJ2qS8z3K8QGzKLF3W+8SiRZGfSwDTsLKH+2Vycvy5auRl+ag=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名     | 必选     | 类型             |
+|:--------|:-------|:---------------|
+| orderId | String | 商户订单号(必须保证唯一性) |
+| orderNo | String | 平台订单号          |
+| sign    | String | 签名             |
+
+### **代付查询**
+
+**简要描述：**
+
+* 创建代付订单
+
+**URL：`/php/pay/query`**
+
+**参数：**
+
+| 参数名     | 必选 | 类型     | 说明                              |
+|:--------|:---|:-------|:--------------------------------|
+| appId   | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| orderId | 是  | String | 商户订单号                           |
+| orderNo | 否  | String | 平台订单号（响应快）                      |
+| sign    | 是  | String | 签名                              |
+
+request
+
+```json
+{
+  "appId": 1000,
+  "orderId": "M1234567111",
+  "orderNo": "3022111516571436",
+  "sign": "ZxkVZL+GAyv0VhvWn4IvuYahTzxgQuthkuV2ONWiqIfIDb2avvHlFOUJVzqZi1q8CPHXZm1ltanRTRVTxfsuftLvGeDioUHglWt46/RU6c1OPznpLGsZ35Q3n5tW2y1EnOsxPynXBFLuDQy+aZ3l9u6AQ30T0zQexMGT+IxuFkmUp02g/6juaHa5ZgNMv7lN67ixIp162wrM7OJuaOif872QijSceRdZhzaMGImAwB0D4MosRV4WMBOKkwgPdmS7GuZN66YUidXk3wTGqX3MYRw6M0kj4eNegSUwPXvp4q4p0KO8Y3xUMld54GY2ApX3WN3CBtC/vpJqEszjGBbbGg=="
+}
+```
+
+response — 订单失败
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M1234567111",
+    "orderNo": "3022111516571436",
+    "amount": "100000.00",
+    "fee": "0.00",
+    "status": 3,
+    "errorMsg": "Đơn hàng không tồn tại",
+    "sign": "KKuvCl0SuNANJs+l2ogDaJm8pmV+Hi+Xa7q27vJ6D1Ehs4aOp13kRbITfJAhczh3T81BE9qwHeJaYwf+r0EypKM9TL6pMwfG8Az4gRy1D57wiUaVjl2PWcvbEqrn1hL0b+btkjvAM9I+CcSv+wuOW3/uku17Ws3FhgJLj9sFsQUBAPjDO+758VnwBytCOLBmljLBXyKgNgpmFQ1/DNkqWl0UNzyLK45Zw3yf5NiwhEFbvW0jlOWlfu/ql4hluISUQG573jEoFCBEnQLb2tQoRZj1QYNRCXPf5lbej0vzqbEwvR9h+ZOf255t1MocJkdIe463DTV5U3KZdVT87HMagw=="
+  }
+}
+```
+
+response — 订单成功
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M1234567112",
+    "orderNo": "3022111517401574",
+    "amount": "100000.00",
+    "fee": "1003.00",
+    "status": 2,
+    "payTime": "2024-03-01 23:59:59",
+    "sign": "khPtOmGq+cpKX0HFAI/lbP0dx4oVyNAnL5oLsdmhDJdASlQm0yg5I3o+MhImYggEsL6c2bo5fP29t54OZFqSdQDfIuNDvGbAMAr4mRBxc0hoHLkBLyyagfVPBLyQA1JY8XV3ZL4ySzQ3ZQnMCfrh2K39ueUuz6HpZ03Hj0KYijVRCXAZaio/L5jfLBT12QXmvIfAHa8s/k9flhK05ENHPep3zjj/MZGOEaX7jkEJLfjK0duypDCa61BRQjM+oePOdVsgleIl1Yf98UAxMDZ/A3912KFHEb+/jvmdnulNbiJFyuT1fEe+j2teUgw3vFsZAtwNWAgxhC7UO+N0Q5z4EA=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名      | 类型      | 说明                                                   |
+|:---------|:--------|:-----------------------------------------------------|
+| orderId  | String  | 商户订单号(必须保证唯一性)                                       |
+| orderNo  | String  | 平台订单号                                                |
+| amount   | String  | 交易金额                                                 |
+| fee      | String  | 手续费                                                  |
+| status   | Integer | 状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)               |
+| payTime  | String  | 支付成功时间（当status=2时有值）(菲律宾时间), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg | String  | 支付失败原因（当status=3时有值）                                 |
+| sign     | String  | 签名                                                   |
+
+### **支付方式**
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1050px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>币种</b></td>
+        <td><b>支付类型(accountType)</b></td>
+        <td><b>支付编码(bankCode)</b></td>
+        <td><b>限额</b></td>
+        <td><b>状态</b></td>
+        <td><b>说明</b></td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>EWALLET</td>
+        <td>GCASH</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Gcash钱包</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>EWALLET</td>
+        <td>COINS</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Coins钱包</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>EWALLET</td>
+        <td>PAYMAYA</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>PayMaya钱包</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>EWALLET</td>
+        <td>GRABPAY</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>GrabPay钱包</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>EWALLET</td>
+        <td>SHOPEE</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>ShopeePay钱包</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>EWALLET</td>
+        <td>OMNIPAY</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>OmniPay钱包</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ABP</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>AllBank Inc.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ALIP</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Alipay Philippines Inc</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>AUB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Asia United Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BDO</td>
+        <td>1-50000</td>
+    <td>可用</td>
+    <td>Banco de Oro</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BMB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Bangko Mabuhay</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BOC</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Bank Of Commerce</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BPI</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Bank of the Philippine Islands</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BPIDB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>BPI Direct BanKO, Inc., A Savings Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BRB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Binangonan Rural Bank (BRBDigital)</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CBC</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>China Banking Corporation(China Bank)</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CBS</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>China Bank Savings, Inc</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CCI</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>CIS BAYAD CENTER INC</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CEBRUR</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Cebuana Lhuillier Rural Bank, Inc.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CIMB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>CIMB Bank Philippines, Inc.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CMG</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>CAMALIG BANK</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CRB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>COMMUNITY RURAL BANK OF ROMBLON, INC</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CRD</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>CARD Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CSB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Citystate Savings Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CSI</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>CARD SME BANK INC</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CTBC</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Ctbc Bank (Philippines) Corp.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>DBI</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Dungganon Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>DBP</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Development Bank of the Philippines</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>DCI</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>DUMAGUETE CITY DEVELOPMENT BANK, INC.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>DCP</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>DCPay Philippines Inc.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>DOP</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>DEVT. BANK OF THE PHILIPPINES</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>EQB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Equicom Savings Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>EWB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>East-West Banking Corporation</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>EWR</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>East West Rural Bank (Green Bank)</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>GTB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>GoTyme Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>IBI</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>ISLA Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ING</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>ING Bank N.V.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>JPM</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>JP Morgan Chase Bank, N.A.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>LBP</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Land Bank of the Philippines</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>LSB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>LEGAZPI SAVINGS BANK INC</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>LUL</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>LULU FINANCIAL SERVICES (PHILS), INC.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MBP</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Maybank Philippines</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MCC</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>MINDANAO CONSOLIDATED COOPERATIVE</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MET</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Metrobank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MSB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Malayan Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ONB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>One Network Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>OWN</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>ownbank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PAP</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>PalawanPay</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PAR</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Partner Rural Bank(Cotabato) Inc.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PBB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Philippine Business Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PBCOM</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Philippine Bank of Communications</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PNB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Philippine National Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PNS</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>PNB Savings Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PRB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Producers Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PSB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Philippine Savings Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PTC</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Philippine Trust Company</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PVB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Philippine Veterans Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>QCB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Queen City Development Bank, Inc.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>QRB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Quezon Capital Rural Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>RBG</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>RURAL BANK OF GUINOBATAN, INC.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>RCBC</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Rizal Commercial Banking Corp. (RCBC)</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>RSB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Robinsons Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>RSBI</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Rcbc Savings Bank Inc.</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SBA</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Sterling Bank Of Asia</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SBC</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Security Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SEB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>SEABANK PH</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SPY</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Starpay Corporation</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SSB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Sun Savings Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>TSB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>THE STANDARD CHARTERED BANK</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>TYC</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Tayocash</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>UBP</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Union Bank Of The Philippines</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>UCBSB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>UCBP Savings bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>UCPB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>United Coconut Planters Bank (UCPB)</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>USS</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>USSC Money Services</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>WDB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Wealth Development Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>YUANSB</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>Yuanta Savings Bank</td>
+    </tr>
+    <tr>
+        <td>PHP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ZTI</td>
+        <td>1-50000</td>
+        <td>可用</td>
+        <td>ZYBI TECH, INC.</td>
+    </tr>
+</table>
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}
+

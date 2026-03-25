@@ -1,0 +1,172 @@
+---
+title: 全球收银台支付接口
+permalink: /api/version2/GlobalCashier/
+---
+
+# **全球收银台支付接口**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+:::warning
+**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
+:::
+
+**如有需要，可联系<font color="red">HaiPay</font>将所有的业务密钥配置信息改为同一套**
+
+## **代收API**
+
+### **代收申请**
+
+**简要描述：**
+
+* 创建代收订单
+
+**URL：**
+
+`/global/cashier/collect/apply`
+说明：appId需使用收银台对应的，用户支付成功后增加[currency]对应的余额
+
+**参数：**
+
+| 参数名           | 必选 | 类型     | 说明                                                                          |
+|:--------------|:---|:-------|:----------------------------------------------------------------------------|
+| appId         | 是  | Long   | 业务ID（后台获取，请使用收银台专属APPID，币种为收银台(CASHIER)）                                   |
+| orderId       | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                      |
+| name          | 是  | String | 用户姓名，推荐使用真实姓名，格式：包含firstName和lastName，以空格分割的，示例：Donald John Trump                                                                        |
+| email         | 是  | String | 真实电子邮件                                                                        |
+| amount        | 是  | String | 交易金额（精确到小数点后两位；禁止添加标点符号，例如：”,”）                                             |
+| currency      | 是  | String | 交易金额对应的币种，支持：USD（0.99美元起步），其他币种参考[地区编码](#地区编码)                              |
+| callBackUrl   | 是  | String |  用户支付成功后跳转地址                                                      |
+| callBackFailUrl | 是   | String | 用户支付失败后跳转地址                                                                             
+| notifyUrl     | 否  | String | 回调地址                                                                        |
+| subject       | 是  | String | 支付备注（交易标题，商品名称，支付原因等）                                                       |
+| body          | 否  | String | 备注详情                                                                        |
+| region        | 是  | String | [地区编码](#地区编码)，使用两位编码即可                                                      |
+| partnerUserId | 是  | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。 |
+| sign          | 是  | String | 签名                                                                          |
+
+返回data参数说明
+
+| 参数名     | 类型     | 说明    |
+|:--------|:-------|:------|
+| orderId | String | 商户订单号 |
+| orderNo | String | 平台订单号 |
+| payUrl  | String | 支付链接  |
+| sign    | String | 签名    |
+
+### **代收查询**
+
+**简要描述：**
+
+* 代收订单查询
+
+**URL：**
+
+`/global/cashier/collect/query`
+
+**参数：**
+
+| 参数名     | 必选 | 类型     | 说明                                        |
+|:--------|:---|:-------|:------------------------------------------|
+| appId   | 是  | Long   | 业务ID（后台获取，请使用收银台专属APPID，币种为收银台(CASHIER)） |
+| orderId | 是  | String | 商户订单号                                     |
+| orderNo | 是  | String | 平台订单号                                     |
+| sign    | 是  | String | 签名                                        |
+
+返回data参数说明
+
+| 参数名          | 类型      | 说明                                                  |
+|:-------------|:--------|:----------------------------------------------------|
+| orderId      | String  | 商户订单号                                               |
+| orderNo      | String  | 平台订单号                                               |
+| amount       | String  | 订单金额                                                |
+| actualAmount | String  | 实收金额                                                |
+| fee          | String  | 手续费                                                 |
+| status       | Integer | 状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)              |
+| payTime      | String  | 支付成功时间（当status=2时有值）(本地时间), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg     | String  | 支付失败原因（当status=3时有值）                                |
+| sign         | String  | 签名                                                  |
+
+### **代收查询v2**
+
+**简要描述：**
+
+* 代收订单查询
+
+**URL：**
+
+`/global/cashier/collect/query/v2`
+
+**参数：**
+
+| 参数名     | 必选 | 类型     | 说明                                        |
+|:--------|:---|:-------|:------------------------------------------|
+| appId   | 是  | Long   | 业务ID（后台获取，请使用收银台专属APPID，币种为收银台(CASHIER)） |
+| orderId | 是  | String | 商户订单号                                     |
+| orderNo | 是  | String | 平台订单号                                     |
+| sign    | 是  | String | 签名                                        |
+
+返回data参数说明
+
+| 参数名          | 类型      | 说明                                                  |
+|:-------------|:--------|:----------------------------------------------------|
+| orderId      | String  | 商户订单号                                               |
+| orderNo      | String  | 平台订单号                                               |
+| currency     | String  | 币种(选择具体支付方式后有值)                                     |
+| amount       | String  | 订单金额                                                |
+| actualAmount | String  | 实收金额                                                |
+| fee          | String  | 手续费                                                 |
+| status       | Integer | 状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)              |
+| payTime      | String  | 支付成功时间（当status=2时有值）(本地时间), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg     | String  | 支付失败原因（当status=3时有值）                                |
+| originalCurrency     | String  | 实际支付币种                                |
+| floatExchangeRate     | String  | 币种转换涉及的汇率                                |
+| originalAmount     | String  | 实际支付金额                                |
+| sign         | String  | 签名                                                  |
+
+### 地区编码
+
+参考：[ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+
+| 编码 | 地区名称                 | 支持币种 |
+|:---|:---------------------|:-----|
+| AE | United Arab Emirates | AED  |
+| AT | Austria              | EUR  |
+| BE | Belgium              | EUR  |
+| BH | Bahrain              | BHD  |
+| BR | Brazil               | BRL  |
+| EG | Egypt                | EGP  |
+| GB | United Kingdom       | GBP  |
+| HK | Hong Kong            | HKD，USD  |
+| ID | Indonesia            | IDR，USD  |
+| IN | India                | INR  |
+| JP | Japan                | JPY，USD  |
+| KR | South Korea          | KRW，USD  |
+| KW | Kuwait               | KWD  |
+| MY | Malaysia             | MYR，USD  |
+| NL | Netherlands          | EUR  |
+| OM | Oman                 | OMR  |
+| PH | Philippines          | PHP  |
+| PK | Pakistan             | PKR  |
+| PL | Poland               | EUR  |
+| QA | Qatar                | QAR  |
+| SA | Saudi Arabia         | SAR  |
+| SG | Singapore            | SGD，USD  |
+| TH | Thailand             | THB，USD  |
+| TR | Türkiye              | TRY  |
+| TW | Taiwan               | TWD，USD  |
+| US | United States        | USD  |
+| VN | Vietnam              | VND，USD  |
+| IT | Italy                | EUR  |
+| EU | European Union       | EUR  |
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div>
+ */}

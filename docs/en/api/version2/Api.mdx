@@ -1,0 +1,331 @@
+---
+title: Payment API
+permalink: /en/api/version2/Api/
+---
+
+# **Payment API**
+
+{/*
+    <div class='page-api'>
+    <div class='page-api-content'>
+    <div class='page-api-left'>
+*/}
+
+
+:::warning
+**Before reading this API documentation, be sure to check the [**API Description**](/en/docs/guide/api_description_guide.md)**
+:::
+
+## **Collection API**
+
+### **Collection Application**
+
+**Brief Description:**
+
+* Creates a collection order.
+
+**URL:** `/{currency}/collect/apply`
+Note: appId, amount, and the final settlement amount all correspond to {currency}
+
+**Path Parameters:**
+
+| Parameter Name | Required | Type   | Description     |
+| :------------- | :------- | :----- | :-------------- |
+| currency       | Yes      | String | Order Currency  |
+
+**Parameters:**
+
+| Parameter Name  | Required | Type   | Description                                                                                                                           |
+| :-------------- | :------- | :----- | :----------------------------------------------------------------------------------------------------------------------------------- |
+| appId           | Yes      | Long   | Business ID (obtained from the backend, corresponds to the currency of the order)                                                                 |
+| orderId         | Yes      | String | Merchant order number (must be unique, length not exceeding 48)                                                                                  |
+| name            | Yes      | String | User name, recommended to use real name, format: include firstName and lastName, separated by space, example: Donald John Trump        |
+| phone           | Yes      | String | Real mobile number                                                                                                                       |
+| email           | Yes      | String | Real email address                                                                                                                       |
+| amount          | Yes      | String | Transaction amount (Unit: yuan)                                                                                                            |
+| currency        | No       | String | Currency (specify the currency of the transaction amount when placing the order; if it differs from the order currency, an exchange rate conversion will occur, overriding the transaction amount)    |
+| payType         | Yes      | String | Transaction type                                                                                                                         |
+| inBankCode      | Yes      | String | Payment method                                                                                                                          |
+| callBackUrl     | Yes      | String | Redirect URL after successful payment                                                               |
+| callBackFailUrl | Yes      | String | Redirect URL after failed payment                                                               |
+| notifyUrl       | No       | String | Callback URL                                                                                                                          |
+| subject         | Yes      | String | Payment memo (transaction title, product name, payment reason)                                                                     |
+| body            | No       | String | Remarks details                                                                                                                          |
+| partnerUserId   | Yes      | String | Unique user identifier (e.g., userId), used for risk control system, must be valid, otherwise it will affect the transaction. Format: digits, letters, or symbols -~!@#$%&*()_. |
+| sign            | Yes      | String | Signature                                                                                                                            |
+
+**Vietnam:**
+
+| Parameter Name| Required | Type   | Description                                         |
+| :------------ | :------- | :----- | :--------------------------------------------- |
+| outBankNo     | No       | String | Payer's bank card number (required when payType is PAYMENT_GATEWAY) |
+| outBankCode   | Yes      | String | Collection code (same as inBankCode)                     |
+
+**Pakistan HBL_KONNECT/ALFA:**
+
+| Parameter Name| Required | Type   | Description        |
+| :------------ | :------- | :----- | :----------------- |
+| idCard        | Yes      | String | ID card number     |
+
+**Middle East:**
+
+| Parameter Name  | Required | Type   | Description             |
+| :-------------- | :------- | :----- | :---------------------- |
+| goodsName       | Yes      | String | Product name            |
+| goodsQuantity   | Yes      | String | Product quantity        |
+| goodsPrice      | Yes      | String | Product unit price      |
+| goodsSku        | Yes      | String | Product unique identifier |
+| goodsAvatar     | Yes      | String | Product image (https://) |
+| platform        | Yes      | String | Platform name           |
+
+**Returned data parameter description:**
+
+| Parameter Name  | Type   | Description                                                                                       |
+| :-------------- | :----- |:--------------------------------------------------------------------------------------------------|
+| orderId         | String | Merchant order number                                                                             |
+| orderNo         | String | Platform order number                                                                             |
+| payUrl          | String | Payment link                                                                                      |
+| qrCode          | String | QR code content (present when payType is QR)                                                      |
+| amount          | String | Order amount (present when the order currency differs from the transaction currency)          |
+| exchangeRate    | String | Exchange rate (present when the order currency differs from the transaction currency)         |
+| orderAmount     | String | Original order amount (present when the order currency differs from the transaction currency) |
+| sign            | String | Signature                                                                                         |
+
+**Vietnam:**
+
+| Parameter Name  | Type   | Description                                                          |
+| :-------------- | :----- | :------------------------------------------------------------------- |
+| bankCode        | String | Receiving bank code (may differ from the specified outBankCode at order creation) |
+| bankName        | String | Receiving bank name                                                |
+| bankNo          | String | Receiving card number (present when payType is BANK_TRANSFER)    |
+| bankUserName    | String | Receiver's name (present when payType is BANK_TRANSFER)          |
+| description     | String | Transfer memo (present when payType is BANK_TRANSFER)            |
+
+**Egypt:**
+
+| Parameter Name  | Type   | Description      |
+| :-------------- | :----- | :--------------- |
+| referenceCode   | String | Reference code   |
+| bankNo          | String | Reference code   |
+
+**Indonesia VA:**
+
+| Parameter Name| Type   | Description   |
+| :------------ | :----- | :------------ |
+| bankNo        | String | VA number     |
+
+**Stablecoin:**
+
+| Parameter Name| Type   | Description   |
+| :------------ | :----- | :------------ |
+| bankNo        | String | Chain address |
+
+### **Collection Query**
+
+**Brief Description:**
+
+* After receiving the asynchronous payment notification, you can use this query to re-confirm the status.
+
+**URL:** `/{currency}/collect/query`
+
+#####              
+
+**Path Parameters:**
+
+| Parameter Name | Required | Type   | Description     |
+| :------------- | :------- | :----- | :-------------- |
+| currency       | Yes      | String | Order Currency  |
+
+**Parameters:**
+
+| Parameter Name| Required | Type   | Description                           |
+| :------------ | :------- | :----- | :---------------------------------- |
+| appId         | Yes      | Long   | Business ID (obtained from the backend, corresponds to the order currency) |
+| orderId       | No       | String | Merchant order number (choose one between this and platform order number) |
+| orderNo       | No       | String | Platform order number (choose one between this and merchant order number) |
+| sign          | Yes      | String | Signature                           |
+
+Returned data parameter description
+
+| Parameter Name  | Type   | Description                                                                                        |
+| :-------------- | :----- | :------------------------------------------------------------------------------------------------ |
+| orderId         | String | Merchant order number (must be unique)                                                           |
+| orderNo         | String | Platform order number                                                                                 |
+| amount          | String | Transaction amount                                                                                    |
+| actualAmount    | String | Amount received                                                                                    |
+| fee             | String | Fee                                                                                                 |
+| status          | Integer| Status<br/>0: Not started<br/>1: Collecting<br/>2: Collection successful<br/>3: Collection failed<br/>-1: Abnormal, to be confirmed) |
+| payTime         | String | Payment success time (has a value when status=2)<br/>Format: yyyy-MM-dd HH:mm:ss <br/>Timezone: Timezone of the order currency |
+| errorMsg        | String | Payment failure reason (has a value when status=3)                                               |
+| sign            | String | Signature                                                                                        |
+
+### **Collection Query v2**
+
+**Brief Description:**
+
+* After receiving the asynchronous payment notification, you can use this query to re-confirm the status.
+
+**URL:** `/{currency}/collect/query/v2`
+
+#####              
+
+**Path Parameters:**
+
+| Parameter Name| Required | Type   | Description     |
+| :------------ | :------- | :----- | :-------------- |
+| currency      | Yes      | String | Order Currency  |
+
+**Parameters:**
+
+| Parameter Name| Required | Type   | Description                           |
+| :------------ | :------- | :----- | :---------------------------------- |
+| appId         | Yes      | Long   | Business ID (obtained from the backend, corresponds to the order currency) |
+| orderId       | No       | String | Merchant order number (choose one between this and platform order number) |
+| orderNo       | No       | String | Platform order number (choose one between this and merchant order number) |
+| sign          | Yes      | String | Signature                           |
+
+Returned data parameter description
+
+| Parameter Name    | Type     | Description                                                                                        |
+| :---------------- | :------- | :------------------------------------------------------------------------------------------------ |
+| orderId           | String   | Merchant order number (must be unique)                                                           |
+| orderNo           | String   | Platform order number                                                                                 |
+| currency          | String   | Order currency                                                                                    |
+| amount            | String   | Transaction amount                                                                                    |
+| actualAmount      | String   | Amount received                                                                                    |
+| fee               | String   | Fee                                                                                                 |
+| status            | Integer  | Status<br/>0: Not started<br/>1: Collecting<br/>2: Collection successful<br/>3: Collection failed<br/>-1: Abnormal, to be confirmed) |
+| payTime           | String   | Payment success time (has a value when status=2)<br/>Format: yyyy-MM-dd HH:mm:ss <br/>Timezone: Timezone of the order currency |
+| errorMsg          | String   | Payment failure reason (has a value when status=3)                                               |
+| originalCurrency  | String   | Actual payment currency                                                                          |
+| floatExchangeRate | String   | Exchange rate involved in currency conversion                                                  |
+| originalAmount    | String   | Actual payment amount                                                                               |
+| sign              | String   | Signature                                                                                        |
+
+## **Payout API**
+
+### **Payout Application**
+
+**Brief Description:**
+
+* Creates a payout order.
+
+**URL:** `/{currency}/pay/apply`
+
+**Path Parameters:**
+
+| Parameter Name| Required | Type   | Description     |
+| :------------ | :------- | :----- | :-------------- |
+| currency      | Yes      | String | Order Currency  |
+
+**Parameters:**
+
+| Parameter Name  | Required | Type   | Description                                                                                                                           |
+| :-------------- | :------- | :----- | :----------------------------------------------------------------------------------------------------------------------------------- |
+| appId           | Yes      | Long   | Business ID (obtained from the backend, corresponds to the currency of the order)                                                                 |
+| orderId         | Yes      | String | Merchant order number (must be unique, length not exceeding 48)                                                                                  |
+| amount          | Yes      | String | Transaction amount (Unit: yuan)                                                                                                            |
+| accountType     | Yes      | String | Account type                                                                                                                        |
+| bankCode        | Yes      | String | Bank code                                                                                                                          |
+| accountNo       | Yes      | String | User account number                                                                                                                |
+| name            | Yes      | String | Payee's name                                                                                                                  |
+| phone           | Yes      | String | Real mobile number                                                                                                                    |
+| email           | Yes      | String | Real email address                                                                                                                  |
+| notifyUrl       | No       | String | Callback URL                                                                                                                        |
+| subject         | No       | String | Payment memo (transaction title, product name, payment reason)                                                                 |
+| body            | No       | String | Remarks details                                                                                                                        |
+| partnerUserId   | Yes      | String | Unique user identifier (e.g., userId), used for risk control system, must be valid, otherwise it will affect the transaction. Format: digits, letters, or symbols -~!@#$%&*()_. |
+| sign            | Yes      | String | Signature                                                                                                                         |
+
+**Brazil PIX:**
+
+| Parameter Name  | Required | Type   | Description                 |
+| :-------------- | :------- | :----- | :-------------------------- |
+| identifyType    | Yes      | String | Account type (CPF/PHONE/EMAIL) |
+
+**Turkey Bank:**
+
+| Parameter Name  | Required | Type   | Description                                                                                                                                       |
+| :-------------- | :------- | :----- | :----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| identifyType    | No       | String | Required when bankCode is PAPARA:<br/>PAPARA_NUMBER(Papara ID)<br/>PHONE(real mobile number registered with Papara)<br/>EMAIL(email registered with Papara)<br/>TURKISH_ID(ID card number registered with Papara) |
+
+**Saudi Arabia Bank:**
+
+| Parameter Name  | Required | Type   | Description                                                  |
+| :-------------- | :------- | :----- | :------------------------------------------------------ |
+| ibanAccount     | Yes      | String | IBAN account (SA + 2-digit checksum + 3-digit bank code + 16-digit account number) |
+
+**US ACH:**
+
+| Parameter Name  | Required | Type   | Description               |
+| :-------------- | :------- | :----- | :---------------------- |
+| identifyType    | Yes      | String | Bank routing code       |
+| country         | Yes      | String | Payee's country         |
+| address1        | Yes      | String | Payout address - detailed street |
+| address2        | Yes      | String | Payout address - city   |
+| address3        | Yes      | String | Payout address (province, state) |
+| postalCode      | Yes      | String | Payout postal code      |
+
+**Russia CARRIER_BILLING:**
+
+| Parameter Name| Required | Type   | Description                                                         |
+| :------------ | :------- | :----- | :------------------------------------------------------------- |
+| country       | Yes      | String | Country                                                        |
+| carrier       | Yes      | String | Telecom carrier, supported: megafon, tmobile, beeline, mst, tele2, yota |
+
+Returned data parameter description
+
+| Parameter Name| Required | Type   |
+| :------------ | :------- | :----- |
+| orderId       | String   | Merchant order number |
+| orderNo       | String   | Platform order number |
+| sign          | String   | Signature        |
+
+### **Payout Query**
+
+**Brief Description:**
+
+* After receiving the asynchronous payment notification, you can use this query to re-confirm the status.
+
+**URL:** `/{currency}/pay/query`
+
+**Path Parameters:**
+
+| Parameter Name| Required | Type   | Description     |
+| :------------ | :------- | :----- | :-------------- |
+| currency      | Yes      | String | Order Currency  |
+
+**Parameters:**
+
+| Parameter Name| Required | Type   | Description                           |
+| :------------ | :------- | :----- | :---------------------------------- |
+| appId         | Yes      | Long   | Business ID (obtained from the backend, corresponds to the order currency) |
+| orderId       | No       | String | Merchant order number (choose one between this and platform order number) |
+| orderNo       | No       | String | Platform order number (choose one between this and merchant order number) |
+| sign          | Yes      | String | Signature                           |
+
+Returned data parameter description
+
+| Parameter Name| Type   | Description                                                                                        |
+| :------------ | :----- | :------------------------------------------------------------------------------------------------ |
+| orderId       | String | Merchant order number (must be unique)                                                           |
+| orderNo       | String | Platform order number                                                                                 |
+| amount        | String | Transaction amount                                                                                    |
+| fee           | String | Fee                                                                                                 |
+| status        | Integer| Order status<br/>0: Not started<br/>1: Payout in progress<br/>2: Payout successful<br/>3: Payout failed<br/>-1: Abnormal, to be confirmed |
+| payTime       | String | Payment success time (has a value when status=2) <br/>Format: yyyy-MM-dd HH:mm:ss <br/>Timezone: Timezone of the order currency |
+| errorMsg      | String | Payment failure reason (has a value when status=3)                                              |
+| sign          | String | Signature                                                                                        |
+
+::: tip
+For all payment methods, request parameters, and limits for different countries/regions and currencies, please refer to the [Payment Method List](/api/version2/bankCode_list/)
+:::
+
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

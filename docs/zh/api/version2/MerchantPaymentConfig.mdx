@@ -1,0 +1,311 @@
+---
+title: 获取商户支付配置
+permalink: /api/version2/MerchantPaymentConfig/
+---
+
+
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+## **1. 接口概述**
+
+* **根据应用ID查询商户的可用支付配置信息，包括支付方式、费率、账期等配置**
+
+**URL：** `/common/payment/config`
+
+**HTTP Method：** `POST`
+
+**Content-Type：** `application/json`
+
+::: tip 注意事项
+> 1. 请求需要进行签名验证，签名算法与其他接口一致
+> 2. tranType和tranCode为可选参数，用于筛选特定类型的支付配置
+> 3. 如果应用没有配置支付产品，返回的configs列表为空
+> 4. 响应数据也会进行签名，签名与其他方法相同，但要注意该接口返回数据存在多级嵌套。
+> 5. 如果传入币种为收银台，则会返回该用户下的所有可用app支付配置信息
+:::
+
+
+## **2. 请求参数**
+
+
+| 参数名      | 必选 | 类型    | 说明                                                  |
+|:---------|:---|:------|:----------------------------------------------------|
+| appId    | 是  | Long   | 业务ID（后台获取）                                          |
+| tranType | 否  | String | 支付类型（可选），如果传入则按支付类型筛选，详见[tranType说明](#trantype支付类型) |
+| tranCode | 否  | String | 交易类型（可选），如果传入则按交易类型筛选，详见[tranCode说明](#tranCode交易类型) |
+| sign     | 是  | String | 签名                                                  |
+
+## **3. 返回参数**
+
+| 参数名    | 类型                      | 说明     |
+|:--------|:------------------------|:-------|
+| userId  | Long                    | 用户ID   |
+| configs | List&lt;PaymentConfig&gt; | 配置列表   |
+| sign    | String                  | 签名     |
+
+**PaymentConfig对象说明：**
+
+| 参数名           | 类型                      | 说明                                   |
+|:--------------|:------------------------|:-------------------------------------|
+| appId         | Long                    | 应用ID                                 |
+| appName       | String                  | 应用名称                                 |
+| tranCode      | String                  | 交易类型：pay=代付，collect=收款               |
+| tranType      | String                  | 支付类型（交易方式），详见[tranType说明](#trantype支付类型) |
+| currNo        | String                  | 币种编码（如USD, CNY）                      |
+| payMethods    | List&lt;PayMethod&gt;   | 支付方式信息列表                             |
+| feeRate       | FeeRate                 | 费率信息                                 |
+| settlement    | Settlement              | 账期信息                                 |
+| supportRefund | Boolean                 | 是否支持退款，详见[退款支持说明](#退款支持说明)       |
+
+**PayMethod对象说明：**
+
+| 参数名  | 类型    | 说明                      |
+|:-----|:------|:------------------------|
+| inBankCode | String | 支付方式编码（inBankCode）                  |
+| name | String | 支付方式名称                  |
+| limit | Limit | 支付方式限额信息 |
+
+**Limit对象说明：**
+
+| 参数名            | 类型     | 说明        |
+|:---------------|:-------|:----------|
+| singleMinAmount | String | 单笔最小金额    |
+| singleMaxAmount | String | 单笔最大金额    |
+
+**FeeRate对象说明：**
+
+| 参数名          | 类型                      | 说明                                    |
+|:-------------|:------------------------|:--------------------------------------|
+| feeType      | Integer                 | 手续费收取方式，详见[feeType说明](#feetype手续费收取方式) |
+| feeMode      | Integer                 | 手续费收款类型，详见[feeMode说明](#feemode手续费收款类型) |
+| feeRate      | String                  | 手续费率                                  |
+| feeFixedValue | String                  | 固定手续费                                 |
+| degrees      | List&lt;FeeDegree&gt;   | 阶梯费率列表（如果fee_mode=2）                      |
+
+**FeeDegree对象说明：**
+
+| 参数名  | 类型     | 说明          |
+|:-----|:-------|:------------|
+| start | Long   | 区间开始        |
+| end   | Long   | 区间结束        |
+| value | String | 区间值（阶梯费率）  |
+| name  | String | 区间名称        |
+
+**Settlement对象说明：**
+
+| 参数名      | 类型     | 说明                    |
+|:---------|:-------|:----------------------|
+| stlMode  | String | 结算方式，详见[stlMode说明](#stlmode结算方式) |
+| stlCycle | Integer | 结算周期值                 |
+
+## **4. 请求与返回示例**
+
+**请求示例：**
+
+```json
+{
+  "appId": 2065,
+  "sign": "PjQFVs4HxYM+skZ+9+O6LzrmgAeDRn6YgaM9ka+kynv8WH36HU6soMGWSV0GiO5ApPMdnpWbRdGt2jkcTFQ4+ZZ/2JxJsV0MGbwH5EGCxXb5vJar2v3l43WwpI9DDwpSjpYqrCA+XlXMA2oD3ZuOsqTKa49E2EgEhWa9mvS/5id+R6V03Zf1wy/sEsFya2zLVF2jK9zRVpQ+pOgAlT++EUPHzMtnAkfj2/CcSFE8Pl0v//HCcw/5dzLFIgpoUH/h6xSgzinndCQVA6Yy4JX9av/K554GpHHE1jw+PqZSW5JbYss/XpT2ltb3ieUdhiqvEHM9NGncBlWptk1KmDywKg\u003d\u003d"
+}
+```
+
+**成功返回示例：**
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "userId": 672,
+    "configs": [{
+      "appId": 2065,
+      "appName": "jiwushanghu_MXN1",
+      "tranCode": "pay",
+      "tranType": "BANK_ACCOUNT",
+      "currNo": "MXN",
+      "payMethods": [{
+        "inBankCode": "ACCENDO_BANCO",
+        "name": "ACCENDO_BANCO",
+        "limit": {
+          "singleMinAmount": "3",
+          "singleMaxAmount": "2000"
+        }
+      }, {
+        "inBankCode": "ABC_CAPITAL",
+        "name": "ABC_CAPITAL",
+        "limit": {
+          "singleMinAmount": "3",
+          "singleMaxAmount": "2000"
+        }
+      }],
+      "feeRate": {
+        "feeType": 1,
+        "feeMode": 1,
+        "feeRate": "0",
+        "feeFixedValue": "8.8"
+      },
+      "settlement": {
+        "stlMode": "WN",
+        "stlCycle": 4
+      },
+      "supportRefund": false
+    }, {
+      "appId": 2065,
+      "appName": "jiwushanghu_MXN1",
+      "tranCode": "collect",
+      "tranType": "QR",
+      "currNo": "MXN",
+      "payMethods": [{
+        "inBankCode": "CASH",
+        "name": "Pay Cash",
+        "limit": {
+          "singleMinAmount": "5.1",
+          "singleMaxAmount": "2000"
+        }
+      }],
+      "feeRate": {
+        "feeType": 1,
+        "feeMode": 0,
+        "feeRate": "0.035",
+        "feeFixedValue": "0.2"
+      },
+      "settlement": {
+        "stlMode": "TN",
+        "stlCycle": 2
+      },
+      "supportRefund": false
+    }, {
+      "appId": 2065,
+      "appName": "jiwushanghu_MXN1",
+      "tranCode": "collect",
+      "tranType": "VA",
+      "currNo": "MXN",
+      "payMethods": [{
+        "inBankCode": "CLABE",
+        "name": "CLABE",
+        "limit": {
+          "singleMinAmount": "5.1",
+          "singleMaxAmount": "2000"
+        }
+      }],
+      "feeRate": {
+        "feeType": 1,
+        "feeMode": 0,
+        "feeRate": "0.035",
+        "feeFixedValue": "0.2"
+      },
+      "settlement": {
+        "stlMode": "TN",
+        "stlCycle": 2
+      },
+      "supportRefund": false
+    }, {
+      "appId": 2065,
+      "appName": "jiwushanghu_MXN1",
+      "tranCode": "collect",
+      "tranType": "VA",
+      "currNo": "MXN",
+      "payMethods": [{
+        "inBankCode": "CLABE",
+        "name": "CLABE",
+        "limit": {
+          "singleMinAmount": "5.1",
+          "singleMaxAmount": "2000"
+        }
+      }],
+      "feeRate": {
+        "feeType": 1,
+        "feeMode": 0,
+        "feeRate": "0.035",
+        "feeFixedValue": "0.2"
+      },
+      "settlement": {
+        "stlMode": "TN",
+        "stlCycle": 2
+      },
+      "supportRefund": false
+    }],
+    "sign": "Uw3xtKg3c772USUDvd5SDv9HjRU/WUAco/UJk+obJckJttwHyxNMfFVr1ADg2TDh2A+1VF5Klba2zmJ3L6DLkv+VXBUvHvvXPLxDLPnRXCzdp0wIxMeCdXZgvbFvtXB/teCOUpN0CocBkVmFtlE6uPoL74bj9l40ZqeDlHLRRbK+BS8d+0zDURINeQLFCTnvgygZof1GjfY6jbYfwfVnY9iJwjpYOc/+InPHSQJpzeVPw4c8fPK3V3rfzdwg1trpwgqnMYOFl1sr+t8ShkUiCpOBRb9E2iVM14cXbHrk3DqYO5p2pf6Ol0zeVMwAQG+oH66gGUCQT4DRcgWHFTtZtg=="
+  }
+}
+```
+
+**错误响应示例：**
+
+```json
+{
+  "status": "0",
+  "error": "1002",
+  "msg": "Please configure the merchant public key"
+}
+```
+
+
+## **5. 返回参数详细说明**
+
+### **<span id="trantype支付类型">tranType（支付类型）</span>**
+
+| 值 | 说明 |
+|:---|:-----|
+| BANK_TRANSFER | 银行转账 |
+| BANK_ACCOUNT | 银行账户 |
+| BANK_CARD | 银行卡 |
+| EWALLET | 电子钱包 |
+| UPI | UPI |
+
+### **<span id="tranCode交易类型">tranCode（交易类型）</span>**
+
+| 值 | 说明 |
+|:---|:-----|
+| pay | 代付 |
+| collect | 收款 |
+
+### **<span id="feetype手续费收取方式">feeType（手续费收取方式）</span>**
+
+| 值 | 说明 |
+|:---|:-----|
+| 0 | 外扣（手续费从余额账户扣除） |
+| 1 | 内扣（手续费从订单金额内扣除） |
+
+### **<span id="feemode手续费收款类型">feeMode（手续费收款类型）</span>**
+
+| 值 | 说明 |
+|:---|:-----|
+| 0 | 比率 |
+| 1 | 按笔 |
+| 2 | 阶梯 |
+| 3 | 底价 |
+
+### **<span id="stlmode结算方式">stlMode（结算方式）</span>**
+
+| 值 | 说明 |
+|:---|:-----|
+| D0 | 自然天 |
+| TN | 工作日 |
+| WN | 周结 |
+| MN | 月结 |
+
+### **<span id="退款支持说明">supportRefund（退款支持）</span>**
+退款功能仅对以下支付方式组合支持：
+
+| 币种 | 支付类型(payType) | 支付编码(inBankCode) |
+|:-----|:----------------|:-------------------|
+| USD  | BANK_TRANSFER   | CREDIT_CARD        |
+| USD  | EWALLET         | GOOGLE_PAY         |
+| USD  | EWALLET         | APPLE_PAY          |
+
+
+
+{/*
+</div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

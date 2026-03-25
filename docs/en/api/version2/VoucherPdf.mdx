@@ -1,0 +1,117 @@
+---
+title: Payout Voucher PDF/ZIP API
+permalink: /en/api/version2/VoucherPdf/
+---
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+## **1. Overview**
+
+**Description:**
+
+- **Generate payout voucher PDF files based on payout order numbers(Only when the order status is "Success" or "Failed"). When only one order number is provided, a single PDF file is returned; when multiple orders are provided, a ZIP package containing multiple PDFs is returned.**
+
+**Request Method:**
+
+- **HTTP Method**: `POST`  
+- **Content-Type**: `application/json`
+
+**Endpoint:**
+
+`/common/voucher/pdf`
+
+---
+
+## **2. Request Parameters**
+
+**Request Body: JSON**
+
+| Parameter  | Required | Type           | Description                                                                                                       |
+|------------|----------|----------------|-------------------------------------------------------------------------------------------------------------------|
+| appId      | Yes      | Long           | Business ID (obtained from the backend)                                                                           |
+| orderNos   | Yes      | List\<String\> | Payout order number list, must contain at least one order，max 100; single order returns PDF, multiple returns ZIP |
+| getFee     | No       | Integer        | Whether to display fee: 0 - do not display, 1 - display, default: 0                                               |
+| isAmount   | No       | Integer        | Amount display type: 0 - use actual credited amount, 1 - use order amount, default: 0                             |
+| getSubject | No       | Integer        | Whether to display remark: 0 - do not display, 1 - display, default: 0                                            |
+| lang       | No       | String         | Voucher language: `zh` / `en`, default: `zh`                                                                      |
+| sign       | Yes      | String         | Signature generated with merchant secret key (same signing rules as other APIs)                                   |
+
+
+---
+
+## **3. Request Examples**
+
+### 3.1 Single Order Example (Returns PDF)
+
+**Sample Request Body:**
+
+```json
+{
+  "appId": 2065,
+  "orderNos": [
+    "1525121020031156560"
+  ],
+  "getFee": 0,
+  "isAmount": 0,
+  "lang": "zh",
+  "sign": "cvEOw/NyNTvp0NBH+Ef31BP0/UFTEcbkj9Nqh/ek8PqywbbwBKIP5aM5b63BiB8JWxGdVeNvbltMsmKnWVCJOdNVno5xwjJnDFl3NFXy05vIh1OINDPWAbtvm143XrTvv7dD2g1ewrz2Aij9bwM74GvZJwP6QyRMZRjp3rDAMvpxZ/WiASOak9tcp7MPny2wq42irt/4YDY4snjCo8MPqgvhJvjewj0FEjS2YvDED8rmZwCqyW9gqKhYhl101jSLbKQ5rf0WrKZvlc/Y2HZqBQKPjhnOJUJmLe/7gPg6tKzq2pF7FmoxBvGyjQ3sjk9SvyxuD32ugqP1RaI2Q9ukdw=="
+}
+```
+
+
+### 3.2 Multiple Orders Example (Returns ZIP)
+
+**Sample Request Body:**
+
+```json
+{
+  "appId": 2065,
+  "orderNos": [
+    "1525121020031156560",
+    "1525121020031156561"
+  ],
+  "getFee": 0,
+  "isAmount": 0,
+  "getSubject": 0,
+  "lang": "zh",
+  "sign": "gpIClDa34j0VE/0SKpy/UCzjqN0i8mTDKhI0gu4oO861ajiRk3C0Ei4RogQmZ5fT5UOVKUK9n7wsyt2psCztuP65tJ8OpOzeiLrtAybQxyiE6Fo56sUMqHok9ubZWp+kZGZnCe2N8uCpxLh39P/NUv/bF7TzpIitdTjYAGI7TG2++YKPqyMnsR0wCu7Aqtk0hN+a8KXXDc+WtGbulP4H257gjD7W6YFDuyLv32MGUyx/VxlbmKN0yyI7D8UFnakrEryIlC4Xi5J2B/8dRfb1l/okMwVI8nRjvCuj0b2ORHHfqefMtHYzWSXtWyoRo/2yxvbaEmckxbyb6e2tfsjLLA=="
+}
+```
+
+
+
+
+## **4. Response Description**
+
+### 4.1 Success Response
+
+- **HTTP Status Code**: `200`  
+- **Response Body**: Binary file stream  
+  - When `orderNos` contains only one order:  
+    - Returns a single **PDF** file  
+    - `Content-Type` is usually `application/pdf`
+  - When `orderNos` contains multiple orders:  
+    - Returns a **ZIP** package  
+    - `Content-Type` is usually `application/zip`
+
+> Recommendation:  
+> - Determine the file type based on the `Content-Type` response header and file size, and save the body as a binary file.  
+> - The file name can be defined by the merchant,or by the response header `Content-Disposition` ,for example: ``attachment;filename*=UTF-8''vouchers_20251229200623.zip`.
+> - The request time for this API interface will increase based on the number of orders, potentially reaching over 30 seconds. Please ensure the stability of the network.
+
+
+### 4.2 Error Response
+
+When parameter validation fails, signature verification fails, IP is not in the whitelist, or PDF/ZIP generation fails, the API returns a JSON error structure, for example:
+
+```json
+{
+  "status": "0",
+  "error": "1001",
+  "msg": "orderNos can not be empty",
+  "data": null
+}
+```
+

@@ -1,0 +1,305 @@
+---
+title: 支付接口
+permalink: /api/version2/Api/
+---
+
+# **支付接口**
+
+{/*
+    <div class='page-api'>
+    <div class='page-api-content'>
+    <div class='page-api-left'>
+*/}
+
+
+:::warning
+**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
+:::
+
+## **代收API**
+
+### **代收申请**
+
+**简要描述：**
+
+* 创建代收订单
+
+**URL：`/{currency}/collect/apply`**
+说明：appId，amount，实收结算都与{currency}对应
+
+**路径参数：**
+
+| 参数名   | 必选 | 类型   | 说明     |
+| :------- | :--- | :----- | :------- |
+| currency | 是   | String | 订单币种 |
+
+**参数：**
+
+| 参数名        | 必选 | 类型   | 说明                                                                                                                             |
+| :------------ | :--- | :----- | :------------------------------------------------------------------------------------------------------------------------------- |
+| appId         | 是   | Long   | 业务ID（后台获取,与下单币种对应）                                                                                                |
+| orderId       | 是   | String | 商户订单号(必须保证唯一性，长度不超过48)                                                                                         |
+| name          | 是   | String | 用户姓名，推荐使用真实姓名，格式：包含firstName和lastName，以空格分割的，示例：Donald John Trump                               |
+| phone         | 是   | String | 真实手机号                                                                                                                       |
+| email         | 是   | String | 真实电子邮件                                                                                                                     |
+| amount        | 是   | String | 交易金额(单位:元)                                                                                                                |
+| currency      | 否   | String | 币种(下单时指定交易金额币种，若与订单币种不一致，会进行汇率转换，覆盖交易金额)                                                   |
+| payType       | 是   | String | 交易类型                                                                                                                         |
+| inBankCode    | 是   | String | 支付方式                                                                                                                         |
+| callBackUrl   | 是   | String | 用户支付成功后跳转地址                                                              |
+| callBackFailUrl | 是   | String | 用户支付失败后跳转地址                                                                             |
+| notifyUrl     | 否   | String | 回调地址                                                                                                                         |
+| subject       | 是   | String | 支付备注（交易标题，商品名称，支付原因）                                                                                         |
+| body          | 否   | String | 备注详情                                                                                                                         |
+| partnerUserId | 是   | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。 |
+| sign          | 是   | String | 签名                                                                                                                             |
+
+**中东：**
+
+| 参数名        | 必选 | 类型   | 说明             |
+| :------------ | :--- | :----- | :--------------- |
+| goodsName     | 是   | String | 商品名称         |
+| goodsQuantity | 是   | String | 商品数量         |
+| goodsPrice    | 是   | String | 商品单价         |
+| goodsSku      | 是   | String | 商品唯一标识     |
+| goodsAvatar   | 是   | String | 商品图(https://) |
+| platform      | 是   | String | 平台名称         |
+
+**返回data参数说明:**
+
+| 参数名       | 类型   | 说明                                         |
+| :----------- | :----- | :------------------------------------------- |
+| orderId      | String | 商户订单号                                   |
+| orderNo      | String | 平台订单号                                   |
+| payUrl       | String | 支付链接                                     |
+| qrCode       | String | 二维码内容(payType为QR时有值)                |
+| amount       | String | 订单金额(下单币种与订单币种不一致时有值)     |
+| exchangeRate | String | 汇率(下单币种与订单币种不一致时有值)         |
+| orderAmount  | String | 订单原始金额(下单币种与订单币种不一致时有值) |
+| sign         | String | 签名                                         |
+
+**越南:**
+
+| 参数名       | 类型   | 说明                                                    |
+| :----------- | :----- | :------------------------------------------------------ |
+| bankCode     | String | 收款银行编码(可能会与创建订单时指定的outBankCode不一致) |
+| bankName     | String | 收款银行名称                                            |
+| bankNo       | String | 收款卡号(payType为BANK_TRANSFER时有值)                  |
+| bankUserName | String | 收款人姓名(payType为BANK_TRANSFER时有值)                |
+| description  | String | 转账备注(payType为BANK_TRANSFER时有值)                  |
+
+**埃及:**
+
+| 参数名        | 类型   | 说明   |
+| :------------ | :----- | :----- |
+| referenceCode | String | 参考码 |
+| bankNo        | String | 参考码 |
+
+**印尼VA:**
+
+| 参数名 | 类型   | 说明   |
+| :----- | :----- | :----- |
+| bankNo | String | VA号码 |
+
+**稳定币:**
+
+| 参数名 | 类型   | 说明   |
+| :----- | :----- | :----- |
+| bankNo | String | 链地址 |
+
+### **代收查询**
+
+**简要描述：**
+
+* 支付方式异步通知后，可通过查询二次确认状态
+
+**URL：`/{currency}/collect/query`**
+
+#####              
+
+**路径参数：**
+
+| 参数名   | 必选 | 类型   | 说明     |
+| :------- | :--- | :----- | :------- |
+| currency | 是   | String | 订单币种 |
+
+**参数：**
+
+| 参数名  | 必选 | 类型   | 说明                            |
+| :------ |:---| :----- |:------------------------------|
+| appId   | 是  | Long   | 业务ID（后台获取,与订单币种对应）            |
+| orderId | 是  | String | 商户订单号                         |
+| orderNo | 否  | String | 平台订单号(响应快)                    |
+| sign    | 是  | String | 签名                            |
+
+返回data参数说明
+
+| 参数名       | 类型    | 说明                                                                                        |
+| :----------- | :------ | :------------------------------------------------------------------------------------------ |
+| orderId      | String  | 商户订单号(必须保证唯一性)                                                                  |
+| orderNo      | String  | 平台订单号                                                                                  |
+| amount       | String  | 交易金额                                                                                    |
+| actualAmount | String  | 到账金额                                                                                    |
+| fee          | String  | 手续费                                                                                      |
+| status       | Integer | 状态<br/>0:未开始<br/>1:收款中<br/>2:收款成功<br/>3:收款失败<br/>-1:异常待确认)             |
+| payTime      | String  | 支付成功时间（当status=2时有值）<br/>格式: yyyy-MM-dd HH:mm:ss <br/> 时区: 订单币种所在时区 |
+| errorMsg     | String  | 支付失败原因（当status=3时有值）                                                            |
+| sign         | String  | 签名                                                                                        |
+
+### **代收查询v2**
+
+**简要描述：**
+
+* 支付方式异步通知后，可通过查询二次确认状态
+
+**URL：`/{currency}/collect/query/v2`**
+
+#####              
+
+**路径参数：**
+
+| 参数名   | 必选 | 类型   | 说明     |
+| :------- | :--- | :----- | :------- |
+| currency | 是   | String | 订单币种 |
+
+**参数：**
+
+| 参数名  | 必选 | 类型   | 说明                              |
+| :------ | :--- | :----- | :-------------------------------- |
+| appId   | 是   | Long   | 业务ID（后台获取,与订单币种对应） |
+| orderId | 是  | String | 商户订单号                         |
+| orderNo | 否  | String | 平台订单号(响应快)                    |
+| sign    | 是   | String | 签名                              |
+
+返回data参数说明
+
+| 参数名            | 类型    | 说明                                                                                        |
+| :---------------- | :------ | :------------------------------------------------------------------------------------------ |
+| orderId           | String  | 商户订单号(必须保证唯一性)                                                                  |
+| orderNo           | String  | 平台订单号                                                                                  |
+| currency          | String  | 订单币种                                                                                    |
+| amount            | String  | 交易金额                                                                                    |
+| actualAmount      | String  | 到账金额                                                                                    |
+| fee               | String  | 手续费                                                                                      |
+| status            | Integer | 状态<br/>0:未开始<br/>1:收款中<br/>2:收款成功<br/>3:收款失败<br/>-1:异常待确认)             |
+| payTime           | String  | 支付成功时间（当status=2时有值）<br/>格式: yyyy-MM-dd HH:mm:ss <br/> 时区: 订单币种所在时区 |
+| errorMsg          | String  | 支付失败原因（当status=3时有值）                                                            |
+| originalCurrency  | String  | 实际支付币种                                                                                |
+| floatExchangeRate | String  | 币种转换涉及的汇率                                                                          |
+| originalAmount    | String  | 实际支付金额                                                                                |
+| sign              | String  | 签名                                                                                        |
+
+## **代付API**
+
+### **代付申请**
+
+**简要描述：**
+
+* 创建代付订单
+
+**URL：`/{currency}/pay/apply`**
+
+**路径参数：**
+
+| 参数名   | 必选 | 类型   | 说明     |
+| :------- | :--- | :----- | :------- |
+| currency | 是   | String | 订单币种 |
+
+**参数：**
+
+| 参数名        | 必选 | 类型   | 说明                                                                                                                             |
+| :------------ | :--- | :----- | :------------------------------------------------------------------------------------------------------------------------------- |
+| appId         | 是   | Long   | 业务ID（后台获取,与下单币种对应）                                                                                                |
+| orderId       | 是   | String | 商户订单号(必须保证唯一性，长度不超过48)                                                                                         |
+| amount        | 是   | String | 交易金额(单位:元)                                                                                                                |
+| accountType   | 是   | String | 账户类型                                                                                                                         |
+| bankCode      | 是   | String | 银行编码                                                                                                                         |
+| accountNo     | 是   | String | 用户账号                                                                                                                         |
+| name          | 是   | String | 收款人姓名                                                                                                                       |
+| phone         | 是   | String | 真实手机号                                                                                                                       |
+| email         | 是   | String | 真实电子邮件                                                                                                                     |
+| notifyUrl     | 否   | String | 回调地址                                                                                                                         |
+| subject       | 否   | String | 支付备注（交易标题，商品名称，支付原因）                                                                                         |
+| body          | 否   | String | 备注详情                                                                                                                         |
+| partnerUserId | 是   | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。 |
+| sign          | 是   | String | 签名                                                                                                                             |
+
+**巴西PIX：**
+
+| 参数名       | 必选 | 类型   | 说明                      |
+| :----------- | :--- | :----- | :------------------------ |
+| identifyType | 是   | String | 账号类型(CPF/PHONE/EMAIL) |
+
+**土耳其Papara：**
+
+| 参数名       | 必选 | 类型   | 说明                                                                                                                                                     |
+| :----------- | :--- | :----- | :------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| identifyType | 否   | String | bankCode为PAPARA时必填 :<br/>PAPARA_NUMBER(Papara Id)<br/>PHONE(注册Papara的真实手机号)<br/>EMAIL(注册Papara的邮箱)<br/>TURKISH_ID(注册Papara的身份证号) |
+
+**美国ACH：**
+
+| 参数名       | 必选 | 类型   | 说明              |
+| :----------- | :--- | :----- | :---------------- |
+| identifyType | 是   | String | 银行路由编码      |
+| country      | 是   | String | 收款人所在国家    |
+| address1     | 是   | String | 收款地址-详细街道 |
+| address2     | 是   | String | 收款地址-城市     |
+| address3     | 是   | String | 收款地址(省、州)  |
+| postalCode   | 是   | String | 收款邮编          |
+
+返回data参数说明
+
+| 参数名  | 必选   | 类型       |
+| :------ | :----- | :--------- |
+| orderId | String | 商户订单号 |
+| orderNo | String | 平台订单号 |
+| sign    | String | 签名       |
+
+### **代付查询**
+
+**简要描述：**
+
+* 支付方式异步通知后，可通过查询二次确认状态
+
+**URL：`/{currency}/pay/query`**
+
+**路径参数：**
+
+| 参数名   | 必选 | 类型   | 说明     |
+| :------- | :--- | :----- | :------- |
+| currency | 是   | String | 订单币种 |
+
+**参数：**
+
+| 参数名  | 必选 | 类型   | 说明                              |
+| :------ | :--- | :----- | :-------------------------------- |
+| appId   | 是   | Long   | 业务ID（后台获取,与下单币种对应） |
+| orderId | 是  | String | 商户订单号                         |
+| orderNo | 否  | String | 平台订单号(响应快)                    |
+| sign    | 是   | String | 签名                              |
+
+返回data参数说明
+
+| 参数名   | 类型    | 说明                                                                                        |
+| :------- | :------ | :------------------------------------------------------------------------------------------ |
+| orderId  | String  | 商户订单号(必须保证唯一性)                                                                  |
+| orderNo  | String  | 平台订单号                                                                                  |
+| amount   | String  | 交易金额                                                                                    |
+| fee      | String  | 手续费                                                                                      |
+| status   | Integer | 订单状态<br/>0:未开始<br/>1:放款中<br/>2:放款成功<br/>3:放款失败<br/>-1:异常待确认          |
+| payTime  | String  | 支付成功时间（当status=2时有值） <br/>格式: yyyy-MM-dd HH:mm:ss <br/>时区: 下单币种所在时区 |
+| errorMsg | String  | 支付失败原因（当status=3时有值）                                                            |
+| sign     | String  | 签名                                                                                        |
+
+::: tip
+不同国家/地区和币种的所有支付方式以及请求参数、限额等信息，请参考 [支付方式列表](/api/version2/bankCode_list/)
+:::
+
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

@@ -1,0 +1,283 @@
+---
+title: 台湾地区支付接口
+permalink: /api/version2/Taiwan/
+---
+
+# **台湾地区支付接口**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+:::warning
+**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
+:::
+
+## **限额**
+
+| 交易类型 | 限额                           |
+|:-----|------------------------------|
+| 代收   | 美元：0.99-499.99, 台币：100-20000 |
+
+## **代收API**
+
+### **代收申请**
+
+**简要描述：**
+
+* 创建代收订单
+
+**URL：**
+
+新台币: `/twd/collect/apply`
+说明：appId需使用新台币对应的，用户支付成功后增加新台币余额
+
+美元: `/usd/collect/apply`
+说明：appId需使用美元对应的，用户支付成功后增加美元余额
+
+**参数：**
+
+| 参数名           | 必选 | 类型     | 说明                                                                          |
+|:--------------|:---|:-------|:----------------------------------------------------------------------------|
+| appId         | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                             |
+| orderId       | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                      |
+| name          | 是  | String | 用户姓名，推荐使用真实姓名，格式：包含firstName和lastName，以空格分割的，示例：Donald John Trump           |
+| phone         | 是  | String | 真实手机号                                                                       |
+| email         | 是  | String | 真实电子邮件                                                                      |
+| amount        | 是  | String | 交易金额，台币下单不能包含小数                                                             |
+| payType       | 是  | String | 交易类型                                                                        |
+| inBankCode    | 是  | String | [支付方式](#inBankCode)                                                         |
+| callBackUrl   | 是  | String |  用户支付成功后跳转地址                                                                   |
+| callBackFailUrl | 是   | String | 用户支付失败后跳转地址                                                                             
+| notifyUrl     | 否  | String | 回调地址                                                                        |
+| subject       | 是  | String | 支付备注                                                                        |
+| body          | 否  | String | 备注详情                                                                        |
+| country       | 否  | String | 收银台模式需要传递，固定值：158                                                           |
+| currency      | 否  | String | 币种(默认TWD 支持下单币种: USD,TWD)                                                   |
+| partnerUserId | 是  | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。 |
+| sign          | 是  | String | 签名                                                                          |
+
+返回data参数说明
+
+| 参数名     | 类型     | 说明             |
+|:--------|:-------|:---------------|
+| orderId | String | 商户订单号(必须保证唯一性) |
+| orderNo | String | 平台订单号          |
+| payUrl  | String | 支付链接           |
+| sign    | String | 签名             |
+
+### **代收查询**
+
+**简要描述：**
+
+* 查询代收订单
+
+**URL：**
+
+台币: `/twd/collect/query`
+
+美元: `/usd/collect/query`
+
+**参数：**
+
+| 参数名     | 必选 | 类型     | 说明                              |
+|:--------|:---|:-------|:--------------------------------|
+| appId   | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| orderId | 是  | String | 商户订单号                           |
+| orderNo | 否  | String | 平台订单号（响应快）                      |
+| sign    | 是  | String | 签名                              |
+
+返回data参数说明
+
+| 参数名          | 类型      | 说明                                                         |
+|:-------------|:--------|:-----------------------------------------------------------|
+| orderId      | String  | 商户订单号(必须保证唯一性)                                             |
+| orderNo      | String  | 平台订单号                                                      |
+| amount       | String  | 交易金额                                                       |
+| actualAmount | String  | 收到金额                                                       |
+| fee          | String  | 手续费                                                        |
+| status       | Integer | 状态(0未开始，1支付中，2成功（终态），3失败（终态）,4部分收款（终态），5超额收款（终态）, -1异常待确认) |
+| payTime      | String  | 支付成功时间（当status=2，4，5时有值）(本地时间), 格式: yyyy-MM-dd HH:mm:ss    |
+| errorMsg     | String  | 支付失败原因（当status=3时有值）                                       |
+| sign         | String  | 签名                                                         |
+
+### **支付方式**<a id="inBankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>币种</b></td>
+        <td><b>支付类型(payType)</b></td>
+        <td><b>支付编码(inBankCode)</b></td>
+        <td><b>限额</b></td>
+        <td><b>状态</b></td>
+        <td><b>说明</b></td>
+    </tr>
+    <tr>
+        <td>TWD</td>
+        <td>QR</td>
+        <td>JKO_PAY_QR</td>
+        <td>30-20000</td>
+        <td>可用</td>
+        <td>JkoPay QR</td>
+    </tr>
+    <tr>
+        <td>TWD</td>
+        <td>EWALLET</td>
+        <td>JKO_PAY_TWD</td>
+        <td>30-20000</td>
+        <td>可用</td>
+        <td>JkoPay</td>
+    </tr>
+    <tr>
+        <td>TWD</td>
+        <td>BANK_TRANSFER</td>
+        <td>ATM</td>
+        <td>1000-20000</td>
+        <td>可用</td>
+        <td>ATM收银台</td>
+    </tr>
+    <tr>
+        <td>TWD</td>
+        <td>BANK_TRANSFER</td>
+        <td>STORE_IBON</td>
+        <td>100-20000</td>
+        <td>可用</td>
+        <td>7-11超商</td>
+    </tr>
+    <tr>
+        <td>TWD</td>
+        <td>BANK_TRANSFER</td>
+        <td>STORE_HILIFEET</td>
+        <td>100-20000</td>
+        <td>可用</td>
+        <td>萊爾富Life-ET</td>
+    </tr>
+    <tr>
+        <td>TWD</td>
+        <td>BANK_TRANSFER</td>
+        <td>STORE_OKGO</td>
+        <td>100-20000</td>
+        <td>可用</td>
+        <td>OK超商OK-go</td>
+    </tr>
+    <tr>
+        <td>TWD</td>
+        <td>BANK_TRANSFER</td>
+        <td>STORE_FAMI</td>
+        <td>100-20000</td>
+        <td>可用</td>
+        <td>全家FAMIPORT</td>
+    </tr>
+    <tr>
+        <td>TWD</td>
+        <td>BANK_TRANSFER</td>
+        <td>STORE_MBC_HILIFEET</td>
+        <td>100-20000</td>
+        <td>可用</td>
+        <td>超商行動掃碼(萊爾富Life-ET)</td>
+    </tr>
+    <tr>
+        <td>TWD</td>
+        <td>BANK_TRANSFER</td>
+        <td>STORE_MBC_IBON</td>
+        <td>100-20000</td>
+        <td>可用</td>
+        <td>7-11超商行動掃碼</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>JKO_PAY</td>
+        <td>0.99-499.99</td>
+        <td>可用</td>
+        <td>JkoPay</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>LINE_PAY_USD</td>
+        <td>2.99-499.99</td>
+        <td>可用</td>
+        <td>LinePay</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td >BANK_TRANSFER</td>
+        <td>ATM_USD</td>
+        <td>32.99-499.99</td>
+        <td>可用</td>
+        <td>ATM收银台</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td >BANK_TRANSFER</td>
+        <td>STORE_IBON_USD</td>
+        <td>2.99-499.99</td>
+        <td>可用</td>
+        <td>7-11超商</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td >BANK_TRANSFER</td>
+        <td>STORE_HILIFEET_USD</td>
+        <td>2.99-499.99</td>
+        <td>可用</td>
+        <td>萊爾富Life-ET</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td >BANK_TRANSFER</td>
+        <td>STORE_OKGO_USD</td>
+        <td>2.99-499.99</td>
+        <td>可用</td>
+        <td>OK超商OK-go</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td >BANK_TRANSFER</td>
+        <td>STORE_FAMI_USD</td>
+        <td>2.99-499.99</td>
+        <td>可用</td>
+        <td>全家FAMIPORT</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td >BANK_TRANSFER</td>
+        <td>STORE_MBC_HILIFEET_USD</td>
+        <td>2.99-499.99</td>
+        <td>可用</td>
+        <td>超商行動掃碼(萊爾富Life-ET)</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td >BANK_TRANSFER</td>
+        <td>STORE_MBC_IBON_USD</td>
+        <td>2.99-499.99</td>
+        <td>可用</td>
+        <td>超商行動掃碼(7-11)</td>
+    </tr>
+</table>
+
+<br/><br/>
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

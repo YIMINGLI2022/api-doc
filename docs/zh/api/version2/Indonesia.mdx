@@ -1,0 +1,1327 @@
+---
+title: 印尼支付接口
+permalink: /api/version2/Indonesia/
+---
+
+# **印尼支付接口**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+:::warning
+**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
+:::
+
+## **限额**
+
+| 交易类型 | 限额                                 |
+|:-----|------------------------------------|
+| 代收   | 美元: 0.99-2500, 印尼盾: 10000-50000000 |
+| 代付   | 印尼盾: 10000-50000000                |
+
+## **代收API**
+
+### **代收申请**
+
+**简要描述：**
+
+* 创建代收订单
+
+**URL：`/idr/collect/apply`**
+说明：appId需使用印尼盾对应的，用户支付成功后增加印尼盾余额
+
+**URL：`/usd/collect/apply`**
+说明：appId需使用美元对应的，用户支付成功后增加美元余额
+
+**参数：**
+
+| 参数名             | 必选 | 类型     | 说明                                                                                               |
+|:----------------|:---|:-------|:-------------------------------------------------------------------------------------------------|
+| appId           | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                                  |
+| orderId         | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                                           |
+| name            | 是  | String | 付款人姓名(付款人姓名格式:英文或印尼语大小写且允许有空格,1-30位,"firstName middleName lastName" (middleName非必填,特殊字符支持\!-)    |
+| phone           | 是  | String | 真实手机号(08xxxxxxxxxx)，（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ） |
+| email           | 是  | String | 真实电子邮件                                                                                           |
+| amount          | 是  | String | 交易金额(单位：**印尼盾**）                                                                                 |
+| payType         | 是  | String | [支付方式类型](#inBankCode)                                                                            |
+| inBankCode      | 是  | String | [支付方式编码](#inBankCode)                                                                            |
+| callBackUrl     | 是  | String | 用户支付成功后跳转地址                                                                                      |
+| callBackFailUrl | 是  | String | 用户支付失败后跳转地址                                                                                      
+| notifyUrl       | 否  | String | 回调地址                                                                                             |
+| currency        | 否  | String | 币种(默认IDR)                                                                                        |
+| subject         | 否  | String | 支付备注                                                                                             |
+| body            | 否  | String | 备注详情                                                                                             |
+| partnerUserId   | 是  | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。                      |
+| sign            | 是  | String | 签名                                                                                               |
+
+#####             
+
+request
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M233323000059",
+  "amount": "300",
+  "phone": "08230219312",
+  "email": "23423@qq.com",
+  "name": "test",
+  "inBankCode": "014",
+  "payType": "QR",
+  "partnerUserId": "149597870",
+  "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M233323000059",
+    "orderNo": "6023071013539074",
+    "payUrl": "https://a.api-uat.idr.com/1L9zQS2",
+    "bankCode": "014",
+    "qrCode": "00020101021228760011ph.ppmi.p2m0111OPDVPHM1XXX0315777148000000017041652948137245442930503001520460165303608540810000.vnd Of Mandalu62310010ph.allbank05062110000803***88310012ph.ppmi.qrph0111OPDVPHM1XXX63042763",
+    "sign": "YEoA8Y2JzQFGVzwJSqmemm1Kfv/bfyIfCqv2dp7RNzT5B72AQvdD+nt2nR4sL1HWscvmNHyVt5ovAi7MMhy3ziih/sMph+wPx4YjH3W1h5DyBvSlWvaKfKrK5ViomZ0pPYWydwRHnnRnicxToHK9S6qtSy7Q73O0hdz4hJ9p41Th3ycBl2Q9SeqSZYSY1ohcPDhdyRf2y0prb8rHgpBKzxZ5BKX/1bsE9OmsSEHAEYT8OGgko6aNe8XPAhr4G48cpWTftvnGQuzh0O65nuZRI/PF+Axt2zJCVbFHDDSREI9NlAT82ebDqhlVdxQzKE67D1nxgjb3dPmDUYHOBpmwxQ=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名      | 类型     | 说明                      |
+|:---------|:-------|:------------------------|
+| orderId  | String | 商户订单号(必须保证唯一性)          |
+| orderNo  | String | 平台订单号                   |
+| payUrl   | String | 返回的是收款地址 其他时候返回的是指引或者详情 |
+| bankNo   | String | 收款卡号(VA)                |
+| bankCode | String | 收款银行                    |
+| qrCode   | String | 二维码内容-可自行生成二维码(QR)      |
+| sign     | String | 签名                      |
+
+### **代收查询**
+
+**简要描述：**
+
+* 查询代收订单
+
+**URL：`/idr/collect/query`**
+
+**URL：`/usd/collect/query`**
+
+**参数：**
+
+| 参数名     | 必选 | 类型     | 说明                              |
+|:--------|:---|:-------|:--------------------------------|
+| appId   | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| orderId | 是  | String | 商户订单号                           |
+| orderNo | 否  | String | 平台订单号（响应快）                      |
+| sign    | 是  | String | 签名                              |
+
+request
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M22222000028",
+  "sign": "EmyJGm3ELzG4FsOd0Krs9ncbSjo4oTGuXWML+7djYla3+VAwd9wS17z38p/7U2ZAjroO04XrE7YXcB1o76Dtyipj3h3bJzs7FYma1QNkMUdt9hh7m8U6hMsMQX7vIWHtXNwz4pbTSC75+kQWXaCew7KoE6LXECdJU8AISgNgeki2TK9R0pCfshr0Z2SZBPeuT6OvIH5LdmqgdZhuqnffGU2qnXk4KMkO848e6/WALLBR+LE1wyKHfPnYVcuKSMVYxkvKyyIL5JIPEgW0o5bh4RCbaUn3NZtyYwrU1uQ3ZDFRThm9j6XAQP+LBlmq3nOePqBtp/VDVarRaV+7FbQg3A=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M22222000028",
+    "orderNo": "6023042811314347",
+    "amount": "50000.00",
+    "actualAmount": "0.00",
+    "fee": "0.00",
+    "status": 1,
+    "sign": "fP433ygWVDLVGxYkVnIJj7riGq0U3vyVX+MbBAImxfGLZkZcEAHVEoVYuULZSmXAAXKRSyd67WlDNm+24pougM54ofAoH4HMtCL2tfCoBReFyz3z02AGKkrKE2xWhSpWoqfQoBvzwuN5iGMMu0s9Q1YvqiwJ8WDVIENnmiIyD8qDJN7caHTW2US14/faG+69AvnuIgJ/nu7/jogOlgEYdZdVYU7gcRDE+d47KjlFGswQkJ/h/uzV7cWtUqrtOO7ZnZ3/z33Xx8awokX36QoYcPSWAU0h+Ij9O9402HNhm1eTbYcLU0uI/z8xCAtyAI/tTyiFijpiNlxUKQj+zKsILw=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名          | 类型      | 说明                                                      |
+|:-------------|:--------|:--------------------------------------------------------|
+| orderId      | String  | 商户订单号(必须保证唯一性)                                          |
+| orderNo      | String  | 平台订单号                                                   |
+| amount       | String  | 交易金额                                                    |
+| actualAmount | String  | 收到金额                                                    |
+| fee          | String  | 手续费                                                     |
+| status       | Integer | 状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)                  |
+| payTime      | String  | 支付成功时间（当status=2,4,5时有值）(印尼时间), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg     | String  | 失败原因（当status=3时有值）                                      |
+| sign         | String  | 签名                                                      |
+
+### **支付方式**<a id="inBankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>币种</b></td>
+        <td><b>支付类型(payType)</b></td>
+        <td><b>支付编码(inBankCode)</b></td>
+        <td><b>限额</b></td>
+        <td><b>状态</b></td>
+        <td><b>说明</b></td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>QR</td>
+        <td>dynamic</td>
+        <td>10000-10000000</td>
+        <td>可用</td>
+        <td>QRIS动态码</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>EWALLET</td>
+        <td>DANA</td>
+        <td>10000-20000000</td>
+        <td>可用</td>
+        <td>Dana钱包</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>EWALLET</td>
+        <td>SHOPEEPAY</td>
+        <td>10000-20000000</td>
+        <td>可用</td>
+        <td>ShopeePay钱包</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>EWALLET</td>
+        <td>LINKAJA</td>
+        <td>10000-20000000</td>
+        <td>可用</td>
+        <td>LinkAja钱包</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>CASHIER</td>
+        <td>OVO</td>
+        <td>10000-20000000</td>
+        <td>可用</td>
+        <td>OVO钱包</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>VA</td>
+        <td>002</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BRI银行</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>VA</td>
+        <td>009</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BNI银行</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>VA</td>
+        <td>013</td>
+        <td>10000-50000000</td>
+        <td>维护</td>
+        <td>PERMATA银行</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>VA</td>
+        <td>022</td>
+        <td>10000-50000000</td>
+        <td>维护</td>
+        <td>CIMB银行</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>QR</td>
+        <td>ID_QRIS_USD</td>
+        <td>0.99-500</td>
+        <td>可用</td>
+        <td>QRIS动态码</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>ID_DANA_USD</td>
+        <td>0.99-1000</td>
+        <td>可用</td>
+        <td>Dana钱包</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>ID_SHOPEEPAY_USD</td>
+        <td>0.99-1000</td>
+        <td>可用</td>
+        <td>ShopeePay钱包</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>ID_LINKAJA_USD</td>
+        <td>0.99-1000</td>
+        <td>可用</td>
+        <td>LinkAja钱包</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>CASHIER</td>
+        <td>ID_OVO_USD</td>
+        <td>0.99-1000</td>
+        <td>可用</td>
+        <td>OVO钱包</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>VA</td>
+        <td>ID_BRI_USD</td>
+        <td>0.99-2500</td>
+        <td>可用</td>
+        <td>BRI银行</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>VA</td>
+        <td>ID_BNI_USD</td>
+        <td>0.99-2500</td>
+        <td>可用</td>
+        <td>BNI银行</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>VA</td>
+        <td>ID_PERMATA_USD</td>
+        <td>0.99-2500</td>
+        <td>维护</td>
+        <td>PERMATA银行</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>VA</td>
+        <td>ID_CIMB_USD</td>
+        <td>0.99-2500</td>
+        <td>维护</td>
+        <td>CIMB银行</td>
+    </tr>
+</table>
+
+## **代付API**
+
+### **代付申请**
+
+**简要描述：**
+
+* 创建代付订单
+
+**URL：`/idr/pay/apply`**
+
+**参数：**
+
+| 参数名           | 必选 | 类型     | 说明                                                                                                 |
+|:--------------|:---|:-------|:---------------------------------------------------------------------------------------------------|
+| appId         | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                                    |
+| orderId       | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                                             |
+| amount        | 是  | String | 交易金额(单位：**印尼盾**）                                                                                   |
+| accountType   | 是  | String | [支付方式类型](#bankCode)                                                                                |
+| bankCode      | 是  | String | [支付方式编码](#bankCode)                                                                                |
+| accountNo     | 是  | String | 用户银行账号                                                                                             |
+| name          | 是  | String | 收款人姓名(收款人姓名 格式：英文或印尼语大小写且允许有空格，1-30位,"firstName middleName lastName" (middleName 非必填, 特殊字符支持 '.-)) |
+| phone         | 是  | String | 真实手机号（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ）                  |
+| email         | 是  | String | 真实电子邮件                                                                                             |
+| notifyUrl     | 否  | String | 回调地址                                                                                               |
+| subject       | 否  | String | 支付备注（交易标题，商品名称，支付原因）                                                                               |
+| body          | 否  | String | 备注详情                                                                                               |
+| partnerUserId | 是  | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。                        |
+| sign          | 是  | String | 签名                                                                                                 |
+
+#####             
+
+request（accountType为BANK\_CARD类型时）
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M100000450012",
+  "amount": "500",
+  "accountType": "BANK_ACCOUNT",
+  "bankCode": "014",
+  "accountNo": "09876543210",
+  "name": "john doe",
+  "phone": "08276543210",
+  "email": "johndoe@cashfree.com",
+  "subject": "iphone13",
+  "body": "ProMotion technology with adaptive refresh rates up to 120Hz",
+  "partnerUserId": "149597870",
+  "sign": "I1PeK3eJOVsFFNowxVRqMXpeWm1lr/BcRpBi8WsW4wVo1+5CC3JsrFq/m/L2O69NzKHvtDWi4zia3DL3dPut0yMyUyqL91LNCSaeISbGsQPlhEsQpyTOryS/RKOfsrn2Xo37SCF/phAvndOk2jwwGwqM5xLz1ms9Ukl85wv27QFNrXIMxK2p18oe7MpMYrgf+xvEBE/VqCtKMtN9pO449wWwXzHWNPbZ76s4pAvKwRE9yXQDr7Iw14Dktcnl1FoLM4gWM/obkO+mz6SyAGDuXhVh/+OD/IGNiCyTCNq6ciQY28UnCFV6ZIP40gxsFhfBJKbK+Raw7y1Bh912ifYfug=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M100000450013",
+    "orderNo": "3023062014149637",
+    "sign": "LmhUnkw5j0pMiimsG8rKwdNNZGvXH5MpSmD6mdHZwq1SQwuK5BohmdEoqKB/jkMk28o3da4Cxh6Q+tW97+yTCemRrF+dMaHA73rpOeUuujKQl/UcFvJuMhfLBa2tp09L71NzoBqpPD6aXf37mYAz8E1HmERwFPpac5FVxIYanHG8cqmMLJYsVmHTSxWavgWU03ys9UczBePkBiR8sl2FSOhFABB0wAP28lswrV/ABS68IsLKtyd1fyI3GBfSbIK5nDEEnlE+EdElFdLs9taAxJImeVF1x4eT47+bkPJ2qS8z3K8QGzKLF3W+8SiRZGfSwDTsLKH+2Vycvy5auRl+ag=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名     | 必选     | 类型             |
+|:--------|:-------|:---------------|
+| orderId | String | 商户订单号(必须保证唯一性) |
+| orderNo | String | 平台订单号          |
+| sign    | String | 签名             |
+
+### **代付查询**
+
+**简要描述：**
+
+* 查询代付订单
+
+**URL：`/idr/pay/query`**
+
+**参数：**
+
+| 参数名     | 必选 | 类型     | 说明                              |
+|:--------|:---|:-------|:--------------------------------|
+| appId   | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| orderId | 是  | String | 商户订单号                           |
+| orderNo | 否  | String | 平台订单号（响应快）                      |
+| sign    | 是  | String | 签名                              |
+
+request
+
+```json
+{
+  "appId": 1000,
+  "orderId": "M1234567111",
+  "orderNo": "3022111516571436",
+  "sign": "ZxkVZL+GAyv0VhvWn4IvuYahTzxgQuthkuV2ONWiqIfIDb2avvHlFOUJVzqZi1q8CPHXZm1ltanRTRVTxfsuftLvGeDioUHglWt46/RU6c1OPznpLGsZ35Q3n5tW2y1EnOsxPynXBFLuDQy+aZ3l9u6AQ30T0zQexMGT+IxuFkmUp02g/6juaHa5ZgNMv7lN67ixIp162wrM7OJuaOif872QijSceRdZhzaMGImAwB0D4MosRV4WMBOKkwgPdmS7GuZN66YUidXk3wTGqX3MYRw6M0kj4eNegSUwPXvp4q4p0KO8Y3xUMld54GY2ApX3WN3CBtC/vpJqEszjGBbbGg=="
+}
+```
+
+response — 订单失败
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M1234567111",
+    "orderNo": "3022111516571436",
+    "amount": "100000.00",
+    "fee": "0.00",
+    "status": 3,
+    "errorMsg": "Đơn hàng không tồn tại",
+    "sign": "KKuvCl0SuNANJs+l2ogDaJm8pmV+Hi+Xa7q27vJ6D1Ehs4aOp13kRbITfJAhczh3T81BE9qwHeJaYwf+r0EypKM9TL6pMwfG8Az4gRy1D57wiUaVjl2PWcvbEqrn1hL0b+btkjvAM9I+CcSv+wuOW3/uku17Ws3FhgJLj9sFsQUBAPjDO+758VnwBytCOLBmljLBXyKgNgpmFQ1/DNkqWl0UNzyLK45Zw3yf5NiwhEFbvW0jlOWlfu/ql4hluISUQG573jEoFCBEnQLb2tQoRZj1QYNRCXPf5lbej0vzqbEwvR9h+ZOf255t1MocJkdIe463DTV5U3KZdVT87HMagw=="
+  }
+}
+```
+
+response — 订单成功
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M1234567112",
+    "orderNo": "3022111517401574",
+    "amount": "100000.00",
+    "fee": "1003.00",
+    "status": 2,
+    "payTime": "2024-03-01 23:59:59",
+    "sign": "khPtOmGq+cpKX0HFAI/lbP0dx4oVyNAnL5oLsdmhDJdASlQm0yg5I3o+MhImYggEsL6c2bo5fP29t54OZFqSdQDfIuNDvGbAMAr4mRBxc0hoHLkBLyyagfVPBLyQA1JY8XV3ZL4ySzQ3ZQnMCfrh2K39ueUuz6HpZ03Hj0KYijVRCXAZaio/L5jfLBT12QXmvIfAHa8s/k9flhK05ENHPep3zjj/MZGOEaX7jkEJLfjK0duypDCa61BRQjM+oePOdVsgleIl1Yf98UAxMDZ/A3912KFHEb+/jvmdnulNbiJFyuT1fEe+j2teUgw3vFsZAtwNWAgxhC7UO+N0Q5z4EA=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名      | 类型      | 说明                                                  |
+|:---------|:--------|:----------------------------------------------------|
+| orderId  | String  | 商户订单号(必须保证唯一性)                                      |
+| orderNo  | String  | 平台订单号                                               |
+| amount   | String  | 交易金额                                                |
+| fee      | String  | 手续费                                                 |
+| status   | Integer | 订单状态(0未开始, 1放款中 2放款成功（终态） 3放款失败（终态） \-1异常待确认)       |
+| payTime  | String  | 支付成功时间（当status=2时有值）(印尼时间), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg | String  | 支付失败原因（当status=3时有值）                                |
+| sign     | String  | 签名                                                  |
+
+### **支付方式**<a id="bankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1050px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>币种</b></td>
+        <td><b>支付类型(accountType)</b></td>
+        <td><b>支付编码(bankCode)</b></td>
+        <td><b>限额</b></td>
+        <td><b>状态</b></td>
+        <td><b>说明</b></td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>EWALLET</td>
+        <td>DANA</td>
+        <td>10000-20000000</td>
+        <td>可用</td>
+        <td>Dana钱包</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>EWALLET</td>
+        <td>OVO</td>
+        <td>10000-20000000</td>
+        <td>可用</td>
+        <td>OVO钱包</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>EWALLET</td>
+        <td>GOPAY</td>
+        <td>10000-20000000</td>
+        <td>可用</td>
+        <td>GoPay钱包</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>EWALLET</td>
+        <td>LINKAJA</td>
+        <td>10000-20000000</td>
+        <td>可用</td>
+        <td>LinkAja钱包</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>EWALLET</td>
+        <td>SHOPEEPAY</td>
+        <td>10000-20000000</td>
+        <td>可用</td>
+        <td>ShopeePay钱包</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>002</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BRI</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>008</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>MANDIRI</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>009</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BNI</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>011</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK DANAMON</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>013</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>PERMATA/SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>014</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BCA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>016</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>MAYBANK INDONESIA/SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>019</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK PAN INDONESIA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>022</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>CIMB NIAGA/SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>023</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>UOB INDONESIA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>028</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>OCBC NISP/SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>031</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>CITIBANK NA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>033</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK OF AMERICA NA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>036</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK CHINA CONSTRUCTION</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>037</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK ARTHA GRAHA INTERNASIONAL</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>041</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>PT. BANK HSBC INDONESIA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>042</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>MUFG BANK</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>046</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>DBS</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>047</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK RESONA PERDANIA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>050</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>STANDARD CHARTERED BANK</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>054</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK CAPITAL INDONESIA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>068</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>PT BANK WOORI SAUDARA INDONESIA 1906</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>069</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK OF CHINA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>076</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK BUMI ARTA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>097</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK MAYAPADA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>110</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD JABAR BANTEN</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>111</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK DKI</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>112</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD DIY</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>113</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD JAWA TENGAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>114</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD JAWA TIMUR/SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>115</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD JAMBI/SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>116</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK ACEH SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>117</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD SUMATERA UTARA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>118</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD SUMATERA BARAT/NAGARI SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>119</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD RIAU KEPRI</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>120</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD SUMSEL BABEL/SYR</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>122</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD KALIMANTAN SELATAN</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>123</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD KALIMANTAN BARAT</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>124</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD KALTIM KALTARA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>125</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD KALIMANTAN TENGAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>126</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD SULSEL BAR</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>127</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD SULAWESI UTARA DAN GORONTALO</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>128</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD NUSA TENGGARA BARAT SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>129</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD BALI</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>130</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD NTT</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>131</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD MALUKU DAN MALUKU UTARA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>132</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>PT.BANK PEMBANGUNAN DAERAH PAPUA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>133</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD BENGKULU</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>135</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD SULAWESI TENGGARA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>137</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD BANTEN</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>147</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK MUAMALAT</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>151</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>MESTIKA DHARMA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>153</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>SINARMAS</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>157</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>MASPION</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>161</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>GANESHA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>164</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK ICBC INDONESIA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>167</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK QNB INDONESIA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>200</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BTN/SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>213</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK BTPN</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>425</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD JABAR BANTEN SYR</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>426</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>MEGA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>451</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK SYARIAH INDONESIA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>472</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK JASA JAKARTA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>484</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>PT BANK KEB HANA INDONESIA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>485</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>MNC BANK</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>490</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>NEO COMMERCE</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>494</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK RAYA INDONESIA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>501</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BCA Digital</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>503</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>NATIONALNOBU</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>506</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK MEGA SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>513</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK INA PERDANA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>523</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>PT BANK SAHABAT SAMPOERNA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>535</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>SEABANK</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>536</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BCA SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>542</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK JAGO/SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>547</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK BTPN SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>548</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK MULTI ARTA SENTOSA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>553</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK MAYORA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>555</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK INDEX SELINDO</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>564</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>PT BANK MANDIRI TASPEN POS</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>566</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK VICTORIA INTERNASIONAL</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>567</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>ALLO BANK INDONESIA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>722</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK DANAMON SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>724</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK DKI SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>725</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD JAWA TENGAH SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>727</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD KALIMANTAN BARAT SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>728</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD KALIMANTAN SELATAN SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>729</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD KALTIM KALTARA SYR</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>733</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD SUMATERA UTARA SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>734</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>SINARMAS SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>735</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD SULSEL BAR SYR</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>736</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BPD DIY SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>945</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK IBK INDONESIA</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>947</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK ALADIN SYARIAH</td>
+    </tr>
+    <tr>
+        <td>IDR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>949</td>
+        <td>10000-50000000</td>
+        <td>可用</td>
+        <td>BANK CTBC</td>
+    </tr>
+</table>
+
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div>
+
+ */}

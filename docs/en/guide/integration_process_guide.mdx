@@ -1,0 +1,79 @@
+---
+title: Integration Process
+permalink: /en/guide/integration_process_guide/
+---
+# Integration Process
+
+HaiPay aims to provide secure and convenient overseas localized payment services and international credit card payment services, including services like collections(pay in), disbursements(pay out), and more.
+
+To ensure smooth integration, this document provides the standardized HaiPay product integration process.
+
+## 1. Overall Process
+
+```mermaid
+flowchart LR
+    A[Account Registration] --> B[Account Verification]
+    B --> C[Account Review]
+    C --> D[Technical Parameter Configuration]
+    D --> E[API Request]
+    E --> F[Go-live Notification]
+```
+
+## 2. Specific Steps
+
+### 2.1 **Account Registration**
+Please provide your merchant name (letters or numbers) and email. We will register an account for you based on the information you provide and send the account details to you.
+
+[//]: # (### 2.2 **Account Verification**)
+
+[//]: # (Login to our platform using the account details you received. After logging in to the backend, please change your login password &#40;for production environment&#41;. You need to fill in complete merchant information, including but not limited to company name, contact information, company registration details, etc.)
+
+[//]: # ()
+[//]: # (Operation path: Merchant Information - Submit Certification. Note: Items marked with * are mandatory.)
+
+[//]: # ()
+[//]: # (<img src="/images/商户认证截图1-中文.png" style="height: 400px"/>)
+
+[//]: # (<img src="/images/商户认证截图2-中文.png" style="height: 400px"/>)
+
+[//]: # ()
+[//]: # (In addition to filling out the information, you also need to prepare and upload the network entry documentation, which typically includes the following:)
+
+[//]: # ()
+[//]: # (<img src="/images/上传文档包截图-中文.png" style="height: 200px"/>)
+
+[//]: # ()
+[//]: # (- A copy of the company registration document &#40;scan or photo&#41;.)
+
+[//]: # (- ID card/passport for company directors &#40;scan or photo&#41;.)
+
+[//]: # (- Company bank account details &#40;for settlement&#41;.)
+
+[//]: # (- Other supporting documents, such as business licenses, tax registration certificates, etc. &#40;based on local requirements&#41;.)
+
+### 2.2 **Account Review**
+After submitting the network entry documents, our review team will verify the information you provided. The review typically takes 24 hours, depending on the situation. Once approved, we will notify you of the result in the dedicated integration group chat.
+
+### 2.3 **Technical Configuration**
+After approval, you can log into the backend to perform technical configuration. You need to configure:
+- Merchant Public Key ([Your Public Key](/en/docs/guide/config_settings_and_signature_rules_guide.md)).
+- IP whitelist (multiple IPs separated by commas ','), and also contact HaiPay's tech team in the integration group to add the IPs to the firewall whitelist.
+- Collection callback URL and payment callback URL.
+
+Configuration entry: "Business Management" - "Payment Product Configuration"
+
+<img src="/images/v2/app-config1-en.png" style="height: 400px"/>
+<img src="/images/v2/app-config2-en.png" style="height: 400px"/>
+
+### 2.4 **API Requests**
+After completing the technical configuration, you can begin using the APIs we provide to perform business operations. Please ensure you follow the instructions in the API documentation to send API transaction requests.
+
+If you encounter any issues during the onboarding process or need further assistance, please feel free to contact our 24-hour on-duty operations team in the dedicated integration group chat.
+
+### 2.5 **Go-Live Notification**
+After acceptance, please notify our on-duty operations team before going live (sync in the dedicated integration group chat).
+
+:::warning
+Test and production environments do not share information. Please notify us before going live, and we will provide your production environment merchant account details.
+
+Before going live, please review our [Production Checklist](/guide/onboarding_checklist/) to ensure all configurations are correct.

@@ -1,0 +1,214 @@
+---
+title: Europe Payment API
+permalink: /en/api/version2/Europe/
+---
+# **Europe Payment API**
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+:::warning
+**Before reading this API document, please check [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
+:::
+
+## **Limits**
+
+| Transaction Type | Limit                          |
+| :--------------- | ------------------------------ |
+| Collection       | USD: 0.99–1000; EUR: 1–500     |
+
+## **Collection API**
+
+### **Collection Request**
+
+**Brief Description:**
+
+* Create a collection order
+
+**URL:**
+
+USD: `/usd/collect/apply`  
+Note: appId USD, amount USD, settlement USD  
+
+EUR: `/eur/collect/apply`  
+Note: appId EUR, amount EUR, settlement EUR  
+
+
+
+**Parameters:**
+
+| Parameter Name  | Required | Type   | Description                                                                                                                           |
+| :-------------- | :------- | :----- | :------------------------------------------------------------------------------------------------------------------------------------- |
+| appId           | Yes      | Long   | Business ID (obtained from backend, needs to pass the corresponding Business ID based on the currency in the URL)                     |
+| orderId         | Yes      | String | Merchant order number (must be unique, length no more than 48)                                                                         |
+| name            | Yes      | String | User name, recommended to use real name. Format: contains firstName and lastName separated by a space. Example: Donald John Trump       |
+| phone           | Yes      | String | Real phone number (format reference [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format))                 |
+| email           | Yes      | String | Real email address                                                                                                                     |
+| amount          | Yes      | String | Transaction amount (accurate to two decimal places; punctuation such as “,” is prohibited)                                              |
+| payType         | Yes      | String | Non-cashier mode: **BANK\_TRANSFER**; Cashier mode: **CASHIER**                                                                        |
+| inBankCode      | Yes      | String | [Payment Method](#inBankCode)                                                                                                          |
+| callBackUrl     | Yes      | String | Redirect URL after successful payment                                                                                                  |
+| callBackFailUrl | Yes      | String | Redirect URL after failed payment                                                                                                      |
+| notifyUrl       | No       | String | Callback URL                                                                                                                           |
+| subject         | No       | String | Payment remark                                                                                                                         |
+| country         | No       | String | Required in cashier mode, reference [Country Code](#country), pass the 3-digit code                                                    |
+| body            | No       | String | Remark details                                                                                                                         |
+| partnerUserId   | Yes      | String | Unique user identifier (e.g., userId), used for risk control system. Must be real and valid, otherwise may affect transaction. Allowed: numbers, letters, or common symbols -~!@#$%&*()_. |
+| sign            | Yes      | String | Signature                                                                                                                              |
+
+##### 
+
+request
+
+```json
+{
+    "appId": 1054,
+    "orderId": "M233323000059",
+    "amount": "300",
+    "phone": "09230219312",
+    "email": "23423@qq.com",
+    "name": "test",
+    "inBankCode": "USA",
+    "payType": "BANK_TRANSFER",
+    "partnerUserId": "149597870",
+    "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="
+}
+```
+
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M233323000059",
+        "orderNo": "6023071013539074",
+        "payUrl": "",
+        "sign": "YEoA8Y2JzQFGVzwJSqmemm1Kfv/bfyIfCqv2dp7RNzT5B72AQvdD+nt2nR4sL1HWscvmNHyVt5ovAi7MMhy3ziih/sMph+wPx4YjH3W1h5DyBvSlWvaKfKrK5ViomZ0pPYWydwRHnnRnicxToHK9S6qtSy7Q73O0hdz4hJ9p41Th3ycBl2Q9SeqSZYSY1ohcPDhdyRf2y0prb8rHgpBKzxZ5BKX/1bsE9OmsSEHAEYT8OGgko6aNe8XPAhr4G48cpWTftvnGQuzh0O65nuZRI/PF+Axt2zJCVbFHDDSREI9NlAT82ebDqhlVdxQzKE67D1nxgjb3dPmDUYHOBpmwxQ=="
+    }
+}
+```
+
+Response data field description
+
+| Parameter Name | Type   | Description                       |
+| :------------- | :----- | :-------------------------------- |
+| orderId        | String | Merchant order number (must be unique) |
+| orderNo        | String | Platform order number             |
+| payUrl         | String | Payment link                      |
+| sign           | String | Signature                         |
+
+### **Collection Query**
+
+**Brief Description:**
+
+* Query collection order
+
+**URL:**
+
+USD: `/usd/collect/query`  
+
+EUR: `/eur/collect/query`  
+
+
+
+
+**Parameters:**
+
+| Parameter Name | Required | Type   | Description                                                    |
+| :------------- | :------- | :----- | :-------------------------------------------------------------- |
+| appId          | Yes      | Long   | Business ID (obtained from backend, needs to pass the corresponding Business ID based on the currency in the URL) |
+| orderId        | Yes      | String | Merchant order number                                          |
+| orderNo        | No       | String | Platform order number (faster response)                        |
+| sign           | Yes      | String | Signature                                                      |
+
+request
+
+```json
+{
+    "appId": 1054,
+    "orderId": "M22222000028",
+    "sign": "EmyJGm3ELzG4FsOd0Krs9ncbSjo4oTGuXWML+7djYla3+VAwd9wS17z38p/7U2ZAjroO04XrE7YXcB1o76Dtyipj3h3bJzs7FYma1QNkMUdt9hh7m8U6hMsMQX7vIWHtXNwz4pbTSC75+kQWXaCew7KoE6LXECdJU8AISgNgeki2TK9R0pCfshr0Z2SZBPeuT6OvIH5LdmqgdZhuqnffGU2qnXk4KMkO848e6/WALLBR+LE1wyKHfPnYVcuKSMVYxkvKyyIL5JIPEgW0o5bh4RCbaUn3NZtyYwrU1uQ3ZDFRThm9j6XAQP+LBlmq3nOePqBtp/VDVarRaV+7FbQg3A=="
+}
+```
+
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M22222000028",
+        "orderNo": "6023042811314347",
+        "amount": "50.00",
+        "actualAmount": "0.00",
+        "fee": "0.00",
+        "status": 1,
+        "sign": "fP433ygWVDLVGxYkVnIJj7riGq0U3vyVX+MbBAImxfGLZkZcEAHVEoVYuULZSmXAAXKRSyd67WlDNm+24pougM54ofAoH4HMtCL2tfCoBReFyz3z02AGKkrKE2xWhSpWoqfQoBvzwuN5iGMMu0s9Q1YvqiwJ8WDVIENnmiIyD8qDJN7caHTW2US14/faG+69AvnuIgJ/nu7/jogOlgEYdZdVYU7gcRDE+d47KjlFGswQkJ/h/uzV7cWtUqrtOO7ZnZ3/z33Xx8awokX36QoYcPSWAU0h+Ij9O9402HNhm1eTbYcLU0uI/z8xCAtyAI/tTyiFijpiNlxUKQj+zKsILw=="
+    }
+}
+```
+Response data field description
+
+| Parameter Name | Type    | Description                                                                 |
+| :------------- | :------ | :--------------------------------------------------------------------------- |
+| orderId        | String  | Merchant order number (must be unique)                                      |
+| orderNo        | String  | Platform order number                                                       |
+| amount         | String  | Transaction amount                                                          |
+| actualAmount   | String  | Received amount                                                             |
+| fee            | String  | Transaction fee                                                             |
+| status         | Integer | Status (0 Not Started, 1 In Progress, 2 Success (final), 3 Failed (final), -1 Exception Pending Confirmation) |
+| payTime        | String  | Payment success time (when status=2, in local time), format: yyyy-MM-dd HH:mm:ss |
+| errorMsg       | String  | Failure reason (when status=3)                                              |
+| sign           | String  | Signature                                                                   |
+
+### **Payment Methods** <a id="inBankCode"></a>
+
+**1. Cashier Mode:**
+
+| payType | inBankCode |
+| :------ | :--------- |
+| CASHIER | CASHIER    |
+
+**2. Non-Cashier Mode:**
+
+| payType        | inBankCode      | Description                      | Local Cashier |
+| :------------- | :-------------- | :-------------------------------- | :------------ |
+| BANK_TRANSFER  | BANCONTACT_USD  | USD order, Belgium BANCONTACT    | **Supported** |
+| BANK_TRANSFER  | EPS_USD         | USD order, Austria EPS           | **Supported** |
+| BANK_TRANSFER  | PRZELEWY24_USD  | USD order, Poland PRZELEWY24     | **Supported** |
+| BANK_TRANSFER  | BLIK_USD        | USD order, Poland BLIK           | **Supported** |
+| BANK_TRANSFER  | IDEAL_USD       | USD order, Netherlands IDEAL     | **Supported** |
+| BANK_TRANSFER  | EPS_EUR         | EUR order, Austria EPS           | **Supported** |
+| BANK_TRANSFER  | IDEAL_EUR       | EUR order, Netherlands IDEAL     | **Supported** |
+| BANK_TRANSFER  | BANCONTACT_EUR  | EUR order, Belgium BANCONTACT    | **Supported** |
+| EWALLET        | BANCOMATPAY_USD | USD order, Italy BANCOMATPAY     | **Supported** |
+| EWALLET        | BANCOMATPAY_EUR | EUR order, Italy BANCOMATPAY     | **Supported** |
+| EWALLET        | GOOGLE_PAY      | USD order 0.99~1000, Google Pay  | **Supported** |
+| EWALLET        | APPLE_PAY       | USD order 0.99~1000, Apple Pay   | **Supported** |
+
+### **Country Code (country)** <a id="country"></a>
+
+**1. Europe Cashier: USD, EUR**
+
+| Code | Description          |
+| :--- | :------------------- |
+| 000  | Show all supported countries |
+| 040  | Austria              |
+| 056  | Belgium              |
+| 380  | Italy                |
+| 528  | Netherlands          |
+| 616  | Poland               |
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div>
+ */}

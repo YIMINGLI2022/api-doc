@@ -1,0 +1,824 @@
+---
+title: 土耳其支付接口
+permalink: /api/version2/Turkey/
+---
+# **土耳其支付接口**
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+:::warning
+**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
+:::
+
+## **限额**
+
+| 交易类型 | 限额(单位:TRY) |
+| :------- | -------------- |
+| 代收     | 10-99000      |
+| 代付     | 10-99000      |
+
+## **代收API**
+
+### **代收申请**
+
+**简要描述：**
+
+* 创建代收订单
+
+**URL：`/try/collect/apply`**
+说明：appId需使用土耳其里拉对应的，用户支付成功后增加土耳其里拉余额
+
+
+**参数：**
+
+| 参数名        | 必选 | 类型   | 说明                                                                                                                             |
+| :------------ | :--- | :----- | :------------------------------------------------------------------------------------------------------------------------------- |
+| appId         | 是   | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                                          |
+| orderId       | 是   | String | 商户订单号(必须保证唯一性，长度不超过48)                                                                                         |
+| name          | 是   | String | 收款人姓名                                                                                                                       |
+| phone         | 是   | String | 真实手机号（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ）                               |
+| email         | 是   | String | 真实电子邮件                                                                                                                     |
+| amount        | 是   | String | 交易金额（单位：本币，精确到小数点后两位；禁止添加标点符号，例如：”,”）                                                          |
+| currency      | 否   | String | 币种(TRY)                                                                                                                        |
+| payType       | 是   | String | 交易类型 PAYMENT\_GATEWAY                                                                                                        |
+| inBankCode    | 是   | String | [支付方式](#inBankCode)                                                                                                          |
+| callBackUrl   | 是   | String |  用户支付成功后跳转地址                                                                                                               |
+| callBackFailUrl | 是   | String | 用户支付失败后跳转地址                                                                             
+| notifyUrl     | 否   | String | 回调地址                                                                                                                         |
+| subject       | 否   | String | 支付备注                                                                                                                         |
+| body          | 否   | String | 备注详情                                                                                                                         |
+| partnerUserId | 是   | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。 |
+| sign          | 是   | String | 签名                                                                                                                             |
+
+##### 
+
+request
+
+```json
+{
+    "appId": 1054,
+    "orderId": "M233323000059",
+    "amount": "300",
+    "phone": "09230219312",
+    "email": "23423@qq.com",
+    "name": "test",
+    "inBankCode": "GPay",
+    "payType": "PAYMENT_GATEWAY",
+    "partnerUserId": "149597870",
+    "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="
+}
+```
+
+va-response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M233323000059",
+        "orderNo": "6023071013539074",
+        "payUrl": "",
+        "sign": "YEoA8Y2JzQFGVzwJSqmemm1Kfv/bfyIfCqv2dp7RNzT5B72AQvdD+nt2nR4sL1HWscvmNHyVt5ovAi7MMhy3ziih/sMph+wPx4YjH3W1h5DyBvSlWvaKfKrK5ViomZ0pPYWydwRHnnRnicxToHK9S6qtSy7Q73O0hdz4hJ9p41Th3ycBl2Q9SeqSZYSY1ohcPDhdyRf2y0prb8rHgpBKzxZ5BKX/1bsE9OmsSEHAEYT8OGgko6aNe8XPAhr4G48cpWTftvnGQuzh0O65nuZRI/PF+Axt2zJCVbFHDDSREI9NlAT82ebDqhlVdxQzKE67D1nxgjb3dPmDUYHOBpmwxQ=="
+    }
+}
+```
+
+返回data参数说明
+
+| 参数名  | 类型   | 说明                       |
+| :------ | :----- | :------------------------- |
+| orderId | String | 商户订单号(必须保证唯一性) |
+| orderNo | String | 平台订单号                 |
+| payUrl  | String | 支付链接                   |
+| sign    | String | 签名                       |
+
+### **代收查询**
+
+**简要描述：**
+
+* 创建代收订单  
+* 当“payType=BANK\_TRANSFER” 时同步返回orderNo可以直接查询  
+* 其他支付方式异步通知后，通过orderNo查询二次确认状态
+
+**URL：`/try/collect/query`**
+
+
+##### 
+
+
+
+**参数：**
+
+| 参数名  | 必选 | 类型   | 说明                                                    |
+| :------ | :--- | :----- | :------------------------------------------------------ |
+| appId   | 是   | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| orderId | 是   | String | 商户订单号                                              |
+| orderNo | 否   | String | 平台订单号（响应快）                                    |
+| sign    | 是   | String | 签名                                                    |
+
+request
+
+```json
+{
+    "appId": 1054,
+    "orderId": "M22222000028",
+    "sign": "EmyJGm3ELzG4FsOd0Krs9ncbSjo4oTGuXWML+7djYla3+VAwd9wS17z38p/7U2ZAjroO04XrE7YXcB1o76Dtyipj3h3bJzs7FYma1QNkMUdt9hh7m8U6hMsMQX7vIWHtXNwz4pbTSC75+kQWXaCew7KoE6LXECdJU8AISgNgeki2TK9R0pCfshr0Z2SZBPeuT6OvIH5LdmqgdZhuqnffGU2qnXk4KMkO848e6/WALLBR+LE1wyKHfPnYVcuKSMVYxkvKyyIL5JIPEgW0o5bh4RCbaUn3NZtyYwrU1uQ3ZDFRThm9j6XAQP+LBlmq3nOePqBtp/VDVarRaV+7FbQg3A=="
+}
+```
+
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M22222000028",
+        "orderNo": "6023042811314347",
+        "amount": "50.00",
+        "actualAmount": "0.00",
+        "fee": "0.00",
+        "status": 1,
+        "sign": "fP433ygWVDLVGxYkVnIJj7riGq0U3vyVX+MbBAImxfGLZkZcEAHVEoVYuULZSmXAAXKRSyd67WlDNm+24pougM54ofAoH4HMtCL2tfCoBReFyz3z02AGKkrKE2xWhSpWoqfQoBvzwuN5iGMMu0s9Q1YvqiwJ8WDVIENnmiIyD8qDJN7caHTW2US14/faG+69AvnuIgJ/nu7/jogOlgEYdZdVYU7gcRDE+d47KjlFGswQkJ/h/uzV7cWtUqrtOO7ZnZ3/z33Xx8awokX36QoYcPSWAU0h+Ij9O9402HNhm1eTbYcLU0uI/z8xCAtyAI/tTyiFijpiNlxUKQj+zKsILw=="
+    }
+}
+```
+
+返回data参数说明
+
+| 参数名       | 类型    | 说明                                                        |
+| :----------- | :------ | :---------------------------------------------------------- |
+| orderId      | String  | 商户订单号(必须保证唯一性)                                  |
+| orderNo      | String  | 平台订单号                                                  |
+| amount       | String  | 交易金额                                                    |
+| actualAmount | String  | 收到金额                                                    |
+| fee          | String  | 手续费                                                      |
+| status       | Integer | 状态(0未开始,1收款中,2收款成功3:收款失败, \-1异常待确认)    |
+| payTime      | String  | 支付成功时间（当status=2时有值）, 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg     | String  | 支付失败原因（当status=3时有值）                            |
+| sign         | String  | 签名                                                        |
+
+### **支付方式**<a id="inBankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>币种</b></td>
+        <td><b>支付类型(payType)</b></td>
+        <td><b>支付编码(inBankCode)</b></td>
+        <td><b>限额</b></td>
+        <td><b>状态</b></td>
+        <td><b>说明</b></td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>IBAN</td>
+        <td>1000-500000</td>
+        <td>可用</td>
+        <td>土耳其国际银行支付</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>PAPARA</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>Papara钱包</td>
+    </tr>
+</table>
+
+
+
+## **代付API**
+
+### **代付申请**
+
+**简要描述：**
+
+* 创建代付订单
+
+**URL：`/try/pay/apply`**
+
+
+
+**参数：**
+
+| 参数名        | 必选 | 类型   | 说明                                                                                                                                                     |
+| :------------ | :--- | :----- | :------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| appId         | 是   | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                                                                  |
+| orderId       | 是   | String | 商户订单号(必须保证唯一性，长度不超过48)                                                                                                                 |
+| amount        | 是   | String | 交易金额（单位：本币）                                                                                                                                   |
+| accountType   | 是   | String | 账户类型： BANK_ACCOUNT,EWALLET                                                                                                                          |
+| bankCode      | 是   | String | [银行编码](#银行编码)                                                                                                                                    |
+| identifyType  | 否   | String | bankCode为PAPARA时必填 :<br/>PAPARA_NUMBER(Papara Id)<br/>PHONE(注册Papara的真实手机号)<br/>EMAIL(注册Papara的邮箱)<br/>TURKISH_ID(注册Papara的身份证号) |
+| accountNo     | 是   | String | 用户账号(BANK_ACCOUNT为iban)                                                                                                                             |
+| name          | 是   | String | 收款人姓名                                                                                                                                               |
+| phone         | 是   | String | 真实手机号                                                                                                                                               |
+| email         | 是   | String | 真实电子邮件                                                                                                                                             |
+| notifyUrl     | 否   | String | 回调地址                                                                                                                                                 |
+| subject       | 否   | String | 支付备注（交易标题，商品名称，支付原因）                                                                                                                 |
+| body          | 否   | String | 备注详情                                                                                                                                                 |
+| partnerUserId | 是   | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。                         |
+| sign          | 是   | String | 签名                                                                                                                                                     |
+
+##### 
+
+request（accountType为BANK\_ACCOUNT类型时）
+
+```json
+{
+    "appId": 1054,
+    "orderId": "M100000450012",
+    "amount": "500",
+    "accountType": "BANK_ACCOUNT",
+    "bankCode": "BDO",
+    "accountNo": "09876543210",
+    "ibanAccount": "09876543210",
+    "name": "john doe",
+    "phone": "09876543210",
+    "email": "johndoe@cashfree.com",
+    "subject": "iphone13",
+    "body": "ProMotion technology with adaptive refresh rates up to 120Hz",
+    "partnerUserId": "149597870",
+    "sign": "I1PeK3eJOVsFFNowxVRqMXpeWm1lr/BcRpBi8WsW4wVo1+5CC3JsrFq/m/L2O69NzKHvtDWi4zia3DL3dPut0yMyUyqL91LNCSaeISbGsQPlhEsQpyTOryS/RKOfsrn2Xo37SCF/phAvndOk2jwwGwqM5xLz1ms9Ukl85wv27QFNrXIMxK2p18oe7MpMYrgf+xvEBE/VqCtKMtN9pO449wWwXzHWNPbZ76s4pAvKwRE9yXQDr7Iw14Dktcnl1FoLM4gWM/obkO+mz6SyAGDuXhVh/+OD/IGNiCyTCNq6ciQY28UnCFV6ZIP40gxsFhfBJKbK+Raw7y1Bh912ifYfug=="
+}
+```
+
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M100000450013",
+        "orderNo": "3023062014149637",
+        "sign": "LmhUnkw5j0pMiimsG8rKwdNNZGvXH5MpSmD6mdHZwq1SQwuK5BohmdEoqKB/jkMk28o3da4Cxh6Q+tW97+yTCemRrF+dMaHA73rpOeUuujKQl/UcFvJuMhfLBa2tp09L71NzoBqpPD6aXf37mYAz8E1HmERwFPpac5FVxIYanHG8cqmMLJYsVmHTSxWavgWU03ys9UczBePkBiR8sl2FSOhFABB0wAP28lswrV/ABS68IsLKtyd1fyI3GBfSbIK5nDEEnlE+EdElFdLs9taAxJImeVF1x4eT47+bkPJ2qS8z3K8QGzKLF3W+8SiRZGfSwDTsLKH+2Vycvy5auRl+ag=="
+    }
+}
+```
+返回data参数说明
+
+| 参数名  | 必选   | 类型                       |
+| :------ | :----- | :------------------------- |
+| orderId | String | 商户订单号(必须保证唯一性) |
+| orderNo | String | 平台订单号                 |
+| sign    | String | 签名                       |
+
+### **代付查询**
+
+**简要描述：**
+
+* 查询代付订单
+
+**URL：`/try/pay/query`**
+
+
+
+
+**参数：**
+
+| 参数名  | 必选 | 类型   | 说明                                                    |
+| :------ | :--- | :----- | :------------------------------------------------------ |
+| appId   | 是   | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| orderId | 是   | String | 商户订单号                                              |
+| orderNo | 否   | String | 平台订单号（响应快）                                    |
+| sign    | 是   | String | 签名                                                    |
+
+request
+
+```json
+{
+    "appId": 1000,
+    "orderId": "M1234567111",
+    "orderNo": "3022111516571436",
+    "sign": "ZxkVZL+GAyv0VhvWn4IvuYahTzxgQuthkuV2ONWiqIfIDb2avvHlFOUJVzqZi1q8CPHXZm1ltanRTRVTxfsuftLvGeDioUHglWt46/RU6c1OPznpLGsZ35Q3n5tW2y1EnOsxPynXBFLuDQy+aZ3l9u6AQ30T0zQexMGT+IxuFkmUp02g/6juaHa5ZgNMv7lN67ixIp162wrM7OJuaOif872QijSceRdZhzaMGImAwB0D4MosRV4WMBOKkwgPdmS7GuZN66YUidXk3wTGqX3MYRw6M0kj4eNegSUwPXvp4q4p0KO8Y3xUMld54GY2ApX3WN3CBtC/vpJqEszjGBbbGg=="
+}
+```
+response — 订单失败
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M1234567111",
+        "orderNo": "3022111516571436",
+        "amount": "100000.00",
+        "fee": "0.00",
+        "status": 3,
+        "errorMsg": "Đơn hàng không tồn tại",
+        "sign": "KKuvCl0SuNANJs+l2ogDaJm8pmV+Hi+Xa7q27vJ6D1Ehs4aOp13kRbITfJAhczh3T81BE9qwHeJaYwf+r0EypKM9TL6pMwfG8Az4gRy1D57wiUaVjl2PWcvbEqrn1hL0b+btkjvAM9I+CcSv+wuOW3/uku17Ws3FhgJLj9sFsQUBAPjDO+758VnwBytCOLBmljLBXyKgNgpmFQ1/DNkqWl0UNzyLK45Zw3yf5NiwhEFbvW0jlOWlfu/ql4hluISUQG573jEoFCBEnQLb2tQoRZj1QYNRCXPf5lbej0vzqbEwvR9h+ZOf255t1MocJkdIe463DTV5U3KZdVT87HMagw=="
+    }
+}
+```
+
+response — 订单成功
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M1234567112",
+        "orderNo": "3022111517401574",
+        "amount": "100000.00",
+        "fee": "1003.00",
+        "status": 2,
+        "payTime": "2024-03-01 23:59:59",
+        "sign": "khPtOmGq+cpKX0HFAI/lbP0dx4oVyNAnL5oLsdmhDJdASlQm0yg5I3o+MhImYggEsL6c2bo5fP29t54OZFqSdQDfIuNDvGbAMAr4mRBxc0hoHLkBLyyagfVPBLyQA1JY8XV3ZL4ySzQ3ZQnMCfrh2K39ueUuz6HpZ03Hj0KYijVRCXAZaio/L5jfLBT12QXmvIfAHa8s/k9flhK05ENHPep3zjj/MZGOEaX7jkEJLfjK0duypDCa61BRQjM+oePOdVsgleIl1Yf98UAxMDZ/A3912KFHEb+/jvmdnulNbiJFyuT1fEe+j2teUgw3vFsZAtwNWAgxhC7UO+N0Q5z4EA=="
+    }
+}
+```
+
+返回data参数说明
+
+| 参数名   | 类型    | 说明                                                                         |
+| :------- | :------ | :--------------------------------------------------------------------------- |
+| orderId  | String  | 商户订单号(必须保证唯一性)                                                   |
+| orderNo  | String  | 平台订单号                                                                   |
+| amount   | String  | 交易金额                                                                     |
+| fee      | String  | 手续费                                                                       |
+| status   | Integer | 订单状态(0未开始, 1放款中 2放款成功（终态） 3放款失败（终态） \-1异常待确认) |
+| payTime  | String  | 支付成功时间（当status=2时有值）, 格式: yyyy-MM-dd HH:mm:ss                  |
+| errorMsg | String  | 支付失败原因（当status=3时有值）                                             |
+| sign     | String  | 签名                                                                         |
+
+### **支付方式**
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1050px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>币种</b></td>
+        <td><b>支付类型(accountType)</b></td>
+        <td><b>支付编码(bankCode)</b></td>
+        <td><b>限额</b></td>
+        <td><b>状态</b></td>
+        <td><b>说明</b></td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>EWALLET</td>
+        <td>PAPARA</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>Papara钱包</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>AKB</td>
+        <td>2000-500000</td>
+        <td>可用</td>
+        <td>AKBANK T.A.Ş.</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>Burgan_Bank</td>
+        <td>2000-500000</td>
+        <td>可用</td>
+        <td>AKBANK T.A.Ş.</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CITI_BANK</td>
+        <td>2000-500000</td>
+        <td>可用</td>
+        <td>CITIBANK A.Ş..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>DENIZ_BANK</td>
+        <td>2000-500000</td>
+        <td>可用</td>
+        <td>DENİZBANK A.Ş..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>FIBA_BANK</td>
+        <td>2000-500000</td>
+        <td>可用</td>
+        <td>FIBABANKA A.Ş.</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>FINANS_BANK</td>
+        <td>2000-500000</td>
+        <td>可用</td>
+        <td>FİNANS BANK A.Ş..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>QNB</td>
+        <td>2000-500000</td>
+        <td>可用</td>
+        <td>QNB Finansbank.</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>HSBC_BANK</td>
+        <td>2000-500000</td>
+        <td>可用</td>
+        <td>HSBC BANK A.Ş.</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ING_BANK</td>
+        <td>2000-500000</td>
+        <td>可用</td>
+        <td>ING BANK A.Ş..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>KUVEYT_TURK</td>
+        <td>2000-500000</td>
+        <td>可用</td>
+        <td>KUVEYT TÜRK KATILIM BANKASI A.Ş..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ODEA_BANK</td>
+        <td>2000-500000</td>
+        <td>可用</td>
+        <td>ODEA BANK A.Ş..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SEKER_BANK</td>
+        <td>2000-500000</td>
+        <td>可用</td>
+        <td>ŞEKERBANK T.A.Ş.</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>TEKFEN_BANK</td>
+        <td>2000-500000</td>
+        <td>可用</td>
+        <td>TEKFENBANK A.S..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>YAPI_KREDI</td>
+        <td>2000-500000</td>
+        <td>可用</td>
+        <td>Yapıkredi</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ZIRAAT_BANK</td>
+        <td>2000-500000</td>
+        <td>可用</td>
+        <td>T.C. ZİRAAT BANKASI A.Ş..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>VAKIF_BANK</td>
+        <td>2000-500000</td>
+        <td>可用</td>
+        <td>T. VAKIFLAR BANKASI.</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ISB</td>
+        <td>2000-500000</td>
+        <td>可用</td>
+        <td>T. İŞ BANKASI A.Ş..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>GARANTI_BANK</td>
+        <td>2000-500000</td>
+        <td>可用</td>
+        <td>T. GARANTİ BANKASI A.Ş..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>TCMB</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>T.C.MERKEZ BANKASI A.&#350;.</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ILB</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>İLLER BANKASI.</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>HALK_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>T. HALK BANKASI A.Ş..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>TSKB</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>T.SINAİ KALK. BANKASI A.S..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>TURK_EXIMB</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>T.IHRACAT KREDI BANKASI A.S.</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>KALKINMA_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>T.KALKINMA BANKASI A.S..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BAYINDIR_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>BAYINDIRBANK A.S..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>EKONOMI_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>T.EKONOMİ BANKASI A.S..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>YAPI_KREDI</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>YAPI ve KREDİ BANKASI A.Ş..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>TURK_TICARET</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>T.DIŞ TICARET_BANKASI A.S..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ROMA_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>BANCA DI ROMA S.P.A..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ABN_AMRO</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>ABN AMRO BANK N.V..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ATB</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>ARAP TÜRK BANKASI A.S..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>KOC_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>KOÇBANK A.S.</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>TURKISH_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>TURKISH BANK A.Ş..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>JPMORGAN_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>JP MORGAN CHASE BANK NA MERK C.</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ING_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>ING BANK A.Ş..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ADA_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>ADABANK A.S..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>DEUTSCHE_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>DEUTSCHE BANK A.S..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CALYON_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>CALYON BANK T.A.S.</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ALTERNATIF_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>ALTERNATİFBANK A.S..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ANADOLU_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>ANADOLUBANK A.Ş..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>DILER_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>DİLER YATIRIM BANKASI A.S..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>GSD_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>GSD YATIRIM BANKASI A.S..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NUROL_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>NUROL YATIRIM BANKASI A.S..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CALIK_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>ÇALIK YATIRIM BANKASI A.S.</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>TURKLAND_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>TURKLAND BANK A.Ş..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>URGAN_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>URGAN BANK A.Ş..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>AKTIF_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>AKTİF YATIRIM BANKASI A.Ş.</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ALBARAKA_TURK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>ALBARAKA TÜRK KATILIM BANKASI A.Ş..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ASYA_BANK</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>ASYA KATILIM BANKASI A.Ş..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PTT</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>PTT.</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>TURKIYE_FINANS</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>TÜRKİYE FİNANS KATILIM BANKASI A.Ş..</td>
+    </tr>
+    <tr>
+        <td>TRY</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ININAL</td>
+        <td>10-99000</td>
+        <td>维护</td>
+        <td>Ininal.</td>
+    </tr>
+</table>
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}
+

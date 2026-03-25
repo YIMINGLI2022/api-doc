@@ -1,0 +1,232 @@
+---
+title: Integration Environment
+permalink: /en/guide/api_parameters_doc/
+---
+# Integration Environment
+
+| Environment | Request URL                                                            |
+| :---------- | :--------------------------------------------------------------------- |
+| Test        | [https://uat-interface.haipay.asia](https://uat-interface.haipay.asia) |
+| Prod        | Provided upon go-live                                                  |
+
+Through these API definitions, merchants can use the interfaces in different environments to complete order creation and payment flows. By continuously adding use case scenarios, more cases can be accumulated and refined.
+
+# APIs
+
+## Collection
+
+### Collection Apply
+
+Create a collection order.
+
+**URL**: `/{currency}/collect/apply`, where {currency} is the currency. See [Supported Countries and Currencies](/en/docs/version2/guide/supported-country-region-currency.md)
+
+**Request Method**: POST
+
+**Request Parameters**:  
+| Parameter       | Required | Type    | Description                                                                                       |
+| :-------------- | :------- | :------ | :------------------------------------------------------------------------------------------------ |
+| appId           | Yes      | Long    | Business ID (retrieved from backend, see [Merchant Integration Process](/en/docs/version2/guide/integration_process_guide.md)) |
+| orderId         | Yes      | String  | Merchant Order ID (must be unique, max length 48)                                                 |
+| amount          | Yes      | String  | Transaction amount                                                                                |
+| name            | No       | String  | Payee name (required for certain scenarios, TODO XXX)                                             |
+| phone           | No       | String  | Real phone number (required for certain scenarios, TODO XXX)                                      |
+| email           | No       | String  | Real email (required for certain scenarios, TODO XXX)                                             |
+| subject         | No       | String  | Payment note                                                                                      |
+| body            | No       | String  | Detailed remark                                                                                   |
+| inBankNo        | No       | String  | Company collection bank account number                                                            |
+| inBankCode      | Yes      | String  | Collection code                                                                                   |
+| payType         | Yes      | String  | User payment method                                                                               |
+| callBackUrl     | Yes      | String  | Redirect URL after successful payment                                                             |
+| callBackFailUrl | Yes      | String  | Redirect URL after failed payment                                                                 |
+| expiryPeriod    | No       | Integer | Expiration time                                                                                   |
+| clientType      | No       | String  | Client type                                                                                       |
+| sign            | Yes      | String  | Signature                                                                                         |
+| outBankNo       | No       | String  | Payer bank account number                                                                         |
+| outBankCode     | No       | String  | Collection code                                                                                   |
+| country         | No       | String  | Credit Card - European Cashier - Country Code (optional)                                          |
+| currency        | No       | String  | User payment currency                                                                             |
+| userId          | No       | Long    | User ID (required for GatePay channel, must be numeric)                                           |
+| uuid            | No       | String  | Unique user ID                                                                                    |
+| goodName        | No       | String  | Product name                                                                                      |
+| goodsQuantity   | No       | String  | Product quantity                                                                                  |
+| goodsPrice      | No       | String  | Product unit price                                                                                |
+| goodsSku        | No       | String  | Product ID                                                                                        |
+| goodsAvatar     | No       | String  | Product image                                                                                     |
+| platform        | No       | String  | Platform name                                                                                     |
+
+**Response**:  
+<table>
+    <tbody>
+        <tr>
+            <td colspan="2"><b>Parameter</b></td>
+            <td><b>Required</b></td>
+            <td><b>Type</b></td>
+            <td><b>Description</b></td>
+        </tr>
+        <tr>
+            <td colspan="2">status</td>
+            <td>Yes</td>
+            <td>Integer</td>
+            <td>Response code, 1 = success, 0 = failure</td>
+        </tr>
+        <tr>
+            <td colspan="2">error</td>
+            <td>No</td>
+            <td>Integer</td>
+            <td>Error code, see <a href="/zh/docs/version2/guide/error_code_doc">Error Codes</a></td>
+        </tr>
+        <tr>
+            <td colspan="2">msg</td>
+            <td>Yes</td>
+            <td>String</td>
+            <td>Error message</td>
+        </tr>
+        <tr>
+            <td rowspan="15">data</td>
+            <td>orderId</td>
+            <td>Yes</td>
+            <td>String</td>
+            <td>Merchant Order ID</td>
+        </tr>
+        <tr>
+            <td>orderNo</td>
+            <td>Yes</td>
+            <td>String</td>
+            <td>Platform Order ID</td>
+        </tr>
+        <tr>
+            <td>payUrl</td>
+            <td>Yes</td>
+            <td>String</td>
+            <td>Collection URL</td>
+        </tr>
+        <tr>
+            <td>exchangeRate</td>
+            <td>No</td>
+            <td>String</td>
+            <td>Exchange rate, returned when user currency differs from merchant base currency</td>
+        </tr>
+        <tr>
+            <td>orderAmount</td>
+            <td>No</td>
+            <td>String</td>
+            <td>Order amount, returned when user currency differs from merchant base currency</td>
+        </tr>
+        <tr>
+            <td>amount</td>
+            <td>No</td>
+            <td>String</td>
+            <td>Transaction amount, returned when user currency differs from merchant base currency</td>
+        </tr>
+        <tr>
+            <td>sign</td>
+            <td>Yes</td>
+            <td>String</td>
+            <td>Signature</td>
+        </tr>
+    </tbody>
+</table>
+
+**Asynchronous Notification**
+
+When a collection succeeds or fails, we will push the order status. Notifications are sent every 5 minutes, up to 5 times. The pushed data contains details of the current payment attempt, including: payment amountm and handling fee.
+
+**URL**: `Provided by merchant`, see [Merchant Integration Process](/en/docs/version2/guide/integration_process_guide.md)
+
+**Request Method**: POST
+
+**Request Parameters**:
+
+| Parameter | Required | Type    | Description                                                                 |
+| :-------- | :------- | :------ | :--------------------------------------------------------------------------- |
+| appId     | Yes      | Long    | Business ID                                                                 |
+| currency  | Yes      | String  | Currency                                                                    |
+| orderId   | Yes      | String  | Merchant Order ID (must be unique)                                          |
+| orderNo   | Yes      | String  | Platform Order ID                                                           |
+| amount    | Yes      | String  | Collection amount                                                           |
+| fee       | Yes      | String  | Handling fee amount                                                         |
+| status    | Yes      | Integer | Order status (2 = success, 3 = failed, 4 = partial, 5 = overpaid)           |
+| payTime   | Yes      | String  | Payment success time (when status = 2,4,5) (local time), format: yyyy-MM-dd HH:mm:ss |
+| errorMsg  | No       | String  | Payment failure reason (when status = 3)                                    |
+| sign      | Yes      | String  | Signature                                                                   |
+
+:::warning
+**After receiving the callback notification, please return body "SUCCESS" (uppercase). Otherwise, notifications will continue up to 5 times.**
+:::
+
+### Collection Query
+
+Query a collection order.
+
+**Request Parameters**:  
+| Parameter | Required | Type   | Description                                                                 |
+| :-------- | :------- | :----- | :-------------------------------------------------------------------------- |
+| appId     | Yes      | Long   | Business ID (retrieved from backend, see [Merchant Integration Process](/en/docs/version2/guide/integration_process_guide.md)) |
+| orderId   | Yes      | String | Merchant Order ID                                                           |
+| orderNo   | No       | String | Platform Order ID (faster response)                                         |
+| sign      | Yes      | String | Signature                                                                   |
+
+**Response**:  
+| Parameter     | Required | Type    | Description                                                                 |
+| :------------ | :------- | :------ | :-------------------------------------------------------------------------- |
+| orderId       | Yes      | String  | Merchant Order ID (must be unique, max length 48)                           |
+| orderNo       | Yes      | String  | Platform Order ID                                                           |
+| amount        | Yes      | String  | Transaction amount                                                          |
+| actualAmount  | Yes      | String  | Amount received                                                             |
+| fee           | Yes      | String  | Handling fee                                                                |
+| status        | Yes      | Integer | Status (0 = not started, 1 = in progress, 2 = success, 3 = failed, 4 = partial, 5 = overpaid, -1 = exception pending confirmation) |
+| payTime       | Yes      | String  | Payment success time (for status = 2,4,5) (Philippines time), format: yyyy-MM-dd HH:mm:ss |
+| errorMsg      | No       | String  | Failure reason (returned when status = 3)                                   |
+| inBankCode    | No       | String  | Collection code                                                             |
+| sign          | Yes      | String  | Signature                                                                   |
+
+### Refund Apply
+
+TODO
+
+## Disbursement
+
+### Disbursement Apply
+
+Create a disbursement order.
+
+**URL**: `/{currency}/pay/apply`, where {currency} is the currency. See [Supported Countries and Currencies](/en/docs/version2/guide/supported-country-region-currency.md)
+
+**Request Method**: POST
+
+**Request Parameters**:  
+| Parameter     | Required | Type   | Description                                                                 |
+| :------------ | :------- | :----- | :-------------------------------------------------------------------------- |
+| appId         | Yes      | Long   | Business ID (retrieved from backend, see [Merchant Integration Process](/en/docs/version2/guide/integration_process_guide.md)) |
+| orderId       | Yes      | String | Merchant Order ID (must be unique, max length 48)                           |
+| amount        | Yes      | String | Transaction amount                                                          |
+| name          | Yes      | String | Payee name                                                                  |
+| phone         | Yes      | String | Real phone number                                                           |
+| email         | Yes      | String | Real email                                                                  |
+| subject       | No       | String | Payment note                                                                |
+| body          | No       | String | Detailed remark                                                             |
+| accountNo     | No       | String | Payee account                                                               |
+| accountType   | No       | String | Account type                                                                |
+| bankName      | No       | String | Disbursing bank name                                                        |
+| bankCode      | No       | String | Disbursing bank code                                                        |
+| sign          | Yes      | String | Signature                                                                   |
+| identifyType  | No       | String | Account type - Brazil PIX disbursement                                      |
+| ibanAccount   | No       | String | IBAN account - Saudi/Turkey disbursement                                    |
+| country       | No       | String | Required for US ACH                                                         |
+| address1      | No       | String | Required for US ACH                                                         |
+| address2      | No       | String | Required for US ACH                                                         |
+| address3      | No       | String | Required for US ACH                                                         |
+| postalCode    | No       | String | Required for US ACH                                                         |
+| ifsc          | No       | String | India IFSC code                                                             |
+| branchNumber  | No       | String | Branch code - Turkey disbursement                                           |
+| birth         | No       | String | Pakistan date of birth [yyyy-MM-dd]                                         |
+| gender        | No       | String | Pakistan gender [MALE, FEMALE, OTHER]                                       |
+
+**Response**:  
+
+### Disbursement Query
+
+## Account Balance
+
+### Query Account

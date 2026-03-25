@@ -1,0 +1,695 @@
+---
+title: 巴基斯坦接口
+permalink: /api/version2/Pakistan/
+---
+
+# **巴基斯坦支付接口**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+:::warning
+**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
+:::
+
+## **限额**
+
+| 交易类型 | 限额(单位:PKR) |
+|:-----|------------|
+| 代收   | 10-500000  |
+| 代付   | 10-100000  |
+
+## **代收API**
+
+### **代收申请**
+
+**简要描述：**
+
+* 创建代收订单
+
+**URL：`/pkr/collect/apply`**
+说明：appId需使用巴基斯坦卢比对应的，用户支付成功后增加巴基斯坦卢比余额
+
+**参数：**
+
+| 参数名             | 必选 | 类型     | 说明                                                                          |
+|:----------------|:---|:-------|:----------------------------------------------------------------------------|
+| appId           | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                             |
+| orderId         | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                      |
+| name            | 是  | String | 收款人姓名                                                                       |
+| phone           | 是  | String | 手机号                               |
+| email           | 是  | String | 真实电子邮件                                                                      |
+| amount          | 是  | String | 交易金额                                                                        |
+| payType         | 是  | String | 交易类型                                                                        |
+| inBankCode      | 是  | String | [支付方式](#支付方式)                                                               |
+| callBackUrl     | 是  | String | 用户支付成功后跳转地址                                                                 |
+| callBackFailUrl | 是  | String | 用户支付失败后跳转地址                                                                 
+| notifyUrl       | 否  | String | 回调地址                                                                        |
+| subject         | 否  | String | 支付备注                                                                        |
+| body            | 否  | String | 备注详情                                                                        |
+| partnerUserId   | 是  | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。 |
+| sign            | 是  | String | 签名                                                                          |
+
+返回data参数说明
+
+| 参数名     | 类型     | 说明                 |
+|:--------|:-------|:-------------------|
+| orderId | String | 商户订单号(必须保证唯一性)     |
+| orderNo | String | 平台订单号              |
+| payUrl  | String | 支付链接               |
+| qrCode  | String | 二维码内容-可自行生成二维码(QR) |
+| sign    | String | 签名                 |
+
+### **代收查询**
+
+**简要描述：**
+
+* 查询代收订单
+
+**URL：`/pkr/collect/query`**
+
+**参数：**
+
+| 参数名     | 必选 | 类型     | 说明                              |
+|:--------|:---|:-------|:--------------------------------|
+| appId   | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| orderId | 是  | String | 商户订单号                           |
+| orderNo | 否  | String | 平台订单号（响应快）                      |
+| sign    | 是  | String | 签名                              |
+
+返回data参数说明
+
+| 参数名          | 类型      | 说明                                                    |
+|:-------------|:--------|:------------------------------------------------------|
+| orderId      | String  | 商户订单号(必须保证唯一性)                                        |
+| orderNo      | String  | 平台订单号                                                 |
+| amount       | String  | 交易金额                                                  |
+| actualAmount | String  | 收到金额                                                  |
+| fee          | String  | 手续费                                                   |
+| status       | Integer | 状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)                |
+| payTime      | String  | 支付成功时间（当status=2时有值）(巴基斯坦时间), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg     | String  | 失败原因（当status=3时有值）                                    |
+| sign         | String  | 签名                                                    |
+
+### **支付方式**
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>币种</b></td>
+        <td><b>支付类型(payType)</b></td>
+        <td><b>支付编码(inBankCode)</b></td>
+        <td><b>限额</b></td>
+        <td><b>状态</b></td>
+        <td><b>说明</b></td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>CASHIER</td>
+        <td>10-500000</td>
+        <td>可用</td>
+        <td>收银台模式</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>EWALLET</td>
+        <td>JAZZCASH</td>
+        <td>10-500000</td>
+        <td>可用</td>
+        <td>JazzCash钱包</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>EWALLET</td>
+        <td>EASYPAISA</td>
+        <td>10-500000</td>
+        <td>可用</td>
+        <td>EasyPaisa钱包</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>EWALLET</td>
+        <td>ALFA</td>
+        <td>10-500000</td>
+        <td>维护</td>
+        <td>ALFA钱包</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>EWALLET</td>
+        <td>HBL_KONNECT</td>
+        <td>10-500000</td>
+        <td>维护</td>
+        <td>HBL KONNECT钱包</td>
+    </tr>
+</table>
+
+## **代付API**
+
+### **代付申请**
+
+**简要描述：**
+
+* 创建代付订单
+
+**URL：`/pkr/pay/apply`**
+
+**参数：**
+
+| 参数名           | 必选 | 类型     | 说明                                                                          |
+|:--------------|:---|:-------|:----------------------------------------------------------------------------|
+| appId         | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                             |
+| orderId       | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                      |
+| amount        | 是  | String | 交易金额（精确到小数点后两位；禁止添加标点符号，例如：”,”）                                             |
+| accountType   | 是  | String | 账户类型：EWALLET（电子钱包） , BANK\_ACCOUNT（银行）                                      |
+| bankCode      | 是  | String | [付款编码](#付款编码)                                                               |
+| accountNo     | 是  | String | 用户银行账号或钱包账号                                                                 |
+| name          | 是  | String | 收款人姓名                                                                       |
+| phone         | 是  | String | 真实手机号                                                                       |
+| email         | 是  | String | 真实电子邮件                                                                      |
+| notifyUrl     | 否  | String | 回调地址                                                                        |
+| subject       | 是  | String | 支付备注（交易标题，商品名称，支付原因）                                                        |
+| body          | 否  | String | 备注详情                                                                        |
+| birth         | 是  | String | 出生年月日，格式：yyyy-MM-dd                                                         |
+| gender        | 是  | String | 性别，可选值：MALE, FEMALE or OTHER                                                |
+| idCard        | 否  | String | 身份证号                                                                        |
+| partnerUserId | 是  | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。 |
+| sign          | 是  | String | 签名                                                                          |
+
+返回data参数说明
+
+| 参数名     | 必选     | 类型             |
+|:--------|:-------|:---------------|
+| orderId | String | 商户订单号(必须保证唯一性) |
+| orderNo | String | 平台订单号          |
+| sign    | String | 签名             |
+
+### **代付查询**
+
+**简要描述：**
+
+* 查询代付订单
+
+**URL：`/pkr/pay/query`**
+
+**参数：**
+
+| 参数名     | 必选 | 类型     | 说明                              |
+|:--------|:---|:-------|:--------------------------------|
+| appId   | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| orderId | 是  | String | 商户订单号                           |
+| orderNo | 否  | String | 平台订单号（响应快）                      |
+| sign    | 是  | String | 签名                              |
+
+返回data参数说明
+
+| 参数名      | 类型      | 说明                                                    |
+|:---------|:--------|:------------------------------------------------------|
+| orderId  | String  | 商户订单号(必须保证唯一性)                                        |
+| orderNo  | String  | 平台订单号                                                 |
+| amount   | String  | 交易金额                                                  |
+| fee      | String  | 手续费                                                   |
+| status   | Integer | 状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)                |
+| payTime  | String  | 支付成功时间（当status=2时有值）(巴基斯坦时间), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg | String  | 支付失败原因（当status=3时有值）                                  |
+| sign     | String  | 签名                                                    |
+
+### **支付方式**
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1050px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>币种</b></td>
+        <td><b>支付类型(accountType)</b></td>
+        <td><b>支付编码(bankCode)</b></td>
+        <td><b>限额</b></td>
+        <td><b>状态</b></td>
+        <td><b>说明</b></td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>EWALLET</td>
+        <td>ALFA</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>ALFA钱包</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>EWALLET</td>
+        <td>BAFL</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Bank Alfalah Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>EWALLET</td>
+        <td>EASYPAISA</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>EasyPaisa钱包</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>EWALLET</td>
+        <td>JAZZCASH</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>JazzCash钱包</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>EWALLET</td>
+        <td>HBL_KONNECT</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>HBL KONNECT钱包</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ABBL</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Al Baraka Bank Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ABHI</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Abhi Finance</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ABL</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Allied Bank Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ACBL</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Askari Commercial Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ADVANS</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Advans Pakistan</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>APNA</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Apna Microfinance Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BAHL</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Bank AL Habib Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BARWAQT</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Barwaqt</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BIPL</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>BankIslami Pakistan</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BOK</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Bank of Khyber</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BOP</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Bank of Punjab</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BYKEA</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>BYKEA</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CDNS</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>CDNS</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CITI</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Citi Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>DIBPL</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Dubai Islamic Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>FAYSAL</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Faysal Bank Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>FINCA</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>FINCA Microfinance Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>FINJA</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>FINJA EMI</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>FMB</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>First Microfinance Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>FWBL</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>First Women Bank Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>HBL</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Habib Bank Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>HBLASSET</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>HBL ASSET MANAGEMENT</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>HMBL</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Habib Metropolitan Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ICBC</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>ICBC</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>JSB</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>JS Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>KHUSHALI</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Khushali Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MCB</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>MCB Bank Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MCBARIF</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>MCB ARIF HABIB</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MCIB</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>MCB Islamic Banking</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MEEZAN</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Meezan Bank Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MOD</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>MOD</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NAYAPAY</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>NayaPay Private Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NBP</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>National Bank of Pakistan</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NBPF</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>NBP Funds</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NRSP</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>NRSP Microfinance</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PAYMAX</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>PayMax (Zong)</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SADAPAY</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>SadaPay</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SAMBA</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>SAMBA</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SCB</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Standard Chartered Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SILK</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Silk Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SIMPAISA</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>SimPaisa</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SINDH</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Sindh Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SME</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>SME Bank Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SONERI</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Soneri Bank Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SUMMIT</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Summit Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>UBANK</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Ubank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>UBL</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>United Bank Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>WHITE</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>WHITE LABEL ATM</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ZARAI</td>
+        <td>10-100000</td>
+        <td>可用</td>
+        <td>Zarai Taraqiati Bank</td>
+    </tr>
+</table>
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}
+

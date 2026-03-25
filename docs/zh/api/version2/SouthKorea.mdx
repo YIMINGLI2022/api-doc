@@ -1,0 +1,857 @@
+---
+title: 韩国支付接口
+permalink: /api/version2/SouthKorea/
+---
+
+# **韩国接口文档**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+:::warning
+**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
+:::
+
+## **限额**
+
+| 交易类型 | 限额                              |
+|:-----|---------------------------------|
+| 代收   | 美元: 0.99-1000, 韩元: 1000-1500000 |
+| 代付   | 韩元: 1000-1500000                |
+
+## **代收API**
+
+### **代收申请**
+
+**简要描述：**
+
+* 创建代收订单
+
+**URL：**
+
+韩元: `/krw/collect/apply`
+说明：appId需使用韩元对应的，用户支付成功后增加韩元余额
+
+美元: `/usd/collect/apply`
+说明：appId需使用美元对应的，用户支付成功后增加美元余额
+
+**参数：**
+
+| 参数名             | 必选 | 类型     | 说明                                                                                |
+|:----------------|:---|:-------|:----------------------------------------------------------------------------------|
+| appId           | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                   |
+| orderId         | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                            |
+| name            | 是  | String | 用户姓名，推荐使用真实姓名，格式：包含firstName和lastName，以空格分割的，示例：Donald John Trump                 |
+| phone           | 是  | String | 真实手机号（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ） |
+| email           | 是  | String | 真实电子邮件                                                                            |
+| amount          | 是  | String | 交易金额（精确到小数点后两位；禁止添加标点符号，例如：”,”） 范围参考：收款编码Code                                     |
+| payType         | 是  | String | [交易类型](#inBankCode)                                                               |
+| inBankCode      | 是  | String | [支付方式](#inBankCode)                                                               |
+| callBackUrl     | 是  | String | 用户支付成功后跳转地址                                                                       |
+| callBackFailUrl | 是  | String | 用户支付失败后跳转地址                                                                       
+| notifyUrl       | 否  | String | 回调地址                                                                              |
+| subject         | 否  | String | 支付备注                                                                              |
+| country         | 否  | String | 收银台模式需要传递，请传：410                                                                  |
+| body            | 否  | String | 备注详情                                                                              |
+| partnerUserId   | 是  | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。       |
+| sign            | 是  | String | 签名                                                                                |
+
+返回data参数说明
+
+| 参数名     | 类型     | 说明             |
+|:--------|:-------|:---------------|
+| orderId | String | 商户订单号(必须保证唯一性) |
+| orderNo | String | 平台订单号          |
+| payUrl  | String | 支付链接           |
+| sign    | String | 签名             |
+
+### **代收查询**
+
+**简要描述：**
+
+* 查询代收订单
+
+**URL：**
+
+韩元: `/krw/collect/query`
+
+美元: `/usd/collect/query`
+
+**参数：**
+
+| 参数名     | 必选 | 类型     | 说明                              |
+|:--------|:---|:-------|:--------------------------------|
+| appId   | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| orderId | 是  | String | 商户订单号                           |
+| orderNo | 否  | String | 平台订单号（响应快）                      |
+| sign    | 是  | String | 签名                              |
+
+request
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M22222000028",
+  "sign": "EmyJGm3ELzG4FsOd0Krs9ncbSjo4oTGuXWML+7djYla3+VAwd9wS17z38p/7U2ZAjroO04XrE7YXcB1o76Dtyipj3h3bJzs7FYma1QNkMUdt9hh7m8U6hMsMQX7vIWHtXNwz4pbTSC75+kQWXaCew7KoE6LXECdJU8AISgNgeki2TK9R0pCfshr0Z2SZBPeuT6OvIH5LdmqgdZhuqnffGU2qnXk4KMkO848e6/WALLBR+LE1wyKHfPnYVcuKSMVYxkvKyyIL5JIPEgW0o5bh4RCbaUn3NZtyYwrU1uQ3ZDFRThm9j6XAQP+LBlmq3nOePqBtp/VDVarRaV+7FbQg3A=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M22222000028",
+    "orderNo": "6023042811314347",
+    "amount": "50.00",
+    "actualAmount": "0.00",
+    "fee": "0.00",
+    "status": 1,
+    "sign": "fP433ygWVDLVGxYkVnIJj7riGq0U3vyVX+MbBAImxfGLZkZcEAHVEoVYuULZSmXAAXKRSyd67WlDNm+24pougM54ofAoH4HMtCL2tfCoBReFyz3z02AGKkrKE2xWhSpWoqfQoBvzwuN5iGMMu0s9Q1YvqiwJ8WDVIENnmiIyD8qDJN7caHTW2US14/faG+69AvnuIgJ/nu7/jogOlgEYdZdVYU7gcRDE+d47KjlFGswQkJ/h/uzV7cWtUqrtOO7ZnZ3/z33Xx8awokX36QoYcPSWAU0h+Ij9O9402HNhm1eTbYcLU0uI/z8xCAtyAI/tTyiFijpiNlxUKQj+zKsILw=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名          | 类型      | 说明                                                  |
+|:-------------|:--------|:----------------------------------------------------|
+| orderId      | String  | 商户订单号(必须保证唯一性)                                      |
+| orderNo      | String  | 平台订单号                                               |
+| amount       | String  | 交易金额                                                |
+| actualAmount | String  | 收到金额                                                |
+| fee          | String  | 手续费                                                 |
+| status       | Integer | 状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)              |
+| payTime      | String  | 支付成功时间（当status=2时有值）(本地时间), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg     | String  | 支付失败原因（当status=3时有值）                                |
+| sign         | String  | 签名                                                  |
+
+### **支付方式** <a id="inBankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>币种</b></td>
+        <td><b>支付类型(payType)</b></td>
+        <td><b>支付编码(inBankCode)</b></td>
+        <td><b>限额</b></td>
+        <td><b>状态</b></td>
+        <td><b>说明</b></td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>EWALLET</td>
+        <td>KAKAOPAY_KRW </td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Kakao Pay钱包</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>EWALLET</td>
+        <td>NAVERPAY_KRW</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Naver Pay钱包</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>EWALLET</td>
+        <td>TOSS_KRW </td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Toss Pay钱包</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>EWALLET</td>
+        <td>SAMSUNGPAY_KRW </td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Samsung Pay钱包</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>EWALLET</td>
+        <td>PAYCO_KRW </td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>PayCo钱包</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_TRANSFER</td>
+        <td>BANK_KRW</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>银行账号授权支付(支持韩国所有银行)</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>VA (Virtual Account)</td>
+        <td>VA_BANK_KRW</td>
+        <td>300-500000</td>
+        <td>可用</td>
+        <td>VA收银台入口</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>VA (Virtual Account)</td>
+        <td>KOOKMIN_BANK</td>
+        <td>300-500000</td>
+        <td>可用</td>
+        <td>支持银行：Kookmin Bank</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>VA (Virtual Account)</td>
+        <td>SHBKKRSE</td>
+        <td>300-500000</td>
+        <td>可用</td>
+        <td>支持银行：Shinhan Bank</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>VA (Virtual Account)</td>
+        <td>HANA_BANK</td>
+        <td>300-500000</td>
+        <td>可用</td>
+        <td>支持银行：Hana Bank</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>VA (Virtual Account)</td>
+        <td>WOORI_BANK</td>
+        <td>300-500000</td>
+        <td>可用</td>
+        <td>支持银行：Woori Bank</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>VA (Virtual Account)</td>
+        <td>NONGHYUP_BANK</td>
+        <td>300-500000</td>
+        <td>可用</td>
+        <td>支持银行：Nonghyup Bank</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>VA (Virtual Account)</td>
+        <td>IBK</td>
+        <td>300-500000</td>
+        <td>可用</td>
+        <td>支持银行：IBK</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>VA (Virtual Account)</td>
+        <td>SC_BANK</td>
+        <td>300-500000</td>
+        <td>可用</td>
+        <td>支持银行：SC Bank</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>VA (Virtual Account)</td>
+        <td>KBANK</td>
+        <td>300-500000</td>
+        <td>可用</td>
+        <td>支持银行：Kbank</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>VA (Virtual Account)</td>
+        <td>SUHYUP</td>
+        <td>300-500000</td>
+        <td>可用</td>
+        <td>支持银行：Suhyup</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>VA (Virtual Account)</td>
+        <td>DAEGU_BANK</td>
+        <td>300-500000</td>
+        <td>可用</td>
+        <td>支持银行：Daegu Bank</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>VA (Virtual Account)</td>
+        <td>BUSAN_BANK</td>
+        <td>300-500000</td>
+        <td>可用</td>
+        <td>支持银行：Busan Bank</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>VA (Virtual Account)</td>
+        <td>KYONGNAM_BANK</td>
+        <td>300-500000</td>
+        <td>可用</td>
+        <td>支持银行：Kyongnam Bank</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>VA (Virtual Account)</td>
+        <td>KWANGJU_BANK</td>
+        <td>300-500000</td>
+        <td>可用</td>
+        <td>支持银行：Kwangju Bank</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>VA (Virtual Account)</td>
+        <td>KFCC</td>
+        <td>300-500000</td>
+        <td>可用</td>
+        <td>支持银行：Korea Federation of Community Credit Cooperatives</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>VA (Virtual Account)</td>
+        <td>KOREA_POST</td>
+        <td>300-500000</td>
+        <td>可用</td>
+        <td>支持银行：Korea Post</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>KAKAOPAY_USD</td>
+        <td>0.99-1000</td>
+        <td>可用</td>
+        <td>Kakao Pay钱包</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>NAVERPAY_USD</td>
+        <td>0.99-1000</td>
+        <td>可用</td>
+        <td>Naver Pay钱包</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>TOSS_USD </td>
+        <td>0.99-1000</td>
+        <td>可用</td>
+        <td>Toss Pay钱包</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>SAMSUNGPAY_USD </td>
+        <td>0.99-1000</td>
+        <td>可用</td>
+        <td>Samsung Pay钱包</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>PAYCO_USD </td>
+        <td>0.99-1000</td>
+        <td>可用</td>
+        <td>PayCo钱包</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>KR_BANK_USD</td>
+        <td>0.99-1000</td>
+        <td>可用</td>
+        <td>银行账号授权支付(支持韩国所有银行)</td>
+    </tr>
+</table>
+
+## **代付API**
+
+### **代付申请**
+
+**简要描述：**
+
+* 创建代付订单
+
+**URL：`/krw/pay/apply`**
+
+**参数：**
+
+| 参数名           | 必选 | 类型     | 说明                                                                                             |
+|:--------------|:---|:-------|:-----------------------------------------------------------------------------------------------|
+| appId         | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                                |
+| orderId       | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                                         |
+| amount        | 是  | String | 交易金额（单位：₩，精确到小数点后两位；禁止添加标点符号，例如：”,”）                                                           |
+| accountType   | 是  | String | 账户类型：BANK_ACCOUNT(银行账号)                                                                        |
+| bankCode      | 是  | String | 银行编码(见附录代付银行编码)                                                                                |
+| accountNo     | 是  | String | 用户银行账号                                                                                         |
+| name          | 是  | String | 收款人姓名(收款人姓名 格式：英文大小写且允许有空格，1-30位,"firstName middleName lastName" (middleName 非必填, 特殊字符支持 '.-)) |
+| phone         | 是  | String | 手机号                                                                                            |
+| email         | 是  | String | 电子邮件                                                                                           |
+| notifyUrl     | 否  | String | 回调地址                                                                                           |
+| subject       | 否  | String | 支付备注                                                                                           |
+| body          | 否  | String | 备注详情                                                                                           |
+| partnerUserId | 是  | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。                    |
+| sign          | 是  | String | 签名                                                                                             |
+
+#####                
+
+request（accountType为BANK\_ACCOUNT类型时）
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M100000450012",
+  "amount": "2000",
+  "accountType": "BANK_ACCOUNT",
+  "bankCode": "KYNAKR22",
+  "accountNo": "09876543210",
+  "name": "john doe",
+  "phone": "09876543210",
+  "email": "johndoe@cashfree.com",
+  "subject": "iphone13",
+  "body": "ProMotion technology with adaptive refresh rates up to 120Hz",
+  "partnerUserId": "149597870",
+  "sign": "I1PeK3eJOVsFFNowxVRqMXpeWm1lr/BcRpBi8WsW4wVo1+5CC3JsrFq/m/L2O69NzKHvtDWi4zia3DL3dPut0yMyUyqL91LNCSaeISbGsQPlhEsQpyTOryS/RKOfsrn2Xo37SCF/phAvndOk2jwwGwqM5xLz1ms9Ukl85wv27QFNrXIMxK2p18oe7MpMYrgf+xvEBE/VqCtKMtN9pO449wWwXzHWNPbZ76s4pAvKwRE9yXQDr7Iw14Dktcnl1FoLM4gWM/obkO+mz6SyAGDuXhVh/+OD/IGNiCyTCNq6ciQY28UnCFV6ZIP40gxsFhfBJKbK+Raw7y1Bh912ifYfug=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M100000450013",
+    "orderNo": "3023062014149637",
+    "sign": "LmhUnkw5j0pMiimsG8rKwdNNZGvXH5MpSmD6mdHZwq1SQwuK5BohmdEoqKB/jkMk28o3da4Cxh6Q+tW97+yTCemRrF+dMaHA73rpOeUuujKQl/UcFvJuMhfLBa2tp09L71NzoBqpPD6aXf37mYAz8E1HmERwFPpac5FVxIYanHG8cqmMLJYsVmHTSxWavgWU03ys9UczBePkBiR8sl2FSOhFABB0wAP28lswrV/ABS68IsLKtyd1fyI3GBfSbIK5nDEEnlE+EdElFdLs9taAxJImeVF1x4eT47+bkPJ2qS8z3K8QGzKLF3W+8SiRZGfSwDTsLKH+2Vycvy5auRl+ag=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名     | 必选     | 类型             |
+|:--------|:-------|:---------------|
+| orderId | String | 商户订单号(必须保证唯一性) |
+| orderNo | String | 平台订单号          |
+| sign    | String | 签名             |
+
+### **代付查询**
+
+**简要描述：**
+
+* 创建代付订单
+
+**URL：`/krw/pay/query`**
+
+**参数：**
+
+| 参数名     | 必选 | 类型     | 说明                              |
+|:--------|:---|:-------|:--------------------------------|
+| appId   | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| orderId | 是  | String | 商户订单号                           |
+| orderNo | 否  | String | 平台订单号（响应快）                      |
+| sign    | 是  | String | 签名                              |
+
+request
+
+```json
+{
+  "appId": 1000,
+  "orderId": "M1234567111",
+  "orderNo": "3022111516571436",
+  "sign": "ZxkVZL+GAyv0VhvWn4IvuYahTzxgQuthkuV2ONWiqIfIDb2avvHlFOUJVzqZi1q8CPHXZm1ltanRTRVTxfsuftLvGeDioUHglWt46/RU6c1OPznpLGsZ35Q3n5tW2y1EnOsxPynXBFLuDQy+aZ3l9u6AQ30T0zQexMGT+IxuFkmUp02g/6juaHa5ZgNMv7lN67ixIp162wrM7OJuaOif872QijSceRdZhzaMGImAwB0D4MosRV4WMBOKkwgPdmS7GuZN66YUidXk3wTGqX3MYRw6M0kj4eNegSUwPXvp4q4p0KO8Y3xUMld54GY2ApX3WN3CBtC/vpJqEszjGBbbGg=="
+}
+```
+
+response — 订单失败
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M1234567111",
+    "orderNo": "3022111516571436",
+    "amount": "2000.00",
+    "fee": "0.00",
+    "status": 3,
+    "errorMsg": "Đơn hàng không tồn tại",
+    "sign": "KKuvCl0SuNANJs+l2ogDaJm8pmV+Hi+Xa7q27vJ6D1Ehs4aOp13kRbITfJAhczh3T81BE9qwHeJaYwf+r0EypKM9TL6pMwfG8Az4gRy1D57wiUaVjl2PWcvbEqrn1hL0b+btkjvAM9I+CcSv+wuOW3/uku17Ws3FhgJLj9sFsQUBAPjDO+758VnwBytCOLBmljLBXyKgNgpmFQ1/DNkqWl0UNzyLK45Zw3yf5NiwhEFbvW0jlOWlfu/ql4hluISUQG573jEoFCBEnQLb2tQoRZj1QYNRCXPf5lbej0vzqbEwvR9h+ZOf255t1MocJkdIe463DTV5U3KZdVT87HMagw=="
+  }
+}
+```
+
+response — 订单成功
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M1234567112",
+    "orderNo": "3022111517401574",
+    "amount": "2000.00",
+    "fee": "1003.00",
+    "status": 2,
+    "payTime": "2024-03-01 23:59:59",
+    "sign": "khPtOmGq+cpKX0HFAI/lbP0dx4oVyNAnL5oLsdmhDJdASlQm0yg5I3o+MhImYggEsL6c2bo5fP29t54OZFqSdQDfIuNDvGbAMAr4mRBxc0hoHLkBLyyagfVPBLyQA1JY8XV3ZL4ySzQ3ZQnMCfrh2K39ueUuz6HpZ03Hj0KYijVRCXAZaio/L5jfLBT12QXmvIfAHa8s/k9flhK05ENHPep3zjj/MZGOEaX7jkEJLfjK0duypDCa61BRQjM+oePOdVsgleIl1Yf98UAxMDZ/A3912KFHEb+/jvmdnulNbiJFyuT1fEe+j2teUgw3vFsZAtwNWAgxhC7UO+N0Q5z4EA=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名      | 类型      | 说明                                                  |
+|:---------|:--------|:----------------------------------------------------|
+| orderId  | String  | 商户订单号(必须保证唯一性)                                      |
+| orderNo  | String  | 平台订单号                                               |
+| amount   | String  | 交易金额                                                |
+| fee      | String  | 手续费                                                 |
+| status   | Integer | 状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)              |
+| payTime  | String  | 支付成功时间（当status=2时有值）(韩国时间), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg | String  | 支付失败原因（当status=3时有值）                                |
+| sign     | String  | 签名                                                  |
+
+### **支付方式**
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1050px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>币种</b></td>
+        <td><b>支付类型(accountType)</b></td>
+        <td><b>支付编码(bankCode)</b></td>
+        <td><b>限额</b></td>
+        <td><b>状态</b></td>
+        <td><b>说明</b></td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SAMCKRSL</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Samsung Securities</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>KOPOKRS1</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Korea Post(Epost)</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>KWABKRSE</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Kwangju Bank(KJ)</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>KYBOKRSE</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Kyobo Securities</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>KYNAKR22</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Kyongnam Bank</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MHCBKRSE</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Mirae Asset Daewoo</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NACFKRSE</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Nonghyup Bank(NH)</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NFFCKRSE</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Suhyup Local Cooperatives</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PUSBKR2P</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Busan Bank(BNK)</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>KODBKRSE</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Korea Development Bank(KDB)</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SCBLKRSE</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Standard Chartered Korea(SC First)</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SECDKRS1</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Daishin Securities</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SEOSKRS1</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Eugene Investment and Securities</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SHBKKRSE</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Shinhan Bank</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SHHEKRS1</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Hyundai Motor Securities</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SKSEKRS1</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>SK Securities</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SSISKRSS</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Shinhan Investment</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>WISHKRSE</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>NH Investment and Securities</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>HVBKKRSE</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Woori Bank</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CITIKRSXKAK</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>K Bank</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CZNBKRSE</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Kookmin-Bank(KB)</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>DAEBKR22</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Daegu Bank(DGB)</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>DEUTKRSE</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Deutsche Bank</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ETSIKRS1</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>eBEST Investment and Securities</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>HNBNKRSE</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>KEB Hana Bank</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>HNWSKRSS</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Hanhwa Investment and Securities</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>HSBCKRSE</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>HSBC</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CITIKRSX</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Citibank Korea</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>HYSEKRSE</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>KB Securities</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>IBKOKRSE</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Industrial Bank of Korea(IBK)</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>JEONKRSE</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Jeonbuk Bank(JB)</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>JJBKKR22</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Jeju Bank</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>KAKOKR22</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>KAKAO Bank</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>KFBCKRSE</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Meritz Securities</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>KISEKRSE</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Korea Investment and Securities</td>
+    </tr>
+    <tr>
+        <td>KRW</td>
+        <td>BANK_ACCOUNT</td>
+        <td>KIWCKRSE</td>
+        <td>1000-1500000</td>
+        <td>可用</td>
+        <td>Kiwoom Securities</td>
+    </tr>
+</table>
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

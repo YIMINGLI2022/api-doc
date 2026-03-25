@@ -1,0 +1,117 @@
+---
+title: Error Response 
+permalink: /en/api/version2/error_response_appendix/
+---
+
+
+
+This document summarizes some common `error_msg` (or related error information) and their meanings to help you quickly locate the root cause and suggested actions when an error occurs.
+
+> Note: If you encounter an error that is not listed below, please first check the order status and gateway response. If the issue persists, contact HaiPay support.
+
+## USD Payout
+
+| Return failure reason / `error_msg`                                                                                | Actual cause / suggestion                                                                                          |
+|:-------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------|
+| Order remains in “processing” status                                                                               | The recipient needs to log in to their email and click the “confirm receipt” link before the funds can be credited. |
+| NULL                                                                                                               | No specific error message returned by the gateway (unknown exception). Please check the order status first; if still abnormal, contact HaiPay support. |
+| Manual processing failed                                                                                           | Manual processing failed. Try again later; if multiple retries still fail, contact HaiPay support.                |
+| 银行退单 (Bank returned the transfer)                                                                             | The recipient account is invalid or restricted (e.g., closed, frozen). Ask the recipient to confirm the account status or use another account. |
+| HttpStatus:500                                                                                                     | Communication timeout or server-side error. Check the order status; if retrying still fails, contact HaiPay support. |
+| 创建收款人失败:is invalid length or format.                                                                        | Parameter length or format is invalid (e.g., name, ID number, account, etc.). Validate all fields against the API documentation and retry. |
+| HttpStatus:502                                                                                                     | Communication timeout or gateway failure. Check the order status; if retrying still fails, contact HaiPay support. |
+| The account cannot be registered with the given information. Please try registering using a different bank account.| The account information does not meet the issuer’s requirements. The account is invalid or not supported. Use a different valid bank account. |
+| java.net.SocketTimeoutException: Read timed out                                                                    | Read timeout. Check the order status and retry if necessary; if this happens frequently, contact HaiPay support.  |
+| 创建转帐方式失败:java.net.SocketTimeoutException: Read timed out                                                   | Read timeout when creating the payout method. Check the order status and retry if necessary; if frequent, contact HaiPay support. |
+| 转账 (Transfer)                                                                                                    | The gateway only returns a vague description like “transfer” and no clear cause. Check the order status and bank statement, or contact HaiPay support. |
+| java.net.SocketTimeoutException: connect timed out                                                                 | Connection timeout. Check the order status and retry if necessary; if the network is normal but this repeats, contact HaiPay support. |
+| Illegal request!                                                                                                   | Illegal request or parameter validation/signature failed. Check all request parameters, signature rules, and encoding formats. |
+| The account status does not allow the requested action.                                                            | The account status does not allow this operation (e.g., frozen, restricted). The account is invalid. Ask the recipient to contact the bank or use another account. |
+| Server unknown error                                                                                               | Unknown server error or timeout. Check the order status first; if still abnormal, capture the full response and contact HaiPay support. |
+| The information entered does not match our records. Please try again.                                             | Account or identity information does not match bank records. Ask the recipient to double-check name, account, ID information, etc.; if the issue persists, contact HaiPay support. |
+| 创建转帐方式失败:Account ID Invalid entry.                                                                         | Recipient account ID is invalid (account does not exist or is entered incorrectly). The account is invalid; use or correct another account. |
+| 付款账号金额不足 (Insufficient funds in the payer account)                                                         | The payer account has insufficient balance. Top up the account before initiating the payout, or check for reserved/held amounts. |
+| 查询不到付款订单                                                                                                     | No payout order record was found. Confirm that the order number is correct and try again; if funds were deducted but the order cannot be found, contact HaiPay support. |
+| 可用地址信息不足                                                                                                     | Recipient address information is incomplete or does not meet channel requirements. Provide full address info (country, city, detailed address, etc.) and retry. |
+| 查询不到付款订单，手动回调                                                                                             | The system could not find the payout order (or query failed), and a manual callback to the merchant has been triggered. Use the merchant portal and final fund status as the source of truth; contact HaiPay support if you have questions. |
+
+## Vietnam Payout
+
+| Return failure reason / `error_msg`                                                                                | Actual cause / suggestion                                                                                          |
+|:-------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------|
+| 付款账号金额不足 (Insufficient funds in the payer account)                                                         | Contact us                                                                                                         |
+| 出款失败渠道已退回 (Channel returned after payout failure)                                                         | Contact us                                                                                                         |
+| 查询不到付款订单 (Payout order not found)                                                                         | Contact us                                                                                                         |
+| Your account balance is insufficient                                                                              | Contact us                                                                                                         |
+| Unexpected end of file from server                                                                                 | Should I reorder when this error occurs?                                                                          |
+| The amount of the arrival nearly supports the integer                                                              | Contact us                                                                                                         |
+| System error                                                                                                       | Contact us                                                                                                         |
+| syntax error                                                                                                       | Contact us                                                                                                         |
+| SSLHandshakeException: Remote host closed connection during handshake                                              | Contact us                                                                                                         |
+| refund                                                                                                             | Verify account information                                                                                        |
+| please input correct account name，account name：                                                                  | Name error                                                                                                         |
+| NULL                                                                                                               | Contact us                                                                                                         |
+| Manual processing failed                                                                                           | Contact us                                                                                                         |
+| get match outbound fee configs from clear service failed                                                          | Contact us                                                                                                         |
+| error_msg                                                                                                          | Contact us                                                                                                         |
+| ConnectException: Connection timed out (Connection timed out)                                                     | Check order status                                                                                                 |
+| Beneficiary account can not receive payment                                                                        | Contact us                                                                                                         |
+| Bank account is not valid                                                                                         | Verify account information                                                                                        |
+| &lt;p&gt;The gateway did not receive a timely response from the upstream server or application.&lt;hr/&gt;Powered by Tengine&lt;/body&gt; | Contact us                                                                                                         |
+| &lt;head&gt;&lt;title&gt;504 Gateway Time-out&lt;/title&gt;&lt;/head&gt;                                                                  | Contact us                                                                                                         |
+| &lt;h1&gt;504 Gateway Time-out&lt;/h1&gt;                                                                                      | Contact us                                                                                                         |
+| Invalid cardholder's name                                                                                          | Name error                                                                                                         |
+| Error when connect to bank. You get this error when the bank is maintenance or upgrade.                          | Error connecting to bank. You will receive this error when the bank is under maintenance or upgrade.              |
+| ErrorCode Query: invalid Bank_code                                                                                 | Contact us                                                                                                         |
+| OrderStatus Query:02                                                                                               | Contact us                                                                                                         |
+| Invalid account number                                                                                             | Contact us                                                                                                         |
+| An error occurred during connection. Need to confirm again with about status of transaction                       | Contact us                                                                                                         |
+| ErrorCode Query: Invalid ref_code                                                                                  | Contact us                                                                                                         |
+| Had refund money                                                                                                   | Failed                                                                                                             |
+| ref_code is exist                                                                                                  | Contact us                                                                                                         |
+
+## Indonesia Payout
+
+| Return failure reason / `error_msg`                                                                                | Actual cause / suggestion                                                                                          |
+|:-------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------|
+| The current merchant balance is insufficient and the payment on behalf of the merchant has failed!              | Contact us if this error occurs                                                                                    |
+| Vendor Error: 4033805 \| Do Not Honor                                                                              | Channel exception, payout failed. Please ask the user to confirm the account is correct and try again             |
+| Vendor Error: 209 \| Bank Account is not found                                                                     | Bank account error                                                                                                 |
+| Vendor Error: 300 \| The bank/e-wallet system encounters an error while disbursing the money. Try again in a moment. | Retry payout                                                                                                       |
+| Vendor Error: 300 \| System encounters an error while disbursing the money. Please try again in a moment.        | Retry payout                                                                                                       |
+| Vendor Error: 4033814 \| Insufficient Fund                                                                         | Contact us if this error occurs                                                                                    |
+| Vendor Error: 4033802 \| Exceeds Transaction Amount Limit                                                         | Exceeds minimum-maximum amount limit                                                                               |
+| Vendor Error: 300 \| Account has exceeded the maximum amount for receiving money. Please contact the account owner. | Customer has reached daily/monthly receiving limit                                                                 |
+| Vendor Error: 300 \| Account is no longer active. Please create a new transaction with a different recipient account number. | Customer account expired, use a different card for payout                                                         |
+| Vendor Error: 300 \| Account not found. Please create a new transaction with a different recipient account number. | Use a different card for payout                                                                                    |
+| Does not support the bank                                                                                          | Bank not supported, use a different card for payout                                                               |
+| Bank reject please check your account                                                                              | Customer account risk control, try using a different card for payout                                              |
+| Wrong account NO. or state abnormal                                                                                | Account number error or account abnormal, try using a different card for payout                                    |
+
+## Malaysia Payout
+
+| Return failure reason / `error_msg`                                                                                | Actual cause / suggestion                                                                                          |
+|:-------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------|
+| Failed / System Error                                                                                             | If this error occurs, please retry                                                                                |
+
+## Philippines Payout
+
+| Return failure reason / `error_msg`                                                                                | Actual cause / suggestion                                                                                          |
+|:-------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------|
+| No record on file                                                                                                  | Account error                                                                                                      |
+| Exceeds account amount limit                                                                                      | Customer has reached daily/monthly receiving limit, use a different card for payout                               |
+| Not supported transaction                                                                                         | Bank payout not supported                                                                                          |
+| No response from ISO20022 RFI respdesc of RTP Cancelled Transaction                                               | Recipient bank network fluctuation, please retry payout later                                                      |
+| Transferee Bank not Ready for InstaPay                                                                            | Recipient bank network fluctuation, please retry payout later                                                      |
+| No activity allowed against the account                                                                           | Recipient account risk control, payment not allowed                                                                |
+| System Failure; Catch all transaction processing error code                                                       | System occasional error, please retry later                                                                        |
+| No Transferee Name                                                                                                | Name cannot be empty                                                                                               |
+| Invalid Account No                                                                                                | Account error                                                                                                      |
+| AmountExceedsAgreedLimit                                                                                          | User card number is under bank risk control                                                                        |
+| IncorrectAccountNumber                                                                                            | Account error                                                                                                      |
+| NotAllowedPayment                                                                                                 | User receiving account is under bank risk control                                                                  |
+| WaitingTimeExpired                                                                                                | Bank maintenance                                                                                                   |
+| BankSystemProcessingError                                                                                          | Recipient bank network fluctuation, please retry payout later                                                      |
+| TransactionForbidden                                                                                              | User receiving account is under bank risk control, cannot receive payment                                          |
+
+
