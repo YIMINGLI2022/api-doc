@@ -32,7 +32,7 @@ permalink: /rsa/rsa-sign/
       </div>
     </div>
     <el-form-item>
-      <div style="margin: auto"><el-button type="primary" @click="Signature(ruleFormRef)" :loading="isLoading" style="margin-top: 20px">加 签</el-button></div>
+      <div style="margin: auto"><el-button type="primary" @click="Signature(ruleFormRef)" :loading="isLoading" style={{ margin-top: "20px" }} >加 签</el-button></div>
     </el-form-item>
  </el-form>
  </div>

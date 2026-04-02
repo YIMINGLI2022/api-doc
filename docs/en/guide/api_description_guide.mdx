@@ -34,8 +34,7 @@ POST https://uat-interface.haipay.asia/{currency}/{api_endpoint}
     "appId": 1054,
     "orderId": "M233323000059",
     ...
-    // sign: Signature of the request body using the merchant's privateKey
-    "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="  
+    "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="
 }
 ```
 
@@ -103,7 +102,7 @@ For details, see [API Documentation](/en/docs/guide/api_doc_list.md).
 ```json
 {
     "appId": 1000,
-    ......
+    "...": "...",
     "sign": "fCywFPOojpRIPi4ph81+CwoAvMXV1va2XR1DQVJeGnZwzNVd0hmvpud7nbP/3lc5JeTVELomruwVTGLtr+BTGT0IweAFTGNvNUuqOs3I4KG5tjvhPM7wm9NtwK2uAX1niLoylt4DcLfy2TeaxPQYDCJJRf7Qm7sDwJX5VoFt8RO9EC2ih+0Ike2+cAyRpIfKENPoIGQbUwvH6KkzHzjljcuvcSqq4D+iZid7up58A866RFrrJH9vkwaF+2mYxa/7awQIwAq8HPOxHkzLfVg74MZC8I1TOKvQAxkAquoNMMyrcAqRIopURfrgEaAtyW/ThPdyduYVlFeMg7BkpGLqZQ=="
 }
 ```
@@ -119,17 +118,15 @@ For details, see [API Documentation](/en/docs/guide/api_doc_list.md).
 
 **Response Example:**
 ```json
-{
     {
         "status": "1",
         "error": "00000000",
         "msg": "",
         "data": {
-            ......
+            "...": "...",
             "sign": "PWA7B2u1hGr1VRxOCZbRuXQXtJiA6BgPExFnFv73hKJ+zcZfOe/R+y+inlwWcdDBzfix35+dl6raEs/yG/hcYyQOwDQ+mVjIt5wFk6iX7GPw557138yBdAmuMqvWM2IF+omLFcQFJvzfbR84rCyOmebDJlhkYMga5TTFHVLicUx3bPIrOJLoWJHrnZfcVFAJ+P5mUQhMH/cf+YmYZvrqq34pMJh6PcP5vyruJ8aNV0QfyHR42AHLIgp+HnOcZpA0aUzFXM5zpsgXK3QR/KO3vLiKd77UaZNO6g5TN/Ck2MtLkBVxyvIHstgXFXKF1e+uc91FdBHK5nfmrjLQ2wyeUA=="
         }
     }
-}
 ```
 
 **Error Codes**

@@ -33,7 +33,7 @@ permalink: /rsa/rsa-generate/
       </el-col>
     </el-row>
     <el-form-item>
-      <div style="margin: auto"><el-button type="primary" @click="Generate()" :loading="isLoading" style="padding: 20px">Generate Key Pair</el-button></div>
+      <div style="margin: auto"><el-button type="primary" @click="Generate()" :loading="isLoading" style={{ padding: "20px" }} >Generate Key Pair</el-button></div>
     </el-form-item>
 </el-form>
 
