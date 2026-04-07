@@ -9,7 +9,7 @@
   "paths": {
     "/egp/collect/apply": {
       "post": {
-        "summary": "代收申请",
+        "summary": "埃及镑代收申请",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -175,7 +175,7 @@
     },
     "/egp/collect/query": {
       "post": {
-        "summary": "代收查询",
+        "summary": "埃及镑代收查询",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -290,7 +290,7 @@
     },
     "/egp/pay/apply": {
       "post": {
-        "summary": "代付申请",
+        "summary": "埃及镑代付申请",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -433,7 +433,7 @@
     },
     "/egp/pay/query": {
       "post": {
-        "summary": "代付查询",
+        "summary": "埃及镑代付查询",
         "deprecated": false,
         "description": "",
         "tags": [],

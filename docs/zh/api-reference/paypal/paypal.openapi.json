@@ -9,7 +9,7 @@
   "paths": {
     "/usd/pay/apply": {
       "post": {
-        "summary": "代付申请",
+        "summary": "PayPal代付申请",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -210,7 +210,7 @@
     },
     "/usd/pay/query": {
       "post": {
-        "summary": "代付查询",
+        "summary": "PayPal代付查询",
         "deprecated": false,
         "description": "创建代付订单\n\n同步返回orderNo可以直接查询\n\n其他支付方式异步通知后，通过orderNo查询二次确认状态",
         "tags": [],

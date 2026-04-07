@@ -9,7 +9,7 @@
   "paths": {
     "/sar/collect/apply": {
       "post": {
-        "summary": "代收申请",
+        "summary": "沙特里亚尔代收申请",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -200,7 +200,7 @@
     },
     "/sar/collect/query": {
       "post": {
-        "summary": "代收查询",
+        "summary": "沙特里亚尔代收查询",
         "deprecated": false,
         "description": "",
         "tags": [],

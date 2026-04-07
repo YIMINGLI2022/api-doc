@@ -9,7 +9,7 @@
   "paths": {
     "/sgd/collect/apply": {
       "post": {
-        "summary": "代收申请",
+        "summary": "新加坡元代收申请",
         "deprecated": false,
         "description": "appId需使用新加坡元对应的，用户支付成功后增加新加坡元余额",
         "tags": [],
@@ -163,7 +163,7 @@
     },
     "/sgd/collect/query": {
       "post": {
-        "summary": "代收查询",
+        "summary": "新加坡元代收查询",
         "deprecated": false,
         "description": "",
         "tags": [],

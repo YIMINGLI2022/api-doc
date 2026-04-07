@@ -9,7 +9,7 @@
   "paths": {
     "/hkd/collect/apply": {
       "post": {
-        "summary": "代收申请",
+        "summary": "港币代收申请",
         "deprecated": false,
         "description": "创建代收订单\n\nappId需使用港元对应的，用户支付成功后增加港元余额",
         "tags": [],
@@ -163,7 +163,7 @@
     },
     "/hkd/collect/query": {
       "post": {
-        "summary": "代收查询",
+        "summary": "港币代收查询",
         "deprecated": false,
         "description": "",
         "tags": [],

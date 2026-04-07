@@ -9,7 +9,7 @@
   "paths": {
     "/myr/collect/apply": {
       "post": {
-        "summary": "代收申请",
+        "summary": "马来西亚林吉特代收申请",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -168,7 +168,7 @@
     },
     "/myr/collect/query": {
       "post": {
-        "summary": "代收查询",
+        "summary": "马来西亚林吉特代收查询",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -283,7 +283,7 @@
     },
     "/myr/pay/apply": {
       "post": {
-        "summary": "代付申请",
+        "summary": "马来西亚林吉特代付申请",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -434,7 +434,7 @@
     },
     "/myr/pay/query": {
       "post": {
-        "summary": "代付查询",
+        "summary": "马来西亚林吉特代付查询",
         "deprecated": false,
         "description": "",
         "tags": [],

@@ -9,7 +9,7 @@
   "paths": {
     "/omr/collect/apply": {
       "post": {
-        "summary": "代收申请",
+        "summary": "阿曼里亚尔代收申请",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -200,7 +200,7 @@
     },
     "/omr/collect/query": {
       "post": {
-        "summary": "代收查询",
+        "summary": "阿曼里亚尔代收查询",
         "deprecated": false,
         "description": "",
         "tags": [],

@@ -9,7 +9,7 @@
   "paths": {
     "/inr/collect/apply": {
       "post": {
-        "summary": "代收申请",
+        "summary": "印度卢比代收申请",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -178,7 +178,7 @@
     },
     "/inr/collect/query": {
       "post": {
-        "summary": "代收查询",
+        "summary": "印度卢比代收查询",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -306,7 +306,7 @@
     },
     "/inr/pay/apply": {
       "post": {
-        "summary": "代付申请",
+        "summary": "印度卢比代付申请",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -455,7 +455,7 @@
     },
     "/inr/pay/query": {
       "post": {
-        "summary": "代付查询",
+        "summary": "印度卢比代付查询",
         "deprecated": false,
         "description": "",
         "tags": [],

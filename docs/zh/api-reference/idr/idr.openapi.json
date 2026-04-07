@@ -9,7 +9,7 @@
   "paths": {
     "/idr/collect/apply": {
       "post": {
-        "summary": "代收申请",
+        "summary": "印尼盾代收申请",
         "deprecated": false,
         "description": "创建代收订单",
         "tags": [],
@@ -184,7 +184,7 @@
     },
     "/idr/collect/query": {
       "post": {
-        "summary": "代收查询",
+        "summary": "印尼盾代收查询",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -298,7 +298,7 @@
     },
     "/idr/pay/apply": {
       "post": {
-        "summary": "代付申请",
+        "summary": "印尼盾代付申请",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -443,7 +443,7 @@
     },
     "/idr/pay/query": {
       "post": {
-        "summary": "代付查询",
+        "summary": "印尼盾代付查询",
         "deprecated": false,
         "description": "",
         "tags": [],

@@ -9,7 +9,7 @@
   "paths": {
     "/thb/collect/apply": {
       "post": {
-        "summary": "代收申请",
+        "summary": "泰铢代收申请",
         "deprecated": false,
         "description": "appId需使用泰铢对应的，用户支付成功后增加泰铢余额",
         "tags": [],
@@ -180,7 +180,7 @@
     },
     "/thb/collect/query": {
       "post": {
-        "summary": "代收查询",
+        "summary": "泰铢代收查询",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -294,7 +294,7 @@
     },
     "/thb/pay/apply": {
       "post": {
-        "summary": "代付申请",
+        "summary": "泰铢代付申请",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -445,7 +445,7 @@
     },
     "/thb/pay/query": {
       "post": {
-        "summary": "代付查询",
+        "summary": "泰铢代付查询",
         "deprecated": false,
         "description": "",
         "tags": [],

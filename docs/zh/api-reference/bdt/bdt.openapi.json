@@ -9,7 +9,7 @@
   "paths": {
     "/bdt/collect/apply": {
       "post": {
-        "summary": "代收申请",
+        "summary": "孟加拉塔卡代收申请",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -165,7 +165,7 @@
     },
     "/bdt/collect/query": {
       "post": {
-        "summary": "代收查询",
+        "summary": "孟加拉塔卡代收查询",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -278,7 +278,7 @@
     },
     "/bdt/pay/apply": {
       "post": {
-        "summary": "代付申请",
+        "summary": "孟加拉塔卡代付申请",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -429,7 +429,7 @@
     },
     "/bdt/pay/query": {
       "post": {
-        "summary": "代付查询",
+        "summary": "孟加拉塔卡代付查询",
         "deprecated": false,
         "description": "",
         "tags": [],

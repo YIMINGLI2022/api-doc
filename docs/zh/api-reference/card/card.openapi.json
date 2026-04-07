@@ -9,7 +9,7 @@
   "paths": {
     "/usd/collect/apply": {
       "post": {
-        "summary": "代收申请",
+        "summary": "信用卡代收申请",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -165,7 +165,7 @@
     },
     "/usd/mit/apply": {
       "post": {
-        "summary": "代收申请 MIT模式",
+        "summary": "信用卡代收申请 MIT模式",
         "deprecated": false,
         "description": "appId需使用美元对应的，用户支付成功后增加美元余额",
         "tags": [],
@@ -348,7 +348,7 @@
     },
     "/usd/collect/query": {
       "post": {
-        "summary": "代收查询",
+        "summary": "信用卡代收查询",
         "deprecated": false,
         "description": "查询代收订单",
         "tags": [],
@@ -489,7 +489,7 @@
     },
     "/usd/refund/apply": {
       "post": {
-        "summary": "退款申请",
+        "summary": "信用卡退款申请",
         "deprecated": false,
         "description": "发起原信用卡交易订单的退款操作，同步返回的退款状态请注意状态值，建议以查询接口为主。",
         "tags": [],
@@ -598,7 +598,7 @@
     },
     "/usd/refund/refundQuery": {
       "post": {
-        "summary": "退款查询",
+        "summary": "信用卡退款查询",
         "deprecated": false,
         "description": "发起退款的订单的结果查询",
         "tags": [],

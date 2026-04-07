@@ -330,7 +330,7 @@
     },
     "/usdc/collect/apply": {
       "post": {
-        "summary": "USDC代收申请",
+        "summary": "USDTUSDC代收申请",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -522,7 +522,7 @@
     },
     "/usdc/collect/query": {
       "post": {
-        "summary": "USDC代收查询",
+        "summary": "USDTUSDC代收查询",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -919,7 +919,7 @@
     },
     "/usdc/pay/apply": {
       "post": {
-        "summary": "USDC代付申请",
+        "summary": "USDTUSDC代付申请",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -1066,7 +1066,7 @@
     },
     "/usdc/pay/query": {
       "post": {
-        "summary": "USDC代付查询",
+        "summary": "USDTUSDC代付查询",
         "deprecated": false,
         "description": "",
         "tags": [],
