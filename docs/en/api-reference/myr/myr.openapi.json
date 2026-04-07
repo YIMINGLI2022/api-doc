@@ -1,0 +1,559 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "默认模块",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "tags": [],
+  "paths": {
+    "/myr/collect/apply": {
+      "post": {
+        "summary": "马来西亚林吉特代收申请",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "appId": {
+                    "type": "integer",
+                    "description": "业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）"
+                  },
+                  "orderId": {
+                    "type": "string",
+                    "description": "商户订单号(必须保证唯一性，长度不超过48)",
+                    "maxLength": 48
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "用户姓名，推荐使用真实姓名，格式：包含firstName和lastName，以空格分割的，示例：Donald John Trump"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "真实手机号（格式参考 电话号码格式 ）"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "真实电子邮件",
+                    "format": "email"
+                  },
+                  "amount": {
+                    "type": "string",
+                    "description": "交易金额（精确到小数点后两位；禁止添加标点符号，例如：\",\"）",
+                    "pattern": "^\\d+\\.\\d{2}$"
+                  },
+                  "payType": {
+                    "type": "string",
+                    "description": "交易类型"
+                  },
+                  "inBankCode": {
+                    "type": "string",
+                    "description": "支付方式"
+                  },
+                  "callBackUrl": {
+                    "type": "string",
+                    "description": "用户支付成功后跳转地址",
+                    "format": "uri"
+                  },
+                  "callBackFailUrl": {
+                    "type": "string",
+                    "description": "用户支付失败后跳转地址",
+                    "format": "uri"
+                  },
+                  "notifyUrl": {
+                    "type": "string",
+                    "description": "回调地址",
+                    "format": "uri"
+                  },
+                  "subject": {
+                    "type": "string",
+                    "description": "支付备注"
+                  },
+                  "body": {
+                    "type": "string",
+                    "description": "备注详情"
+                  },
+                  "country": {
+                    "type": "string",
+                    "description": "收银台模式需要传递，请传：458"
+                  },
+                  "partnerUserId": {
+                    "type": "string",
+                    "description": "用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。",
+                    "pattern": "^[A-Za-z0-9\\-~!@#$%&*()_]+$"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "签名"
+                  }
+                },
+                "required": [
+                  "appId",
+                  "orderId",
+                  "name",
+                  "phone",
+                  "email",
+                  "amount",
+                  "payType",
+                  "inBankCode",
+                  "callBackUrl",
+                  "callBackFailUrl",
+                  "subject",
+                  "partnerUserId",
+                  "sign"
+                ]
+              },
+              "examples": {}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "状态码"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "错误码"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "返回信息"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "orderId": {
+                          "type": "string",
+                          "description": "商户订单号"
+                        },
+                        "orderNo": {
+                          "type": "string",
+                          "description": "平台订单号"
+                        },
+                        "payUrl": {
+                          "type": "string",
+                          "description": "支付链接",
+                          "format": "uri"
+                        },
+                        "sign": {
+                          "type": "string",
+                          "description": "签名"
+                        }
+                      },
+                      "additionalProperties": true
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/myr/collect/query": {
+      "post": {
+        "summary": "马来西亚林吉特代收查询",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "appId": {
+                    "type": "integer",
+                    "description": "业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）"
+                  },
+                  "orderId": {
+                    "type": "string",
+                    "description": "商户订单号"
+                  },
+                  "orderNo": {
+                    "type": "string",
+                    "description": "平台订单号（响应快）"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "签名"
+                  }
+                },
+                "required": [
+                  "appId",
+                  "orderId",
+                  "sign"
+                ]
+              },
+              "examples": {}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "状态码"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "错误码"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "消息"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "orderId": {
+                          "type": "string",
+                          "description": "商户订单号"
+                        },
+                        "orderNo": {
+                          "type": "string",
+                          "description": "平台订单号"
+                        },
+                        "amount": {
+                          "type": "string",
+                          "description": "交易金额"
+                        },
+                        "actualAmount": {
+                          "type": "string",
+                          "description": "收到金额"
+                        },
+                        "fee": {
+                          "type": "string",
+                          "description": "手续费"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "description": "状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)"
+                        },
+                        "payTime": {
+                          "type": "string",
+                          "pattern": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$",
+                          "description": "支付成功时间（当status=2时有值）(币种时间), 格式: yyyy-MM-dd HH:mm:ss"
+                        },
+                        "errorMsg": {
+                          "type": "string",
+                          "description": "支付失败原因（当status=3时有值）"
+                        },
+                        "sign": {
+                          "type": "string",
+                          "description": "签名"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "description": "业务数据"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/myr/pay/apply": {
+      "post": {
+        "summary": "马来西亚林吉特代付申请",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "appId": {
+                    "type": "integer",
+                    "description": "业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）"
+                  },
+                  "orderId": {
+                    "type": "string",
+                    "description": "商户订单号(必须保证唯一性，长度不超过48)",
+                    "maxLength": 48
+                  },
+                  "amount": {
+                    "type": "string",
+                    "description": "交易金额（精确到小数点后两位；禁止添加标点符号，例如：\",\"）",
+                    "pattern": "^\\d+\\.\\d{2}$"
+                  },
+                  "accountType": {
+                    "type": "string",
+                    "description": "账户类型：EWALLET（电子钱包） , BANK_ACCOUNT（银行）",
+                    "enum": [
+                      "EWALLET",
+                      "BANK_ACCOUNT"
+                    ]
+                  },
+                  "bankCode": {
+                    "type": "string",
+                    "description": "支付方式"
+                  },
+                  "accountNo": {
+                    "type": "string",
+                    "description": "用户账号"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "收款人姓名(收款人姓名 格式：英文大小写且允许有空格，1-30位,\"firstName middleName lastName\" (middleName 非必填, 特殊字符支持 '.-))",
+                    "minLength": 1,
+                    "maxLength": 30,
+                    "pattern": "^[A-Za-z\\s'.-]+$"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "真实手机号（格式参考 电话号码格式 ）"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "真实电子邮件",
+                    "format": "email"
+                  },
+                  "notifyUrl": {
+                    "type": "string",
+                    "description": "回调地址",
+                    "format": "uri"
+                  },
+                  "subject": {
+                    "type": "string",
+                    "description": "支付备注（交易标题，商品名称，支付原因）"
+                  },
+                  "body": {
+                    "type": "string",
+                    "description": "备注详情"
+                  },
+                  "partnerUserId": {
+                    "type": "string",
+                    "description": "用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。",
+                    "pattern": "^[A-Za-z0-9\\-~!@#$%&*()_]+$"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "签名"
+                  }
+                },
+                "required": [
+                  "appId",
+                  "orderId",
+                  "amount",
+                  "accountType",
+                  "bankCode",
+                  "accountNo",
+                  "name",
+                  "phone",
+                  "email",
+                  "partnerUserId",
+                  "sign"
+                ]
+              },
+              "examples": {}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "状态码",
+                      "example": "1"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "错误码",
+                      "example": "00000000"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "返回信息"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "orderId": {
+                          "type": "string",
+                          "description": "商户订单号(必须保证唯一性)"
+                        },
+                        "orderNo": {
+                          "type": "string",
+                          "description": "平台订单号"
+                        },
+                        "sign": {
+                          "type": "string",
+                          "description": "签名"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/myr/pay/query": {
+      "post": {
+        "summary": "马来西亚林吉特代付查询",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "appId": {
+                    "type": "integer",
+                    "description": "业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）"
+                  },
+                  "orderId": {
+                    "type": "string",
+                    "description": "商户订单号"
+                  },
+                  "orderNo": {
+                    "type": "string",
+                    "description": "平台订单号（响应快）"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "签名"
+                  }
+                },
+                "required": [
+                  "appId",
+                  "orderId",
+                  "sign"
+                ]
+              },
+              "examples": {}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "响应状态码"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "错误码"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "响应消息"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "响应数据",
+                      "properties": {
+                        "orderId": {
+                          "type": "string",
+                          "description": "商户订单号(必须保证唯一性)"
+                        },
+                        "orderNo": {
+                          "type": "string",
+                          "description": "平台订单号"
+                        },
+                        "amount": {
+                          "type": "string",
+                          "description": "交易金额"
+                        },
+                        "fee": {
+                          "type": "string",
+                          "description": "手续费"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "description": "状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)"
+                        },
+                        "payTime": {
+                          "type": "string",
+                          "description": "支付成功时间（当status=2时有值）(马来西亚时间), 格式: yyyy-MM-dd HH:mm:ss"
+                        },
+                        "errorMsg": {
+                          "type": "string",
+                          "description": "支付失败原因（当status=3时有值）"
+                        },
+                        "sign": {
+                          "type": "string",
+                          "description": "签名"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "responses": {},
+    "securitySchemes": {}
+  },
+  "servers": [
+    {
+      "url": "https://uat-interface.haipay.asia",
+      "description": "测试-interface"
+    }
+  ],
+  "security": []
+}

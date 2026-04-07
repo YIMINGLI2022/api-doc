@@ -1,0 +1,26 @@
+---
+title: "BRL Collection Query"
+description: "Query the status via orderNo after receiving async notification for confirmation."
+openapi: "docs/en/api-reference/brl/brl.openapi.json POST /brl/collect/query"
+playground: "interactive"
+---
+
+<div class="flex flex-col gap-4">
+    <div class="api-section-heading flex flex-col gap-y-4 w-full">
+        <div class="flex items-baseline border-b pb-2.5 border-gray-100 dark:border-gray-800 w-full">
+            <h4 class="api-section-heading-title flex-1 mb-0">Secret Key & Private Key (Generate Signature)</h4>
+        </div>
+        <div></div>
+    </div>
+
+    <input
+        id="secret-key"
+        placeholder="Secret Key"
+        class="px-3 py-2 border rounded-md"
+    />
+    <input
+        id="private-key"
+        placeholder="Private Key"
+        class="px-3 py-2 border rounded-md"
+    />
+</div>

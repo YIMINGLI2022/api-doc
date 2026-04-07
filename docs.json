@@ -411,7 +411,7 @@
             "github": "https://github.com/mintlify"
           }
         },
-        "groups": [
+        "tabs": [
           {
             "tab": "Documentation Center",
             "groups": [
@@ -531,9 +531,241 @@
           },
           {
             "tab": "API reference",
-            "openapi": "docs/en/openapi.json",
-            "pages": [
-              "docs/en/api-reference/global/cashier/collect-apply"
+            "groups": [
+              {
+                "group": "Cashier",
+                "pages": [
+                  "docs/en/api-reference/cashier/api/collectApply",
+                  "docs/en/api-reference/cashier/api/collectQuery",
+                  "docs/en/api-reference/cashier/api/collectQueryV2"
+                ]
+              },
+              {
+                "group": "International Credit Card",
+                "pages": [
+                  "docs/en/api-reference/card/api/collectApply",
+                  "docs/en/api-reference/card/api/collectQuery",
+                  "docs/en/api-reference/card/api/mitApply",
+                  "docs/en/api-reference/card/api/refundApply",
+                  "docs/en/api-reference/card/api/refundQuery"
+                ]
+              },
+              {
+                "group": "Credit Card Subscription",
+                "pages": [
+                  "docs/en/api-reference/subscription/api/subscriptionApply",
+                  "docs/en/api-reference/subscription/api/subscriptionQuery",
+                  "docs/en/api-reference/subscription/api/subscriptionCancel",
+                  "docs/en/api-reference/subscription/api/refundApply"
+                ]
+              },
+              {
+                "group": "PayPal",
+                "pages": [
+                  "docs/en/api-reference/paypal/api/payApply",
+                  "docs/en/api-reference/paypal/api/payQuery"
+                ]
+              },
+              {
+                "group": "Mexico",
+                "pages": [
+                  "docs/en/api-reference/mxn/api/collectApply",
+                  "docs/en/api-reference/mxn/api/collectQuery",
+                  "docs/en/api-reference/mxn/api/payApply",
+                  "docs/en/api-reference/mxn/api/payQuery"
+                ]
+              },
+              {
+                "group": "Turkey",
+                "pages": [
+                  "docs/en/api-reference/try/api/collectApply",
+                  "docs/en/api-reference/try/api/collectQuery",
+                  "docs/en/api-reference/try/api/payApply",
+                  "docs/en/api-reference/try/api/payQuery"
+                ]
+              },
+              {
+                "group": "Brazil",
+                "pages": [
+                  "docs/en/api-reference/brl/api/collectApply",
+                  "docs/en/api-reference/brl/api/collectQuery",
+                  "docs/en/api-reference/brl/api/payApply",
+                  "docs/en/api-reference/brl/api/payQuery"
+                ]
+              },
+              {
+                "group": "Hong Kong",
+                "pages": [
+                  "docs/en/api-reference/hkd/api/collectApply",
+                  "docs/en/api-reference/hkd/api/collectQuery"
+                ]
+              },
+              {
+                "group": "Singapore",
+                "pages": [
+                  "docs/en/api-reference/sgd/api/collectApply",
+                  "docs/en/api-reference/sgd/api/collectQuery"
+                ]
+              },
+              {
+                "group": "Taiwan",
+                "pages": [
+                  "docs/en/api-reference/twd/api/collectApply",
+                  "docs/en/api-reference/twd/api/collectQuery"
+                ]
+              },
+              {
+                "group": "Japan",
+                "pages": [
+                  "docs/en/api-reference/jpy/api/collectApply",
+                  "docs/en/api-reference/jpy/api/collectQuery"
+                ]
+              },
+              {
+                "group": "South Korea",
+                "pages": [
+                  "docs/en/api-reference/krw/api/collectApply",
+                  "docs/en/api-reference/krw/api/collectQuery",
+                  "docs/en/api-reference/krw/api/payApply",
+                  "docs/en/api-reference/krw/api/payQuery"
+                ]
+              },
+              {
+                "group": "Philippines",
+                "pages": [
+                  "docs/en/api-reference/php/api/collectApply",
+                  "docs/en/api-reference/php/api/collectQuery",
+                  "docs/en/api-reference/php/api/payApply",
+                  "docs/en/api-reference/php/api/payQuery"
+                ]
+              },
+              {
+                "group": "Thailand",
+                "pages": [
+                  "docs/en/api-reference/thb/api/collectApply",
+                  "docs/en/api-reference/thb/api/collectQuery",
+                  "docs/en/api-reference/thb/api/payApply",
+                  "docs/en/api-reference/thb/api/payQuery"
+                ]
+              },
+              {
+                "group": "Vietnam",
+                "pages": [
+                  "docs/en/api-reference/vnd/api/collectApply",
+                  "docs/en/api-reference/vnd/api/collectQuery",
+                  "docs/en/api-reference/vnd/api/payApply",
+                  "docs/en/api-reference/vnd/api/payQuery"
+                ]
+              },
+              {
+                "group": "Indonesia",
+                "pages": [
+                  "docs/en/api-reference/idr/api/collectApply",
+                  "docs/en/api-reference/idr/api/collectQuery",
+                  "docs/en/api-reference/idr/api/payApply",
+                  "docs/en/api-reference/idr/api/payQuery"
+                ]
+              },
+              {
+                "group": "India",
+                "pages": [
+                  "docs/en/api-reference/inr/api/collectApply",
+                  "docs/en/api-reference/inr/api/collectQuery",
+                  "docs/en/api-reference/inr/api/payApply",
+                  "docs/en/api-reference/inr/api/payQuery"
+                ]
+              },
+              {
+                "group": "Malaysia",
+                "pages": [
+                  "docs/en/api-reference/myr/api/collectApply",
+                  "docs/en/api-reference/myr/api/collectQuery",
+                  "docs/en/api-reference/myr/api/payApply",
+                  "docs/en/api-reference/myr/api/payQuery"
+                ]
+              },
+              {
+                "group": "Pakistan",
+                "pages": [
+                  "docs/en/api-reference/pkr/api/collectApply",
+                  "docs/en/api-reference/pkr/api/collectQuery",
+                  "docs/en/api-reference/pkr/api/payApply",
+                  "docs/en/api-reference/pkr/api/payQuery"
+                ]
+              },
+              {
+                "group": "Bangladesh",
+                "pages": [
+                  "docs/en/api-reference/bdt/api/collectApply",
+                  "docs/en/api-reference/bdt/api/collectQuery",
+                  "docs/en/api-reference/bdt/api/payApply",
+                  "docs/en/api-reference/bdt/api/payQuery"
+                ]
+              },
+              {
+                "group": "Egypt",
+                "pages": [
+                  "docs/en/api-reference/egp/api/collectApply",
+                  "docs/en/api-reference/egp/api/collectQuery",
+                  "docs/en/api-reference/egp/api/payApply",
+                  "docs/en/api-reference/egp/api/payQuery"
+                ]
+              },
+              {
+                "group": "Saudi Arabia",
+                "pages": [
+                  "docs/en/api-reference/sar/api/collectApply",
+                  "docs/en/api-reference/sar/api/collectQuery"
+                ]
+              },
+              {
+                "group": "Kuwait",
+                "pages": [
+                  "docs/en/api-reference/kwd/api/collectApply",
+                  "docs/en/api-reference/kwd/api/collectQuery"
+                ]
+              },
+              {
+                "group": "Bahrain",
+                "pages": [
+                  "docs/en/api-reference/bhd/api/collectApply",
+                  "docs/en/api-reference/bhd/api/collectQuery"
+                ]
+              },
+              {
+                "group": "United Arab Emirates",
+                "pages": [
+                  "docs/en/api-reference/aed/api/collectApply",
+                  "docs/en/api-reference/aed/api/collectQuery"
+                ]
+              },
+              {
+                "group": "Oman",
+                "pages": [
+                  "docs/en/api-reference/omr/api/collectApply",
+                  "docs/en/api-reference/omr/api/collectQuery"
+                ]
+              },
+              {
+                "group": "Qatar",
+                "pages": [
+                  "docs/en/api-reference/qar/api/collectApply",
+                  "docs/en/api-reference/qar/api/collectQuery"
+                ]
+              },
+              {
+                "group": "Stablecoin",
+                "pages": [
+                  "docs/en/api-reference/usdtc/api/usdcCollectApply",
+                  "docs/en/api-reference/usdtc/api/usdcCollectQuery",
+                  "docs/en/api-reference/usdtc/api/usdcPayApply",
+                  "docs/en/api-reference/usdtc/api/usdcPayQuery",
+                  "docs/en/api-reference/usdtc/api/usdtCollectApply",
+                  "docs/en/api-reference/usdtc/api/usdtCollectQuery",
+                  "docs/en/api-reference/usdtc/api/usdtPayApply",
+                  "docs/en/api-reference/usdtc/api/usdtPayQuery"
+                ]
+              }
             ]
           }
         ]

@@ -1,0 +1,601 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "默认模块",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "tags": [],
+  "paths": {
+    "/pkr/collect/apply": {
+      "post": {
+        "summary": "巴基斯坦卢比代收申请",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "appId": {
+                    "type": "integer",
+                    "description": "业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）"
+                  },
+                  "orderId": {
+                    "type": "string",
+                    "description": "商户订单号(必须保证唯一性，长度不超过48)",
+                    "maxLength": 48
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "收款人姓名"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "手机号"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "真实电子邮件",
+                    "format": "email"
+                  },
+                  "amount": {
+                    "type": "string",
+                    "description": "交易金额"
+                  },
+                  "payType": {
+                    "type": "string",
+                    "description": "交易类型"
+                  },
+                  "inBankCode": {
+                    "type": "string",
+                    "description": "支付方式"
+                  },
+                  "callBackUrl": {
+                    "type": "string",
+                    "description": "用户支付成功后跳转地址",
+                    "format": "uri"
+                  },
+                  "callBackFailUrl": {
+                    "type": "string",
+                    "description": "用户支付失败后跳转地址",
+                    "format": "uri"
+                  },
+                  "notifyUrl": {
+                    "type": "string",
+                    "description": "回调地址",
+                    "format": "uri"
+                  },
+                  "subject": {
+                    "type": "string",
+                    "description": "支付备注"
+                  },
+                  "body": {
+                    "type": "string",
+                    "description": "备注详情"
+                  },
+                  "partnerUserId": {
+                    "type": "string",
+                    "description": "用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。",
+                    "pattern": "^[A-Za-z0-9\\-~!@#$%&*()_]+$"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "签名"
+                  }
+                },
+                "required": [
+                  "appId",
+                  "orderId",
+                  "name",
+                  "phone",
+                  "email",
+                  "amount",
+                  "payType",
+                  "inBankCode",
+                  "callBackUrl",
+                  "callBackFailUrl",
+                  "partnerUserId",
+                  "sign"
+                ]
+              },
+              "examples": {}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "状态码",
+                      "default": "1"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "错误码",
+                      "default": "00000000"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "提示信息",
+                      "default": ""
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "orderId": {
+                          "type": "string",
+                          "description": "商户订单号(必须保证唯一性)"
+                        },
+                        "orderNo": {
+                          "type": "string",
+                          "description": "平台订单号"
+                        },
+                        "payUrl": {
+                          "type": "string",
+                          "description": "支付链接"
+                        },
+                        "qrCode": {
+                          "type": "string",
+                          "description": "二维码内容-可自行生成二维码(QR)"
+                        },
+                        "sign": {
+                          "type": "string",
+                          "description": "签名"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "default": {}
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/pkr/collect/query": {
+      "post": {
+        "summary": "巴基斯坦卢比代收查询",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "appId": {
+                    "type": "integer",
+                    "description": "业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）"
+                  },
+                  "orderId": {
+                    "type": "string",
+                    "description": "商户订单号"
+                  },
+                  "orderNo": {
+                    "type": "string",
+                    "description": "平台订单号（响应快）"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "签名"
+                  }
+                },
+                "required": [
+                  "appId",
+                  "orderId",
+                  "sign"
+                ]
+              },
+              "examples": {}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "状态码",
+                      "default": "1"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "错误码",
+                      "default": "00000000"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "消息",
+                      "default": ""
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "数据对象",
+                      "properties": {
+                        "orderId": {
+                          "type": "string",
+                          "description": "商户订单号(必须保证唯一性)",
+                          "default": null
+                        },
+                        "orderNo": {
+                          "type": "string",
+                          "description": "平台订单号",
+                          "default": null
+                        },
+                        "amount": {
+                          "type": "string",
+                          "description": "交易金额",
+                          "default": null
+                        },
+                        "actualAmount": {
+                          "type": "string",
+                          "description": "收到金额",
+                          "default": null
+                        },
+                        "fee": {
+                          "type": "string",
+                          "description": "手续费",
+                          "default": null
+                        },
+                        "status": {
+                          "type": "integer",
+                          "description": "状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)",
+                          "default": null
+                        },
+                        "payTime": {
+                          "type": "string",
+                          "description": "支付成功时间（当status=2时有值）(巴基斯坦时间), 格式: yyyy-MM-dd HH:mm:ss",
+                          "default": null
+                        },
+                        "errorMsg": {
+                          "type": "string",
+                          "description": "失败原因（当status=3时有值）",
+                          "default": null
+                        },
+                        "sign": {
+                          "type": "string",
+                          "description": "签名",
+                          "default": null
+                        }
+                      },
+                      "additionalProperties": false,
+                      "default": {}
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/pkr/pay/apply": {
+      "post": {
+        "summary": "巴基斯坦卢比代付申请",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "appId": {
+                    "type": "integer",
+                    "description": "业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）"
+                  },
+                  "orderId": {
+                    "type": "string",
+                    "description": "商户订单号(必须保证唯一性，长度不超过48)",
+                    "maxLength": 48
+                  },
+                  "amount": {
+                    "type": "string",
+                    "description": "交易金额（精确到小数点后两位；禁止添加标点符号，例如：\",\"）",
+                    "pattern": "^\\d+\\.\\d{2}$"
+                  },
+                  "accountType": {
+                    "type": "string",
+                    "description": "账户类型：EWALLET（电子钱包） , BANK_ACCOUNT（银行）",
+                    "enum": [
+                      "EWALLET",
+                      "BANK_ACCOUNT"
+                    ]
+                  },
+                  "bankCode": {
+                    "type": "string",
+                    "description": "付款编码"
+                  },
+                  "accountNo": {
+                    "type": "string",
+                    "description": "用户银行账号或钱包账号"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "收款人姓名"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "真实手机号"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "真实电子邮件",
+                    "format": "email"
+                  },
+                  "notifyUrl": {
+                    "type": "string",
+                    "description": "回调地址",
+                    "format": "uri"
+                  },
+                  "subject": {
+                    "type": "string",
+                    "description": "支付备注（交易标题，商品名称，支付原因）"
+                  },
+                  "body": {
+                    "type": "string",
+                    "description": "备注详情"
+                  },
+                  "birth": {
+                    "type": "string",
+                    "description": "出生年月日，格式：yyyy-MM-dd",
+                    "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                  },
+                  "gender": {
+                    "type": "string",
+                    "description": "性别，可选值：MALE, FEMALE or OTHER",
+                    "enum": [
+                      "MALE",
+                      "FEMALE",
+                      "OTHER"
+                    ]
+                  },
+                  "idCard": {
+                    "type": "string",
+                    "description": "身份证号"
+                  },
+                  "partnerUserId": {
+                    "type": "string",
+                    "description": "用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。",
+                    "pattern": "^[A-Za-z0-9\\-~!@#$%&*()_]+$"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "签名"
+                  }
+                },
+                "required": [
+                  "appId",
+                  "orderId",
+                  "amount",
+                  "accountType",
+                  "bankCode",
+                  "accountNo",
+                  "name",
+                  "phone",
+                  "email",
+                  "subject",
+                  "birth",
+                  "gender",
+                  "partnerUserId",
+                  "sign"
+                ],
+                "additionalProperties": false
+              },
+              "examples": {}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "状态码"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "错误码"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "消息说明"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "返回数据",
+                      "properties": {
+                        "orderId": {
+                          "type": "string",
+                          "description": "商户订单号(必须保证唯一性)"
+                        },
+                        "orderNo": {
+                          "type": "string",
+                          "description": "平台订单号"
+                        },
+                        "sign": {
+                          "type": "string",
+                          "description": "签名"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/pkr/pay/query": {
+      "post": {
+        "summary": "巴基斯坦卢比代付查询",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "appId": {
+                    "type": "integer",
+                    "description": "业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）"
+                  },
+                  "orderId": {
+                    "type": "string",
+                    "description": "商户订单号"
+                  },
+                  "orderNo": {
+                    "type": "string",
+                    "description": "平台订单号（响应快）"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "签名"
+                  }
+                },
+                "required": [
+                  "appId",
+                  "orderId",
+                  "sign"
+                ]
+              },
+              "examples": {}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "响应状态码",
+                      "default": "1"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "错误码",
+                      "default": "00000000"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "响应消息",
+                      "default": ""
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "响应数据",
+                      "properties": {
+                        "orderId": {
+                          "type": "string",
+                          "description": "商户订单号(必须保证唯一性)"
+                        },
+                        "orderNo": {
+                          "type": "string",
+                          "description": "平台订单号"
+                        },
+                        "amount": {
+                          "type": "string",
+                          "description": "交易金额"
+                        },
+                        "fee": {
+                          "type": "string",
+                          "description": "手续费"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "description": "状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)",
+                          "enum": [
+                            0,
+                            1,
+                            2,
+                            3,
+                            -1
+                          ]
+                        },
+                        "payTime": {
+                          "type": "string",
+                          "description": "支付成功时间（当status=2时有值）(巴基斯坦时间), 格式: yyyy-MM-dd HH:mm:ss",
+                          "pattern": "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$"
+                        },
+                        "errorMsg": {
+                          "type": "string",
+                          "description": "支付失败原因（当status=3时有值）"
+                        },
+                        "sign": {
+                          "type": "string",
+                          "description": "签名"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "responses": {},
+    "securitySchemes": {}
+  },
+  "servers": [
+    {
+      "url": "https://uat-interface.haipay.asia",
+      "description": "测试-interface"
+    }
+  ],
+  "security": []
+}
