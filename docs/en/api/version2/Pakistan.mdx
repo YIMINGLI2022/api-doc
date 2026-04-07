@@ -1,0 +1,704 @@
+---
+title: Pakistan API
+permalink: /en/api/version2/Pakistan/
+---
+# **Pakistan Payment API**
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+:::warning
+**Before reading this API documentation, please make sure to check [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
+:::
+
+## **Transaction Limits**
+
+| Transaction Type | Limit (Unit: PKR) |
+| :--------------- | ----------------- |
+| Collection       | 10-500000         |
+| Disbursement     | 10-100000         |
+
+## **Collection API**
+
+### **Collection Application**
+
+**Brief Description:**
+
+* Create a collection order
+
+**URL: `/pkr/collect/apply`**  
+Note: appId needs to use PKR corresponding, user payment success will increase PKR balance
+
+
+**Parameters:**
+
+| Parameter     | Required | Type   | Description                                                                 |
+| :------------ | :------- | :----- | :-------------------------------------------------------------------------- |
+| appId         | Yes      | Long   | Business ID (obtained from the backend, must pass the corresponding business ID according to the currency in URL) |
+| orderId       | Yes      | String | Merchant Order Number (must be unique, max length: 48)                        |
+| name          | Yes      | String | Recipient's Name                                                             |
+| phone         | Yes      | String | Mobile number                               |
+| email         | Yes      | String | Real Email                                                                   |
+| amount        | Yes      | String | Transaction Amount                                                           |
+| payType       | Yes      | String | Transaction Type                                                             |
+| inBankCode    | Yes      | String | [Payment Method](#支付方式)                                                  |
+| callBackUrl   | Yes      | String | Redirect URL after successful payment                                        |
+| callBackFailUrl | Yes    | String | Redirect URL after failed payment                                            |
+| notifyUrl     | No       | String | Callback URL                                                                 |
+| subject       | No       | String | Payment Note                                                                 |
+| body          | No       | String | Note Details                                                                 |
+| idCard        | No       | String | ID card number, required for JAZZCASH                        |
+| partnerUserId | Yes      | String | Unique user identifier (e.g., userId), used for risk control system, must be valid, otherwise it will affect the transaction. Format: digits, letters, or symbols -~!@#$%&*()_. |
+| sign          | Yes      | String | Signature                                                                    |
+
+**Return Data Parameters**
+
+| Parameter | Type   | Description                                    |
+| :-------- | :----- | :--------------------------------------------- |
+| orderId   | String | Merchant Order Number (must be unique)          |
+| orderNo   | String | Platform Order Number                           |
+| payUrl    | String | Payment URL                                     |
+| qrCode    | String | QR Code content – can generate QR by yourself   |
+| sign      | String | Signature                                       |
+
+### **Collection Query**
+
+**Brief Description:**
+
+* Query collection order
+
+**URL: `/pkr/collect/query`**
+
+
+
+**Parameters:**
+
+| Parameter | Required | Type   | Description                                                                 |
+| :-------- | :------- | :----- | :-------------------------------------------------------------------------- |
+| appId     | Yes      | Long   | Business ID (obtained from the backend, must pass the corresponding business ID according to the currency in URL) |
+| orderId   | Yes      | String | Merchant Order Number                                                       |
+| orderNo   | No       | String | Platform Order Number (faster response)                                     |
+| sign      | Yes      | String | Signature                                                                   |
+
+**Return Data Parameters**
+
+| Parameter     | Type    | Description                                                                 |
+| :------------ | :------ | :------------------------------------------------------------------------- |
+| orderId       | String  | Merchant Order Number (must be unique)                                      |
+| orderNo       | String  | Platform Order Number                                                       |
+| amount        | String  | Transaction Amount                                                          |
+| actualAmount  | String  | Received Amount                                                             |
+| fee           | String  | Fee                                                                         |
+| status        | Integer | Status (0 Not Started, 1 Processing, 2 Success [final], 3 Failed [final], -1 Pending Confirmation) |
+| payTime       | String  | Payment Success Time (present when status=2) (Pakistan Time), format: yyyy-MM-dd HH:mm:ss |
+| errorMsg      | String  | Failure Reason (present when status=3)                                      |
+| sign          | String  | Signature                                                                   |
+
+### **Payment Methods**
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (payType)</b></td>
+        <td><b>Payment Code (inBankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>CASHIER</td>
+        <td>10-500000</td>
+        <td>Available</td>
+        <td>Cashier Mode</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>EWALLET</td>
+        <td>JAZZCASH</td>
+        <td>10-500000</td>
+        <td>Available</td>
+        <td>JazzCash Wallet</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>EWALLET</td>
+        <td>EASYPAISA</td>
+        <td>10-500000</td>
+        <td>Available</td>
+        <td>EasyPaisa Wallet</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>EWALLET</td>
+        <td>ALFA</td>
+        <td>10-500000</td>
+        <td>Maintenance</td>
+        <td>ALFA Wallet</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>EWALLET</td>
+        <td>HBL_KONNECT</td>
+        <td>10-500000</td>
+        <td>Maintenance</td>
+        <td>HBL KONNECT Wallet</td>
+    </tr>
+</table>
+
+
+
+## **Disbursement API**
+
+### **Disbursement Apply**
+
+**Brief Description:**
+
+* Create a disbursement order
+
+**URL: `/pkr/pay/apply`**
+
+
+
+**Parameters:**
+
+| Parameter      | Required | Type   | Description                                                                 |
+| :------------- | :------- | :----- | :-------------------------------------------------------------------------- |
+| appId          | Yes      | Long   | Business ID (obtained from the backend, must pass the corresponding business ID according to the currency in URL) |
+| orderId        | Yes      | String | Merchant Order Number (must be unique, max length 48)                        |
+| amount         | Yes      | String | Transaction Amount (accurate to two decimals; no punctuation allowed, e.g., “,” is forbidden) |
+| accountType    | Yes      | String | Account Type: EWALLET (E-wallet), BANK_ACCOUNT (Bank)                        |
+| bankCode       | Yes      | String | [Payment Code](#付款编码)                                                     |
+| accountNo      | Yes      | String | User’s bank account number or wallet account number                          |
+| name           | Yes      | String | Recipient’s Name                                                            |
+| phone          | Yes      | String | Real Mobile Number                                                           |
+| email          | Yes      | String | Real Email                                                                   |
+| notifyUrl      | No       | String | Callback URL                                                                 |
+| subject        | Yes      | String | Payment Note (transaction title, product name, reason for payment)           |
+| body           | No       | String | Note Details                                                                 |
+| birth          | Yes      | String | Date of Birth, format: yyyy-MM-dd                                            |
+| gender         | Yes      | String | Gender, allowed values: MALE, FEMALE, or OTHER                               |
+| idCard         | No       | String | ID card number                                    |
+| partnerUserId  | Yes      | String | Unique user identifier (e.g., userId), used for risk control system, must be valid, otherwise it will affect the transaction. Format: digits, letters, or symbols -~!@#$%&*()_. |
+| sign           | Yes      | String | Signature                                                                    |
+
+**Return Data Parameters**
+
+| Parameter | Required | Type   | Description                                    |
+| :-------- | :------- | :----- | :--------------------------------------------- |
+| orderId   | String   | Merchant Order Number (must be unique)                  |
+| orderNo   | String   | Platform Order Number                                   |
+| sign      | String   | Signature                                               |
+
+### **Disbursement Query**
+
+**Brief Description:**
+
+* Query disbursement order
+
+**URL: `/pkr/pay/query`**
+
+
+
+**Parameters:**
+
+| Parameter | Required | Type   | Description                                                                 |
+| :-------- | :------- | :----- | :-------------------------------------------------------------------------- |
+| appId     | Yes      | Long   | Business ID (obtained from the backend, must pass the corresponding business ID according to the currency in URL) |
+| orderId   | Yes      | String | Merchant Order Number                                                       |
+| orderNo   | No       | String | Platform Order Number (faster response)                                     |
+| sign      | Yes      | String | Signature                                                                   |
+
+**Return Data Parameters**
+
+| Parameter  | Type    | Description                                                                 |
+| :--------- | :------ | :------------------------------------------------------------------------- |
+| orderId    | String  | Merchant Order Number (must be unique)                                      |
+| orderNo    | String  | Platform Order Number                                                       |
+| amount     | String  | Transaction Amount                                                          |
+| fee        | String  | Fee                                                                         |
+| status     | Integer | Status (0 Not Started, 1 Processing, 2 Success [final], 3 Failed [final], -1 Pending Confirmation) |
+| payTime    | String  | Payment Success Time (present when status=2) (Pakistan Time), format: yyyy-MM-dd HH:mm:ss |
+| errorMsg   | String  | Failure Reason (present when status=3)                                      |
+| sign       | String  | Signature                                                                   |
+
+### **Payment Codes**
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1050px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (accountType)</b></td>
+        <td><b>Payment Code (bankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>EWALLET</td>
+        <td>ALFA</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>ALFA Wallet</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>EWALLET</td>
+        <td>BAFL</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Bank Alfalah Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>EWALLET</td>
+        <td>EASYPAISA</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>EasyPaisa Wallet</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>EWALLET</td>
+        <td>JAZZCASH</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>JazzCash Wallet</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>EWALLET</td>
+        <td>HBL_KONNECT</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>HBL KONNECT Wallet</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ABBL</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Al Baraka Bank Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ABHI</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Abhi Finance</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ABL</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Allied Bank Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ACBL</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Askari Commercial Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ADVANS</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Advans Pakistan</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>APNA</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Apna Microfinance Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BAHL</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Bank AL Habib Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BARWAQT</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Barwaqt</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BIPL</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>BankIslami Pakistan</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BOK</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Bank of Khyber</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BOP</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Bank of Punjab</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BYKEA</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>BYKEA</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CDNS</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>CDNS</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CITI</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Citi Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>DIBPL</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Dubai Islamic Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>FAYSAL</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Faysal Bank Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>FINCA</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>FINCA Microfinance Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>FINJA</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>FINJA EMI</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>FMB</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>First Microfinance Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>FWBL</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>First Women Bank Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>HBL</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Habib Bank Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>HBLASSET</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>HBL ASSET MANAGEMENT</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>HMBL</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Habib Metropolitan Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ICBC</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>ICBC</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>JSB</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>JS Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>KHUSHALI</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Khushali Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MCB</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>MCB Bank Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MCBARIF</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>MCB ARIF HABIB</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MCIB</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>MCB Islamic Banking</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MEEZAN</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Meezan Bank Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MOD</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>MOD</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NAYAPAY</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>NayaPay Private Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NBP</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>National Bank of Pakistan</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NBPF</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>NBP Funds</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NRSP</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>NRSP Microfinance</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PAYMAX</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>PayMax (Zong)</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SADAPAY</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>SadaPay</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SAMBA</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>SAMBA</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SCB</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Standard Chartered Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SILK</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Silk Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SIMPAISA</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>SimPaisa</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SINDH</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Sindh Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SME</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>SME Bank Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SONERI</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Soneri Bank Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SUMMIT</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Summit Bank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>UBANK</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Ubank</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>UBL</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>United Bank Limited</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>WHITE</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>WHITE LABEL ATM</td>
+    </tr>
+    <tr>
+        <td>PKR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ZARAI</td>
+        <td>10-100000</td>
+        <td>Available</td>
+        <td>Zarai Taraqiati Bank</td>
+    </tr>
+</table>
+
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

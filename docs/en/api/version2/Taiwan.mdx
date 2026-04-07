@@ -1,0 +1,272 @@
+---
+title: Taiwan Payment API
+permalink: /en/api/version2/Taiwan/
+---
+
+# **Taiwan Payment API**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+:::warning
+**Before reading this API document, please make sure to check [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
+:::
+
+## **Limits**
+
+| Transaction Type | Limit                            |
+|:-----------------|:---------------------------------|
+| Collection       | USD: 0.99-499.99, TWD: 100-20000 |
+
+## **Collection API**
+
+### **Collection Application**
+
+**Brief Description:**
+
+* Create a collection order
+
+**URL:**
+
+TWD: `/twd/collect/apply` Note: appId TWD, amount TWD, settlement TWD  
+
+USD: `/usd/collect/apply` Note: appId USD, amount USD, settlement USD  
+
+**Parameters:**
+
+| Parameter Name   | Required | Type   | Description                                                                                                     |
+|:-----------------|:---------|:-------|:----------------------------------------------------------------------------------------------------------------|
+| appId            | Yes      | Long   | Business ID (obtained from the backend, needs to pass the corresponding business ID according to the currency in the URL) |
+| orderId          | Yes      | String | Merchant order number (must be unique, max length 48)                                                 |
+| name             | Yes      | String | User’s full name. Recommended to use real name. Format: firstName and lastName separated by a space. Example: Donald John Trump |
+| phone            | Yes      | String | Real phone number                                                                                                |
+| email            | Yes      | String | Real email                                                                                                       |
+| amount           | Yes      | String | Transaction amount. For TWD orders, decimals are not allowed                                                     |
+| payType          | Yes      | String | Transaction type                                                                                                 |
+| inBankCode       | Yes      | String | [Payment method](#inBankCode)                                                                                    |
+| callBackUrl      | Yes      | String | Redirect URL after successful payment                                                                            |
+| callBackFailUrl  | Yes      | String | Redirect URL after failed payment                                                                                |
+| notifyUrl        | No       | String | Callback URL                                                                                                     |
+| subject          | Yes      | String | Payment note                                                                                                     |
+| body             | No       | String | Additional details                                                                                               |
+| country          | No       | String | Required for cashier mode, fixed value: 158                                                                      |
+| currency         | No       | String | Currency (default TWD; supported currencies: USD, TWD)                                                           |
+| partnerUserId    | Yes      | String | Unique user identifier (e.g., userId). Used for risk control. Must be valid, otherwise it will affect the transaction. Allowed format: numbers, uppercase/lowercase letters, or common symbols -~!@#$%&*()_. |
+| sign             | Yes      | String | Signature                                                                                                        |
+
+**Return data parameter description**
+
+| Parameter Name | Type   | Description                      |
+|:---------------|:-------|:---------------------------------|
+| orderId        | String | Merchant order number (must be unique) |
+| orderNo        | String | Platform order number            |
+| payUrl         | String | Payment link                     |
+| sign           | String | Signature                        |
+
+### **Collection Query**
+
+**Brief Description:**
+
+* Query collection order
+
+**URL:**
+
+TWD: `/twd/collect/query`  
+
+USD: `/usd/collect/query`  
+
+**Parameters:**
+
+| Parameter Name | Required | Type   | Description                                                                 |
+|:---------------|:---------|:-------|:----------------------------------------------------------------------------|
+| appId          | Yes      | Long   | Business ID (obtained from the backend, needs to pass the corresponding business ID according to the currency in the URL) |
+| orderId        | Yes      | String | Merchant order number                                                       |
+| orderNo        | No       | String | Platform order number (faster response)                                     |
+| sign           | Yes      | String | Signature                                                                   |
+
+**Return data parameter description**
+
+| Parameter Name | Type    | Description                                                                                          |
+|:---------------|:--------|:----------------------------------------------------------------------------------------------------|
+| orderId        | String  | Merchant order number (must be unique)                                                              |
+| orderNo        | String  | Platform order number                                                                               |
+| amount         | String  | Transaction amount                                                                                  |
+| actualAmount   | String  | Amount received                                                                                     |
+| fee            | String  | Transaction fee                                                                                     |
+| status         | Integer | Status (0: Not started, 1: Processing, 2: Success (final), 3: Failed (final), 4: Partial received (final), 5: Over-received (final), -1: Exception pending confirmation) |
+| payTime        | String  | Payment success time (available when status=2,4,5). Local time format: yyyy-MM-dd HH:mm:ss           |
+| errorMsg       | String  | Payment failure reason (available when status=3)                                                     |
+| sign           | String  | Signature                                                                                           |
+
+### **Payment Methods**<a id="inBankCode"></a>
+
+<table style='border-collapse: collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752; width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032; width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496; width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784; width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480; width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040; width:355px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (payType)</b></td>
+        <td><b>Payment Code (inBankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>TWD</td>
+        <td>QR</td>
+        <td>JKO_PAY_QR</td>
+        <td>30-20000</td>
+        <td>Available</td>
+        <td>JkoPay QR</td>
+    </tr>
+    <tr>
+        <td>TWD</td>
+        <td>EWALLET</td>
+        <td>JKO_PAY_TWD</td>
+        <td>30-20000</td>
+        <td>Available</td>
+        <td>JKO Pay</td>
+    </tr>
+    <tr>
+        <td>TWD</td>
+        <td>BANK_TRANSFER</td>
+        <td>ATM</td>
+        <td>1000-20000</td>
+        <td>Available</td>
+        <td>ATM Cashier</td>
+    </tr>
+    <tr>
+        <td>TWD</td>
+        <td>BANK_TRANSFER</td>
+        <td>STORE_IBON</td>
+        <td>100-20000</td>
+        <td>Available</td>
+        <td>7-11 Convenience Store</td>
+    </tr>
+    <tr>
+        <td>TWD</td>
+        <td>BANK_TRANSFER</td>
+        <td>STORE_HILIFEET</td>
+        <td>100-20000</td>
+        <td>Available</td>
+        <td>Hi-Life Life-ET</td>
+    </tr>
+    <tr>
+        <td>TWD</td>
+        <td>BANK_TRANSFER</td>
+        <td>STORE_OKGO</td>
+        <td>100-20000</td>
+        <td>Available</td>
+        <td>OK Mart OK-go</td>
+    </tr>
+    <tr>
+        <td>TWD</td>
+        <td>BANK_TRANSFER</td>
+        <td>STORE_FAMI</td>
+        <td>100-20000</td>
+        <td>Available</td>
+        <td>FamilyMart FamiPort</td>
+    </tr>
+    <tr>
+        <td>TWD</td>
+        <td>BANK_TRANSFER</td>
+        <td>STORE_MBC_HILIFEET</td>
+        <td>100-20000</td>
+        <td>Available</td>
+        <td>Convenience store mobile QR scan (Hi-Life Life-ET)</td>
+    </tr>
+    <tr>
+        <td>TWD</td>
+        <td>BANK_TRANSFER</td>
+        <td>STORE_MBC_IBON</td>
+        <td>100-20000</td>
+        <td>Available</td>
+        <td>7-11 Convenience store mobile QR scan</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>JKO_PAY</td>
+        <td>0.99-499.99</td>
+        <td>Available</td>
+        <td>JKO Pay</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>LINE_PAY_USD</td>
+        <td>2.99-499.99</td>
+        <td>Available</td>
+        <td>Line Pay</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>ATM_USD</td>
+        <td>32.99-499.99</td>
+        <td>Available</td>
+        <td>ATM Cashier</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>STORE_IBON_USD</td>
+        <td>2.99-499.99</td>
+        <td>Available</td>
+        <td>7-11 Convenience Store</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>STORE_HILIFEET_USD</td>
+        <td>2.99-499.99</td>
+        <td>Available</td>
+        <td>Hi-Life Life-ET</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>STORE_OKGO_USD</td>
+        <td>2.99-499.99</td>
+        <td>Available</td>
+        <td>OK Mart OK-go</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>STORE_FAMI_USD</td>
+        <td>2.99-499.99</td>
+        <td>Available</td>
+        <td>FamilyMart FamiPort</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>STORE_MBC_HILIFEET_USD</td>
+        <td>2.99-499.99</td>
+        <td>Available</td>
+        <td>Convenience store mobile QR scan (Hi-Life Life-ET)</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>STORE_MBC_IBON_USD</td>
+        <td>2.99-499.99</td>
+        <td>Available</td>
+        <td>Convenience store mobile QR scan (7-Eleven)</td>
+    </tr>
+</table>
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

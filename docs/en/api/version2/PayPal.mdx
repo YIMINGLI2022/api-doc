@@ -1,0 +1,254 @@
+---
+title: PayPal Payout API
+permalink: /en/api/version2/PayPal/
+---
+# **PayPal/VENMO/ACH/ECASHAPP Payout API**
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+:::warning
+**Before reading this API document, please make sure to review [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
+:::
+
+## **Limits**
+
+| Transaction Type | Limit (Unit: USD) |
+| :--------------- | ----------------- |
+| Payout           | 1–800             |
+
+## **Payout API**
+
+### **Payout Request**
+
+**URL：**
+
+USD: `/usd/pay/apply`
+
+
+
+**Parameters：**
+
+| Name           | Required | Type   | Description                                                                                                                                                                                                                |
+|:---------------|:---------|:-------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| appId          | Yes      | Long   | Business ID (obtained from the backend; must use the corresponding business ID for the currency in the URL).                                                                                                               |
+| orderId        | Yes      | String | Merchant order number (must be unique, max length 48).                                                                                                                                                                     |
+| name           | Yes      | String | Recipient's full name, recommended to use the real name in English, no special characters, separated by spaces, must include at least firstName and lastName. Example: Donald John Trump                                   |
+| phone          | Yes      | String | Real phone number (format reference: [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format)).                                                                                                   |
+| email          | Yes      | String | Real email address.                                                                                                                                                                                                        |
+| notifyUrl      | No       | String | Callback URL.                                                                                                                                                                                                              |
+| amount         | Yes      | String | Transaction amount (unit: USD, accurate to two decimals; no punctuation marks allowed, e.g., “,”).                                                                                                                         |
+| accountType    | Yes      | String | Account type.                                                                                                                                                                                                              |
+| bankCode       | Yes      | String | [Payment Method](#payment-methods).                                                                                                                                                                                        |
+| subject        | Yes      | String | Payment remark.                                                                                                                                                                                                            |
+| accountNo      | Yes      | String | Account number, for PayPal it is the email address.                                                                                                                                                                        |
+| identifyType   | No       | String | Bank routing code, required for ACH.                                                                                                                                                                                       |
+| body           | No       | String | Remark details, required for ECASHAPP.                                                                                                                                                                                     |
+| country        | No       | String | Recipient’s country, required for ACH，for example: US.                                                                                                                                                                     |
+| address1       | No       | String | Recipient’s address - street details, required for ACH.                                                                                                                                                                    |
+| address2       | No       | String | Recipient’s address - city, required for ACH.                                                                                                                                                                              |
+| address3       | No       | String | Recipient’s address - state/province, required for ACH.                                                                                                                                                                    |
+| postalCode     | No       | String | Recipient’s postal code, required for ACH.                                                                                                                                                                                 |
+| bankName     | No       | String | Recipient’s bank name, required for ACH.                                                                                                                                                                                   |
+| swiftCode     | No       | String | swiftCode, required for ACH.                                                                                                                                                                                               |
+| partnerUserId  | Yes      | String | User unique identifier (e.g., userId). Used for risk control. Must be real and valid, otherwise it will affect the transaction. Allowed characters: digits, uppercase/lowercase letters, or common symbols `-~!@#$%&*()_`. |
+| sign           | Yes      | String | Signature.                                                                                                                                                                                                                 |
+
+##### 
+
+request
+
+```json
+{
+    "appId": 1054,
+    "orderId": "M233323000059",
+    "amount": "300",
+    "phone": "09230219312",
+    "email": "23423@qq.com",
+    "name": "test",
+    "accountType": "EWALLET",
+    "bankCode": "PayPal",
+    "accountNo": "123465",
+    "partnerUserId": "149597870",
+    "sign": "af0gAHkUOyYH***"
+}
+```
+
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M233323000059",
+        "orderNo": "6023071013539074",
+        "payUrl": "",
+        "sign": "YEoA8Y2JzQFG***"
+    }
+}
+```
+
+**Response data description**
+
+| Name    | Type   | Description                  |
+| :------ | :----- | :--------------------------- |
+| orderId | String | Merchant order number (must be unique). |
+| orderNo | String | Platform order number.       |
+| payUrl  | String | Payment link.                |
+| sign    | String | Signature.                   |
+
+### **Payout Query**
+
+**Description:**
+
+* Create a payout order  
+* If orderNo is returned synchronously, it can be queried directly  
+* For other payment methods, after asynchronous notification, use orderNo to query and confirm the status again  
+
+**URL：**
+
+USD: `/usd/pay/query`
+
+
+
+**Parameters：**
+
+| Name    | Required | Type   | Description                                      |
+| :------ | :------- | :----- | :----------------------------------------------- |
+| appId   | Yes      | Long   | Business ID (obtained from the backend; must match the currency in the URL). |
+| orderId | Yes      | String | Merchant order number.                           |
+| orderNo | No       | String | Platform order number (faster response).         |
+| sign    | Yes      | String | Signature.                                       |
+
+request
+
+```json
+{
+    "appId": 1054,
+    "orderId": "M22222000028",
+    "sign": "EmyJGm3ELzG4FsOd0Krs9ncbSjo4oTGuXWML+7djYla3+VAwd9wS17z38p/7U2ZAjroO04XrE7YXcB1o76Dtyipj3h3bJzs7FYma1QNkMUdt9hh7m8U6hMsMQX7vIWHtXNwz4pbTSC75+kQWXaCew7KoE6LXECdJU8AISgNgeki2TK9R0pCfshr0Z2SZBPeuT6OvIH5LdmqgdZhuqnffGU2qnXk4KMkO848e6/WALLBR+LE1wyKHfPnYVcuKSMVYxkvKyyIL5JIPEgW0o5bh4RCbaUn3NZtyYwrU1uQ3ZDFRThm9j6XAQP+LBlmq3nOePqBtp/VDVarRaV+7FbQg3A=="
+}
+```
+
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M22222000028",
+        "orderNo": "6023042811314347",
+        "amount": "50.00",
+        "actualAmount": "0.00",
+        "fee": "0.00",
+        "status": 1,
+        "sign": "fP433ygWVDLVGxYkVnIJj7riGq0U3vyVX+MbBAImxfGLZkZcEAHVEoVYuULZSmXAAXKRSyd67WlDNm+24pougM54ofAoH4HMtCL2tfCoBReFyz3z02AGKkrKE2xWhSpWoqfQoBvzwuN5iGMMu0s9Q1YvqiwJ8WDVIENnmiIyD8qDJN7caHTW2US14/faG+69AvnuIgJ/nu7/jogOlgEYdZdVYU7gcRDE+d47KjlFGswQkJ/h/uzV7cWtUqrtOO7ZnZ3/z33Xx8awokX36QoYcPSWAU0h+Ij9O9402HNhm1eTbYcLU0uI/z8xCAtyAI/tTyiFijpiNlxUKQj+zKsILw=="
+    }
+}
+```
+Response data description
+
+| Name     | Type    | Description                                                                 |
+| :------- | :------ | :-------------------------------------------------------------------------- |
+| orderId  | String  | Merchant order number (must be unique).                                      |
+| orderNo  | String  | Platform order number.                                                       |
+| amount   | String  | Transaction amount.                                                          |
+| fee      | String  | Transaction fee.                                                             |
+| status   | Integer | Status (0 = Not started, 1 = Processing, 2 = Success (final), 3 = Failed (final), -1 = Exception pending confirmation). |
+| payTime  | String  | Payment success time (value present when status=2). Local time, format: yyyy-MM-dd HH:mm:ss. |
+| errorMsg | String  | Failure reason (value present when status=3).                                |
+| sign     | String  | Signature.                                                                   |
+
+### **Payment Methods**
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1050px;margin:0'>
+ <colgroup >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+ </colgroup>
+ <tbody>
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (accountType)</b></td>
+        <td><b>Payment Code (bankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>PayPal</td>
+        <td>1-800</td>
+        <td>Available</td>
+        <td>PayPal Wallet</td>
+    </tr>
+   <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>VENMO</td>
+        <td>1-800</td>
+        <td>Available</td>
+        <td>Venmo Wallet</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ACH</td>
+        <td>10-200000</td>
+        <td>Available</td>
+        <td>ACH Transfer</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>ECASHAPP</td>
+        <td>1-800</td>
+        <td>Maintenance</td>
+        <td>CashApp Wallet</td>
+    </tr>
+    </tbody>
+</table>
+
+### **Notes**
+
+1. **What does the failure reason `<Bank Reversal>` mean?**
+   
+   The user’s account has been flagged by PayPal as a high-risk account and cannot receive funds. The user must change to another account.
+
+2. **Can an order that is already in the payout process be recalled?**
+
+   No, it cannot.
+
+3. **Funds have been sent, but the user has not received them. What should be done?**
+
+   The user needs to check their PayPal email to see if there is a notification email and claim the payment.  
+   If the payment remains in "pending transfer" status, after 30 days without being claimed, it will be automatically refunded.  
+
+   **Below is the PayPal email claiming guide:**  
+
+   ![](/images/paypal.jpg)
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}
+

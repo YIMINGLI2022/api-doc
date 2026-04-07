@@ -1,0 +1,595 @@
+---
+title: ApplePay Payment API
+permalink: /en/api/version2/ApplePay/
+---
+
+# **ApplePay API Documentation**
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+:::warning
+**Before reading this API documentation, be sure to review the [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
+:::
+
+## **Check Your Device and Browser Settings**
+
+If you cannot see the wallet you want on the payment page, your device or browser may not meet the following Apple Pay or Google Pay requirements.
+
+- You must have at least one card in your wallet.
+- You must use compatible [Apple Pay devices](https://support.apple.com/en-us/102896) and [Google Pay devices](https://developers.google.com/pay/issuers/overview/supported-devices#compatibility_requirements).
+- You must use **HTTPS** and [supported browsers](#supported-browsers) to test the wallet you are testing.
+- Allow applicable browsers to access your wallet.
+  - Chrome: **Settings** > **Autofill and passwords** > **Payment methods** > **Allow sites to check if you have saved payment methods**
+  - Safari: **Settings** > **Advanced** > **Allow websites to check for Apple Pay and Apple Card**
+- Do not use Chrome incognito window or Safari private window.
+- Confirm you are operating in supported Apple Pay and Google Pay regions.
+- For Apple Pay, confirm your device supports [biometric authentication](https://support.apple.com/en-us/102626#:~:text=iPhone%20or%20.iPad,on%20all%20devices.).
+  
+### **Supported Browsers**
+
+#### **Desktop Browsers**
+- Chrome 38+
+- Safari 10.1+
+- Firefox 29+
+- Edge 15+
+- Opera 25+
+
+#### **Mobile Browsers**
+- iOS Safari 9+ and other browsers and web views using the system-provided WebKit engine
+- Android Chrome 38+
+- Samsung Browser 7.1+
+
+#### **Other Notes**
+For browsers not explicitly supported, we limit support as follows:
+
+- Requires browser support for **TLS 1.2**
+- Requires a sufficiently modern browser to support **Promises** in JavaScript
+- We respond to error reports but do not actively test other browsers
+
+
+
+::: danger Warning
+The following regions are prohibited from using the service!!!
+::: details Prohibited Regions List
+
+AD - Andorra
+
+AE - United Arab Emirates
+
+AF - Afghanistan
+
+AG - Antigua and Barbuda
+
+AI - Anguilla
+
+AL - Albania
+
+AM - Armenia
+
+AO - Angola
+
+AQ - Antarctica
+
+AR - Argentina
+
+AS - American Samoa
+
+AW - Aruba
+
+AX - Åland Islands
+
+BA - Bosnia and Herzegovina
+
+BB - Barbados
+
+BD - Bangladesh
+
+BF - Burkina Faso
+
+BH - Bahrain
+
+BI - Burundi
+
+BJ - Benin
+
+BL - Saint Barthélemy
+
+BM - Bermuda
+
+BN - Brunei
+
+BQ - Bonaire, Sint Eustatius, and Saba
+
+BS - Bahamas
+
+BT - Bhutan
+
+BV - Bouvet Island
+
+BW - Botswana
+
+BY - Belarus
+
+BZ - Belize
+
+CC - Cocos (Keeling) Islands
+
+CD - Democratic Republic of the Congo
+
+CF - Central African Republic
+
+CG - Republic of the Congo
+
+CI - Ivory Coast
+
+CK - Cook Islands
+
+CM - Cameroon
+
+CO - Colombia
+
+CU - Cuba
+
+CV - Cape Verde
+
+CW - Curaçao
+
+CX - Christmas Island
+
+CY - Cyprus
+
+DJ - Djibouti
+
+DM - Dominica
+
+DO - Dominican Republic
+
+DZ - Algeria
+
+EC - Ecuador
+
+EE - Estonia
+
+EG - Egypt
+
+EH - Western Sahara
+
+ER - Eritrea
+
+ET - Ethiopia
+
+FJ - Fiji
+
+FK - Falkland Islands
+
+FM - Federated States of Micronesia
+
+FO - Faroe Islands
+
+GA - Gabon
+
+GD - Grenada
+
+GE - Georgia
+
+GF - French Guiana
+
+GG - Guernsey
+
+GH - Ghana
+
+GI - Gibraltar
+
+GL - Greenland
+
+GM - Gambia
+
+GN - Guinea
+
+GP - Guadeloupe
+
+GQ - Equatorial Guinea
+
+GS - South Georgia and the South Sandwich Islands
+
+GT - Guatemala
+
+GW - Guinea-Bissau
+
+HK - Hong Kong
+
+HM - Heard Island and McDonald Islands
+
+HN - Honduras
+
+HT - Haiti
+
+ID - Indonesia
+
+IL - Israel
+
+IM - Isle of Man
+
+IN - India
+
+IO - British Indian Ocean Territory
+
+IQ - Iraq
+
+IR - Iran
+
+JM - Jamaica
+
+JO - Jordan
+
+JP - Japan
+
+KE - Kenya
+
+KH - Cambodia
+
+KI - Kiribati
+
+KM - Comoros
+
+KN - Saint Kitts and Nevis
+
+KP - North Korea
+
+KR - South Korea
+
+KW - Kuwait
+
+KY - Cayman Islands
+
+KZ - Kazakhstan
+
+LA - Laos
+
+LB - Lebanon
+
+LC - Saint Lucia
+
+LI - Liechtenstein
+
+LK - Sri Lanka
+
+LR - Liberia
+
+LS - Lesotho
+
+LV - Latvia
+
+LY - Libya
+
+MD - Moldova
+
+ME - Montenegro
+
+MF - Saint Martin (French part)
+
+MG - Madagascar
+
+MH - Marshall Islands
+
+MK - North Macedonia
+
+ML - Mali
+
+MM - Myanmar
+
+MN - Mongolia
+
+MP - Northern Mariana Islands
+
+MQ - Martinique
+
+MR - Mauritania
+
+MS - Montserrat
+
+MU - Mauritius
+
+MV - Maldives
+
+MW - Malawi
+
+MY - Malaysia
+
+MZ - Mozambique
+
+NA - Namibia
+
+NC - New Caledonia
+
+NE - Niger
+
+NF - Norfolk Island
+
+NG - Nigeria
+
+NI - Nicaragua
+
+NP - Nepal
+
+NR - Nauru
+
+NU - Niue
+
+OM - Oman
+
+PA - Panama
+
+PE - Peru
+
+PF - French Polynesia
+
+PG - Papua New Guinea
+
+PH - Philippines
+
+PK - Pakistan
+
+PM - Saint Pierre and Miquelon
+
+PN - Pitcairn Islands
+
+PR - Puerto Rico
+
+PS - Palestine
+
+PW - Palau
+
+RE - Réunion
+
+RU - Russia
+
+RW - Rwanda
+
+SA - Saudi Arabia
+
+SB - Solomon Islands
+
+SC - Seychelles
+
+SD - Sudan
+
+SH - Saint Helena
+
+SJ - Svalbard and Jan Mayen
+
+SK - Slovakia
+
+SL - Sierra Leone
+
+SM - San Marino
+
+SN - Senegal
+
+SO - Somalia
+
+SR - Suriname
+
+SS - South Sudan
+
+ST - São Tomé and Príncipe
+
+SV - El Salvador
+
+SX - Sint Maarten (Dutch part)
+
+SY - Syria
+
+SZ - Eswatini
+
+TC - Turks and Caicos Islands
+
+TD - Chad
+
+TF - French Southern Territories
+
+TG - Togo
+
+TH - Thailand
+
+TK - Tokelau
+
+TL - East Timor
+
+TM - Turkmenistan
+
+TN - Tunisia
+
+TO - Tonga
+
+TR - Turkey
+
+TT - Trinidad and Tobago
+
+TV - Tuvalu
+
+TW - Taiwan
+
+TZ - Tanzania
+
+UA - Ukraine
+
+UG - Uganda
+
+UM - United States Minor Outlying Islands
+
+UY - Uruguay
+
+UZ - Uzbekistan
+
+VA - Vatican City
+
+VC - Saint Vincent and the Grenadines
+
+VE - Venezuela
+
+VG - British Virgin Islands
+
+VI - U.S. Virgin Islands
+
+VN - Vietnam
+
+VU - Vanuatu
+
+WF - Wallis and Futuna
+
+WS - Samoa
+
+YE - Yemen
+
+YT - Mayotte
+
+ZA - South Africa
+
+ZM - Zambia
+
+ZW - Zimbabwe
+:::
+
+## **Transaction Limits**
+
+| Transaction Type | Limit (Unit: USD) |
+| :--------------- | ----------------- |
+| Collection       | 0.99-1000         |
+
+## **Collection API**
+
+### **Collection Application**
+
+**Brief Description:**
+
+* Create a collection order
+
+**URL:**
+
+USD: `/usd/collect/apply`
+Note: appId for USD, amount in USD, settlement in USD
+
+**Parameters:**
+
+| Parameter Name     | Required | Type   | Description                                                                                           |
+| :----------------- | :------- | :----- | :--------------------------------------------------------------------------------------------------- |
+| appId              | Yes      | Long   | Business ID (obtained from backend, must pass corresponding business ID based on currency in URL)   |
+| orderId            | Yes      | String | Merchant order number (must be unique, length not exceeding 48)                                      |
+| name               | Yes      | String | User name, recommended to use real name, format: firstName and lastName separated by space, example: Donald John Trump |
+| phone              | Yes      | String | Real phone number (format reference [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format)) |
+| email              | Yes      | String | Real email address                                                                                   |
+| amount             | Yes      | String | Transaction amount (accurate to two decimal places; do not add punctuation, e.g., ",")              |
+| payType            | Yes      | String | **EWALLET**                                                                                          |
+| inBankCode         | Yes      | String | **APPLE_PAY**                                                                                        |
+| callBackUrl        | Yes      | String | URL to redirect after successful payment                                                             |
+| callBackFailUrl    | Yes      | String | URL to redirect after failed payment                                                                 |
+| notifyUrl          | No       | String | Callback URL                                                                                         |
+| subject            | Yes      | String | Payment remark                                                                                       |
+| body               | No       | String | Remark details                                                                                       |
+| partnerUserId      | Yes      | String | Unique user identifier (e.g., userId), used for risk control, must be real and valid, otherwise it will affect transactions. Format requirements: digits, uppercase and lowercase letters or common symbols -~!@#$%&*()_. |
+| sign               | Yes      | String | Signature                                                                                            |
+
+
+Response data parameter description
+
+| Parameter Name | Type   | Description                       |
+| :------------- | :----- | :------------------------------- |
+| orderId        | String | Merchant order number (must be unique) |
+| orderNo        | String | Platform order number            |
+| payUrl         | String | Payment link                     |
+| sign           | String | Signature                        |
+
+### **Collection Query**
+
+**Brief Description:**
+
+* Query collection order
+
+**URL:**
+
+USD: `/usd/collect/query`
+
+**Parameters:**
+
+| Parameter Name | Required | Type   | Description                                                       |
+| :------------- | :------- | :----- | :--------------------------------------------------------------- |
+| appId          | Yes      | Long   | Business ID (obtained from backend, must pass corresponding business ID based on currency in URL) |
+| orderId        | Yes      | String | Merchant order number                                            |
+| orderNo        | No       | String | Platform order number (faster response)                         |
+| sign           | Yes      | String | Signature                                                        |
+
+Response data parameter description
+
+| Parameter Name | Type    | Description                                                                  |
+| :------------- | :------ | :---------------------------------------------------------------------------- |
+| orderId        | String  | Merchant order number (must be unique)                                       |
+| orderNo        | String  | Platform order number                                                        |
+| amount         | String  | Transaction amount                                                            |
+| actualAmount   | String  | Amount received                                                               |
+| fee            | String  | Handling fee                                                                 |
+| status         | Integer | Status (0 - Not started, 1 - In progress, 2 - Success (final state), 3 - Failure (final state), -1 - Pending confirmation) |
+| payTime        | String  | Payment success time (available when status=2) (local time), format: yyyy-MM-dd HH:mm:ss |
+| errorMsg       | String  | Payment failure reason (available when status=3)                             |
+| sign           | String  | Signature                                                                     |
+
+
+### **HaiPaySDK Integration Documentation (Apple Pay & Google Pay)**
+HaiPaySDK provides a convenient Apple Pay and Google Pay payment integration solution that allows you to quickly integrate payment functionality into web pages through simple configuration.
+- Import HaiPaySDK script ([https://cdn.jsdelivr.net/gh/hpth/payment/cashier/js/applePayGooglePay_1.0.0.js])
+- Page structure requirements
+  - Payment button container: Used for rendering Apple Pay/Google Pay buttons.
+  - Error message container: Used to display error messages during the payment process (such as parameter errors, payment failures, etc.).
+- Quick integration example
+```json
+  <script src="https://cdn.jsdelivr.net/gh/hpth/payment/cashier/js/applePayGooglePay_1.0.0.js"></script>
+
+  <div id="appId">
+      <div id="applePay-googlePay"></div>
+      <div id="error-message-pay"></div>
+  </div>
+
+   const elements = new HaiPay({
+        env: 'test',
+        orderNo: '6cgjnxvc6kdb',
+        buttonContainerId: 'applePay-googlePay',
+        errorContainerId: 'error-message-pay',
+        onCallback: (status) => {},
+        onReady: () => {}
+    });
+    elements.createPay();
+```
+- Parameter description
+  - 1. Initialization configuration parameters (HaiPay constructor parameters)
+
+| Parameter Name      | Required | Type     | Description                                                                       |
+| :------------------ | :------- | :------- | :-------------------------------------------------------------------------------- |
+| env                 | Yes      | String   | Environment type, optional values: <br /> - test: Test environment (for integration testing) <br /> - prod: Production environment (for live use) |
+| orderNo             | Yes      | String   | Platform order number                                                             |
+| buttonContainerId   | Yes      | String   | Payment button container DOM ID, <b> do not include # prefix </b>                |
+| errorContainerId    | No       | String   | Error message container DOM ID, <b> do not include # prefix </b>                 |
+| buttonType          | No       | String   | Button text type, default value buy, optional values: <br /> - plain: "Display payment logo only, no text" <br /> - add-money: "Add funds" <br /> - book: "Book" <br /> - buy: "Buy" (default) <br /> - check-out: "Checkout" <br /> - contribute: "Donate" <br /> - order: "Order" <br /> - reload: "Reload" <br /> - rent: "Rent" <br /> - subscribe: "Subscribe" <br /> - support: "Support" <br /> - tip: "Tip" <br /> - top-up: "Top-up" |
+| buttonTheme         | No       | String   | Button theme style, default value black, optional values: <br /> - black: Black background <br /> - white: White background |
+| buttonHeight        | No       | number   | Button height, default value 50                                                   |
+| onCallback          | No       | function | Order status callback function, parameter is status code: <br /> - Success: "2"/"4"/"5" <br /> - Failure: "3" |
+| onReady             | No       | function | Payment button rendering completion callback function                              |
+
+  - 2. Common error types and solutions
+
+| Error Message                                    | Error Cause                        | Solution                                                                  |
+| :----------------------------------------------- | :--------------------------------- | :------------------------------------------------------------------------ |
+| Missing required parameters: env, orderNo       | Missing required initialization parameters | Check if parameters like env, orderNo are passed                          |
+| The env parameter must be test or prod          | Invalid env parameter value        | Change env to test or prod                                                |
+| Button container does not exist: #xxx           | Payment button container ID does not exist | Confirm if the payment region is within the supported range, or switch to test environment |
+| Unsupported region: CN                          | Production environment does not support China region | Check if there is a DOM element with the corresponding ID in the page     |
+
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

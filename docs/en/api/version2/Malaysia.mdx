@@ -1,0 +1,439 @@
+ ---
+title: Malaysia Payment API
+permalink: /en/api/version2/Malaysia/
+---
+
+# **Malaysia Payment API**
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+:::warning
+**Before reading this API documentation, please make sure to review [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
+:::
+
+### **Transaction Limits**
+
+| Transaction Type | Limit                               |
+|:-----------------|:-----------------------------------|
+| Collection       | USD: 0.99-499.99, MYR: 1-3000      |
+| Disbursement     | MYR: 10-50000                      |
+
+## **Collection API**
+
+### **Collection Application**
+
+**Description:**
+
+* Create a collection order
+
+**URL:**
+
+MYR: `/myr/collect/apply`  
+Note: appId needs to use MYR corresponding, user payment success will increase MYR balance
+
+USD: `/usd/collect/apply`  
+Note: appId needs to use USD corresponding, user payment success will increase USD balance  
+
+**Parameters:**
+
+| Parameter      | Required | Type   | Description                                                                                                                                                                                                    |
+| :------------- | :------- | :----- |:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| appId          | Yes      | Long   | Business ID (obtained from backend, must pass the corresponding business ID according to the currency in the URL)                                                                                              |
+| orderId        | Yes      | String | Merchant order number (must be unique, maximum length 48)                                                                                                                                                      |
+| name           | Yes      | String | User’s full name, recommended to use real name. Format: include firstName and lastName, separated by a space. Example: Donald John Trump                                                                       |
+| phone          | Yes      | String | Valid phone number (format reference: [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format))                                                                                       |
+| email          | Yes      | String | Valid email                                                                                                                                                                                                    |
+| amount         | Yes      | String | Transaction amount (accurate to two decimal places; punctuation marks such as “,” are prohibited)                                                                                                              |
+| payType        | Yes      | String | Transaction type                                                                                                                                                                                               |
+| inBankCode     | Yes      | String | [Payment Method](#inBankCode)                                                                                                                                                                                  |
+| callBackUrl    | Yes      | String | Redirect URL after successful payment                                                                                                                                                                          |
+| callBackFailUrl | Yes     | String | Redirect URL after failed payment                                                                                                                                                                              |
+| notifyUrl      | No       | String | Callback URL                                                                                                                                                                                                   |
+| subject        | Yes      | String | Payment remark                                                                                                                                                                                                 |
+| body           | No       | String | Remark details                                                                                                                                                                                                 |
+| country        | No       | String | Required for cashier mode, pass: 458                                                                                                                                                                           |
+| partnerUserId  | Yes      | String | Unique user identifier (e.g., userId),used for risk control purposesfor the risk control system and must be valid, otherwise it will affect the transaction. Format: digits, letters, or symbols -~!@#$%&*()_. |
+| sign           | Yes      | String | Signature                                                                                                                                                                                                      |
+
+Return Data Parameters
+
+| Parameter | Type   | Description       |
+| :-------- | :----- | :---------------- |
+| orderId   | String | Merchant order ID |
+| orderNo   | String | Platform order ID |
+| payUrl    | String | Payment link      |
+| sign      | String | Signature         |
+
+### **Collection Query**
+
+**Description:**
+
+* Query a collection order
+
+**URL:**
+
+MYR: `/myr/collect/query`  
+USD: `/usd/collect/query`  
+
+**Parameters:**
+
+| Parameter | Required | Type   | Description                                                                 |
+| :-------- | :------- | :----- | :--------------------------------------------------------------------------- |
+| appId     | Yes      | Long   | Business ID (obtained from backend, must pass the corresponding business ID according to the currency in the URL) |
+| orderId   | Yes      | String | Merchant order number                                                        |
+| orderNo   | No       | String | Platform order number (faster response)                                      |
+| sign      | Yes      | String | Signature                                                                   |
+
+Return Data Parameters
+
+| Parameter     | Type    | Description                                                                                                            |
+| :------------ | :------ |:-----------------------------------------------------------------------------------------------------------------------|
+| orderId       | String  | Merchant order ID                                                                                                      |
+| orderNo       | String  | Platform order ID                                                                                                      |
+| amount        | String  | Transaction amount                                                                                                     |
+| actualAmount  | String  | Received amount                                                                                                        |
+| fee           | String  | Fee                                                                                                                    |
+| status        | Integer | Status (0 = Not started, 1 = Processing, 2 = Success (final), 3 = Failed (final), -1 = Exception pending confirmation) |
+| payTime       | String  | Payment success time (present when status=2) (local currency time), format: yyyy-MM-dd HH:mm:ss                        |
+| errorMsg      | String  | Failure reason (present when status=3)                                                                                 |
+| sign          | String  | Signature                                                                                                              |
+
+### **Payment Methods**<a id="inBankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (payType)</b></td>
+        <td><b>Payment Code (inBankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>QR</td>
+        <td>QR</td>
+        <td>1-3000</td>
+        <td>Maintenance</td>
+        <td>DuitNow QR Code</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>EWALLET</td>
+        <td>TNG</td>
+        <td>1-3000</td>
+        <td>Available</td>
+        <td>Touch N Go</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>EWALLET</td>
+        <td>GRAB</td>
+        <td>1-3000</td>
+        <td>Available</td>
+        <td>GrabPay</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>EWALLET</td>
+        <td>BOOST</td>
+        <td>1-3000</td>
+        <td>Available</td>
+        <td>Boost</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>EWALLET</td>
+        <td>SHOPEE</td>
+        <td>1-3000</td>
+        <td>Available</td>
+        <td>ShopeePay</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>EWALLET</td>
+        <td>MCash</td>
+        <td>1-3000</td>
+        <td>Available</td>
+        <td>MCash</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>BANK_TRANSFER</td>
+        <td>FPX_MYR</td>
+        <td>1-3000</td>
+        <td>Available</td>
+        <td>FPX Bank Transfer</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>TNG_USD</td>
+        <td>0.99-499.99</td>
+        <td>Available</td>
+        <td>Touch N Go</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>BOOST_USD</td>
+        <td>0.99-499.99</td>
+        <td>Available</td>
+        <td>Boost</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>FPX_USD</td>
+        <td>0.99-499.99</td>
+        <td>Available</td>
+        <td>FPX Bank Transfer</td>
+    </tr>
+</table>
+
+## **Disbursement API**
+
+### **Disbursement Application**
+
+**Description:**
+
+* Create a disbursement order
+
+**URL: `/myr/pay/apply`**
+
+**Parameters:**
+
+| Parameter      | Required | Type   | Description                                                                                                                           |
+| :------------- | :------- | :----- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| appId          | Yes      | Long   | Business ID (obtained from backend, must pass the corresponding business ID according to the currency in the URL)                     |
+| orderId        | Yes      | String | Merchant order number (must be unique, maximum length 48)                                                                             |
+| amount         | Yes      | String | Transaction amount (accurate to two decimal places; punctuation marks such as “,” are prohibited)                                     |
+| accountType    | Yes      | String | Account type: EWALLET (e-wallet), BANK_ACCOUNT (bank)                                                                                 |
+| bankCode       | Yes      | String | [Payment Method](#bankCode)                                                                                                           |
+| accountNo      | Yes      | String | User account number                                                                                                                   |
+| name           | Yes      | String | Recipient’s name (format: English letters, case-insensitive, spaces allowed, 1-30 chars, “firstName middleName lastName” (middleName optional, special chars supported '.-)) |
+| phone          | Yes      | String | Valid phone number (format reference: [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format))              |
+| email          | Yes      | String | Valid email                                                                                                                           |
+| notifyUrl      | No       | String | Callback URL                                                                                                                          |
+| subject        | No       | String | Payment remark (transaction title, product name, or payment reason)                                                                   |
+| body           | No       | String | Remark details                                                                                                                        |
+| partnerUserId  | Yes      | String | Unique user identifier (e.g., userId). Must be valid, otherwise it will affect the transaction. Format: digits, letters, or symbols -~!@#$%&*()_. |
+| sign           | Yes      | String | Signature                                                                                                                             |
+
+Return Data Parameters
+
+| Parameter | Type   | Description                                                                 |
+| :-------- | :----- | :------------------------------------------------------------------------- |
+| orderId   | String | Merchant order number (must be unique)                                     |
+| orderNo   | String | Platform order number                                                      |
+| sign      | String | Signature                                                                  |
+
+### **Disbursement Query**
+
+**URL: `/myr/pay/query`**
+
+**Parameters:**
+
+| Parameter | Required | Type   | Description                                                                 |
+| :-------- | :------- | :----- | :--------------------------------------------------------------------------- |
+| appId     | Yes      | Long   | Business ID (obtained from backend, must pass the corresponding business ID according to the currency in the URL) |
+| orderId   | Yes      | String | Merchant order number                                                        |
+| orderNo   | No       | String | Platform order number (faster response)                                      |
+| sign      | Yes      | String | Signature                                                                   |
+
+Return Data Parameters
+
+| Parameter | Type    | Description                                                                 |
+| :-------- | :------ | :-------------------------------------------------------------------------- |
+| orderId   | String  | Merchant order number (must be unique)                                      |
+| orderNo   | String  | Platform order number                                                       |
+| amount    | String  | Transaction amount                                                          |
+| fee       | String  | Fee                                                                         |
+| status    | Integer | Status (0 = Not started, 1 = Processing, 2 = Success (final), 3 = Failed (final), -1 = Exception pending confirmation) |
+| payTime   | String  | Payment success time (exists when status=2) (Malaysia Time), format: yyyy-MM-dd HH:mm:ss |
+| errorMsg  | String  | Failure reason (exists when status=3)                                        |
+| sign      | String  | Signature                                                                   |
+
+### **Payment Methods**<a id="bankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1050px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (accountType)</b></td>
+        <td><b>Payment Code (bankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>EWALLET</td>
+        <td>TNG</td>
+        <td>10-50000</td>
+        <td>Available</td>
+        <td>Touch 'n Go eWallet</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>EWALLET</td>
+        <td>BIGPAY</td>
+        <td>10-50000</td>
+        <td>Available</td>
+        <td>BigPay</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BIMB</td>
+        <td>10-50000</td>
+        <td>Available</td>
+        <td>Bank Islam</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CIMB</td>
+        <td>10-50000</td>
+        <td>Available</td>
+        <td>CIMB Bank</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>UOB</td>
+        <td>10-50000</td>
+        <td>Available</td>
+        <td>United Oversea Bank</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MBB</td>
+        <td>10-50000</td>
+        <td>Available</td>
+        <td>Maybank</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>HSBC</td>
+        <td>10-50000</td>
+        <td>Available</td>
+        <td>HSBC Bank</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>RHB</td>
+        <td>10-50000</td>
+        <td>Available</td>
+        <td>RHB Bank</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>OCBC</td>
+        <td>10-50000</td>
+        <td>Available</td>
+        <td>OCBC Bank</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PBB</td>
+        <td>10-50000</td>
+        <td>Available</td>
+        <td>Public Bank</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SCB</td>
+        <td>10-50000</td>
+        <td>Available</td>
+        <td>Standard Chartered</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>AMB</td>
+        <td>10-50000</td>
+        <td>Available</td>
+        <td>AmBank</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BKRM</td>
+        <td>10-50000</td>
+        <td>Available</td>
+        <td>Bank Kerjasama Rakyat</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BSN</td>
+        <td>10-50000</td>
+        <td>Available</td>
+        <td>Bank Simpanan Nasional</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>AFB</td>
+        <td>10-50000</td>
+        <td>Available</td>
+        <td>Affin Bank</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>HLB</td>
+        <td>10-50000</td>
+        <td>Available</td>
+        <td>Hong Leong Bank</td>
+    </tr>
+    <tr>
+        <td>MYR</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ALB</td>
+        <td>10-50000</td>
+        <td>Available</td>
+        <td>Alliance Bank</td>
+    </tr>
+</table>
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

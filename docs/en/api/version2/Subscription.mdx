@@ -1,0 +1,555 @@
+---
+title: Subscription Payment API
+permalink: /en/api/version2/Subscription/
+---
+
+# **Subscription API Documentation**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+:::warning
+**Before reading this API documentation, be sure to review [**API Description Guide**](/en/docs/guide/api_description_guide.md) and [**Subscription Process**](/en/docs/api/version2/subscription-process.md)**
+
+**Since this involves deductions, in order to avoid complaints, the platform must provide the following functions or services:**
+
+**1. Customer service available 24/7, or if mainly operating in certain regions, staff must be available during working hours**
+
+**2. The personal center page on the platform must clearly display the subscription deduction entry, with clear page guidance so customers understand deduction cycles and related information**
+
+**3. A clear unsubscription entry must be provided**
+
+**4. Both after subscription success and before/after deductions, there must be email or other (non-platform internal) notifications to inform customers of deduction details**
+
+**5. The platform must provide the subscription service agreement content, and subscription deductions can only be initiated after explicit confirmation by the customer**
+:::
+:::tip mportant Information Regarding Credit Card Disputes
+  - **For credit card transactions, consumers maintain the right to initiate a dispute within 180 days of the charge date. When a dispute is filed, a dispute fee of $20 will be assessed per transaction.**
+  - **Upon receiving a dispute notification, you have two options for response**
+    - **First: you may accept the dispute by submitting a response to the issuing bank affirming that you do not contest the refunded amount.**
+    - **Second, you may counter the dispute by completing a guided submission process that prompts you to provide relevant evidence and supporting documentation for your case.**
+  - **Should you elect to counter a dispute, an additional dispute countered fee of $20 will be applied. In the event that the issuing bank does not accept your counter materials and rules in favor of the consumer, both the dispute countered fee will be deducted and the consumer's payment will be refunded to them.**
+  - **Regarding fee refunds, Haipay will return the dispute countered fee if you successfully win the dispute. However, unless explicitly stated otherwise in your Haipay contract, the initial dispute fee is non-refundable under all circumstances.**
+:::
+
+## **HaiPay.js Integration (Apple Pay Subscribe & Google Pay Subscribe)** <a id="haipaysdk"></a>
+
+HaiPay provides a convenient Apple Pay Subscribe and Google Pay Subscribe payment integration solution that allows you to quickly integrate payment functionality into web pages through simple configuration.
+
+- Import HaiPay script ([https://cashier.haipay.top/js/applePayGooglePaySubscribe_1.0.0.min.js])
+- Page structure requirements
+    - Payment button container: Used for rendering Apple Pay/Google Pay Subscribe buttons.
+- Quick integration example
+
+```javascript
+<script src="https://cashier.haipay.top/js/applePayGooglePaySubscribe_1.0.0.min.js"></script>
+
+<div>
+  <div id="applePay-googlePay"></div>
+</div>
+
+  // Create instance
+  const elements = applePayGooglePaySubscribe.create('applePayGooglePaySubscribe', {
+      sandbox: true,
+      clientToken: '6cgjnxvc6kdb',
+      buttonType: 'buy',
+      buttonTheme: 'black',
+      buttonHeight: 50
+  });
+
+  // Mount component
+  elements.mount('#applePay-googlePay');
+
+ // Payment button render completion callback
+  elements.on('ready', (data) => {
+      console.log('Button rendered successfully:', data);
+  });
+
+
+ // Error message
+  elements.on('error', (data) => {
+      console.error('Payment error:', data);
+  });
+
+```
+
+- Parameter description
+  - 1. Initialization configuration parameters (HaiPay constructor parameters)
+
+| Parameter Name      | Required | Type     | Description                                                                       |
+| :------------------ | :------- | :------- | :-------------------------------------------------------------------------------- |
+| sandbox                 | Yes      | Boolean   | Environment type,default value true, optional values: <br /> - true: Test environment (for integration testing) <br /> - false: Production environment (for live use) |
+| clientToken             | Yes      | String   | Client Toke(clientToken)                                                             |
+| buttonType          | No       | String   | Button text type, default value buy, optional values: <br /> - plain: "Display payment logo only, no text" <br /> - add-money: "Add funds" <br /> - book: "Book" <br /> - buy: "Buy" (default) <br /> - check-out: "Checkout" <br /> - contribute: "Donate" <br /> - order: "Order" <br /> - reload: "Reload" <br /> - rent: "Rent" <br /> - subscribe: "Subscribe" <br /> - support: "Support" <br /> - tip: "Tip" <br /> - top-up: "Top-up" |
+| buttonTheme         | No       | String   | Button theme style, default value black, optional values: <br /> - black: Black background <br /> - white: White background |
+| buttonHeight        | No       | number   | Button height, default value 50                                                   |
+
+  - 2. Common error types and solutions
+
+| Error Message                                    | Error Cause                        | Solution                                                                  |
+| :----------------------------------------------- | :--------------------------------- | :------------------------------------------------------------------------ |
+| Missing required parameters: clientToken       | Missing required initialization parameters | Check if parameters clientToken are passed                          | 
+| Unsupported region: CN                          | Production environment does not support China region | Check if there is a DOM element with the corresponding ID in the page     |
+
+## **HaiPay.js Integration (creditCard Subscribe)** <a id="haipaysdk"></a>
+
+HaiPay provides a convenient creditCard Subscribe payment integration solution that allows you to quickly integrate payment functionality into web pages through simple configuration.
+
+- Import HaiPay script ([https://cashier.haipay.top/js/creditCardSubscription_1.0.0.min.js])
+- Page structure requirements
+    - Page Container: used for rendering the creditCard Subscribe page.
+- Quick integration example
+
+```javascript
+<script src="https://cashier.haipay.top/js/creditCardSubscription_1.0.0.min.js"></script>
+
+<div>
+  <div id="creditCard"></div>
+</div>
+
+  // Create instance
+  const elements = creditCardSubscription.create('card', {
+      sandbox: true,
+      clientToken: '6cgjnxvc6kdb',
+  });
+
+  // Mount component
+  elements.mount('#creditCard');
+
+  // Card render completion callback
+  elements.on('ready', (data) => {
+      console.log('Card rendered successfully:', data);
+  });
+
+
+ // Error message
+  elements.on('error', (data) => {
+      console.error('Payment error:', data);
+  });
+
+  // Submit Form Information
+ elements.submit()
+
+```
+
+- Parameter description
+  - 1. Initialization configuration parameters (HaiPay constructor parameters)
+
+| Parameter Name      | Required | Type     | Description                                                                       |
+| :------------------ | :------- | :------- | :-------------------------------------------------------------------------------- |
+| sandbox                 | Yes      | Boolean   | Environment type,default value true, optional values: <br /> - true: Test environment (for integration testing) <br /> - false: Production environment (for live use) |
+| clientToken             | Yes      | String   | Client Toke(clientToken)                                                             |
+| cardTheme        | No  | String   | Theme style, default value white, optional values: <br /> - black: Black background <br /> - white: White background          |
+
+  - 2. Common error types and solutions
+
+| Error Message                                    | Error Cause                        | Solution                                                                  |
+| :----------------------------------------------- | :--------------------------------- | :------------------------------------------------------------------------ |
+| Missing required parameters: clientToken       | Missing required initialization parameters | Check if parameters clientToken are passed                          | 
+| Unsupported region: CN                          | Production environment does not support China region | Check if there is a DOM element with the corresponding ID in the page     |
+
+
+> ⚠️ **Note**  
+> Apple Pay does not support **W (week)** as a subscription period.  
+> If you need to implement a weekly subscription, the correct approach is to use **D** as the unit and set the interval to **7 days**.
+
+
+## **Limit**
+
+| Transaction Type | Limit (Unit: USD) |
+| :--------------- | ----------------- |
+| Subscription     | 0.99-1000         |
+
+## **1. Subscription API**
+
+### **Subscription Apply**
+
+**Brief Description:**
+
+* Create a subscription order
+
+**URL:**
+
+`/subscription/apply`
+
+**Parameters:**
+
+| Parameter Name         | Required | Type    | Description                                                                                                                                                                              |
+|:-----------------------|:---------|:--------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| appId                  | Yes      | Long    | Business ID (obtained from the backend, must pass the corresponding business ID according to the currency parameter)                                                                     |
+| subscriptionOrderId    | Yes      | String  | Merchant order ID (must be unique, max length 48)                                                                                                                                        |
+| amount                 | Yes      | String  | Transaction amount (accurate to two decimals; punctuation such as “,” is not allowed)                                                                                                    |
+| name                   | Yes      | String  | User name, recommended to use real name. Format: includes firstName and lastName, separated by space. Example: Donald John Trump                                                         |
+| phone                  | Yes      | String  | Real phone number (format reference: [Phone Format](/en/docs/guide/frequently_asked_question.html#phone_format))                                                                         |
+| email                  | Yes      | String  | Real email                                                                                                                                                                               |
+| subject                | Yes      | String  | Subscription title                                                                                                                                                                       |
+| body                   | No       | String  | Remark details                                                                                                                                                                           |
+| inBankCode             | Yes      | String  | CREDIT_CARD, GOOGLE_PAY, APPLE_PAY                                                                                                                                                       |
+| payType                | Yes      | String  | SUBSCRIPTION                                                                                                                                                                             |
+| callBackUrl            | Yes      | String  | Redirect URL after successful payment                                                                                                                                                    |
+| notifyUrl              | Yes      | String  | Asynchronous notification URL                                                                                                                                                            |
+| country                | Yes      | String  | Country                                                                                                                                                                                  |
+| currency               | Yes      | String  | Currency, currently supported: USD                                                                                                                                                       |
+| partnerUserId          | Yes      | String  | User unique identifier (e.g., userId). Used for risk control. Must be real and valid, otherwise it will affect the transaction. Format: digits, letters, or common symbols -~!@#$%&*()_. |
+| recurringInterval      | Yes      | String  | Recurring cycle type D（day）,W（week）,M（month）,Y（year）                                                                                                                                     |
+| recurringIntervalCount | Yes      | Integer | Recurring cycle interval                                                                                                                                                                 |
+| recurringMaxNumber     | Yes      | Integer | Maximum number of cycles. Regardless of cycle type, maximum duration cannot exceed 3 years. Subscription will be automatically canceled at expiration.                                   |
+| website                | Yes      | String  | Transaction website                                                                                                                                                                      |
+| retryTimes             | Yes      | Integer | Retry attempts for failed periodic deductions, default 3                                                                                                                                 |
+| cancelUrl              | No       | String  | If provided, the user can click “Back” on the payment page to return to this URL.                                                                                                        |
+| couponPeriod              | No       | Integer  | Discount Period (Currently only the first period discount and the full period discount are supported, i.e., couponPeriod can only be equal to 1 or recurringMaxNumber)                                                                                                        |
+| couponAmountPerPeriod              | No       | String  | Discount amount per period                                                                                                        |
+| sign                   | Yes      | String  | Signature                                                                                                                                                                                |
+
+#####            
+
+request
+
+```json
+{
+  "country": "USA",
+  "referer": "https://test.com",
+  "amount": "0.5",
+  "callBackUrl": "https://www.google.com",
+  "inBankCode": "CREDIT_CARD",
+  "subject": "Test subscription",
+  "subscriptionOrderId": "1736739758574",
+  "recurringIntervalCount": 1,
+  "sign": "JeJR4N40eKncoohebUN31aNqPqpBxR799rmMutqrSmMaBn0Sjmqbskl4Wiitmatvvx6tqvuwkOYtk6ryrYj7YqJxDeNfDqthWzOxv2ixkKY0YDoWEAra9sWc4CnXBBssP0VIKg0jSTMNzdvmvuNBa7sLEQj5YjgswUnCGtYCmsz154JHSSRpdeYDLL+Nt5b96pzQn8WyRr6b/9SSCrLCWSdt22gJmY5sQh7cc9OcJfAGb5E1XflTq5Va78cV+fw9hHhaZmFzKncg4wxrdaatxg9tCElMJpL1OuWO7XLfcfqgA/8Y/qRCWmNf11Ji3ZSrr7rU4+V7Egrfu1Fcr5DTlw==",
+  "partnerUserId": "H20241231",
+  "payType": "SUBSCRIPTION",
+  "phone": "0845632145871",
+  "appId": 1724,
+  "name": "howard",
+  "notifyUrl": "https://www.google.com",
+  "currency": "USD",
+  "email": "howard@gmail.com",
+  "recurringInterval": "D"
+}
+
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "subscriptionNo": "4025011311423010028",
+    "subscriptionOrderId": "1736739758574",
+    "appId": 1724,
+    "subject": "Test subscription",
+    "payType": "SUBSCRIPTION",
+    "inBankCode": "CREDIT_CARD",
+    "amount": 0.5,
+    "recurringInterval": "D",
+    "recurringIntervalCount": 1,
+    "status": "2",
+    "sign": "QrOo7yPJMTRk92bP9WU8P0ATdRvCm8dWElhbxqV6qmZEWZDRXeJAwUvd3839zErg+3tN/U4Rwyru219AkXg9CJZtocna3fiYj7uLxwD6bpAp+i9DGz5ZKV9ab5mwIEPWIQXKuY6wATzmlz6W4TvAkRqgGtqLkwYUaeqsmgJrh4WlIMK13GW/zvoCmYfFD6pNZUByVixpll8JPeZG7F9d+x7yjDigJZ2S1wm4F307OzZJkUSKSvQn6Q0lOvp1JS0feXSC+hwCfrdllFXIE10TDV0itoPY5G7+3QdmHpINWp3kWmepR/1pOsN+09hLxe8xKAIZrX2GFHY00xo3QnxBIw=="
+  }
+}
+```
+
+Return data parameter description
+
+| Parameter Name         | Type   | Description                                                                        |
+|:-----------------------|:-------|:-----------------------------------------------------------------------------------|
+| subscriptionOrderId    | String | Merchant subscription ID (must be unique)                                          |
+| subscriptionNo         | String | Platform subscription ID                                                           |
+| appId                  | String | Business ID                                                                        |
+| subject                | String | Payment note                                                                       |
+| payType                | String | Subscription fixed as **SUBSCRIPTION**                                             |
+| inBankCode             | String | Bank code                                                                          |
+| amount                 | String | Amount                                                                             |
+| payUrl                 | String | Authorization URL                                                                  |
+| recurringInterval      | String | Recurring cycle W, M, Y                                                            |
+| recurringIntervalCount | String | Recurring cycle interval                                                           |
+| status                 | String | Subscription status (-1: Error, 1: Processing, 2: Success, 3: Failed, 4: Canceled) |
+| clientToken | String | Client token used in the JavaScript Web SDK (see [HaiPaySDK.js](#haipaysdk)) |
+| sign                   | String | Signature                                                                          |
+
+### **Query Subscription**
+
+**Brief Description:**
+
+* Query subscription order
+
+**URL:**
+
+`/subscription/query`
+
+**Parameters:**
+
+| Parameter Name | Required | Type   | Description                                                                                                           |
+|:---------------|:---------|:-------|:----------------------------------------------------------------------------------------------------------------------|
+| appId          | Yes      | Long   | Business ID (obtained from the backend, must pass the corresponding business ID according to the currency in the URL) |
+| subscriptionNo | Yes      | String | Platform subscription ID                                                                                              |
+| sign           | Yes      | String | Signature                                                                                                             |
+
+request
+
+```json
+{
+  "appId": 1724,
+  "sign": "gETp00ngwiG0qPVcpldPGEsWRCShOJUbwxWizbL9xGbWCtlBsTPFshQtClLtBCRAdhoVNZAD7UQXjdiAsr74neYu1akj1a6d3sNapGaqoTdBgykXyr1hLVe14AIUhLRg0Mj2elOlMPiWMdccSC+i4G/lfPpJLpS/T08S8qttExTOjML5Rrny5jNsYedjf+Jo3jrPsLcfZFX3QrWA4txPG+x7ZrShXUonOiZMoH6hwU8PcETrC0vpGqTwySJ6siS2AwyPOZElR6nf3geIx7GAllFUuZSyjCvRDE+9JeZl5Y2Ohlm9xcRxqHgMi4YB3jSJcwo7GqGqnPapZnO2GvcbGw==",
+  "subscriptionNo": "4025011311423010028"
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "subscriptionOrderId": "1736739758574",
+    "subscriptionNo": "4025011311423010028",
+    "appId": 1724,
+    "subject": "Test subscription",
+    "payType": "SUBSCRIPTION",
+    "inBankCode": "CREDIT_CARD",
+    "amount": 0.50000000,
+    "recurringInterval": "D",
+    "recurringIntervalCount": 1,
+    "status": "2",
+    "deductList": [
+      {
+        "deductNo": "4125011311423010028",
+        "amount": "0.99",
+        "status": 2,
+        "orderNo": "2025011311423010028",
+        "startTime": "2024-12-18 09:25:11",
+        "endTime": "2024-12-25 09:25:11"
+      }
+    ],
+    "sign": "fscM1XiVPqDb/NxrZuVv33zvqFxsXsKri6+MzIsWqdMlcsa7E3ayGNHg6ChiVxFVdow3NAlmg4szGXp0AtvOLDdQ/BAfC8DWpbktjDXeiEQ7ma1/ZKsmVrrLHzF01B5UI33xYX+qMsjMQ/yJBHwY1LTOhPq3lIwShwhB92CCd6IfPPkSi1EPDL6QLKAll3NNRVUw3vktIx+ghePojrmkgOesD7ujCPlXPjvznJ4o99BFhwPr6i+a0w++ZvfoE/NuClTCP4mf1n4umnw70GqHDv3OfwVk9FeE27SC/TMJIgVJiVc9L3o+mJNUyaIT3o9EyKkfUl+lNsz1KnUyfjycUg=="
+  }
+}
+```
+
+Return data parameter description
+
+| Parameter Name         | Type   | Description                                                                        |
+|:-----------------------|:-------|:-----------------------------------------------------------------------------------|
+| subscriptionOrderId    | String | Merchant subscription ID (must be unique)                                          |
+| subscriptionNo         | String | Platform subscription ID                                                           |
+| appId                  | String | Business ID                                                                        |
+| subject                | String | Payment note                                                                       |
+| currency               | String | Currency                                                                           |
+| payType                | String | Subscription fixed as **SUBSCRIPTION**                                             |
+| inBankCode             | String | Bank code                                                                          |
+| amount                 | String | Amount                                                                             |
+| recurringInterval      | String | Recurring cycle W, M, Y                                                            |
+| recurringIntervalCount | String | Recurring cycle interval                                                           |
+| status                 | String | Subscription status (-1: Error, 1: Processing, 2: Success, 3: Failed, 4: Canceled) |
+| deductList             | String | Deduction list                                                                     |
+| sign                   | String | Signature                                                                          |
+
+**deductList parameter description**
+
+| Parameter Name | Type    | Description                                                              |
+|:---------------|:--------|:-------------------------------------------------------------------------|
+| deductNo       | String  | Subscription deduction ID                                                |
+| amount         | String  | Deduction amount                                                         |
+| status         | Integer | Deduction status (0: Not started, 1: In progress, 2: Success, 3: Failed) |
+| orderNo        | String  | Payment note                                                             |
+| startTime      | String  | Subscription deduction cycle - start time                                |
+| endTime        | String  | Subscription deduction cycle - end time                                  |
+
+### **Cancel Subscription**
+
+**Brief Description:**
+
+* Cancel a subscription
+
+**URL:**
+
+`/subscription/cancel`
+
+**Parameters:**
+
+| Parameter Name | Required | Type   | Description                                                                                                           |
+|:---------------|:---------|:-------|:----------------------------------------------------------------------------------------------------------------------|
+| appId          | Yes      | Long   | Business ID (obtained from the backend, must pass the corresponding business ID according to the currency in the URL) |
+| subscriptionNo | Yes      | String | Platform subscription ID                                                                                              |
+| sign           | Yes      | String | Signature                                                                                                             |
+
+#####              
+
+request
+
+```json
+{
+  "appId": 1724,
+  "sign": "gETp00ngwiG0qPVcpldPGEsWRCShOJUbwxWizbL9xGbWCtlBsTPFshQtClLtBCRAdhoVNZAD7UQXjdiAsr74neYu1akj1a6d3sNapGaqoTdBgykXyr1hLVe14AIUhLRg0Mj2elOlMPiWMdccSC+i4G/lfPpJLpS/T08S8qttExTOjML5Rrny5jNsYedjf+Jo3jrPsLcfZFX3QrWA4txPG+x7ZrShXUonOiZMoH6hwU8PcETrC0vpGqTwySJ6siS2AwyPOZElR6nf3geIx7GAllFUuZSyjCvRDE+9JeZl5Y2Ohlm9xcRxqHgMi4YB3jSJcwo7GqGqnPapZnO2GvcbGw==",
+  "subscriptionNo": "4025011311423010028"
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "appId": 1724,
+    "subscriptionNo": "4025011311423010028",
+    "status": "4",
+    "payType": "SUBSCRIPTION",
+    "inBankCode": "CREDIT_CARD",
+    "sign": "lynHvI+9JhVbhwHiinJGlDEq7CVU67WkNUsNURs1wu4bI2/2ePVORGqbVdnaU+L9qV4JN35gM2hHadn4pye/Xk+iztLVSbDh5F9XpKAmLeLCcYj+II0pt4Eo4QPxnYJjmMzbDu6fdWgjgi/go2M75N7Fqv2QgV/tIu1O2pe4/LRPe3l/IODvW+ppvbf5FHk5hO2AaLUX/Fn7H0MIv6kcKAhu7ImBrNpF79VPj9YC1qXghJE11q4aHx7xfDDCn4GiqDJBXbzLtqGP6cS2CVXlyLxGziKDxM1+Bv02XNbjzYKwcaS1VDNfmzlglVH+GHZcgVpiEa3u4ffezu2NN2B4Yg=="
+  }
+}
+```
+
+Return data parameter description
+
+| Parameter Name      | Type   | Description                                                                        |
+|:--------------------|:-------|:-----------------------------------------------------------------------------------|
+| subscriptionOrderId | String | Merchant subscription ID (must be unique)                                          |
+| subscriptionNo      | String | Platform subscription ID                                                           |
+| appId               | String | Business ID                                                                        |
+| payType             | String | Subscription fixed as **SUBSCRIPTION**                                             |
+| inBankCode          | String | Bank code                                                                          |
+| status              | String | Subscription status (-1: Error, 1: Processing, 2: Success, 3: Failed, 4: Canceled) |
+| sign                | String | Signature                                                                          |
+
+### **Subscription Refund**
+
+**Brief Description:**
+
+* Subscription refund
+
+**URL:**
+
+`/subscription/refund/apply`
+
+**Parameters:**
+
+| Parameter Name | Required | Type   | Description                                                                                                           |
+|:---------------|:---------|:-------|:----------------------------------------------------------------------------------------------------------------------|
+| appId          | Yes      | Long   | Business ID (obtained from the backend, must pass the corresponding business ID according to the currency in the URL) |
+| subscriptionNo | Yes      | String | Platform subscription ID                                                                                              |
+| orderNo        | Yes      | String | Platform order ID                                                                                                     |
+| sign           | Yes      | String | Signature                                                                                                             |
+
+request
+
+```json
+{
+  "appId": 1091,
+  "subscriptionNo": "4025050711174217272",
+  "orderNo": "2025050711174213012",
+  "sign": "Zs9W0md9b+z5zdswnr5ItJio+TU8xzXe/2CXjEUY7bA9y56fECE54xtPIq70agEChhc/b06OtHHASojuYW55TmTAeFIgQMBT5hrlC+m5jf845OBs2KmG+RRODn3hwp6bjTnnkg37mueRvs+1pXEU7DbucYmlRrRmyOywpf+t3RHjU+5qrnK9Bw6RDwT5LtfhHIMCYQA3mLhHlJkSN5oQq1j5F0xQjy51A8Gp6e1Sp2ZeHDr1SsPsh8K7XN2kxDyenpDhhFRU2tZkIYRJFYyrwFfUsCtg7t6V8dzwHDGrU8EuCC1CGcmn/sQ1FYk0V3FnVmiL5FW1eBPgWdahtxWolg=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "appId": 1091,
+    "subscriptionNo": "4025050711174217272",
+    "orderNo": "2025050711174213012",
+    "refundNo": "2525050711193210376",
+    "sign": "fseIFahsO8jttM7T3hNnmJiLmEBr4mRlcM/two4SeODZ262+T3nnymNEVMRyvQwDRp9OULBrQlD7ZQI6T9M7ub0qni3bjv/cF1cY/LE4VGhR3rrAnBr30JFBQlcpLzqtxrPokgdhUoP5P5lbhSCnBl9s5mVFIhGDeJArZ76rG1LfoFgw3osZdk5D6GcdIjNYOn1QvucK2TZeJiEVxGk0fwAJMGTxknqBRU1XttX1OPILHs8U1sF5RL7aDG5N1Oarxd6CiLCvyHE242RKgvdN9GYiVjXNHjoO+M1VmxFFlMzryEA7d2d0cHygf0PjuaiOiKDQ98Kyy7fmj1VuA4WiHg=="
+  }
+}
+```
+
+Return data parameter description
+
+| Parameter Name | Type   | Description              |
+|:---------------|:-------|:-------------------------|
+| orderNo        | String | Platform order ID        |
+| subscriptionNo | String | Platform subscription ID |
+| appId          | String | Business ID              |
+| refundNo       | String | Refund order ID          |
+| sign           | String | Signature                |
+
+## **2. Asynchronous Notification**
+
+**Brief Description:**
+
+* **When the customer's subscription status changes or during a subscription deduction cycle, we will send a callback
+  notification.**
+
+**URL: `Provided by you`**
+
+Subscription status change callback parameters:
+
+| Parameter Name         | Type   | Description                                                                                                      |
+|:-----------------------|:-------|:-----------------------------------------------------------------------------------------------------------------|
+| type                   | String | Fixed value SUBSCRIPTION                                                                                         |
+| appId                  | Long   | Business ID                                                                                                      |
+| currency               | String | Currency                                                                                                         |
+| subscriptionOrderId    | String | Merchant subscription ID                                                                                         |
+| subscriptionNo         | String | Platform subscription ID                                                                                         |
+| status                 | String | Subscription status (-1: Error, 1: Processing, 2: Success, 3: Failed, 4: Canceled)                               |
+| recurringInterval      | String | Recurring interval W, M, Y                                                                                       |
+| recurringIntervalCount | String | Recurring interval count                                                                                         |
+| subject                | String | Subscription title                                                                                               |
+| sign                   | String | Signature, <font color='red'>(verification required using the business key corresponding to the currency)</font> |
+
+Subscription deduction callback parameters:
+
+| Parameter Name      | Type    | Description                                                                                                      |
+|:--------------------|:--------|:-----------------------------------------------------------------------------------------------------------------|
+| type                | String  | Fixed value SUBSCRIPTIONS_DEDUCT                                                                                 |
+| appId               | Long    | Business ID                                                                                                      |
+| currency            | String  | Currency                                                                                                         |
+| subscriptionOrderId | String  | Merchant subscription ID                                                                                         |
+| subscriptionNo      | String  | Platform subscription ID                                                                                         |
+| deductNo            | String  | Subscription deduction ID                                                                                        |
+| orderNo             | String  | Deduction order ID                                                                                               |
+| amount              | String  | Deduction amount                                                                                                 |
+| status              | Integer | Deduction status (0: Not started, 1: In progress, 2: Success, 3: Failed)                                         |
+| startTime           | String  | Subscription deduction cycle - start time Format: yyyy-MM-dd HH:mm:ss                                            |
+| endTime             | String  | Subscription deduction cycle - end time Format: yyyy-MM-dd HH:mm:ss                                              |
+| sign                | String  | Signature, <font color='red'>(verification required using the business key corresponding to the currency)</font> |
+
+Notes
+
+After receiving the callback notification, please return **SUCCESS** (**uppercase**) in the response body, no quotes
+needed.
+
+## 3. Test Card Numbers
+
+:::warning
+**Only for use in the test environment**
+:::
+
+#### Simulate successful payment
+
+Use the following test card number, enter any CVC (3 digits) and a valid expiration date (future date) to simulate a
+successful payment:
+
+- Card No. 1: 4242424242424242
+
+#### Simulate payment failure
+
+Use the following test card number and invalid data to simulate a failed payment:
+
+- Card No.1: 4000000000009995
+- Invalid month: 13
+- Invalid CVV: 99
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

@@ -1,0 +1,328 @@
+---
+title: India Payment API
+permalink: /en/api/version2/India/
+---
+
+# **India Payment API**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+:::warning
+**Before reading this document, please make sure to
+review [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
+:::
+
+## **Limits**
+
+| Transaction Type | Limit (INR) |
+|:-----------------|-------------|
+| Collection       | 200-5000    |
+| Disbursement     | 200-10000   |
+
+---
+
+## **Collection API**
+
+### **Collection Request**
+
+**Description:**
+
+* Create a collection order
+
+**URL:** `/inr/collect/apply`  
+Note: `appId` INR, `amount` INR, settlement INR
+
+**Parameters:**
+
+| Name            | Required | Type   | Description                                                                                                                                                        |
+|:----------------|:---------|:-------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| appId           | Yes      | Long   | Business ID (retrieved from backend, must correspond to the currency in the URL)                                                                                   |
+| orderId         | Yes      | String | Merchant order number (must be unique, max length: 48)                                                                                                             |
+| name            | Yes      | String | Name (Name must consist solely of letters; no numbers or special characters permitted)                                                                             |
+| phone           | Yes      | String | Telephone number (mobile numbers consisting of 10 digits beginning with 6-9)                                                                                       |
+| email           | Yes      | String | Email address (ending in @gmail.com; a name + number combination is recommended as the email prefix)                                                               |
+| amount          | Yes      | String | Transaction amount (unit: INR, decimals not supported)                                                                                                             |
+| payType         | Yes      | String | Payment method: `PAYMENT_GATEWAY`                                                                                                                                  |
+| inBankCode      | Yes      | String | UPI                                                                                                                                                                |
+| callBackUrl     | Yes      | String | Redirect URL after successful payment                                                                                                                              |
+| callBackFailUrl | Yes      | String | Redirect URL after failed payment                                                                                                                                  |
+| notifyUrl       | No       | String | Notification URL                                                                                                                                                   |
+| subject         | No       | String | Payment note                                                                                                                                                       |
+| body            | No       | String | Payment details                                                                                                                                                    |
+| partnerUserId   | Yes      | String | Unique user identifier (e.g., userId). Must be valid, otherwise it may affect risk control. Allowed characters: digits, letters, and common symbols `-~!@#$%&*()_` |
+| sign            | Yes      | String | Signature                                                                                                                                                          |
+
+**Request Example**
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M233323000059",
+  "amount": "300",
+  "phone": "09230219312",
+  "email": "23423@qq.com",
+  "name": "test",
+  "inBankCode": "UPI",
+  "payType": "PAYMENT_GATEWAY",
+  "partnerUserId": "149597870",
+  "sign": "af0gAHkU..."
+}
+```
+
+va-response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M233323000059",
+    "orderNo": "6023071013539074",
+    "payUrl": "",
+    "sign": "YEoA8Y2JzQFGVzwJSqmemm1Kfv/bfyIfCqv2dp7RNzT5B72AQvdD+nt2nR4sL1HWscvmNHyVt5ovAi7MMhy3ziih/sMph+wPx4YjH3W1h5DyBvSlWvaKfKrK5ViomZ0pPYWydwRHnnRnicxToHK9S6qtSy7Q73O0hdz4hJ9p41Th3ycBl2Q9SeqSZYSY1ohcPDhdyRf2y0prb8rHgpBKzxZ5BKX/1bsE9OmsSEHAEYT8OGgko6aNe8XPAhr4G48cpWTftvnGQuzh0O65nuZRI/PF+Axt2zJCVbFHDDSREI9NlAT82ebDqhlVdxQzKE67D1nxgjb3dPmDUYHOBpmwxQ=="
+  }
+}
+```
+
+**Response Data**
+
+| Name    | Type   | Description                            |
+|:--------|:-------|:---------------------------------------|
+| orderId | String | Merchant order number (must be unique) |
+| orderNo | String | Platform order number                  |
+| payUrl  | String | Payment URL                            |
+| sign    | String | Signature                              |
+
+---
+
+### **Collection Query**
+
+**Description:**
+
+* Create a collection order
+* When `payType = BANK_TRANSFER`, the `orderNo` is returned synchronously and can be queried directly
+* For other payment methods, after receiving the asynchronous notification, query again using `orderNo` for confirmation
+
+**URL:** `/inr/collect/query`
+
+**Parameters:**
+
+| Name    | Required | Type   | Description                                                                  |
+|:--------|:---------|:-------|:-----------------------------------------------------------------------------|
+| appId   | Yes      | Long   | Business ID (retrieved from backend, must correspond to the currency in URL) |
+| orderId | Yes      | String | Merchant order number                                                        |
+| orderNo | No       | String | Platform order number (faster response)                                      |
+| sign    | Yes      | String | Signature                                                                    |
+
+request
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M22222000028",
+  "sign": "EmyJGm3ELzG4FsOd0Krs9ncbSjo4oTGuXWML+7djYla3+VAwd9wS17z38p/7U2ZAjroO04XrE7YXcB1o76Dtyipj3h3bJzs7FYma1QNkMUdt9hh7m8U6hMsMQX7vIWHtXNwz4pbTSC75+kQWXaCew7KoE6LXECdJU8AISgNgeki2TK9R0pCfshr0Z2SZBPeuT6OvIH5LdmqgdZhuqnffGU2qnXk4KMkO848e6/WALLBR+LE1wyKHfPnYVcuKSMVYxkvKyyIL5JIPEgW0o5bh4RCbaUn3NZtyYwrU1uQ3ZDFRThm9j6XAQP+LBlmq3nOePqBtp/VDVarRaV+7FbQg3A=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M22222000028",
+    "orderNo": "6023042811314347",
+    "amount": "100.00",
+    "actualAmount": "0.00",
+    "fee": "0.00",
+    "status": 1,
+    "sign": "fP433ygWVDLVGxYkVnIJj7riGq0U3vyVX+MbBAImxfGLZkZcEAHVEoVYuULZSmXAAXKRSyd67WlDNm+24pougM54ofAoH4HMtCL2tfCoBReFyz3z02AGKkrKE2xWhSpWoqfQoBvzwuN5iGMMu0s9Q1YvqiwJ8WDVIENnmiIyD8qDJN7caHTW2US14/faG+69AvnuIgJ/nu7/jogOlgEYdZdVYU7gcRDE+d47KjlFGswQkJ/h/uzV7cWtUqrtOO7ZnZ3/z33Xx8awokX36QoYcPSWAU0h+Ij9O9402HNhm1eTbYcLU0uI/z8xCAtyAI/tTyiFijpiNlxUKQj+zKsILw=="
+  }
+}
+```
+
+**Response Data**
+
+| Name         | Type    | Description                                                                                                             |
+|:-------------|:--------|:------------------------------------------------------------------------------------------------------------------------|
+| orderId      | String  | Merchant order number (must be unique)                                                                                  |
+| orderNo      | String  | Platform order number                                                                                                   |
+| amount       | String  | Transaction amount                                                                                                      |
+| actualAmount | String  | Received amount                                                                                                         |
+| fee          | String  | Handling fee                                                                                                            |
+| status       | Integer | Status (0 = Not started, 1 = In progress, 2 = Success (final), 3 = Failed (final), -1 = Exception pending confirmation) |
+| payTime      | String  | Payment success time (present when status = 2), format: yyyy-MM-dd HH:mm:ss                                             |
+| errorMsg     | String  | Failure reason (present when status = 3)                                                                                |
+| sign         | String  | Signature                                                                                                               |
+
+---
+
+## **Disbursement API**
+
+### **Disbursement Application**
+
+**Description:**
+
+* Create a Disbursement order
+
+**URL:** `/inr/pay/apply`
+
+**Parameters:**
+
+| Name          | Required | Type   | Description                                                                                                                                                                                   |
+|:--------------|:---------|:-------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| appId         | Yes      | Long   | Business ID (retrieved from backend, must correspond to the currency in URL)                                                                                                                  |
+| orderId       | Yes      | String | Merchant order number (must be unique, max length 48)                                                                                                                                         |
+| amount        | Yes      | String | Transaction amount (unit: INR, decimals not supported)                                                                                                                                        |
+| accountType   | Yes      | String | Account type: `BANK_ACCOUNT` (Bank)                                                                                                                                                           |
+| bankCode      | Yes      | String | Bank code (if `accountType = BANK_ACCOUNT`, fill in IFSC)                                                                                                                                     |
+| accountNo     | Yes      | String | User bank account number                                                                                                                                                                      |
+| name          | Yes      | String | Name (Name must consist solely of letters; no numbers or special characters permitted)                                                                                                        |
+| phone         | Yes      | String | Telephone number (mobile numbers consisting of 10 digits beginning with 6-9)                                                                                                                  |
+| email         | Yes      | String | Email address (ending in @gmail.com; a name + number combination is recommended as the email prefix)                                                                                          |
+| notifyUrl     | No       | String | Callback URL                                                                                                                                                                                  |
+| subject       | No       | String | Payment note (transaction title, product name, payment reason, etc.)                                                                                                                          |
+| body          | No       | String | Additional remark details                                                                                                                                                                     |
+| partnerUserId | Yes      | String | Unique user identifier (e.g. userId). Used for risk control, must be valid, otherwise it will affect the transaction. Allowed characters: numbers, letters, or common symbols `-~!@#$%&*()_`. |
+| sign          | Yes      | String | Signature                                                                                                                                                                                     |
+|
+
+#####  
+
+request（if accountType = BANK\_ACCOUNT）
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M100000450012",
+  "amount": "500",
+  "accountType": "BANK_ACCOUNT",
+  "bankCode": "BANK",
+  "accountNo": "09876543210",
+  "ifsc": "09876543210",
+  "name": "john doe",
+  "phone": "09876543210",
+  "email": "johndoe@cashfree.com",
+  "subject": "iphone13",
+  "body": "ProMotion technology with adaptive refresh rates up to 120Hz",
+  "partnerUserId": "149597870",
+  "sign": "I1PeK3eJOVsFFNowxVRqMXpeWm1lr/BcRpBi8WsW4wVo1+5CC3JsrFq/m/L2O69NzKHvtDWi4zia3DL3dPut0yMyUyqL91LNCSaeISbGsQPlhEsQpyTOryS/RKOfsrn2Xo37SCF/phAvndOk2jwwGwqM5xLz1ms9Ukl85wv27QFNrXIMxK2p18oe7MpMYrgf+xvEBE/VqCtKMtN9pO449wWwXzHWNPbZ76s4pAvKwRE9yXQDr7Iw14Dktcnl1FoLM4gWM/obkO+mz6SyAGDuXhVh/+OD/IGNiCyTCNq6ciQY28UnCFV6ZIP40gxsFhfBJKbK+Raw7y1Bh912ifYfug=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M100000450013",
+    "orderNo": "3023062014149637",
+    "sign": "LmhUnkw5j0pMiimsG8rKwdNNZGvXH5MpSmD6mdHZwq1SQwuK5BohmdEoqKB/jkMk28o3da4Cxh6Q+tW97+yTCemRrF+dMaHA73rpOeUuujKQl/UcFvJuMhfLBa2tp09L71NzoBqpPD6aXf37mYAz8E1HmERwFPpac5FVxIYanHG8cqmMLJYsVmHTSxWavgWU03ys9UczBePkBiR8sl2FSOhFABB0wAP28lswrV/ABS68IsLKtyd1fyI3GBfSbIK5nDEEnlE+EdElFdLs9taAxJImeVF1x4eT47+bkPJ2qS8z3K8QGzKLF3W+8SiRZGfSwDTsLKH+2Vycvy5auRl+ag=="
+  }
+}
+```
+
+**Response Data**
+
+| Name    | Type   | Description                            |
+|:--------|:-------|:---------------------------------------|
+| orderId | String | Merchant order number (must be unique) |
+| orderNo | String | Platform order number                  |
+| sign    | String | Signature                              |
+
+---
+
+### **Disbursement Query**
+
+**Description:**
+
+* Query disbursement order
+
+**URL:** `/inr/pay/query`
+
+**Request Method:**
+
+| Parameters Name | Required | Type   | Description                                                                  |
+|:----------------|:---------|:-------|:-----------------------------------------------------------------------------|
+| appId           | Yes      | Long   | Business ID (retrieved from backend, must correspond to the currency in URL) |
+| orderId         | Yes      | String | Merchant order number                                                        |
+| orderNo         | No       | String | Platform order number (faster response)                                      |
+| sign            | Yes      | String | Signature                                                                    |
+
+request
+
+```json
+{
+  "appId": 1000,
+  "orderId": "M1234567111",
+  "orderNo": "3022111516571436",
+  "sign": "ZxkVZL+GAyv0VhvWn4IvuYahTzxgQuthkuV2ONWiqIfIDb2avvHlFOUJVzqZi1q8CPHXZm1ltanRTRVTxfsuftLvGeDioUHglWt46/RU6c1OPznpLGsZ35Q3n5tW2y1EnOsxPynXBFLuDQy+aZ3l9u6AQ30T0zQexMGT+IxuFkmUp02g/6juaHa5ZgNMv7lN67ixIp162wrM7OJuaOif872QijSceRdZhzaMGImAwB0D4MosRV4WMBOKkwgPdmS7GuZN66YUidXk3wTGqX3MYRw6M0kj4eNegSUwPXvp4q4p0KO8Y3xUMld54GY2ApX3WN3CBtC/vpJqEszjGBbbGg=="
+}
+```
+
+response — Order Failed
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M1234567111",
+    "orderNo": "3022111516571436",
+    "amount": "100000.00",
+    "fee": "0.00",
+    "status": 3,
+    "errorMsg": "Đơn hàng không tồn tại",
+    "sign": "KKuvCl0SuNANJs+l2ogDaJm8pmV+Hi+Xa7q27vJ6D1Ehs4aOp13kRbITfJAhczh3T81BE9qwHeJaYwf+r0EypKM9TL6pMwfG8Az4gRy1D57wiUaVjl2PWcvbEqrn1hL0b+btkjvAM9I+CcSv+wuOW3/uku17Ws3FhgJLj9sFsQUBAPjDO+758VnwBytCOLBmljLBXyKgNgpmFQ1/DNkqWl0UNzyLK45Zw3yf5NiwhEFbvW0jlOWlfu/ql4hluISUQG573jEoFCBEnQLb2tQoRZj1QYNRCXPf5lbej0vzqbEwvR9h+ZOf255t1MocJkdIe463DTV5U3KZdVT87HMagw=="
+  }
+}
+```
+
+response — Order Successful
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M1234567112",
+    "orderNo": "3022111517401574",
+    "amount": "100000.00",
+    "fee": "1003.00",
+    "status": 2,
+    "payTime": "2024-03-01 23:59:59",
+    "sign": "khPtOmGq+cpKX0HFAI/lbP0dx4oVyNAnL5oLsdmhDJdASlQm0yg5I3o+MhImYggEsL6c2bo5fP29t54OZFqSdQDfIuNDvGbAMAr4mRBxc0hoHLkBLyyagfVPBLyQA1JY8XV3ZL4ySzQ3ZQnMCfrh2K39ueUuz6HpZ03Hj0KYijVRCXAZaio/L5jfLBT12QXmvIfAHa8s/k9flhK05ENHPep3zjj/MZGOEaX7jkEJLfjK0duypDCa61BRQjM+oePOdVsgleIl1Yf98UAxMDZ/A3912KFHEb+/jvmdnulNbiJFyuT1fEe+j2teUgw3vFsZAtwNWAgxhC7UO+N0Q5z4EA=="
+  }
+}
+```
+
+### Response Data Description
+
+| Field    | Type    | Description                                                                                                                                               |
+|:---------|:--------|:----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| orderId  | String  | Merchant Order ID (must be unique)                                                                                                                        |
+| orderNo  | String  | Platform Order ID                                                                                                                                         |
+| amount   | String  | Transaction Amount                                                                                                                                        |
+| fee      | String  | Fee                                                                                                                                                       |
+| status   | Integer | Order Status (0 = Not Started, 1 = Processing, 2 = Disbursement Successful (final), 3 = Disbursement Failed (final), -1 = Exception Pending Confirmation) |
+| payTime  | String  | Disbursement Success Time (available when status = 2), format: yyyy-MM-dd HH:mm:ss                                                                        |
+| errorMsg | String  | Disbursement Failure Reason (available when status = 3)                                                                                                   |
+| sign     | String  | Signature                                                                                                                                                 |
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

@@ -39,28 +39,22 @@
               {
                 "group": "商户指南",
                 "pages": [
+                  "docs/zh/guide/integration_process_guide",
+                  "docs/zh/guide/config_settings_and_signature_rules_guide",
+                  "docs/zh/guide/integration_guide",
                   "docs/zh/guide/api_description_guide",
                   "docs/zh/guide/api_doc_list",
-                  "docs/zh/guide/api_parameters_doc",
-                  "docs/zh/guide/config_settings_and_signature_rules_guide",
                   "docs/zh/guide/end_to_end_testing",
-                  "docs/zh/guide/error_response_appendix",
-                  "docs/zh/guide/frequently_asked_question",
-                  "docs/zh/guide/integration_guide",
-                  "docs/zh/guide/integration_process_guide",
                   "docs/zh/guide/onboarding_checklist",
-                  "docs/zh/guide/phone_regex"
+                  "docs/zh/guide/frequently_asked_question"
                 ]
               },
               {
                 "group": "公共支付",
                 "pages": [
-                  "docs/zh/merchant/merchant_guide",
-                  "docs/zh/merchant/merchant_list",
-                  "docs/zh/merchant/merchant_parameters",
-                  "docs/zh/merchant/merchant_signature_rules",
-                  "docs/zh/merchant/merchant_testing",
-                  "docs/zh/merchant/merchant_error_response_appendix"
+                  "docs/zh/api/version2/CommonApi",
+                  "docs/zh/api/version2/MerchantPaymentConfig",
+                  "docs/zh/api/version2/VoucherPdf"
                 ]
               },
               {
@@ -68,76 +62,90 @@
                 "pages": [
                   {
                     "group": "全球通用",
-                    "pages": ["docs/zh/merchant/merchant_guide"]
+                    "pages": [
+                      "docs/zh/api/version2/GlobalCashier",
+                      "docs/zh/api/version2/creditcard",
+                      "docs/zh/api/version2/Subscription",
+                      "docs/zh/api/version2/subscription-process"
+                    ]
                   },
                   {
                     "group": "北美洲",
-                    "pages": ["docs/zh/merchant/merchant_list"]
+                    "pages": [
+                      "docs/zh/api/version2/PayPal",
+                      "docs/zh/api/version2/Mexico"
+                    ]
                   },
                   {
                     "group": "欧洲",
-                    "pages": ["docs/zh/merchant/merchant_list"]
+                    "pages": [
+                      "docs/zh/api/version2/Turkey"
+                    ]
                   },
                   {
                     "group": "南美洲",
-                    "pages": ["docs/zh/merchant/merchant_list"]
+                    "pages": [
+                      "docs/zh/api/version2/Brazil"
+                    ]
                   },
                   {
                     "group": "亚洲",
-                    "pages": ["docs/zh/merchant/merchant_list"]
+                    "pages": [
+                      "docs/zh/api/version2/HongKong",
+                      "docs/zh/api/version2/Singapore",
+                      "docs/zh/api/version2/Taiwan",
+                      "docs/zh/api/version2/Japan",
+                      "docs/zh/api/version2/SouthKorea",
+                      "docs/zh/api/version2/Philippines",
+                      "docs/zh/api/version2/Thailand",
+                      "docs/zh/api/version2/Vietnam",
+                      "docs/zh/api/version2/Indonesia",
+                      "docs/zh/api/version2/Malaysia",
+                      "docs/zh/api/version2/Pakistan",
+                      "docs/zh/api/version2/Bangladesh"
+                    ]
                   },
                   {
                     "group": "中东",
-                    "pages": ["docs/zh/merchant/merchant_list"]
+                    "pages": [
+                      "docs/zh/api/version2/Egypt",
+                      "docs/zh/api/version2/Middle_East"
+                    ]
                   },
                   {
                     "group": "稳定币",
-                    "pages": ["docs/zh/merchant/merchant_list"]
+                    "pages": [
+                      "docs/zh/api/version2/coinpay",
+                      "docs/zh/api/version2/coinpay-fixed_address"
+                    ]
                   }
                 ]
               },
               {
                 "group": "统一支付",
                 "pages": [
-                  "docs/zh/merchant/merchant_guide",
-                  "docs/zh/merchant/merchant_list",
-                  "docs/zh/merchant/merchant_parameters",
-                  "docs/zh/merchant/merchant_signature_rules",
-                  "docs/zh/merchant/merchant_testing",
-                  "docs/zh/merchant/merchant_error_response_appendix"
+                  "docs/zh/api/version2/Api"
                 ]
               },
               {
                 "group": "测试与上线",
                 "pages": [
-                  "docs/zh/merchant/merchant_guide",
-                  "docs/zh/merchant/merchant_list",
-                  "docs/zh/merchant/merchant_parameters",
-                  "docs/zh/merchant/merchant_signature_rules",
-                  "docs/zh/merchant/merchant_testing",
-                  "docs/zh/merchant/merchant_error_response_appendix"
+                  "docs/zh/guide/end_to_end_testing",
+                  "docs/zh/guide/onboarding_checklist"
                 ]
               },
               {
                 "group": "附录",
                 "pages": [
-                  "docs/zh/merchant/merchant_guide",
-                  "docs/zh/merchant/merchant_list",
-                  "docs/zh/merchant/merchant_parameters",
-                  "docs/zh/merchant/merchant_signature_rules",
-                  "docs/zh/merchant/merchant_testing",
-                  "docs/zh/merchant/merchant_error_response_appendix"
+                  "docs/zh/api/version2/cashin_code_list",
+                  "docs/zh/api/version2/cashout_code_list",
+                  "docs/zh/guide/error_response_appendix"
                 ]
               },
               {
                 "group": "商户QA",
                 "pages": [
-                  "docs/zh/merchant/merchant_guide",
-                  "docs/zh/merchant/merchant_list",
-                  "docs/zh/merchant/merchant_parameters",
-                  "docs/zh/merchant/merchant_signature_rules",
-                  "docs/zh/merchant/merchant_testing",
-                  "docs/zh/merchant/merchant_error_response_appendix"
+                  "docs/zh/guide/frequently_asked_question"
                 ]
               }
             ]
@@ -387,7 +395,9 @@
         "language": "en",
         "navbar": {
           "links": [
-            { "label": "Support", "href": "https://your-support-url.com" }
+            {
+              "label": "Support",
+              "href": "https://your-support-url.com" }
           ],
           "primary": {
             "type": "button",
@@ -403,8 +413,128 @@
         },
         "groups": [
           {
-            "group": "Comenzando",
-            "pages": ["index", "quickstart"]
+            "tab": "Documentation Center",
+            "groups": [
+              {
+                "group": "Merchant Guide",
+                "pages": [
+                  "docs/en/guide/integration_process_guide",
+                  "docs/en/guide/config_settings_and_signature_rules_guide",
+                  "docs/en/guide/integration_guide",
+                  "docs/en/guide/api_description_guide",
+                  "docs/en/guide/api_doc_list",
+                  "docs/en/guide/end_to_end_testing",
+                  "docs/en/guide/onboarding_checklist",
+                  "docs/en/guide/frequently_asked_question"
+                ]
+              },
+              {
+                "group": "Common Payment",
+                "pages": [
+                  "docs/en/api/version2/CommonApi",
+                  "docs/en/api/version2/MerchantPaymentConfig",
+                  "docs/en/api/version2/VoucherPdf"
+                ]
+              },
+              {
+                "group": "Global Payment",
+                "pages": [
+                  {
+                    "group": "Global",
+                    "pages": [
+                      "docs/en/api/version2/GlobalCashier",
+                      "docs/en/api/version2/creditcard",
+                      "docs/en/api/version2/Subscription",
+                      "docs/en/api/version2/subscription-process"
+                    ]
+                  },
+                  {
+                    "group": "North America",
+                    "pages": [
+                      "docs/en/api/version2/PayPal",
+                      "docs/en/api/version2/Mexico"
+                    ]
+                  },
+                  {
+                    "group": "Europe",
+                    "pages": [
+                      "docs/en/api/version2/Turkey"
+                    ]
+                  },
+                  {
+                    "group": "South America",
+                    "pages": [
+                      "docs/en/api/version2/Brazil"
+                    ]
+                  },
+                  {
+                    "group": "Asia",
+                    "pages": [
+                      "docs/en/api/version2/HongKong",
+                      "docs/en/api/version2/Singapore",
+                      "docs/en/api/version2/Taiwan",
+                      "docs/en/api/version2/Japan",
+                      "docs/en/api/version2/SouthKorea",
+                      "docs/en/api/version2/Philippines",
+                      "docs/en/api/version2/Thailand",
+                      "docs/en/api/version2/Vietnam",
+                      "docs/en/api/version2/Indonesia",
+                      "docs/en/api/version2/Malaysia",
+                      "docs/en/api/version2/Pakistan",
+                      "docs/en/api/version2/Bangladesh"
+                    ]
+                  },
+                  {
+                    "group": "Middle East",
+                    "pages": [
+                      "docs/en/api/version2/Egypt",
+                      "docs/en/api/version2/Middle_East"
+                    ]
+                  },
+                  {
+                    "group": "Crypto",
+                    "pages": [
+                      "docs/en/api/version2/coinpay",
+                      "docs/en/api/version2/coinpay-fixed_address"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Unified API",
+                "pages": [
+                  "docs/en/api/version2/Api"
+                ]
+              },
+              {
+                "group": "End To End Testing",
+                "pages": [
+                  "docs/en/guide/end_to_end_testing",
+                  "docs/en/guide/onboarding_checklist"
+                ]
+              },
+              {
+                "group": "Appendix",
+                "pages": [
+                  "docs/en/api/version2/cashin_code_list",
+                  "docs/en/api/version2/cashout_code_list",
+                  "docs/en/api/guide/error_response_appendix"
+                ]
+              },
+              {
+                "group": "Merchant FAQ",
+                "pages": [
+                  "docs/en/guide/frequently_asked_question"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "API reference",
+            "openapi": "docs/en/openapi.json",
+            "pages": [
+              "docs/en/api-reference/global/cashier/collect-apply"
+            ]
           }
         ]
       }

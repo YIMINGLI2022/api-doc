@@ -1,0 +1,312 @@
+---
+title: 日本支付接口
+permalink: /api/version2/Japan/
+---
+
+# **日本支付接口**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+:::warning
+**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
+:::
+
+## **限额**
+
+| 交易类型 | 限额                            |
+|:-----|-------------------------------|
+| 代收   | 美元: 0.99-1000, 日圆: 100-150000 |
+
+## **代收API**
+
+### **代收申请**
+
+**简要描述：**
+
+* 创建代收订单
+
+**URL：`/jpy/collect/apply`**
+说明：appId需使用日圆对应的，用户支付成功后增加日圆余额
+
+**URL：`/usd/collect/apply`**
+说明：appId需使用美元对应的，用户支付成功后增加美元余额
+
+**参数：**
+
+| 参数名             | 必选 | 类型     | 说明                                                                          |
+|:----------------|:---|:-------|:----------------------------------------------------------------------------|
+| appId           | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                             |
+| orderId         | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                      |
+| name            | 是  | String | 收款人姓名                                                                       |
+| phone           | 是  | String | 真实手机号                                                                       |
+| email           | 是  | String | 真实电子邮件                                                                      |
+| amount          | 是  | String | 交易金额(不能包含小数位）                                                               |
+| payType         | 是  | String | 参考 [支付方式](#支付方式)                                                            |
+| inBankCode      | 是  | String | [支付方式](#支付方式)                                                               |
+| callBackUrl     | 是  | String | 用户支付成功后跳转地址                                                                 |
+| callBackFailUrl | 是  | String | 用户支付失败后跳转地址                                                                 
+| notifyUrl       | 否  | String | 回调地址                                                                        |
+| subject         | 否  | String | 支付备注                                                                        |
+| body            | 否  | String | 备注详情                                                                        |
+| partnerUserId   | 是  | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。 |
+| sign            | 是  | String | 签名                                                                          |
+
+#####                           
+
+request
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M233323000059",
+  "amount": "300",
+  "phone": "09230219312",
+  "email": "23423@qq.com",
+  "name": "test",
+  "inBankCode": "PH_QRPH_DYNAMIC",
+  "payType": "QR",
+  "partnerUserId": "149597870",
+  "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M233323000059",
+    "orderNo": "6023071013539074",
+    "payUrl": "https://a.api-uat.php.com/1L9zQS2",
+    "bankCode": "GCASH_STATIC_VA",
+    "bankNo": "PC0007I10000035",
+    "qrCode": "00020101021228760011ph.ppmi.p2m0111OPDVPHM1XXX0315777148000000017041652948137245442930503001520460165303608540810000.php Of Mandalu62310010ph.allbank05062110000803***88310012ph.ppmi.qrph0111OPDVPHM1XXX63042763",
+    "sign": "YEoA8Y2JzQFGVzwJSqmemm1Kfv/bfyIfCqv2dp7RNzT5B72AQvdD+nt2nR4sL1HWscvmNHyVt5ovAi7MMhy3ziih/sMph+wPx4YjH3W1h5DyBvSlWvaKfKrK5ViomZ0pPYWydwRHnnRnicxToHK9S6qtSy7Q73O0hdz4hJ9p41Th3ycBl2Q9SeqSZYSY1ohcPDhdyRf2y0prb8rHgpBKzxZ5BKX/1bsE9OmsSEHAEYT8OGgko6aNe8XPAhr4G48cpWTftvnGQuzh0O65nuZRI/PF+Axt2zJCVbFHDDSREI9NlAT82ebDqhlVdxQzKE67D1nxgjb3dPmDUYHOBpmwxQ=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名     | 类型     | 说明             |
+|:--------|:-------|:---------------|
+| orderId | String | 商户订单号(必须保证唯一性) |
+| orderNo | String | 平台订单号          |
+| payUrl  | String | 支付链接           |
+| sign    | String | 签名             |
+
+### **代收查询**
+
+**简要描述：**
+
+* 查询代收订单
+
+**URL：`/jpy/collect/query`**
+
+**URL：`/usd/collect/query`**
+
+**参数：**
+
+| 参数名     | 必选 | 类型     | 说明                              |
+|:--------|:---|:-------|:--------------------------------|
+| appId   | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID） |
+| orderId | 是  | String | 商户订单号                           |
+| orderNo | 否  | String | 平台订单号（响应快）                      |
+| sign    | 是  | String | 签名                              |
+
+request
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M22222000028",
+  "sign": "EmyJGm3ELzG4FsOd0Krs9ncbSjo4oTGuXWML+7djYla3+VAwd9wS17z38p/7U2ZAjroO04XrE7YXcB1o76Dtyipj3h3bJzs7FYma1QNkMUdt9hh7m8U6hMsMQX7vIWHtXNwz4pbTSC75+kQWXaCew7KoE6LXECdJU8AISgNgeki2TK9R0pCfshr0Z2SZBPeuT6OvIH5LdmqgdZhuqnffGU2qnXk4KMkO848e6/WALLBR+LE1wyKHfPnYVcuKSMVYxkvKyyIL5JIPEgW0o5bh4RCbaUn3NZtyYwrU1uQ3ZDFRThm9j6XAQP+LBlmq3nOePqBtp/VDVarRaV+7FbQg3A=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M22222000028",
+    "orderNo": "6023042811314347",
+    "amount": "50000.00",
+    "actualAmount": "0.00",
+    "fee": "0.00",
+    "status": 1,
+    "sign": "fP433ygWVDLVGxYkVnIJj7riGq0U3vyVX+MbBAImxfGLZkZcEAHVEoVYuULZSmXAAXKRSyd67WlDNm+24pougM54ofAoH4HMtCL2tfCoBReFyz3z02AGKkrKE2xWhSpWoqfQoBvzwuN5iGMMu0s9Q1YvqiwJ8WDVIENnmiIyD8qDJN7caHTW2US14/faG+69AvnuIgJ/nu7/jogOlgEYdZdVYU7gcRDE+d47KjlFGswQkJ/h/uzV7cWtUqrtOO7ZnZ3/z33Xx8awokX36QoYcPSWAU0h+Ij9O9402HNhm1eTbYcLU0uI/z8xCAtyAI/tTyiFijpiNlxUKQj+zKsILw=="
+  }
+}
+```
+
+返回data参数说明
+
+| 参数名          | 类型      | 说明                                                  |
+|:-------------|:--------|:----------------------------------------------------|
+| orderId      | String  | 商户订单号(必须保证唯一性)                                      |
+| orderNo      | String  | 平台订单号                                               |
+| amount       | String  | 交易金额                                                |
+| actualAmount | String  | 收到金额                                                |
+| fee          | String  | 手续费                                                 |
+| status       | Integer | 状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)              |
+| payTime      | String  | 支付成功时间（当status=2时有值）(日本时间), 格式: yyyy-MM-dd HH:mm:ss |
+| errorMsg     | String  | 失败原因（当status=3时有值）                                  |
+| sign         | String  | 签名                                                  |
+
+### **支付方式**
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>币种</b></td>
+        <td><b>支付类型(payType)</b></td>
+        <td><b>支付编码(inBankCode)</b></td>
+        <td><b>限额</b></td>
+        <td><b>状态</b></td>
+        <td><b>说明</b></td>
+    </tr>
+    <tr>
+        <td>JPY</td>
+        <td>EWALLET</td>
+        <td>AU_PAY</td>
+        <td>100-150000</td>
+        <td>可用</td>
+        <td>AuPay</td>
+    </tr>
+    <tr>
+        <td>JPY</td>
+        <td>EWALLET</td>
+        <td>MERPAY</td>
+        <td>100-150000</td>
+        <td>可用</td>
+        <td>MerPay</td>
+    </tr>
+    <tr>
+        <td>JPY</td>
+        <td>BANK_TRANSFER</td>
+        <td>GMO_AOZORA</td>
+        <td>100-150000</td>
+        <td>可用</td>
+        <td>GMO Aozora VA</td>
+    </tr>
+    <tr>
+        <td>JPY</td>
+        <td>BANK_TRANSFER</td>
+        <td>KONBINI_FAMILYMART</td>
+        <td>300-150000</td>
+        <td>可用</td>
+        <td>全家便利店</td>
+    </tr>
+    <tr>
+        <td>JPY</td>
+        <td>BANK_TRANSFER</td>
+        <td>KONBINI_LAWSON</td>
+        <td>300-150000</td>
+        <td>可用</td>
+        <td>罗森便利店</td>
+    </tr>
+    <tr>
+        <td>JPY</td>
+        <td>BANK_TRANSFER</td>
+        <td>KONBINI_SEVEN_ELEVEN</td>
+        <td>300-150000</td>
+        <td>可用</td>
+        <td>7-11便利店</td>
+    </tr>
+    <tr>
+        <td>JPY</td>
+        <td>BANK_TRANSFER</td>
+        <td>KONBINI_MINISTOP</td>
+        <td>300-150000</td>
+        <td>可用</td>
+        <td>迷你岛便利店</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>JP_AU_PAY_USD</td>
+        <td>0.99-1000</td>
+        <td>可用</td>
+        <td>AuPay</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>EWALLET</td>
+        <td>JP_MERPAY_USD</td>
+        <td>0.99-1000</td>
+        <td>可用</td>
+        <td>MerPay</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>JP_GMO_AOZORA_USD</td>
+        <td>0.99-1000</td>
+        <td>可用</td>
+        <td>GMO Aozora VA</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>JP_KONBINI_FAMILYMART_USD</td>
+        <td>1.99-1000</td>
+        <td>可用</td>
+        <td>全家便利店</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>JP_KONBINI_LAWSON_USD</td>
+        <td>1.99-1000</td>
+        <td>可用</td>
+        <td>罗森便利店</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>JP_KONBINI_SEVEN_ELEVEN_USD</td>
+        <td>1.99-1000</td>
+        <td>可用</td>
+        <td>7-11便利店</td>
+    </tr>
+    <tr>
+        <td>USD</td>
+        <td>BANK_TRANSFER</td>
+        <td>JP_KONBINI_MINISTOP_USD</td>
+        <td>1.99-1000</td>
+        <td>可用</td>
+        <td>迷你岛便利店</td>
+    </tr>
+</table>
+
+<br/><br/>
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

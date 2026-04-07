@@ -1,0 +1,545 @@
+---
+title: Middle East Payment API
+permalink: /en/api/version2/Middle_East/
+---
+
+# **Middle East Payment API**
+
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+:::warning
+**Before reading this API documentation, be sure to review [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
+:::
+
+## **Transaction Limits**
+
+| Transaction Type | Limit                                                                                        |
+| :--------------- | -------------------------------------------------------------------------------------------- |
+| Collection       | Saudi Riyal: 0.5-5000, Kuwaiti Dinar: 0.5-800, Bahraini Dinar: 0.5-800, UAE Dirham: 0.5-5000, Omani Rial: 0.5-800, Qatari Riyal: 0.5-5000 |
+
+## **Collection API**
+
+### **Collection Request**
+
+**Brief Description:**
+
+* Create a collection order
+
+**URL:**
+
+Saudi Arabia: `/sar/collect/apply`  
+Note: appId needs to use SAR corresponding, user payment success will increase SAR balance
+
+Kuwait: `/kwd/collect/apply`  
+Note: appId needs to use KWD corresponding, user payment success will increase KWD balance
+
+Bahrain: `/bhd/collect/apply`  
+Note: appId needs to use BHD corresponding, user payment success will increase BHD balance
+
+UAE: `/aed/collect/apply`  
+Note: appId needs to use AED corresponding, user payment success will increase AED balance
+
+Oman: `/omr/collect/apply`  
+Note: appId needs to use OMR corresponding, user payment success will increase OMR balance
+
+Qatar: `/qar/collect/apply`  
+Note: appId needs to use QAR corresponding, user payment success will increase QAR balance  
+
+**Parameters:**
+
+| Parameter     | Required | Type   | Description                                                                                                                   |
+| :------------ | :------- | :----- | :---------------------------------------------------------------------------------------------------------------------------- |
+| appId         | Yes      | Long   | Business ID (obtained from the backend, must pass the corresponding business ID based on the currency in the URL)             |
+| orderId       | Yes      | String | Merchant order number (must be unique, max length 48)                                                                         |
+| name          | Yes      | String | Recipient name, used for risk control                                                                                           |
+| phone         | Yes      | String | Real mobile number (format reference: [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format))      |
+| email         | Yes      | String | Real email address                                                                                                           |
+| amount        | Yes      | String | Transaction amount (unit: local currency, accurate to two decimal places; punctuation marks such as "," are prohibited), test environment please use amount below 10SAR     |
+| currency      | No       | String | Currency (USD, local currency)                                                                                                |
+| payType       | Yes      | String | Transaction type                                                                                                              |
+| inBankCode    | Yes      | String | [Payment Method](#inBankCode)                                                                                                 |
+| callBackUrl   | Yes      | String | Redirect URL after successful payment                                                                                         |
+| callBackFailUrl | Yes    | String | Redirect URL after failed payment                                                                                             |
+| notifyUrl     | No       | String | Callback URL                                                                                                                  |
+| goodsName     | Yes      | String | Product name                                                                                                                  |
+| goodsQuantity | Yes      | String | Product quantity                                                                                                              |
+| goodsPrice    | Yes      | String | Product price                                                                                                                 |
+| goodsSku      | Yes      | String | Product unique identifier                                                                                                     |
+| goodsAvatar   | Yes      | String | Product image (https://)                                                                                                      |
+| platform      | Yes      | String | Platform name                                                                                                                 |
+| subject       | No       | String | Payment note                                                                                                                  |
+| body          | No       | String | Additional description                                                                                                        |
+| partnerUserId | Yes      | String | Unique user identifier (e.g., userId), used for risk control system, must be valid, otherwise it will affect the transaction. Format: digits, letters, or symbols -~!@#$%&*()_. |
+| sign          | Yes      | String | Signature                                                                                                                     |
+
+#####   
+
+request
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M233323000059",
+  "amount": "300",
+  "phone": "09230219312",
+  "email": "23423@qq.com",
+  "name": "test",
+  "inBankCode": "STCPay",
+  "payType": "PAYMENT_GATEWAY",
+  "partnerUserId": "149597870",
+  "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M233323000059",
+    "orderNo": "6023071013539074",
+    "payUrl": "",
+    "sign": "YEoA8Y2JzQFGVzwJSqmemm1Kfv/bfyIfCqv2dp7RNzT5B72AQvdD+nt2nR4sL1HWscvmNHyVt5ovAi7MMhy3ziih/sMph+wPx4YjH3W1h5DyBvSlWvaKfKrK5ViomZ0pPYWydwRHnnRnicxToHK9S6qtSy7Q73O0hdz4hJ9p41Th3ycBl2Q9SeqSZYSY1ohcPDhdyRf2y0prb8rHgpBKzxZ5BKX/1bsE9OmsSEHAEYT8OGgko6aNe8XPAhr4G48cpWTftvnGQuzh0O65nuZRI/PF+Axt2zJCVbFHDDSREI9NlAT82ebDqhlVdxQzKE67D1nxgjb3dPmDUYHOBpmwxQ=="
+  }
+}
+```
+
+Return Data Parameters Description
+
+| Parameter | Type   | Description                                |
+| :-------- | :----- | :----------------------------------------- |
+| orderId   | String | Merchant Order Number (must be unique)     |
+| orderNo   | String | Platform Order Number                      |
+| payUrl    | String | Payment URL                                |
+| sign      | String | Signature                                  |
+
+### **Collection Query**
+
+**Brief Description:**
+
+* Query collection order  
+* When "payType = BANK_TRANSFER", the orderNo is returned synchronously and can be queried directly  
+* For other payment methods, after asynchronous notification, use orderNo for second confirmation  
+
+**URL:**
+
+Saudi Arabia: `/sar/collect/query`  
+
+Kuwait: `/kwd/collect/query`  
+
+Bahrain: `/bhd/collect/query`  
+
+UAE: `/aed/collect/query`  
+
+Oman: `/omr/collect/query`  
+
+Qatar: `/qar/collect/query`  
+
+**Parameters:**
+
+| Parameter | Required | Type   | Description                                                                 |
+| :-------- | :------- | :----- | :-------------------------------------------------------------------------- |
+| appId     | Yes      | Long   | Business ID (obtained from backend, must match the currency in the URL)     |
+| orderId   | Yes      | String | Merchant Order Number                                                       |
+| orderNo   | No       | String | Platform Order Number (faster response)                                     |
+| sign      | Yes      | String | Signature                                                                   |
+
+request
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M22222000028",
+  "sign": "EmyJGm3ELzG4FsOd0Krs9ncbSjo4oTGuXWML+7djYla3+VAwd9wS17z38p/7U2ZAjroO04XrE7YXcB1o76Dtyipj3h3bJzs7FYma1QNkMUdt9hh7m8U6hMsMQX7vIWHtXNwz4pbTSC75+kQWXaCew7KoE6LXECdJU8AISgNgeki2TK9R0pCfshr0Z2SZBPeuT6OvIH5LdmqgdZhuqnffGU2qnXk4KMkO848e6/WALLBR+LE1wyKHfPnYVcuKSMVYxkvKyyIL5JIPEgW0o5bh4RCbaUn3NZtyYwrU1uQ3ZDFRThm9j6XAQP+LBlmq3nOePqBtp/VDVarRaV+7FbQg3A=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M22222000028",
+    "orderNo": "6023042811314347",
+    "amount": "50.00",
+    "actualAmount": "0.00",
+    "fee": "0.00",
+    "status": 1,
+    "sign": "fP433ygWVDLVGxYkVnIJj7riGq0U3vyVX+MbBAImxfGLZkZcEAHVEoVYuULZSmXAAXKRSyd67WlDNm+24pougM54ofAoH4HMtCL2tfCoBReFyz3z02AGKkrKE2xWhSpWoqfQoBvzwuN5iGMMu0s9Q1YvqiwJ8WDVIENnmiIyD8qDJN7caHTW2US14/faG+69AvnuIgJ/nu7/jogOlgEYdZdVYU7gcRDE+d47KjlFGswQkJ/h/uzV7cWtUqrtOO7ZnZ3/z33Xx8awokX36QoYcPSWAU0h+Ij9O9402HNhm1eTbYcLU0uI/z8xCAtyAI/tTyiFijpiNlxUKQj+zKsILw=="
+  }
+}
+```
+Return Data Parameters Description
+
+| Parameter    | Type    | Description                                                                 |
+| :----------- | :------ | :-------------------------------------------------------------------------- |
+| orderId      | String  | Merchant Order Number (must be unique)                                      |
+| orderNo      | String  | Platform Order Number                                                       |
+| amount       | String  | Transaction Amount                                                          |
+| actualAmount | String  | Received Amount                                                             |
+| fee          | String  | Fee                                                                         |
+| status       | Integer | Status (0 Not Started, 1 In Progress, 2 Success (final), 3 Failed (final), -1 Exception Pending Confirmation) |
+| payTime      | String  | Payment Success Time (available when status=2) (Saudi Time), format: yyyy-MM-dd HH:mm:ss |
+| errorMsg     | String  | Failure Reason (available when status=3)                                    |
+| sign         | String  | Signature                                                                   |
+
+### **Payment Methods** <a id="inBankCode"></a>
+
+#### Saudi Arabia
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (payType)</b></td>
+        <td><b>Payment Code (inBankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>SAR</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>CARD</td>
+        <td>0.5-5000</td>
+        <td>Available</td>
+        <td>VISA</td>
+    </tr>
+    <tr>
+        <td>SAR</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>CARD</td>
+        <td>0.5-5000</td>
+        <td>Available</td>
+        <td>MasterCard</td>
+    </tr>
+    <tr>
+        <td>SAR</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>CARD</td>
+        <td>0.5-5000</td>
+        <td>Available</td>
+        <td>Mada</td>
+    </tr>
+    <tr>
+        <td>SAR</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>STCPAY</td>
+       <td>0.5-300</td>
+        <td>Available</td>
+        <td>STCPay Wallet</td>
+    </tr>
+    <tr>
+        <td>SAR</td>
+        <td>EWALLET</td>
+        <td>APPLE_PAY</td>
+        <td>0.5-5000</td>
+        <td>Available</td>
+        <td>Apple Pay</td>
+    </tr>
+</table>
+
+#### UAE
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (payType)</b></td>
+        <td><b>Payment Code (inBankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+   <tr>
+        <td>AED</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>CARD</td>
+        <td>0.5-5000</td>
+        <td>Available</td>
+        <td>VISA</td>
+    </tr>
+    <tr>
+        <td>AED</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>CARD</td>
+        <td>0.5-5000</td>
+        <td>Available</td>
+        <td>MasterCard</td>
+    </tr>
+    <tr>
+        <td>AED</td>
+        <td>EWALLET</td>
+        <td>APPLE_PAY</td>
+        <td>0.5-5000</td>
+        <td>Available</td>
+        <td>Apple Pay</td>
+    </tr>
+</table>
+
+#### Kuwait
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (payType)</b></td>
+        <td><b>Payment Code (inBankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>KWD</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>CARD</td>
+        <td>0.5-800</td>
+        <td>Available</td>
+        <td>VISA</td>
+    </tr>
+    <tr>
+        <td>KWD</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>CARD</td>
+        <td>0.5-800</td>
+        <td>Available</td>
+        <td>MasterCard</td>
+    </tr>
+    <tr>
+        <td>KWD</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>CARD</td>
+        <td>0.5-800</td>
+        <td>Available</td>
+        <td>KNET</td>
+    </tr>
+    <tr>
+        <td>KWD</td>
+        <td>EWALLET</td>
+        <td>APPLE_PAY</td>
+        <td>0.5-800</td>
+        <td>Available</td>
+        <td>Apple Pay</td>
+    </tr>
+</table>
+
+#### Qatar
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (payType)</b></td>
+        <td><b>Payment Code (inBankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>QAR</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>CARD</td>
+        <td>0.5-5000</td>
+        <td>Available</td>
+        <td>VISA</td>
+    </tr>
+    <tr>
+        <td>QAR</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>CARD</td>
+        <td>0.5-5000</td>
+        <td>Available</td>
+        <td>MasterCard</td>
+    </tr>
+    <tr>
+        <td>QAR</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>CARD</td>
+        <td>0.5-5000</td>
+        <td>Available</td>
+        <td>NAPS</td>
+    </tr>
+    <tr>
+        <td>QAR</td>
+        <td>EWALLET</td>
+        <td>APPLE_PAY</td>
+        <td>0.5-5000</td>
+        <td>Available</td>
+        <td>Apple Pay</td>
+    </tr>
+</table>
+
+#### Oman
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (payType)</b></td>
+        <td><b>Payment Code (inBankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>OMR</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>CARD</td>
+        <td>0.5-800</td>
+        <td>Available</td>
+        <td>VISA</td>
+    </tr>
+    <tr>
+        <td>OMR</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>CARD</td>
+        <td>0.5-800</td>
+        <td>Available</td>
+        <td>MasterCard</td>
+    </tr>
+    <tr>
+        <td>OMR</td>
+        <td>EWALLET</td>
+        <td>APPLE_PAY</td>
+        <td>0.5-800</td>
+        <td>Available</td>
+        <td>Apple Pay</td>
+    </tr>
+</table>
+
+#### Bahrain
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (payType)</b></td>
+        <td><b>Payment Code (inBankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>BHD</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>CARD</td>
+        <td>0.5-800</td>
+        <td>Available</td>
+        <td>VISA</td>
+    </tr>
+    <tr>
+        <td>BHD</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>CARD</td>
+        <td>0.5-800</td>
+        <td>Available</td>
+        <td>MasterCard</td>
+    </tr>
+    <tr>
+        <td>BHD</td>
+        <td>PAYMENT_GATEWAY</td>
+        <td>CARD</td>
+        <td>0.5-800</td>
+        <td>Available</td>
+        <td>BENEFIT</td>
+    </tr>
+    <tr>
+        <td>BHD</td>
+        <td>EWALLET</td>
+        <td>APPLE_PAY</td>
+        <td>0.5-800</td>
+        <td>Available</td>
+        <td>Apple Pay</td>
+    </tr>
+</table>
+
+<br/><br/>
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}
+

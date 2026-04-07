@@ -1,0 +1,747 @@
+--- 
+title: Egypt Payment API
+permalink: /en/api/version2/Egypt/
+---
+# **Egypt Payment API**
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+:::warning
+**Before reading this API document, please check [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
+:::
+
+## **Transaction Limits**
+
+| Transaction Type | Limit (Unit: EGP) |
+| :--------------- | ----------------- |
+| Collection       | Egyptian Pound: 5-30000 |
+| Disbursement     | Egyptian Pound: 20-30000 |
+
+## **Collection API**
+
+### **Collection Application**
+
+**Brief Description:**
+
+* Create a collection order
+
+**URL: `/egp/collect/apply`**
+Note: appId needs to use EGP corresponding, user payment success will increase EGP balance
+
+
+**Parameters:**
+
+| Parameter Name | Required | Type   | Description                                                                                                                                            |
+| :------------- | :------- | :----- | :------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| appId          | Yes      | Long   | Business ID (obtained from backend, needs to pass the corresponding Business ID based on the currency in the URL)                                       |
+| orderId        | Yes      | String | Merchant order number (must be unique, length no more than 48)                                                                                         |
+| name           | Yes      | String | Payer name |
+| phone          | Yes      | String | Payer mobile number                                                                                                                                        |
+| email          | Yes      | String | Payer email address                                                                                                                                      |
+| amount         | Yes      | String | Transaction amount                                                                                                      |
+| payType        | Yes      | String | [Payment Method Type](#inBankCode)                                                                                                                               |
+| inBankCode     | Yes      | String | [Payment Method Code](#inBankCode)                                                                                                                      |
+| callBackUrl    | Yes      | String | Redirect URL after successful payment                                                                                                                   |
+| callBackFailUrl| Yes      | String | Redirect URL after failed payment                                                                                                                       |
+| notifyUrl      | No       | String | Callback URL                                                                                                                                            |
+| subject        | Yes      | String | Payment remark                                                                                                                                          |
+| body           | No       | String | Remark details                                                                                                                                          |
+| partnerUserId  | Yes      | String | Unique user identifier (e.g., userId), used for risk control system, must be valid, otherwise it will affect the transaction. Format: digits, letters, or symbols -~!@#$%&*()_. |
+| sign           | Yes      | String | Signature                                                                                                                                                |
+
+##### 
+
+request
+
+```json
+{
+    "appId": 1054,
+    "orderId": "M233323000059",
+    "amount": "300",
+    "phone": "09230219312",
+    "email": "23423@qq.com",
+    "name": "test",
+    "inBankCode": "PH_QRPH_DYNAMIC",
+    "payType": "QR",
+    "partnerUserId": "149597870",
+    "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="
+}
+```
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M233323000059",
+        "orderNo": "6023071013539074",
+        "payUrl": "https://a.api-uat.php.com/1L9zQS2",
+        "bankCode": "GCASH_STATIC_VA",
+        "bankNo": "PC0007I10000035",
+        "qrCode": "00020101021228760011ph.ppmi.p2m0111OPDVPHM1XXX0315777148000000017041652948137245442930503001520460165303608540810000.php Of Mandalu62310010ph.allbank05062110000803***88310012ph.ppmi.qrph0111OPDVPHM1XXX63042763",
+        "sign": "YEoA8Y2JzQFGVzwJSqmemm1Kfv/bfyIfCqv2dp7RNzT5B72AQvdD+nt2nR4sL1HWscvmNHyVt5ovAi7MMhy3ziih/sMph+wPx4YjH3W1h5DyBvSlWvaKfKrK5ViomZ0pPYWydwRHnnRnicxToHK9S6qtSy7Q73O0hdz4hJ9p41Th3ycBl2Q9SeqSZYSY1ohcPDhdyRf2y0prb8rHgpBKzxZ5BKX/1bsE9OmsSEHAEYT8OGgko6aNe8XPAhr4G48cpWTftvnGQuzh0O65nuZRI/PF+Axt2zJCVbFHDDSREI9NlAT82ebDqhlVdxQzKE67D1nxgjb3dPmDUYHOBpmwxQ=="
+    }
+}
+```
+
+Response data field description
+
+| Parameter Name | Type   | Description                       |
+| :------------- | :----- | :-------------------------------- |
+| orderId        | String | Merchant order number (must be unique) |
+| orderNo        | String | Platform order number             |
+| payUrl         | String | Payment link                      |
+| sign           | String | Signature                         |
+
+### **Collection Query**
+
+**Brief Description:**
+
+* Query collection order
+
+**URL: `/egp/collect/query`**
+
+
+
+
+**Parameters:**
+
+| Parameter Name | Required | Type   | Description                                                    |
+| :------------- | :------- | :----- | :-------------------------------------------------------------- |
+| appId          | Yes      | Long   | Business ID (obtained from backend, needs to pass the corresponding Business ID based on the currency in the URL) |
+| orderId        | Yes      | String | Merchant order number                                          |
+| orderNo        | No       | String | Platform order number (faster response)                        |
+| sign           | Yes      | String | Signature                                                      |
+
+request
+
+```json
+{
+  "appId": 1054,
+    "orderId": "M22222000028",
+    "sign": "EmyJGm3ELzG4FsOd0Krs9ncbSjo4oTGuXWML+7djYla3+VAwd9wS17z38p/7U2ZAjroO04XrE7YXcB1o76Dtyipj3h3bJzs7FYma1QNkMUdt9hh7m8U6hMsMQX7vIWHtXNwz4pbTSC75+kQWXaCew7KoE6LXECdJU8AISgNgeki2TK9R0pCfshr0Z2SZBPeuT6OvIH5LdmqgdZhuqnffGU2qnXk4KMkO848e6/WALLBR+LE1wyKHfPnYVcuKSMVYxkvKyyIL5JIPEgW0o5bh4RCbaUn3NZtyYwrU1uQ3ZDFRThm9j6XAQP+LBlmq3nOePqBtp/VDVarRaV+7FbQg3A=="
+}
+```
+
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M22222000028",
+        "orderNo": "6023042811314347",
+        "amount": "50000.00",
+        "actualAmount": "0.00",
+        "fee": "0.00",
+        "status": 1,
+        "sign": "fP433ygWVDLVGxYkVnIJj7riGq0U3vyVX+MbBAImxfGLZkZcEAHVEoVYuULZSmXAAXKRSyd67WlDNm+24pougM54ofAoH4HMtCL2tfCoBReFyz3z02AGKkrKE2xWhSpWoqfQoBvzwuN5iGMMu0s9Q1YvqiwJ8WDVIENnmiIyD8qDJN7caHTW2US14/faG+69AvnuIgJ/nu7/jogOlgEYdZdVYU7gcRDE+d47KjlFGswQkJ/h/uzV7cWtUqrtOO7ZnZ3/z33Xx8awokX36QoYcPSWAU0h+Ij9O9402HNhm1eTbYcLU0uI/z8xCAtyAI/tTyiFijpiNlxUKQj+zKsILw=="
+    }
+}
+```
+
+Response data field description
+
+| Parameter Name | Type    | Description                                                                 |
+| :------------- | :------ | :--------------------------------------------------------------------------- |
+| orderId        | String  | Merchant order number (must be unique)                                      |
+| orderNo        | String  | Platform order number                                                       |
+| amount         | String  | Transaction amount                                                          |
+| actualAmount   | String  | Received amount                                                             |
+| fee            | String  | Transaction fee                                                             |
+| status         | Integer | Status (0 Not Started, 1 In Progress, 2 Success (final), 3 Failed (final), -1 Exception Pending Confirmation) |
+| payTime        | String  | Payment success time (when status=2), format: yyyy-MM-dd HH:mm:ss (Egypt Time) |
+| errorMsg       | String  | Failure reason (when status=3)                                              |
+| sign           | String  | Signature                                                                   |
+
+### **Payment Methods**<a id="inBankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1040px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:170px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:200px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (payType)</b></td>
+        <td><b>Payment Code (inBankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>EWALLET</td>
+        <td>REFERENCE_CODE</td>
+        <td>10-30000</td>
+        <td>Available</td>
+        <td>Fawry Wallet</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>EWALLET</td>
+        <td>VODAFONE</td>
+        <td>5-30000</td>
+        <td>Available</td>
+        <td>Vodafone Wallet</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>EWALLET</td>
+        <td>R2P</td>
+        <td>10-30000</td>
+        <td>Maintenance</td>
+        <td>MWallet USSD Push Payment</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>EWALLET</td>
+        <td>OTP</td>
+        <td>5-30000</td>
+        <td>Maintenance</td>
+        <td>Vodafone OTP Verification Payment</td>
+    </tr>
+</table>
+
+## **Disbursement API**
+
+:::tip Egypt Disbursement Arrival Notice
+1. Transactions submitted before 3:00 PM on business days will arrive on the same day (business days are Sunday to Thursday, Egypt's weekend is Friday and Saturday).
+2. Transactions submitted after 3:00 PM on business days will be successful on the next business day.
+   - For example: transactions submitted after 3:00 PM on Thursday will be processed successfully on Sunday.
+3. Local weekends or public holidays do not process disbursement transactions, need to wait until the next business day to process
+:::
+
+### **Disbursement Application**
+
+**Brief Description:**
+
+* Create a disbursement order
+
+**URL: `/egp/pay/apply`**
+
+**Parameters:**
+
+| Parameter Name | Required | Type   | Description                                                                             |
+| :------------- | :------- | :----- | :--------------------------------------------------------------------------------------- |
+| appId          | Yes      | Long   | Business ID (obtained from backend, needs to pass the corresponding Business ID based on the currency in the URL) |
+| orderId        | Yes      | String | Merchant order number (must be unique, length no more than 48)                          |
+| amount         | Yes      | String | Transaction amount (Unit: Egyptian Pound)                                               |
+| accountType    | Yes      | String | [Payment Method Type](#bankCode)                                                        |
+| bankCode       | Yes      | String | [Payment Method Code](#bankCode)                                                        |
+| accountNo      | Yes      | String | User bank/wallet account number (wallet account please use +2 prefix mobile number format) |
+| name           | Yes      | String | Recipient name                                                                           |
+| phone          | Yes      | String | Recipient mobile number (please use +2 prefix mobile number format)                     |
+| email          | Yes      | String | Recipient email address                                                                  |
+| notifyUrl      | No       | String | Callback URL                                                                             |
+| subject        | No       | String | Payment remark (transaction title, product name, payment reason)                        |
+| body           | No       | String | Remark details                                                                           |
+| partnerUserId  | Yes      | String | Unique user identifier (e.g., userId), used for risk control system, must be valid, otherwise it will affect the transaction. Format: digits, letters, or symbols -~!@#$%&*()_ |
+| sign           | Yes      | String | Signature                                                                                |
+
+#####         
+
+request (when accountType is EWALLET type)
+
+```json
+{
+  "appId": 1054,
+  "orderId": "M100000450012",
+  "amount": "500",
+  "accountType": "EWALLET",
+  "bankCode": "MEEZA",
+  "accountNo": "+201012345678",
+  "name": "john doe",
+  "phone": "+201012345678",
+  "email": "johndoe@cashfree.com",
+  "partnerUserId": "149597870",
+  "sign": "I1PeK3eJOVsFFNowxVRqMXpeWm1lr/BcRpBi8WsW4wVo1+5CC3JsrFq/m/L2O69NzKHvtDWi4zia3DL3dPut0yMyUyqL91LNCSaeISbGsQPlhEsQpyTOryS/RKOfsrn2Xo37SCF/phAvndOk2jwwGwqM5xLz1ms9Ukl85wv27QFNrXIMxK2p18oe7MpMYrgf+xvEBE/VqCtKMtN9pO449wWwXzHWNPbZ76s4pAvKwRE9yXQDr7Iw14Dktcnl1FoLM4gWM/obkO+mz6SyAGDuXhVh/+OD/IGNiCyTCNq6ciQY28UnCFV6ZIP40gxsFhfBJKbK+Raw7y1Bh912ifYfug=="
+}
+```
+
+response
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M100000450012",
+    "orderNo": "1525091710234210109",
+    "sign": "LmhUnkw5j0pMiimsG8rKwdNNZGvXH5MpSmD6mdHZwq1SQwuK5BohmdEoqKB/jkMk28o3da4Cxh6Q+tW97+yTCemRrF+dMaHA73rpOeUuujKQl/UcFvJuMhfLBa2tp09L71NzoBqpPD6aXf37mYAz8E1HmERwFPpac5FVxIYanHG8cqmMLJYsVmHTSxWavgWU03ys9UczBePkBiR8sl2FSOhFABB0wAP28lswrV/ABS68IsLKtyd1fyI3GBfSbIK5nDEEnlE+EdElFdLs9taAxJImeVF1x4eT47+bkPJ2qS8z3K8QGzKLF3W+8SiRZGfSwDTsLKH+2Vycvy5auRl+ag=="
+  }
+}
+```
+
+Response data field description
+
+| Parameter Name | Required | Type                                   |
+|:---------------|:---------|:---------------------------------------| 
+| orderId        | String   | Merchant order number (must be unique) |
+| orderNo        | String   | Platform order number                  |
+| sign           | String   | Signature                              |
+
+### **Disbursement Query**
+
+**Brief Description:**
+
+* Query disbursement order
+
+**URL: `/egp/pay/query`**
+
+**Parameters:**
+
+| Parameter Name | Required | Type   | Description                                                    |
+| :------------- | :------- | :----- | :-------------------------------------------------------------- |
+| appId          | Yes      | Long   | Business ID (obtained from backend, needs to pass the corresponding Business ID based on the currency in the URL) |
+| orderId        | Yes      | String | Merchant order number                                          |
+| orderNo        | No       | String | Platform order number (faster response)                        |
+| sign           | Yes      | String | Signature                                                      |
+
+request
+
+```json
+{
+  "appId": 1000,
+  "orderId": "M100000450012",
+  "orderNo": "1525091710234210109",
+  "sign": "ZxkVZL+GAyv0VhvWn4IvuYahTzxgQuthkuV2ONWiqIfIDb2avvHlFOUJVzqZi1q8CPHXZm1ltanRTRVTxfsuftLvGeDioUHglWt46/RU6c1OPznpLGsZ35Q3n5tW2y1EnOsxPynXBFLuDQy+aZ3l9u6AQ30T0zQexMGT+IxuFkmUp02g/6juaHa5ZgNMv7lN67ixIp162wrM7OJuaOif872QijSceRdZhzaMGImAwB0D4MosRV4WMBOKkwgPdmS7GuZN66YUidXk3wTGqX3MYRw6M0kj4eNegSUwPXvp4q4p0KO8Y3xUMld54GY2ApX3WN3CBtC/vpJqEszjGBbbGg=="
+}
+```
+
+response — Order failed
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M100000450012",
+    "orderNo": "1525091710234210109",
+    "amount": "500",
+    "fee": "0",
+    "status": 3,
+    "errorMsg": "الطلب غير موجود",
+    "sign": "KKuvCl0SuNANJs+l2ogDaJm8pmV+Hi+Xa7q27vJ6D1Ehs4aOp13kRbITfJAhczh3T81BE9qwHeJaYwf+r0EypKM9TL6pMwfG8Az4gRy1D57wiUaVjl2PWcvbEqrn1hL0b+btkjvAM9I+CcSv+wuOW3/uku17Ws3FhgJLj9sFsQUBAPjDO+758VnwBytCOLBmljLBXyKgNgpmFQ1/DNkqWl0UNzyLK45Zw3yf5NiwhEFbvW0jlOWlfu/ql4hluISUQG573jEoFCBEnQLb2tQoRZj1QYNRCXPf5lbej0vzqbEwvR9h+ZOf255t1MocJkdIe463DTV5U3KZdVT87HMagw=="
+  }
+}
+```
+
+response — Order successful
+
+```json
+{
+  "status": "1",
+  "error": "00000000",
+  "msg": "",
+  "data": {
+    "orderId": "M100000450012",
+    "orderNo": "1525091710234210109",
+    "amount": "500",
+    "fee": "10",
+    "status": 2,
+    "payTime": "2024-03-01 23:59:59",
+    "sign": "khPtOmGq+cpKX0HFAI/lbP0dx4oVyNAnL5oLsdmhDJdASlQm0yg5I3o+MhImYggEsL6c2bo5fP29t54OZFqSdQDfIuNDvGbAMAr4mRBxc0hoHLkBLyyagfVPBLyQA1JY8XV3ZL4ySzQ3ZQnMCfrh2K39ueUuz6HpZ03Hj0KYijVRCXAZaio/L5jfLBT12QXmvIfAHa8s/k9flhK05ENHPep3zjj/MZGOEaX7jkEJLfjK0duypDCa61BRQjM+oePOdVsgleIl1Yf98UAxMDZ/A3912KFHEb+/jvmdnulNbiJFyuT1fEe+j2teUgw3vFsZAtwNWAgxhC7UO+N0Q5z4EA=="
+  }
+}
+```
+
+Response data field description
+
+| Parameter Name | Type    | Description                                                                 |
+| :------------- | :------ | :--------------------------------------------------------------------------- |
+| orderId        | String  | Merchant order number (must be unique)                                      |
+| orderNo        | String  | Platform order number                                                       |
+| amount         | String  | Transaction amount                                                          |
+| fee            | String  | Transaction fee                                                             |
+| status         | Integer | Status (0 Not Started, 1 In Progress, 2 Success (final), 3 Failed (final), -1 Exception Pending Confirmation) |
+| payTime        | String  | Payment success time (when status=2), format: yyyy-MM-dd HH:mm:ss (Egypt Time) |
+| errorMsg       | String  | Payment failure reason (when status=3)                                      |
+| sign           | String  | Signature                                                                   |
+
+### **Payment Methods**<a id="bankCode"></a>
+
+<table style='border-collapse:
+ collapse;table-layout:fixed;width:1050px;margin:0' >
+    <col style='mso-width-source:userset;mso-width-alt:6752;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:8032;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6496;
+ width:190px' />
+    <col style='mso-width-source:userset;mso-width-alt:6784;
+ width:155px' />
+    <col style='mso-width-source:userset;mso-width-alt:4480;
+ width:80px' />
+    <col style='mso-width-source:userset;mso-width-alt:15040;
+ width:355px' />
+    <tr>
+        <td><b>Currency</b></td>
+        <td><b>Payment Type (accountType)</b></td>
+        <td><b>Payment Code (bankCode)</b></td>
+        <td><b>Limit</b></td>
+        <td><b>Status</b></td>
+        <td><b>Description</b></td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>EWALLET</td>
+        <td>MEEZA</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>MeezaWallet is a mobile number–based e-wallet under Egypt’s Meeza payment network, supporting account type identification based on the phone number and enabling payouts to local wallets such as Vodafone Cash, Orange Money, and Etisalat Cash.</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>EWALLET</td>
+        <td>OPAY</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>OpayCard</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ABP</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>AllBank Inc</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>AAIB</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Arab African International Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ABC</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Arab Banking Corporation - Egypt</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ABK</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Al Ahli Bank of Kuwait – Egypt</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ABRK</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Al Baraka Bank Egypt</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ADIB</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Abu Dhabi Islamic Bank – Egypt</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>AIB</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Arab Investment Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ARAB</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Arab Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ARIB</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Arab International Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>AUB</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Ahly United Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>AUDI</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Audi Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BBE</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>ATTIJARIWAFA BANK EGYPT S.A.E</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BDC</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Banque Du Caire</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BLOM</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Blom Bank Egypt</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>BOA</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Bank of Alexandria</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CAE</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Credit Agricole</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CIB</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Commercial International Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>CITI</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Citibank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>EALB</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Egyptian Arab Land Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>EDBE</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Export Development Bank of Egypt</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>EGB</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Egyptian Gulf Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>ENBD</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Emirates National Bank of Dubai</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>FAIB</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Faisal Islamic Bank of Egypt</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>HDB</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Housing And Development Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>HSBC</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>HSBC</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>IDBE</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Industrial Development Bank of Egypt</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MASH</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Mashreq Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MIDB</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Misr Iran Development Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>MISR</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Banque Misr</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NBAD</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>National Bank of Abu Dhabi</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NBE</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>National Bank of Egypt</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NBG</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>National Bank of Greece</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NBK</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>National Bank of Kuwait – Egypt</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>NSB</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Nasser Social Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>PDAC</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>The Principal Bank for Development and Agri.</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>QNB</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Qatar National Bank Alahli</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SAIB</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Societe Arabe Internationale De Banque</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>SCB</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>Suez Canal Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>UB</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>The United Bank</td>
+    </tr>
+    <tr>
+        <td>EGP</td>
+        <td>BANK_ACCOUNT</td>
+        <td>UNB</td>
+        <td>20-30000</td>
+        <td>Available</td>
+        <td>United National Bank</td>
+    </tr>
+</table>
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

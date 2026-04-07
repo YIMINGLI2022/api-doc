@@ -1,0 +1,450 @@
+---
+title: PCI Payment Interface
+permalink: /en/api/version2/creditcard-pci/
+---
+# **PCI Interface Documentation**
+{/* <div class='page-api'>
+<div class='page-api-content'>
+<div class='page-api-left'> */}
+
+
+:::warning
+**Before reading this API documentation, be sure to review the [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
+:::
+
+## **Limits**
+
+| Transaction Type | Limit (Unit: USD) |
+| :-------------- | ----------------- |
+| Collection      | 0.99 - 1000       |
+
+## **Collection API**
+
+### **Collection Application**
+
+**Brief Description:**
+
+* Create a collection order
+
+**URL:**
+
+USD: `/usd/collect/apply`
+Description: appId in USD, amount in USD, actual settlement in USD
+
+**Parameters:**
+
+| Parameter Name   | Required | Type   | Description                                                                                 |
+| :--------------- | :------- | :----- | :------------------------------------------------------------------------------------------ |
+| appId            | Yes      | Long   | Business ID (obtain from backend, need to pass the corresponding business ID based on currency) |
+| orderId          | Yes      | String | Merchant order number (must be unique, length cannot exceed 48)                             |
+| name             | Yes      | String | Cardholder name, format: firstName and lastName separated by space, example: Donald John Trump |
+| phone            | No       | String | Real phone number (format reference [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format)) |
+| email            | Yes      | String | Real email address                                                                          |
+| amount           | Yes      | String | Transaction amount, default in USD (rounded to two decimal places; no punctuation allowed, e.g., “,”) |
+| payType          | Yes      | String | **BANK_TRANSFER**                                                                           |
+| inBankCode       | Yes      | String | [Payment Method](#payment-method)                                                           |
+| callBackUrl      | Yes      | String | User redirection URL after successful payment                                               |
+| notifyUrl        | Yes      | String | Asynchronous notification URL                                                              |
+| country          | No       | String | Country                                                                                   |
+| currency         | No       | String | Currency                                                                                  |
+| clientType       | Yes      | String | Client type, possible values: APP, WEB, WAP, MINIAPP, OTHERS                              |
+| accountNo        | Yes      | String | Credit card number                                                                          |
+| expiryMonth      | Yes      | String | Credit card expiry month, e.g., 02                                                          |
+| expiryYear       | Yes      | String | Credit card expiry year, e.g., 2031                                                         |
+| cvv              | Yes      | String | Card Security Code (CSC) or CVV or CVV2                                                     |
+| referer          | Yes      | String | Customer's payment page                                                                    |
+| userAgent        | Yes      | String | User agent, real information, used for risk control                                          |
+| customerIp       | Yes      | String | Customer IP address                                                                          |
+| subject          | Yes      | String | Payment description                                                                          |
+| body             | No       | String | Detailed description of the order                                                            |
+| partnerUserId    | Yes      | String | Unique user identifier (e.g., userId), used for risk control system; must be real and valid. Allowed characters: numbers, lowercase and uppercase letters, or common symbols -~!@#$%&*()_ |
+| sign             | Yes      | String | Signature                                                                                    |
+
+##### 
+
+request
+
+```json
+{
+    "appId": 1054,
+    "orderId": "1752751125282",
+    "amount": "999.99",
+    "name": "Master card",
+    "phone": "09123456789",
+    "email": "zhangsan@gmail.com",
+    "customerIp": "142.250.191.174",
+    "payType": "BANK_TRANSFER",
+    "inBankCode": "CREDIT_CARD",
+    "clientType": "WEB",
+    "accountNo": "4000056655665556",
+    "expiryMonth": "11",
+    "expiryYear": "2028",
+    "cvv": "234",
+    "referer": "https://tn-cashier.haipay.top",
+    "callBackUrl": "https://www.google.com",
+    "userAgent": "Mozilla/5.0 (Linux; Android 10; PPA-LX2; HMSCore 6.15.0.311) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.196 HuaweiBrowser/15.0.10.302 Mobile Safari/537.36",
+    "subject": "iPhone 16 ProMax 256G",
+    "partnerUserId": "9527",
+    "sign": "0Np0HI3bcjoVIX+RbdUwqIIYi75k98Z3djHRn4sNWKx6pM+NW6EWnCafMFDZMfUOSqm0Rt86NOX80a9W9i9cqeS6IIBl/naBfTa1Fo6nxwswztjY+xJkChn3BQ2/vWy0QTClY7594mhmMxbexr+Msr5QRs4j/jmxVzbN4xhwHAD4jsThk6pGyNa4hU8kE2bkPvegzXcjfWwZXpTxJhmHfwkrGvM1kpq9nETEFCGTWqDTKQ+eVncptAqWicECRvEKgt5nO09D3HeVrc8h4d9UxTrgoYi0umO11bSKpZTDG4WicXTasdbAbLBtbysqrebSihgsLrbtYYISWohyanXGkQ=="
+}
+```
+
+
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M233323000059",
+        "orderNo": "6023071013539074",
+        "payUrl": "",
+        "sign": "YEoA8Y2JzQFGVzwJSqmemm1Kfv/bfyIfCqv2dp7RNzT5B72AQvdD+nt2nR4sL1HWscvmNHyVt5ovAi7MMhy3ziih/sMph+wPx4YjH3W1h5DyBvSlWvaKfKrK5ViomZ0pPYWydwRHnnRnicxToHK9S6qtSy7Q73O0hdz4hJ9p41Th3ycBl2Q9SeqSZYSY1ohcPDhdyRf2y0prb8rHgpBKzxZ5BKX/1bsE9OmsSEHAEYT8OGgko6aNe8XPAhr4G48cpWTftvnGQuzh0O65nuZRI/PF+Axt2zJCVbFHDDSREI9NlAT82ebDqhlVdxQzKE67D1nxgjb3dPmDUYHOBpmwxQ=="
+    }
+}
+```
+
+### **Return Data Parameters Description**
+
+| Parameter | Type   | Description                                |
+| :-------- | :----- | :----------------------------------------- |
+| orderId   | String | Merchant order number (must ensure uniqueness) |
+| orderNo   | String | Platform order number                      |
+| payUrl    | String | Verification URL (for 3D verification)    |
+| sign      | String | Signature                                  |
+
+### **Collection Query**
+
+**Brief Description:**
+
+- Query collection orders.
+
+**URL:**
+
+- `/usd/collect/query` (for USD)
+
+
+
+**Parameters:**
+
+| Parameter | Required | Type   | Description                                 |
+| :-------- | :------  | :----- | :----------------------------------------- |
+| appId     | Yes      | Long   | Business ID (to be obtained from the backend, needs to pass the corresponding business ID based on the currency in the URL) |
+| orderId   | Yes      | String | Merchant order number                      |
+| orderNo   | No       | String | Platform order number (faster response)    |
+| sign      | Yes      | String | Signature                                  |
+
+request
+
+```json
+{
+    "appId": 1054,
+    "orderId": "M22222000028",
+    "sign": "EmyJGm3ELzG4FsOd0Krs9ncbSjo4oTGuXWML+7djYla3+VAwd9wS17z38p/7U2ZAjroO04XrE7YXcB1o76Dtyipj3h3bJzs7FYma1QNkMUdt9hh7m8U6hMsMQX7vIWHtXNwz4pbTSC75+kQWXaCew7KoE6LXECdJU8AISgNgeki2TK9R0pCfshr0Z2SZBPeuT6OvIH5LdmqgdZhuqnffGU2qnXk4KMkO848e6/WALLBR+LE1wyKHfPnYVcuKSMVYxkvKyyIL5JIPEgW0o5bh4RCbaUn3NZtyYwrU1uQ3ZDFRThm9j6XAQP+LBlmq3nOePqBtp/VDVarRaV+7FbQg3A=="
+}
+```
+
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "orderId": "M22222000028",
+        "orderNo": "6023042811314347",
+        "amount": "50.00",
+        "actualAmount": "0.00",
+        "fee": "0.00",
+        "status": 1,
+        "sign": "fP433ygWVDLVGxYkVnIJj7riGq0U3vyVX+MbBAImxfGLZkZcEAHVEoVYuULZSmXAAXKRSyd67WlDNm+24pougM54ofAoH4HMtCL2tfCoBReFyz3z02AGKkrKE2xWhSpWoqfQoBvzwuN5iGMMu0s9Q1YvqiwJ8WDVIENnmiIyD8qDJN7caHTW2US14/faG+69AvnuIgJ/nu7/jogOlgEYdZdVYU7gcRDE+d47KjlFGswQkJ/h/uzV7cWtUqrtOO7ZnZ3/z33Xx8awokX36QoYcPSWAU0h+Ij9O9402HNhm1eTbYcLU0uI/z8xCAtyAI/tTyiFijpiNlxUKQj+zKsILw=="
+    }
+}
+```
+
+### **Return Data Parameters Description**
+
+| Parameter      | Type    | Description                                                       |
+| :------------- | :------ | :---------------------------------------------------------------- |
+| orderId        | String  | Merchant order number (must ensure uniqueness)                   |
+| orderNo        | String  | Platform order number                                             |
+| amount         | String  | Transaction amount                                                |
+| actualAmount   | String  | Amount received                                                   |
+| fee            | String  | Handling fee                                                      |
+| status         | Integer | Status (0: not started, 1: in payment, 2: success (final state), 3: failed (final state), -1: exception pending confirmation) |
+| payTime        | String  | Payment success time (when status=2, this field has value) (local time), format: yyyy-MM-dd HH:mm:ss |
+| errorMsg       | String  | Payment failure reason (when status=3, this field has value)      |
+| sign           | String  | Signature                                                         |
+
+
+### **Refund**
+
+### **Payment Method** <a id="inBankCode"></a>
+
+| payType        | inBankCode  | Limit        | Description                                                     |
+| :------------- | :---------- | :----------- | :-------------------------------------------------------------- |
+| BANK_TRANSFER  | CREDIT_CARD | (0.99-1000)  | Only supports USD orders, Credit Cards (VISA, MasterCard)        |
+
+## **Subscription API**
+
+### **Subscription Application**
+
+**Brief Description:**
+
+- Create a subscription order.
+
+**URL:**
+
+`/subscription/apply`
+
+**Parameters:**
+
+| Parameter               | Required | Type   | Description                                                    |
+| :----------------------  | :------  | :----- | :------------------------------------------------------------- |
+| appId                   | Yes      | Long   | Business ID (to be obtained from the backend, needs to pass the corresponding business ID based on the currency in the URL) |
+| subscriptionOrderId     | Yes      | String | Merchant order number (must ensure uniqueness, length no more than 48) |
+| amount                  | Yes      | String | Transaction amount (accurate to two decimal places; punctuation marks like “,” are not allowed) |
+| name                    | Yes      | String | User's name, recommended to use real name, format: include firstName and lastName separated by space, e.g., Donald John Trump |
+| phone                   | No       | String | Real phone number (refer to [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format)) |
+| email                   | Yes      | String | Real email address                                              |
+| subject                 | Yes      | String | Payment remark                                                   |
+| body                    | No       | String | Remark details                                                   |
+| payType                 | Yes      | String | **Subscription**                                                 |
+| inBankCode              | Yes      | String | [Payment Method](#支付方式)                                        |
+| callBackUrl             | Yes      | String | URL to redirect the user after payment success                    |
+| notifyUrl               | Yes      | String | Asynchronous notification URL                                    |
+| country                 | No       | String | Country                                                         |
+| currency                | No       | String | Currency                                                         |
+| clientType              | Yes      | String | Client type, possible values: APP, WEB, WAP, MINIAPP, OTHERS     |
+| accountNo               | Yes      | String | Credit card number                                               |
+| expiryMonth             | Yes      | String | Credit card expiry month, e.g., 02                                |
+| expiryYear              | Yes      | String | Credit card expiry year, e.g., 2031                               |
+| cvv                     | Yes      | String | Credit card security code (CSC) or CVV or card verification code (CCV) |
+| referer                 | Yes      | String | The customer payment page                                         |
+| userAgent               | Yes      | String | User agent, real information, used for risk control               |
+| customerIp              | Yes      | String | Client IP address                                                |
+| partnerUserId           | Yes      | String | Unique user identifier (e.g., userID), used for risk control, must be real and valid, otherwise, it may affect the transaction. Format: numbers, letters, or common symbols -~!@#$%&*()_. |
+| recurringInterval       | Yes      | String | Recurring interval: D, W, M, Y                                   |
+| recurringIntervalCount  | Yes      | String | Interval count for the recurring period                           |
+| retryTimes              | Yes      | String | Number of retry attempts                                          |
+| sign                    | Yes      | String | Signature                                                         |
+
+
+##### 
+
+request
+
+```json
+{
+    "appId": 1054,
+    "subscriptionOrderId": "1752752449648",
+    "amount": "999.99",
+    "name": "Jon Smith",
+    "email": "zhangsan@gmail.com",
+    "subject": "iPhone 16 ProMax 256G",
+    "payType": "SUBSCRIPTION",
+    "inBankCode": "CREDIT_CARD",
+    "callBackUrl": "https://www.google.com",
+    "notifyUrl": "https://www.google.com",
+    "clientType": "WEB",
+    "accountNo": "4000056655665556",
+    "expiryYear": "2028",
+    "expiryMonth": "11",
+    "cvv": "234",
+    "referer": "https://tn-cashier.haipay.top",
+    "userAgent": "Mozilla/5.0 (Linux; Android 10; PPA-LX2; HMSCore 6.15.0.311) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.196 HuaweiBrowser/15.0.10.302 Mobile Safari/537.36",
+    "customerIp": "142.250.191.174",
+    "partnerUserId": "9527",
+    "recurringInterval": "D",
+    "recurringIntervalCount": 2,
+    "sign": "lNWHfQPubGzx97LQbDnorVUprfJkkzDyW4Ue/lDENfl6xDY7iyF3MWRv730q6tNFpDAuPH6ltdi+RWpaG4U6wKiGfSckCmJttPzaxxFelKsJvli33/Xp+qEBfLV/pk9bKVGo1Pwxlt59U3FzOHuXnMDDBD96pcWfYOg42Ry/vEUwUfPtYTE9rK6PraR7GDekS2mAiSs6XDAYjR8CbvQ0ZDNj/bElF747vLGqgo8nrArnjNdJTjtvzpwI0ZgSsHcto2w+rwW8RIQqdrcm+zyk4y8s/MWfTePKXxt2PdeYY9FelHtXSCaOb9KmnLdTlHiM40PVbobIISGg63wgGywFhA=="
+}
+
+```
+
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+      "subscriptionNo": "4025071719404220010",
+      "subscriptionOrderId": "1752752449648",
+      "appId": 1054,
+      "subject": "Test subscription",
+      "payType": "SUBSCRIPTION",
+      "inBankCode": "CREDIT_CARD",
+      "amount": 999.99,
+      "recurringInterval": "D",
+      "recurringIntervalCount": 2,
+      "status": "1",
+      "payUrl": "https://tn-uat-cashier.haipay.top/pay/usd/redirect/?orderNo=cmgjhy4v6v0a",
+    }
+}
+```
+
+
+### **Return Data Parameters Description**
+
+| Parameter               | Type    | Description                                                        |
+| :----------------------  | :------ | :----------------------------------------------------------------- |
+| subscriptionOrderId      | String  | Merchant subscription number (must ensure uniqueness)             |
+| subscriptionNo           | String  | Platform subscription number                                       |
+| appId                    | String  | Business ID                                                       |
+| subject                  | String  | Payment remark                                                     |
+| payType                  | String  | Subscription is fixed as **SUBSCRIPTION**                           |
+| inBankCode               | String  | Bank code                                                          |
+| amount                   | String  | Amount                                                             |
+| recurringInterval        | String  | Recurring interval: D, W, M, Y                                     |
+| recurringIntervalCount   | String  | Interval count for the recurring period                            |
+| status                   | String  | Subscription status (-1: Subscription exception, 1: Processing, 2: Subscription successful, 3: Subscription failed, 4: Subscription canceled) |
+| sign                     | String  | Signature                                                          |
+
+
+
+
+### **Query Subscription**
+
+**Brief Description:**
+
+- Query subscription orders.
+
+**URL:**
+
+`/subscription/query`
+
+**Parameters:**
+
+| Parameter              | Required | Type   | Description                                               |
+| :---------------------  | :------- | :----- | :-------------------------------------------------------- |
+| appId                   | Yes      | Long   | Business ID (to be obtained from the backend, needs to pass the corresponding business ID based on the currency in the URL) |
+| subscriptionNo          | Yes      | String | Platform subscription number                               |
+| sign                    | Yes      | String | Signature                                                  |
+
+
+##### 
+
+request
+
+```json
+{
+    "appId": 1724,
+    "sign": "gETp00ngwiG0qPVcpldPGEsWRCShOJUbwxWizbL9xGbWCtlBsTPFshQtClLtBCRAdhoVNZAD7UQXjdiAsr74neYu1akj1a6d3sNapGaqoTdBgykXyr1hLVe14AIUhLRg0Mj2elOlMPiWMdccSC+i4G/lfPpJLpS/T08S8qttExTOjML5Rrny5jNsYedjf+Jo3jrPsLcfZFX3QrWA4txPG+x7ZrShXUonOiZMoH6hwU8PcETrC0vpGqTwySJ6siS2AwyPOZElR6nf3geIx7GAllFUuZSyjCvRDE+9JeZl5Y2Ohlm9xcRxqHgMi4YB3jSJcwo7GqGqnPapZnO2GvcbGw==",
+    "subscriptionNo": "4025011311423010028"
+}
+```
+
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "subscriptionOrderId": "1736739758574",
+        "subscriptionNo": "4025011311423010028",
+        "appId": 1724,
+        "subject": "Test subscription",
+        "payType": "SUBSCRIPTION",
+        "inBankCode": "CREDIT_CARD",
+        "amount": 0.50000000,
+        "recurringInterval": "D",
+        "recurringIntervalCount": 1,
+        "status": "2",
+        "sign": "fscM1XiVPqDb/NxrZuVv33zvqFxsXsKri6+MzIsWqdMlcsa7E3ayGNHg6ChiVxFVdow3NAlmg4szGXp0AtvOLDdQ/BAfC8DWpbktjDXeiEQ7ma1/ZKsmVrrLHzF01B5UI33xYX+qMsjMQ/yJBHwY1LTOhPq3lIwShwhB92CCd6IfPPkSi1EPDL6QLKAll3NNRVUw3vktIx+ghePojrmkgOesD7ujCPlXPjvznJ4o99BFhwPr6i+a0w++ZvfoE/NuClTCP4mf1n4umnw70GqHDv3OfwVk9FeE27SC/TMJIgVJiVc9L3o+mJNUyaIT3o9EyKkfUl+lNsz1KnUyfjycUg=="
+    }
+}
+```
+
+
+### **Return Data Parameters Description**
+
+| Parameter               | Type    | Description                                                        |
+| :----------------------  | :------ | :----------------------------------------------------------------- |
+| subscriptionOrderId      | String  | Merchant subscription number (must ensure uniqueness)             |
+| subscriptionNo           | String  | Platform subscription number                                       |
+| appId                    | String  | Business ID                                                       |
+| subject                  | String  | Payment remark                                                     |
+| payType                  | String  | Subscription is fixed as **SUBSCRIPTION**                           |
+| inBankCode               | String  | Bank code                                                          |
+| amount                   | String  | Amount                                                             |
+| recurringInterval        | String  | Recurring interval: D, W, M, Y                                     |
+| recurringIntervalCount   | String  | Interval count for the recurring period                            |
+| status                   | String  | Subscription status (-1: Subscription exception, 1: Processing, 2: Subscription successful, 3: Subscription failed, 4: Subscription canceled) |
+| sign                     | String  | Signature                                                          |
+
+
+### **Cancel Subscription**
+
+**Brief Description:**
+
+- Cancel subscription.
+
+**URL:**
+
+`/subscription/cancel`
+
+**Parameters:**
+
+| Parameter              | Required | Type   | Description                                               |
+| :---------------------  | :------- | :----- | :-------------------------------------------------------- |
+| appId                   | Yes      | Long   | Business ID (to be obtained from the backend, needs to pass the corresponding business ID based on the currency in the URL) |
+| subscriptionNo          | Yes      | String | Platform subscription number                               |
+| sign                    | Yes      | String | Signature                                                  |
+
+
+
+##### 
+
+request
+
+```json
+{
+    "appId": 1724,
+    "sign": "gETp00ngwiG0qPVcpldPGEsWRCShOJUbwxWizbL9xGbWCtlBsTPFshQtClLtBCRAdhoVNZAD7UQXjdiAsr74neYu1akj1a6d3sNapGaqoTdBgykXyr1hLVe14AIUhLRg0Mj2elOlMPiWMdccSC+i4G/lfPpJLpS/T08S8qttExTOjML5Rrny5jNsYedjf+Jo3jrPsLcfZFX3QrWA4txPG+x7ZrShXUonOiZMoH6hwU8PcETrC0vpGqTwySJ6siS2AwyPOZElR6nf3geIx7GAllFUuZSyjCvRDE+9JeZl5Y2Ohlm9xcRxqHgMi4YB3jSJcwo7GqGqnPapZnO2GvcbGw==",
+    "subscriptionNo": "4025011311423010028"
+}
+```
+
+response
+
+```json
+{
+    "status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
+        "appId": 1724,
+        "subscriptionNo": "4025011311423010028",
+        "status": "4",
+        "payType": "SUBSCRIPTION",
+        "inBankCode": "CREDIT_CARD",
+        "sign": "lynHvI+9JhVbhwHiinJGlDEq7CVU67WkNUsNURs1wu4bI2/2ePVORGqbVdnaU+L9qV4JN35gM2hHadn4pye/Xk+iztLVSbDh5F9XpKAmLeLCcYj+II0pt4Eo4QPxnYJjmMzbDu6fdWgjgi/go2M75N7Fqv2QgV/tIu1O2pe4/LRPe3l/IODvW+ppvbf5FHk5hO2AaLUX/Fn7H0MIv6kcKAhu7ImBrNpF79VPj9YC1qXghJE11q4aHx7xfDDCn4GiqDJBXbzLtqGP6cS2CVXlyLxGziKDxM1+Bv02XNbjzYKwcaS1VDNfmzlglVH+GHZcgVpiEa3u4ffezu2NN2B4Yg=="
+    }
+}
+```
+### **Return Data Parameters Description**
+
+| Parameter               | Type    | Description                                                        |
+| :----------------------  | :------ | :----------------------------------------------------------------- |
+| subscriptionOrderId      | String  | Merchant subscription number (must be unique)             |
+| subscriptionNo           | String  | Platform subscription number                                       |
+| appId                    | String  | Business ID                                                       |
+| payType                  | String  | Subscription is fixed as **SUBSCRIPTION**                           |
+| inBankCode               | String  | Bank code                                                          |
+| status                   | String  | Subscription status (-1: Subscription exception, 1: Processing, 2: Subscription successful, 3: Subscription failed, 4: Subscription canceled) |
+| sign                     | String  | Signature                                                          |
+
+{/* </div>
+<div class='page-api-right'>
+    <APITest class="api-test-item"/>
+</div>
+</div>
+
+</div> */}

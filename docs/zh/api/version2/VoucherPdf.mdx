@@ -1,0 +1,112 @@
+---
+title: 支付凭证 PDF/ZIP 接口
+permalink: /api/version2/VoucherPdf/
+---
+
+
+
+## **1. 接口概述**
+
+**简要描述：**
+
+- **根据代付订单号生成支付凭证 PDF 文件(只有当订单状态为成功或失败时)；当只传一个订单号时返回单个 PDF 文件，多笔订单时返回 ZIP 压缩包。**
+
+**请求方式：**
+
+- **HTTP Method**：`POST`  
+- **Content-Type**：`application/json`
+
+**接口地址：**
+
+`/common/voucher/pdf`
+
+---
+
+## **2. 请求参数**
+
+**请求体：JSON**
+
+| 参数名        | 必选 | 类型            | 说明                                          |
+|:-----------|:-----|:----------------|:--------------------------------------------|
+| appId      | 是  | Long            | 业务ID（后台获取）                                  |
+| orderNos   | 是  | List\<String\>  | 代付订单号列表，至少 1 个,最多100个；单个订单返回 PDF，多笔订单返回 ZIP |
+| getFee     | 否  | Integer         | 是否显示手续费：0-不显示，1-显示，默认：0                     |
+| getSubject | 否  | Integer         | 是否显示备注：0-不显示，1-显示，默认：0                      |
+| isAmount   | 否  | Integer         | 金额显示方式：0-使用实际到账金额，1-使用订单金额，默认：0             |
+| lang       | 否  | String          | 凭证语言：`zh` / `en`，默认：`zh`                    |
+| sign       | 是  | String          | 签名，使用商户密钥对上述参数进行签名（签名规则与其它接口一致）             |
+
+
+
+---
+
+## **3. 请求示例**
+
+### 3.1 单个订单号示例（返回 PDF）
+
+**请求体示例：**
+
+```json
+{
+  "appId": 2065,
+  "orderNos": [
+    "1525121020031156560"
+  ],
+  "getFee": 0,
+  "isAmount": 0,
+  "getSubject": 0,
+  "lang": "zh",
+  "sign": "cvEOw/NyNTvp0NBH+Ef31BP0/UFTEcbkj9Nqh/ek8PqywbbwBKIP5aM5b63BiB8JWxGdVeNvbltMsmKnWVCJOdNVno5xwjJnDFl3NFXy05vIh1OINDPWAbtvm143XrTvv7dD2g1ewrz2Aij9bwM74GvZJwP6QyRMZRjp3rDAMvpxZ/WiASOak9tcp7MPny2wq42irt/4YDY4snjCo8MPqgvhJvjewj0FEjS2YvDED8rmZwCqyW9gqKhYhl101jSLbKQ5rf0WrKZvlc/Y2HZqBQKPjhnOJUJmLe/7gPg6tKzq2pF7FmoxBvGyjQ3sjk9SvyxuD32ugqP1RaI2Q9ukdw=="
+}
+```
+
+### 3.2 多个订单号示例（返回 ZIP）
+
+**请求体示例：**
+
+```json
+{
+  "appId": 2065,
+  "orderNos": [
+    "1525121020031156560",
+    "1525121020031156561"
+  ],
+  "getFee": 0,
+  "isAmount": 0,
+  "lang": "zh",
+  "sign": "gpIClDa34j0VE/0SKpy/UCzjqN0i8mTDKhI0gu4oO861ajiRk3C0Ei4RogQmZ5fT5UOVKUK9n7wsyt2psCztuP65tJ8OpOzeiLrtAybQxyiE6Fo56sUMqHok9ubZWp+kZGZnCe2N8uCpxLh39P/NUv/bF7TzpIitdTjYAGI7TG2++YKPqyMnsR0wCu7Aqtk0hN+a8KXXDc+WtGbulP4H257gjD7W6YFDuyLv32MGUyx/VxlbmKN0yyI7D8UFnakrEryIlC4Xi5J2B/8dRfb1l/okMwVI8nRjvCuj0b2ORHHfqefMtHYzWSXtWyoRo/2yxvbaEmckxbyb6e2tfsjLLA=="
+}
+```
+
+## **4. 响应说明**
+
+### 4.1 成功响应
+
+- **HTTP 状态码**：`200`  
+- **响应体**：二进制文件流  
+  - 当 `orderNos` 只有 1 个订单号时：  
+    - 返回单个 **PDF** 文件  
+    - `Content-Type` 通常为：`application/pdf`
+  - 当 `orderNos` 包含多个订单号时：  
+    - 返回 **ZIP** 压缩包  
+    - `Content-Type` 通常为：`application/zip`
+
+> 建议：  
+> - 根据响应头 `Content-Type` 以及文件大小，将响应体按二进制方式直接保存到本地文件。  
+> - 文件名可根据业务自行命名，也可从响应头`Content-Disposition` 中 获取：例如 `attachment;filename*=UTF-8''vouchers_20251229200623.zip` 。
+> - 该api接口请求时间随订单数量进行增加，可能达到 30s+，注意保持网络的稳定。。
+
+### 4.2 失败响应
+
+当参数校验失败、签名错误、IP 不在白名单或 PDF/ZIP 生成失败时，接口会返回 JSON 结构的错误信息，示例如下：
+
+```json
+{
+  "status": "0",
+  "error": "1001",
+  "msg": "orderNos can not be empty",
+  "data": null
+}
+```
+
+
