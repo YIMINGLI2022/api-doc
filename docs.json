@@ -16,22 +16,7 @@
     "languages": [
       {
         "language": "zh",
-        "navbar": {
-          "links": [
-            { "label": "支持", "href": "https://your-support-url.com" }
-          ],
-          "primary": {
-            "type": "button",
-            "label": "控制台",
-            "href": "https://your-dashboard-url.com"
-          }
-        },
-        "footer": {
-          "socials": {
-            "x": "https://x.com/mintlify",
-            "github": "https://github.com/mintlify"
-          }
-        },
+        "default": true,
         "tabs": [
           {
             "tab": "文档中心",
@@ -161,25 +146,7 @@
       },
       {
         "language": "en",
-        "navbar": {
-          "links": [
-            {
-              "label": "Support",
-              "href": "https://your-support-url.com" }
-          ],
-          "primary": {
-            "type": "button",
-            "label": "Dashboard",
-            "href": "https://your-dashboard-url.com"
-          }
-        },
-        "footer": {
-          "socials": {
-            "x": "https://x.com/mintlify",
-            "github": "https://github.com/mintlify"
-          }
-        },
-        "groups": [
+        "tabs": [
           {
             "tab": "Documentation Center",
             "groups": [
@@ -296,13 +263,6 @@
                 ]
               }
             ]
-          },
-          {
-            "tab": "API reference",
-            "openapi": "docs/en/openapi.json",
-            "pages": [
-              "docs/en/api-reference/global/cashier/collect-apply"
-            ]
           }
         ]
       }
@@ -311,27 +271,8 @@
   "contextual": {
     "options": [
       "copy",
-      "view",
-      "chatgpt",
-      "claude",
-      "perplexity",
-      "mcp",
-      "cursor",
-      "vscode"
+      "view"
     ]
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "支持",
-        "href": "https://your-dashboard-url.com"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "控制台",
-      "href": "https://your-dashboard-url.com"
-    }
   },
   "footer": {
     "socials": {}
