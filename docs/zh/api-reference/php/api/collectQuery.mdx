@@ -1,0 +1,26 @@
+---
+title: "菲律宾比索代收查询"
+description: "创建代付订单 当“payType=PAYMENT_GATEWAY” 时同步返回orderNo可以直接查询 其他支付方式异步通知后，通过orderNo查询二次确认状态"
+openapi: "docs/zh/api-reference/php/php.openapi.json POST /php/collect/query"
+playground: "interactive"
+---
+
+<div class="flex flex-col gap-4">
+    <div class="api-section-heading flex flex-col gap-y-4 w-full">
+        <div class="flex items-baseline border-b pb-2.5 border-gray-100 dark:border-gray-800 w-full">
+            <h4 class="api-section-heading-title flex-1 mb-0">密钥私钥(生成签名)</h4>
+        </div>
+        <div></div>
+    </div>
+
+    <input
+        id="secret-key"
+        placeholder="密钥"
+        class="px-3 py-2 border rounded-md"
+    />
+    <input
+        id="private-key"
+        placeholder="私钥"
+        class="px-3 py-2 border rounded-md"
+    />
+</div>
