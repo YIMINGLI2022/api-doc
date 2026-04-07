@@ -9,7 +9,7 @@
   "paths": {
     "/aed/collect/apply": {
       "post": {
-        "summary": "阿联酋迪拉姆代收申请",
+        "summary": "AED Collection Application",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -200,7 +200,7 @@
     },
     "/aed/collect/query": {
       "post": {
-        "summary": "阿联酋迪拉姆代收查询",
+        "summary": "AED Collection Query",
         "deprecated": false,
         "description": "",
         "tags": [],

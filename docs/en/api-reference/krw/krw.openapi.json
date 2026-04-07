@@ -9,7 +9,7 @@
   "paths": {
     "/krw/collect/apply": {
       "post": {
-        "summary": "韩元代收申请",
+        "summary": "KRW Collection Application",
         "deprecated": false,
         "description": "appId需使用韩元对应的，用户支付成功后增加韩元余额",
         "tags": [],
@@ -167,7 +167,7 @@
     },
     "/krw/collect/query": {
       "post": {
-        "summary": "韩元代收查询",
+        "summary": "KRW Collection Query",
         "deprecated": false,
         "description": "查询代收订单",
         "tags": [],
@@ -280,7 +280,7 @@
     },
     "/krw/pay/apply": {
       "post": {
-        "summary": "韩元代付申请",
+        "summary": "KRW Disbursement Application",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -430,7 +430,7 @@
     },
     "/krw/pay/query": {
       "post": {
-        "summary": "韩元代付查询",
+        "summary": "KRW Disbursement Query",
         "deprecated": false,
         "description": "",
         "tags": [],

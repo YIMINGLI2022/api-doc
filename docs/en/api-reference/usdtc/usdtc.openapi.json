@@ -9,7 +9,7 @@
   "paths": {
     "/usdt/collect/apply": {
       "post": {
-        "summary": "USDT代收申请",
+        "summary": "USDT Collection Application",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -201,7 +201,7 @@
     },
     "/usdt/collect/query": {
       "post": {
-        "summary": "USDT代收查询",
+        "summary": "USDT Collection Query",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -330,7 +330,7 @@
     },
     "/usdc/collect/apply": {
       "post": {
-        "summary": "USDTUSDC代收申请",
+        "summary": "USDC Collection Application",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -522,7 +522,7 @@
     },
     "/usdc/collect/query": {
       "post": {
-        "summary": "USDTUSDC代收查询",
+        "summary": "USDC Collection Query",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -651,7 +651,7 @@
     },
     "/usdt/pay/apply": {
       "post": {
-        "summary": "USDT代付申请",
+        "summary": "USDT Disbursement Application",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -798,7 +798,7 @@
     },
     "/usdt/pay/query": {
       "post": {
-        "summary": "USDT代付查询",
+        "summary": "USDT Disbursement Query",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -919,7 +919,7 @@
     },
     "/usdc/pay/apply": {
       "post": {
-        "summary": "USDTUSDC代付申请",
+        "summary": "USDC Disbursement Application",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -1066,7 +1066,7 @@
     },
     "/usdc/pay/query": {
       "post": {
-        "summary": "USDTUSDC代付查询",
+        "summary": "USDC Disbursement Query",
         "deprecated": false,
         "description": "",
         "tags": [],

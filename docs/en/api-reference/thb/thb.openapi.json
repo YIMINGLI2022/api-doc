@@ -9,7 +9,7 @@
   "paths": {
     "/thb/collect/apply": {
       "post": {
-        "summary": "泰铢代收申请",
+        "summary": "THB Collection Application",
         "deprecated": false,
         "description": "appId需使用泰铢对应的，用户支付成功后增加泰铢余额",
         "tags": [],
@@ -180,7 +180,7 @@
     },
     "/thb/collect/query": {
       "post": {
-        "summary": "泰铢代收查询",
+        "summary": "THB Collection Query",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -294,7 +294,7 @@
     },
     "/thb/pay/apply": {
       "post": {
-        "summary": "泰铢代付申请",
+        "summary": "THB Disbursement Application",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -445,7 +445,7 @@
     },
     "/thb/pay/query": {
       "post": {
-        "summary": "泰铢代付查询",
+        "summary": "THB Disbursement Query",
         "deprecated": false,
         "description": "",
         "tags": [],

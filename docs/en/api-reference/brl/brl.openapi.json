@@ -9,7 +9,7 @@
   "paths": {
     "/brl/collect/apply": {
       "post": {
-        "summary": "巴西雷亚尔代收申请",
+        "summary": "BRL Collection Application",
         "deprecated": false,
         "description": "appId 巴西雷亚尔， amount 巴西雷亚尔，实收结算巴西雷亚尔",
         "tags": [],
@@ -206,7 +206,7 @@
     },
     "/brl/collect/query": {
       "post": {
-        "summary": "巴西雷亚尔代收查询",
+        "summary": "BRL Collection Query",
         "deprecated": false,
         "description": "创建代收订单\n异步通知后，通过orderNo查询二次确认状态",
         "tags": [],
@@ -334,7 +334,7 @@
     },
     "/brl/pay/apply": {
       "post": {
-        "summary": "巴西雷亚尔代付申请",
+        "summary": "BRL Disbursement Application",
         "deprecated": false,
         "description": "创建代付订单",
         "tags": [],
@@ -495,7 +495,7 @@
     },
     "/brl/pay/query": {
       "post": {
-        "summary": "巴西雷亚尔代付查询",
+        "summary": "BRL Disbursement Query",
         "deprecated": false,
         "description": "代付订单查询",
         "tags": [],

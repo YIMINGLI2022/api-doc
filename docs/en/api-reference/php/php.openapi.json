@@ -9,7 +9,7 @@
   "paths": {
     "/php/collect/apply": {
       "post": {
-        "summary": "菲律宾比索代收申请",
+        "summary": "PHP Collection Application",
         "deprecated": false,
         "description": "appId需使用菲律宾比索对应的，用户支付成功后增加菲律宾比索余额",
         "tags": [],
@@ -179,7 +179,7 @@
     },
     "/php/collect/query": {
       "post": {
-        "summary": "菲律宾比索代收查询",
+        "summary": "PHP Collection Query",
         "deprecated": false,
         "description": "创建代付订单\n当“payType=PAYMENT_GATEWAY” 时同步返回orderNo可以直接查询\n其他支付方式异步通知后，通过orderNo查询二次确认状态",
         "tags": [],
@@ -306,7 +306,7 @@
     },
     "/php/pay/apply": {
       "post": {
-        "summary": "菲律宾比索代付申请",
+        "summary": "PHP Disbursement Application",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -456,7 +456,7 @@
     },
     "/php/pay/query": {
       "post": {
-        "summary": "菲律宾比索代付查询",
+        "summary": "PHP Disbursement Query",
         "deprecated": false,
         "description": "",
         "tags": [],

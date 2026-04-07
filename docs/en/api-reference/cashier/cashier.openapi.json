@@ -9,7 +9,7 @@
   "paths": {
     "/global/cashier/collect/apply": {
       "post": {
-        "summary": "收银台代收申请",
+        "summary": "Cashier Collection Application",
         "deprecated": false,
         "description": "创建代收订单\n\nappId需使用收银台对应的，用户支付成功后增加[currency]对应的余额",
         "tags": [],
@@ -168,7 +168,7 @@
     },
     "/global/cashier/collect/query": {
       "post": {
-        "summary": "收银台代收查询",
+        "summary": "Cashier Collection Query",
         "deprecated": false,
         "description": "代收订单查询",
         "tags": [],
@@ -286,7 +286,7 @@
     },
     "/global/cashier/collect/query/v2": {
       "post": {
-        "summary": "收银台代收查询v2",
+        "summary": "Cashier Collection Query",
         "deprecated": false,
         "description": "代收订单查询",
         "tags": [],

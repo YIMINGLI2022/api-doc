@@ -9,7 +9,7 @@
   "paths": {
     "/twd/collect/apply": {
       "post": {
-        "summary": "新台币代收申请",
+        "summary": "TWD Collection Application",
         "deprecated": false,
         "description": "ppId需使用新台币对应的，用户支付成功后增加新台币余额",
         "tags": [],
@@ -176,7 +176,7 @@
     },
     "/twd/collect/query": {
       "post": {
-        "summary": "新台币代收查询",
+        "summary": "TWD Collection Query",
         "deprecated": false,
         "description": "",
         "tags": [],

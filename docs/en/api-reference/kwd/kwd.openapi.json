@@ -9,7 +9,7 @@
   "paths": {
     "/kwd/collect/query": {
       "post": {
-        "summary": "科威特第纳尔代收查询",
+        "summary": "KWD Collection Query",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -137,7 +137,7 @@
     },
     "/kwd/collect/apply": {
       "post": {
-        "summary": "科威特第纳尔代收申请",
+        "summary": "KWD Collection Application",
         "deprecated": false,
         "description": "",
         "tags": [],

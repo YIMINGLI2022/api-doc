@@ -9,7 +9,7 @@
   "paths": {
     "/pkr/collect/apply": {
       "post": {
-        "summary": "巴基斯坦卢比代收申请",
+        "summary": "PKR Collection Application",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -170,7 +170,7 @@
     },
     "/pkr/collect/query": {
       "post": {
-        "summary": "巴基斯坦卢比代收查询",
+        "summary": "PKR Collection Query",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -297,7 +297,7 @@
     },
     "/pkr/pay/apply": {
       "post": {
-        "summary": "巴基斯坦卢比代付申请",
+        "summary": "PKR Disbursement Application",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -465,7 +465,7 @@
     },
     "/pkr/pay/query": {
       "post": {
-        "summary": "巴基斯坦卢比代付查询",
+        "summary": "PKR Disbursement Query",
         "deprecated": false,
         "description": "",
         "tags": [],

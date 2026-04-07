@@ -9,7 +9,7 @@
   "paths": {
     "/subscription/apply": {
       "post": {
-        "summary": "订阅申请",
+        "summary": "Subscription Application",
         "deprecated": false,
         "description": "创建订阅订单",
         "tags": [],
@@ -298,7 +298,7 @@
     },
     "/subscription/query": {
       "post": {
-        "summary": "查询订阅",
+        "summary": "Subscription Query",
         "deprecated": false,
         "description": "查询订阅订单",
         "tags": [],
@@ -474,7 +474,7 @@
     },
     "/subscription/cancel": {
       "post": {
-        "summary": "取消订阅",
+        "summary": "Subscription Cancel",
         "deprecated": false,
         "description": "取消订阅",
         "tags": [],
@@ -606,7 +606,7 @@
     },
     "/subscription/refund/apply": {
       "post": {
-        "summary": "订阅退款",
+        "summary": "Subscription Refund",
         "deprecated": false,
         "description": "",
         "tags": [],

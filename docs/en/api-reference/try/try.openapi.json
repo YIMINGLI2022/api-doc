@@ -9,7 +9,7 @@
   "paths": {
     "/try/collect/apply": {
       "post": {
-        "summary": "土耳其里拉代收申请",
+        "summary": "TRY Collection Application",
         "deprecated": false,
         "description": "创建代收订单\n\nappId需使用土耳其里拉对应的，用户支付成功后增加土耳其里拉余额",
         "tags": [],
@@ -186,7 +186,7 @@
     },
     "/try/collect/query": {
       "post": {
-        "summary": "土耳其里拉代收查询",
+        "summary": "TRY Collection Query",
         "deprecated": false,
         "description": "创建代收订单\n当“payType=BANK_TRANSFER” 时同步返回orderNo可以直接查询\n其他支付方式异步通知后，通过orderNo查询二次确认状态",
         "tags": [],
@@ -323,7 +323,7 @@
     },
     "/try/pay/apply": {
       "post": {
-        "summary": "土耳其里拉代付申请",
+        "summary": "TRY Disbursement Application",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -489,7 +489,7 @@
     },
     "/try/pay/query": {
       "post": {
-        "summary": "土耳其里拉代付查询",
+        "summary": "TRY Disbursement Query",
         "deprecated": false,
         "description": "",
         "tags": [],

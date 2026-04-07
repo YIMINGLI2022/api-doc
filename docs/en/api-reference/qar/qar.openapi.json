@@ -9,7 +9,7 @@
   "paths": {
     "/qar/collect/apply": {
       "post": {
-        "summary": "卡塔尔里亚尔代收申请",
+        "summary": "QAR Collection Application",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -200,7 +200,7 @@
     },
     "/qar/collect/query": {
       "post": {
-        "summary": "卡塔尔里亚尔代收查询",
+        "summary": "QAR Collection Query",
         "deprecated": false,
         "description": "",
         "tags": [],

@@ -9,7 +9,7 @@
   "paths": {
     "/jpy/collect/apply": {
       "post": {
-        "summary": "日元代收申请",
+        "summary": "JPY Collection Application",
         "deprecated": false,
         "description": "appId需使用日圆对应的，用户支付成功后增加日圆余额",
         "tags": [],
@@ -164,7 +164,7 @@
     },
     "/jpy/collect/query": {
       "post": {
-        "summary": "日元代收查询",
+        "summary": "JPY Collection Query",
         "deprecated": false,
         "description": "查询代收订单",
         "tags": [],

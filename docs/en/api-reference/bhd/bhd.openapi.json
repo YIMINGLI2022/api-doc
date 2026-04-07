@@ -9,7 +9,7 @@
   "paths": {
     "/bhd/collect/apply": {
       "post": {
-        "summary": "巴林第纳尔代收申请",
+        "summary": "BHD Collection Application",
         "deprecated": false,
         "description": "",
         "tags": [],
@@ -200,7 +200,7 @@
     },
     "/bhd/collect/query": {
       "post": {
-        "summary": "巴林第纳尔代收查询",
+        "summary": "BHD Collection Query",
         "deprecated": false,
         "description": "",
         "tags": [],
