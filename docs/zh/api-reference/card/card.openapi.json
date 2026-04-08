@@ -141,6 +141,10 @@
                           "type": "string",
                           "description": "支付链接"
                         },
+                        "bankCode": {
+                          "type": "string",
+                          "description": "支付方式编码"
+                        },
                         "clientToken": {
                           "type": "string",
                           "description": "客户端令牌"

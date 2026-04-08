@@ -22,69 +22,69 @@
                 "properties": {
                   "appId": {
                     "type": "integer",
-                    "description": "业务ID(后台获取,需要根据URL中的币种传递对应的业务ID)"
+                    "description": "Business ID (obtained from backend, needs to pass the corresponding Business ID based on the currency in the URL)"
                   },
                   "orderId": {
                     "type": "string",
-                    "description": "商户订单号(必须保证唯一性,长度不超过48)",
+                    "description": "Merchant order number",
                     "maxLength": 48
                   },
                   "name": {
                     "type": "string",
-                    "description": "付款人姓名"
+                    "description": "Payer name"
                   },
                   "phone": {
                     "type": "string",
-                    "description": "付款人手机号"
+                    "description": "Recipient mobile number (please use +2 prefix mobile number format)"
                   },
                   "email": {
                     "type": "string",
-                    "description": "付款人电子邮件",
+                    "description": "Recipient email address",
                     "format": "email"
                   },
                   "amount": {
                     "type": "string",
-                    "description": "交易金额"
+                    "description": "Transaction amount (Unit: Egyptian Pound)"
                   },
                   "payType": {
                     "type": "string",
-                    "description": "支付方式类型"
+                    "description": ""
                   },
                   "inBankCode": {
                     "type": "string",
-                    "description": "支付方式编码"
+                    "description": ""
                   },
                   "callBackUrl": {
                     "type": "string",
-                    "description": "用户支付成功后跳转地址",
+                    "description": "Redirect URL after successful payment",
                     "format": "uri"
                   },
                   "callBackFailUrl": {
                     "type": "string",
-                    "description": "用户支付失败后跳转地址",
+                    "description": "Redirect URL after failed payment",
                     "format": "uri"
                   },
                   "notifyUrl": {
                     "type": "string",
-                    "description": "回调地址",
+                    "description": "Callback URL",
                     "format": "uri"
                   },
                   "subject": {
                     "type": "string",
-                    "description": "支付备注"
+                    "description": "Payment remark (transaction title, product name, payment reason)"
                   },
                   "body": {
                     "type": "string",
-                    "description": "备注详情"
+                    "description": "Remark details"
                   },
                   "partnerUserId": {
                     "type": "string",
-                    "description": "用户唯一标识(如用户ID userId),用于风控系统,必须真实有效,否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。",
+                    "description": "Unique user identifier (e.g., userId), used for risk control system, must be valid, otherwise it will affect the transaction. Format: digits, letters, or symbols -~!@#$%&*()_",
                     "pattern": "^[A-Za-z0-9\\-~!@#$%&*()_]+$"
                   },
                   "sign": {
                     "type": "string",
-                    "description": "签名"
+                    "description": "Signature"
                   }
                 },
                 "required": [
@@ -118,46 +118,46 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "description": "状态码",
+                      "description": "1: Normal, 0: Exception",
                       "default": "1"
                     },
                     "error": {
                       "type": "string",
-                      "description": "错误码",
+                      "description": "Error code",
                       "default": "00000000"
                     },
                     "msg": {
                       "type": "string",
-                      "description": "返回信息",
+                      "description": "Error description",
                       "default": ""
                     },
                     "data": {
                       "type": "object",
-                      "description": "返回数据",
+                      "description": "",
                       "properties": {
                         "orderId": {
                           "type": "string",
-                          "description": "商户订单号(必须保证唯一性)"
+                          "description": "Merchant order number (must be unique)"
                         },
                         "orderNo": {
                           "type": "string",
-                          "description": "平台订单号"
+                          "description": "Platform order number"
                         },
                         "payUrl": {
                           "type": "string",
-                          "description": "支付链接"
+                          "description": "Payment link"
                         },
                         "bankNo": {
                           "type": "string",
-                          "description": "参考码(可能为空)"
+                          "description": ""
                         },
                         "referenceCode": {
                           "type": "string",
-                          "description": "参考码(可能为空)"
+                          "description": ""
                         },
                         "sign": {
                           "type": "string",
-                          "description": "签名"
+                          "description": "Signature"
                         }
                       },
                       "additionalProperties": false
@@ -188,19 +188,19 @@
                 "properties": {
                   "appId": {
                     "type": "integer",
-                    "description": "业务ID(后台获取,需要根据URL中的币种传递对应的业务ID)"
+                    "description": "Business ID (obtained from backend, needs to pass the corresponding Business ID based on the currency in the URL)"
                   },
                   "orderId": {
                     "type": "string",
-                    "description": "商户订单号"
+                    "description": "Merchant order number"
                   },
                   "orderNo": {
                     "type": "string",
-                    "description": "平台订单号(响应快)"
+                    "description": "Platform order number (faster response)"
                   },
                   "sign": {
                     "type": "string",
-                    "description": "签名"
+                    "description": "Signature"
                   }
                 },
                 "required": [
@@ -224,55 +224,55 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "description": "响应状态码"
+                      "description": "1: Normal, 0: Exception"
                     },
                     "error": {
                       "type": "string",
-                      "description": "错误码"
+                      "description": "Error code"
                     },
                     "msg": {
                       "type": "string",
-                      "description": "响应消息"
+                      "description": "Error description"
                     },
                     "data": {
                       "type": "object",
-                      "description": "响应数据",
+                      "description": "",
                       "properties": {
                         "orderId": {
                           "type": "string",
-                          "description": "商户订单号(必须保证唯一性)"
+                          "description": "Merchant order number (must be unique)"
                         },
                         "orderNo": {
                           "type": "string",
-                          "description": "平台订单号"
+                          "description": "Platform order number"
                         },
                         "amount": {
                           "type": "string",
-                          "description": "交易金额"
+                          "description": "Transaction amount"
                         },
                         "actualAmount": {
                           "type": "string",
-                          "description": "实收金额"
+                          "description": "Received amount"
                         },
                         "fee": {
                           "type": "string",
-                          "description": "手续费"
+                          "description": "Transaction fee"
                         },
                         "status": {
                           "type": "integer",
-                          "description": "状态(0未开始,1支付中,2成功(终态),3失败(终态), -1异常待确认)"
+                          "description": "Status (0 Not Started, 1 In Progress, 2 Success (final), 3 Failed (final), -1 Exception Pending Confirmation)"
                         },
                         "payTime": {
                           "type": "string",
-                          "description": "支付成功时间(当status=2时有值)(埃及时间), 格式: yyyy-MM-dd HH:mm:ss"
+                          "description": "Payment success time (when status=2), format: yyyy-MM-dd HH:mm:ss (Egypt Time)"
                         },
                         "errorMsg": {
                           "type": "string",
-                          "description": "失败原因(当status=3时有值)"
+                          "description": "Payment failure reason (when status=3)"
                         },
                         "sign": {
                           "type": "string",
-                          "description": "签名"
+                          "description": "Signature"
                         }
                       },
                       "additionalProperties": true
@@ -303,63 +303,63 @@
                 "properties": {
                   "appId": {
                     "type": "integer",
-                    "description": "业务ID(后台获取,需要根据URL中的币种传递对应的业务ID)"
+                    "description": "Business ID (obtained from backend, needs to pass the corresponding Business ID based on the currency in the URL)"
                   },
                   "orderId": {
                     "type": "string",
-                    "description": "商户订单号(必须保证唯一性,长度不超过48)",
+                    "description": "Merchant order number",
                     "maxLength": 48
                   },
                   "amount": {
                     "type": "string",
-                    "description": "交易金额(单位: 埃及镑)"
+                    "description": "Transaction amount (Unit: Egyptian Pound)"
                   },
                   "accountType": {
                     "type": "string",
-                    "description": "支付方式类型"
+                    "description": "[Payment Method Type](#bankCode)"
                   },
                   "bankCode": {
                     "type": "string",
-                    "description": "支付方式编码"
+                    "description": "[Payment Method Code](#bankCode)"
                   },
                   "accountNo": {
                     "type": "string",
-                    "description": "用户银行/钱包账号(钱包账号请使用+2开头的手机号格式)"
+                    "description": "User bank/wallet account number (wallet account please use +2 prefix mobile number format)"
                   },
                   "name": {
                     "type": "string",
-                    "description": "收款人姓名"
+                    "description": "Recipient name"
                   },
                   "phone": {
                     "type": "string",
-                    "description": "收款人手机号(请使用+2开头的手机号格式)"
+                    "description": "Recipient mobile number (please use +2 prefix mobile number format)"
                   },
                   "email": {
                     "type": "string",
-                    "description": "收款人电子邮件",
+                    "description": "Recipient email address",
                     "format": "email"
                   },
                   "notifyUrl": {
                     "type": "string",
-                    "description": "回调地址",
+                    "description": "Callback URL",
                     "format": "uri"
                   },
                   "subject": {
                     "type": "string",
-                    "description": "支付备注(交易标题,商品名称,支付原因)"
+                    "description": "Payment remark (transaction title, product name, payment reason)"
                   },
                   "body": {
                     "type": "string",
-                    "description": "备注详情"
+                    "description": "Remark details"
                   },
                   "partnerUserId": {
                     "type": "string",
-                    "description": "用户唯一标识(如用户ID userId), 用于风控系统, 必须真实有效, 否则会影响交易. 格式要求: 数字、大小写字母或常用符号-~!@#$%&*()_",
+                    "description": "Unique user identifier (e.g., userId), used for risk control system, must be valid, otherwise it will affect the transaction. Format: digits, letters, or symbols -~!@#$%&*()_",
                     "pattern": "^[A-Za-z0-9\\-~!@#$%&*()_]+$"
                   },
                   "sign": {
                     "type": "string",
-                    "description": "签名"
+                    "description": "Signature"
                   }
                 },
                 "required": [
@@ -392,30 +392,30 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "description": "状态码"
+                      "description": "1: Normal, 0: Exception"
                     },
                     "error": {
                       "type": "string",
-                      "description": "错误码"
+                      "description": "Error code"
                     },
                     "msg": {
                       "type": "string",
-                      "description": "消息"
+                      "description": "Error description"
                     },
                     "data": {
                       "type": "object",
                       "properties": {
                         "orderId": {
                           "type": "string",
-                          "description": "商户订单号(必须保证唯一性)"
+                          "description": "Merchant order number (must be unique)"
                         },
                         "orderNo": {
                           "type": "string",
-                          "description": "平台订单号"
+                          "description": "Platform order number"
                         },
                         "sign": {
                           "type": "string",
-                          "description": "签名"
+                          "description": "Signature"
                         }
                       },
                       "additionalProperties": true
@@ -446,19 +446,19 @@
                 "properties": {
                   "appId": {
                     "type": "integer",
-                    "description": "业务ID(后台获取,需要根据URL中的币种传递对应的业务ID)"
+                    "description": "Business ID (obtained from backend, needs to pass the corresponding Business ID based on the currency in the URL)"
                   },
                   "orderId": {
                     "type": "string",
-                    "description": "商户订单号"
+                    "description": "Merchant order number"
                   },
                   "orderNo": {
                     "type": "string",
-                    "description": "平台订单号(响应快)"
+                    "description": "Platform order number (faster response)"
                   },
                   "sign": {
                     "type": "string",
-                    "description": "签名"
+                    "description": "Signature"
                   }
                 },
                 "required": [
@@ -482,51 +482,51 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "description": "响应状态码"
+                      "description": "1: Normal, 0: Exception"
                     },
                     "error": {
                       "type": "string",
-                      "description": "错误码"
+                      "description": "Error code"
                     },
                     "msg": {
                       "type": "string",
-                      "description": "响应消息"
+                      "description": "Error description"
                     },
                     "data": {
                       "type": "object",
-                      "description": "响应数据",
+                      "description": "",
                       "properties": {
                         "orderId": {
                           "type": "string",
-                          "description": "商户订单号(必须保证唯一性)"
+                          "description": "Merchant order number (must be unique)"
                         },
                         "orderNo": {
                           "type": "string",
-                          "description": "平台订单号"
+                          "description": "Platform order number"
                         },
                         "amount": {
                           "type": "string",
-                          "description": "交易金额"
+                          "description": "Transaction amount"
                         },
                         "fee": {
                           "type": "string",
-                          "description": "手续费"
+                          "description": "Transaction fee"
                         },
                         "status": {
                           "type": "integer",
-                          "description": "状态(0未开始,1支付中,2成功(终态),3失败(终态), -1异常待确认)"
+                          "description": "Status (0 Not Started, 1 In Progress, 2 Success (final), 3 Failed (final), -1 Exception Pending Confirmation)"
                         },
                         "payTime": {
                           "type": "string",
-                          "description": "支付成功时间(当status=2时有值)(埃及时间), 格式: yyyy-MM-dd HH:mm:ss"
+                          "description": "Payment success time (when status=2), format: yyyy-MM-dd HH:mm:ss (Egypt Time)"
                         },
                         "errorMsg": {
                           "type": "string",
-                          "description": "支付失败原因(当status=3时有值)"
+                          "description": "Payment failure reason (when status=3)"
                         },
                         "sign": {
                           "type": "string",
-                          "description": "签名"
+                          "description": "Signature"
                         }
                       },
                       "additionalProperties": false

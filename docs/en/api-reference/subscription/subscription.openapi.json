@@ -22,42 +22,42 @@
                 "properties": {
                   "appId": {
                     "type": "integer",
-                    "description": "业务ID（后台获取，需要根据参数currency传递对应的业务ID）"
+                    "description": "Business ID (obtained from the backend, must pass the corresponding business ID according to the currency in the URL)"
                   },
                   "subscriptionOrderId": {
                     "type": "string",
-                    "description": "商户订单号(必须保证唯一性，长度不超过48)",
+                    "description": "Merchant order ID (must be unique, max length 48)",
                     "maxLength": 48
                   },
                   "amount": {
                     "type": "string",
-                    "description": "交易金额（精确到小数点后两位；禁止添加标点符号，例如：\",\"）",
+                    "description": "Transaction amount (accurate to two decimals; punctuation such as “,” is not allowed)",
                     "pattern": "^\\d+\\.\\d{2}$"
                   },
                   "name": {
                     "type": "string",
-                    "description": "用户姓名，推荐使用真实姓名，格式：包含firstName和lastName，以空格分割的，示例：Donald John Trump"
+                    "description": "User name, recommended to use real name. Format: includes firstName and lastName, separated by space. Example: Donald John Trump"
                   },
                   "phone": {
                     "type": "string",
-                    "description": "真实手机号（格式参考电话号码格式）"
+                    "description": "Real phone number"
                   },
                   "email": {
                     "type": "string",
-                    "description": "真实电子邮件",
+                    "description": "Real email",
                     "format": "email"
                   },
                   "subject": {
                     "type": "string",
-                    "description": "订阅标题"
+                    "description": "Subscription title"
                   },
                   "body": {
                     "type": "string",
-                    "description": "备注详情"
+                    "description": "Remark details"
                   },
                   "inBankCode": {
                     "type": "string",
-                    "description": "支付方式编码",
+                    "description": "CREDIT_CARD, GOOGLE_PAY, APPLE_PAY",
                     "enum": [
                       "CREDIT_CARD",
                       "GOOGLE_PAY",
@@ -66,40 +66,40 @@
                   },
                   "payType": {
                     "type": "string",
-                    "description": "支付方式类型",
+                    "description": "SUBSCRIPTION",
                     "enum": [
                       "SUBSCRIPTION"
                     ]
                   },
                   "callBackUrl": {
                     "type": "string",
-                    "description": "用户支付成功后跳转地址",
+                    "description": "Redirect URL after successful payment",
                     "format": "uri"
                   },
                   "notifyUrl": {
                     "type": "string",
-                    "description": "异步通知地址",
+                    "description": "Asynchronous notification URL",
                     "format": "uri"
                   },
                   "country": {
                     "type": "string",
-                    "description": "国家"
+                    "description": "Country"
                   },
                   "currency": {
                     "type": "string",
-                    "description": "币种，目前支持：USD",
+                    "description": "Currency, currently supported: USD",
                     "enum": [
                       "USD"
                     ]
                   },
                   "partnerUserId": {
                     "type": "string",
-                    "description": "用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。",
+                    "description": "User unique identifier (e.g., userId). Used for risk control. Must be real and valid, otherwise it will affect the transaction. Format: digits, letters, or common symbols -~!@#$%&*()_.",
                     "pattern": "^[A-Za-z0-9\\-~!@#$%&*()_]+$"
                   },
                   "recurringInterval": {
                     "type": "string",
-                    "description": "循环周期类型 D（天）,W（周）,M（月）,Y（年）",
+                    "description": "Recurring cycle type D（day）,W（week）,M（month）,Y（year）",
                     "enum": [
                       "D",
                       "W",
@@ -109,42 +109,42 @@
                   },
                   "recurringIntervalCount": {
                     "type": "integer",
-                    "description": "循环周期间隔",
+                    "description": "Recurring cycle interval",
                     "minimum": 1
                   },
                   "recurringMaxNumber": {
                     "type": "integer",
-                    "description": "最大循环次数，无论循环周期是哪个，最长时间不能超过三年，到期订阅自动取消",
+                    "description": "Maximum number of cycles. Regardless of cycle type, maximum duration cannot exceed 3 years. Subscription will be automatically canceled at expiration.",
                     "minimum": 1
                   },
                   "website": {
                     "type": "string",
-                    "description": "交易网站",
+                    "description": "Transaction website",
                     "format": "uri"
                   },
                   "retryTimes": {
                     "type": "integer",
-                    "description": "定期扣款失败重试次数，默认为3",
+                    "description": "Retry attempts for failed periodic deductions, default 3",
                     "minimum": 0,
                     "default": 3
                   },
                   "cancelUrl": {
                     "type": "string",
-                    "description": "用户取消支付URL，如果传递，用户可在支付页面点击返回到此页面",
+                    "description": "If provided, the user can click “Back” on the payment page to return to this URL.",
                     "format": "uri"
                   },
                   "couponPeriod": {
                     "type": "integer",
-                    "description": "优惠期数(暂时只支持首期优惠与全期优惠，即couponPeriod只能等于1或者等于recurringMaxNumber)"
+                    "description": "Discount Period (Currently only the first period discount and the full period discount are supported, i.e., couponPeriod can only be equal to 1 or recurringMaxNumber)"
                   },
                   "couponAmountPerPeriod": {
                     "type": "string",
-                    "description": "每期优惠金额",
+                    "description": "Discount amount per period",
                     "pattern": "^\\d+\\.\\d{2}$"
                   },
                   "sign": {
                     "type": "string",
-                    "description": "签名"
+                    "description": "Signature"
                   }
                 },
                 "required": [
@@ -203,69 +203,87 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "subscriptionOrderId": {
-                      "type": "string",
-                      "description": "商户订阅号(必须保证唯一性)"
-                    },
-                    "subscriptionNo": {
-                      "type": "string",
-                      "description": "平台订阅号"
-                    },
-                    "appId": {
-                      "type": "string",
-                      "description": "业务ID"
-                    },
-                    "subject": {
-                      "type": "string",
-                      "description": "支付备注"
-                    },
-                    "payType": {
-                      "type": "string",
-                      "description": "订阅固定为SUBSCRIPTION"
-                    },
-                    "inBankCode": {
-                      "type": "string",
-                      "description": "银行编码"
-                    },
-                    "amount": {
-                      "type": "string",
-                      "description": "金额"
-                    },
-                    "payUrl": {
-                      "type": "string",
-                      "description": "授权链接"
-                    },
-                    "recurringInterval": {
-                      "type": "string",
-                      "description": "循环周期 W,M,Y",
-                      "enum": [
-                        "W",
-                        "M",
-                        "Y"
-                      ]
-                    },
-                    "recurringIntervalCount": {
-                      "type": "string",
-                      "description": "环周期间隔"
-                    },
                     "status": {
                       "type": "string",
-                      "description": "订阅状态(-1: 订阅异常, 1: 处理中, 2: 订阅成功, 3: 订阅失败, 4: 订阅取消)",
-                      "enum": [
-                        "-1",
-                        "1",
-                        "2",
-                        "3",
-                        "4"
-                      ]
+                      "description": "1: Normal, 0: Exception"
                     },
-                    "clientToken": {
+                    "error": {
                       "type": "string",
-                      "description": "在JavaScript Web SDK中使用的客户端令牌(见HaiPaySDK.js)"
+                      "description": "Error code"
                     },
-                    "sign": {
+                    "msg": {
                       "type": "string",
-                      "description": "签名"
+                      "description": "Error description"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "",
+                      "properties": {
+                        "subscriptionOrderId": {
+                          "type": "string",
+                          "description": "Merchant subscription ID (must be unique)"
+                        },
+                        "subscriptionNo": {
+                          "type": "string",
+                          "description": "Platform subscription ID"
+                        },
+                        "appId": {
+                          "type": "string",
+                          "description": "Business ID"
+                        },
+                        "subject": {
+                          "type": "string",
+                          "description": "Payment note"
+                        },
+                        "payType": {
+                          "type": "string",
+                          "description": "Subscription fixed as SUBSCRIPTION"
+                        },
+                        "inBankCode": {
+                          "type": "string",
+                          "description": "Bank code"
+                        },
+                        "amount": {
+                          "type": "string",
+                          "description": "Deduction amount"
+                        },
+                        "payUrl": {
+                          "type": "string",
+                          "description": "Authorization URL"
+                        },
+                        "recurringInterval": {
+                          "type": "string",
+                          "description": "Recurring cycle W, M, Y",
+                          "enum": [
+                            "W",
+                            "M",
+                            "Y"
+                          ]
+                        },
+                        "recurringIntervalCount": {
+                          "type": "string",
+                          "description": "Recurring cycle interval"
+                        },
+                        "status": {
+                          "type": "string",
+                          "description": "1: Normal, 0: Exception",
+                          "enum": [
+                            "-1",
+                            "1",
+                            "2",
+                            "3",
+                            "4"
+                          ]
+                        },
+                        "clientToken": {
+                          "type": "string",
+                          "description": "Client token used in the JavaScript Web SDK (see [HaiPaySDK.js](#haipaysdk))"
+                        },
+                        "sign": {
+                          "type": "string",
+                          "description": "Signature"
+                        }
+                      }
                     }
                   },
                   "additionalProperties": false
@@ -311,15 +329,15 @@
                 "properties": {
                   "appId": {
                     "type": "integer",
-                    "description": "业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）"
+                    "description": "Business ID (obtained from the backend, must pass the corresponding business ID according to the currency in the URL)"
                   },
                   "subscriptionNo": {
                     "type": "string",
-                    "description": "平台订阅号"
+                    "description": "Platform subscription ID"
                   },
                   "sign": {
                     "type": "string",
-                    "description": "签名"
+                    "description": "Signature"
                   }
                 },
                 "required": [
@@ -346,123 +364,141 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "subscriptionOrderId": {
-                      "type": "string",
-                      "description": "商户订阅号(必须保证唯一性)"
-                    },
-                    "subscriptionNo": {
-                      "type": "string",
-                      "description": "平台订阅号"
-                    },
-                    "appId": {
-                      "type": "string",
-                      "description": "业务ID"
-                    },
-                    "subject": {
-                      "type": "string",
-                      "description": "支付备注"
-                    },
-                    "currency": {
-                      "type": "string",
-                      "description": "币种"
-                    },
-                    "payType": {
-                      "type": "string",
-                      "description": "订阅固定为SUBSCRIPTION"
-                    },
-                    "inBankCode": {
-                      "type": "string",
-                      "description": "银行编码"
-                    },
-                    "amount": {
-                      "type": "string",
-                      "description": "金额"
-                    },
-                    "recurringInterval": {
-                      "type": "string",
-                      "description": "循环周期 W,M,Y"
-                    },
-                    "recurringIntervalCount": {
-                      "type": "string",
-                      "description": "循环周期间隔"
-                    },
                     "status": {
                       "type": "string",
-                      "description": "订阅状态(-1: 订阅异常, 1: 处理中, 2: 订阅成功, 3: 订阅失败, 4: 订阅取消)"
+                      "description": "1: Normal, 0: Exception"
                     },
-                    "deductList": {
-                      "type": "array",
-                      "description": "扣款列表",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "deductNo": {
-                            "type": "string",
-                            "description": "订阅扣款号"
-                          },
-                          "amount": {
-                            "type": "string",
-                            "description": "扣款金额"
-                          },
-                          "status": {
-                            "type": "integer",
-                            "description": "扣款状态(0未开始,1扣款中,2扣款成功,3扣款失败)"
-                          },
-                          "orderNo": {
-                            "type": "string",
-                            "description": "支付备注"
-                          },
-                          "startTime": {
-                            "type": "string",
-                            "description": "订阅扣款周期-起始时间"
-                          },
-                          "endTime": {
-                            "type": "string",
-                            "description": "订阅扣款周期-结束时间"
+                    "error": {
+                      "type": "string",
+                      "description": "Error code"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "Error description"
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "",
+                      "properties": {
+                        "subscriptionOrderId": {
+                          "type": "string",
+                          "description": "Merchant subscription ID (must be unique)"
+                        },
+                        "subscriptionNo": {
+                          "type": "string",
+                          "description": "Platform subscription ID"
+                        },
+                        "appId": {
+                          "type": "string",
+                          "description": "Business ID"
+                        },
+                        "subject": {
+                          "type": "string",
+                          "description": "Payment note"
+                        },
+                        "currency": {
+                          "type": "string",
+                          "description": "Currency"
+                        },
+                        "payType": {
+                          "type": "string",
+                          "description": "Subscription fixed as SUBSCRIPTION"
+                        },
+                        "inBankCode": {
+                          "type": "string",
+                          "description": "Bank code"
+                        },
+                        "amount": {
+                          "type": "string",
+                          "description": "Deduction amount"
+                        },
+                        "recurringInterval": {
+                          "type": "string",
+                          "description": "Recurring cycle W, M, Y"
+                        },
+                        "recurringIntervalCount": {
+                          "type": "string",
+                          "description": "Recurring cycle interval"
+                        },
+                        "status": {
+                          "type": "string",
+                          "description": "1: Normal, 0: Exception"
+                        },
+                        "deductList": {
+                          "type": "array",
+                          "description": "Deduction list",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "deductNo": {
+                                "type": "string",
+                                "description": "Subscription deduction ID"
+                              },
+                              "amount": {
+                                "type": "string",
+                                "description": "Deduction amount"
+                              },
+                              "status": {
+                                "type": "integer",
+                                "description": "1: Normal, 0: Exception"
+                              },
+                              "orderNo": {
+                                "type": "string",
+                                "description": "Platform order ID"
+                              },
+                              "startTime": {
+                                "type": "string",
+                                "description": "Subscription deduction cycle - start time"
+                              },
+                              "endTime": {
+                                "type": "string",
+                                "description": "Subscription deduction cycle - end time"
+                              }
+                            },
+                            "required": [
+                              "deductNo",
+                              "amount",
+                              "status",
+                              "orderNo",
+                              "startTime",
+                              "endTime"
+                            ]
                           }
                         },
-                        "required": [
-                          "deductNo",
-                          "amount",
-                          "status",
-                          "orderNo",
-                          "startTime",
-                          "endTime"
-                        ]
+                        "sign": {
+                          "type": "string",
+                          "description": "Signature"
+                        }
                       }
-                    },
-                    "sign": {
-                      "type": "string",
-                      "description": "签名"
                     }
-                  }
-                },
-                "example": {
-                  "status": "1",
-                  "error": "00000000",
-                  "msg": "",
-                  "data": {
-                    "subscriptionOrderId": "1736739758574",
-                    "subscriptionNo": "4025011311423010028",
-                    "appId": 1724,
-                    "subject": "Test subscription",
-                    "payType": "SUBSCRIPTION",
-                    "inBankCode": "CREDIT_CARD",
-                    "amount": 0.5,
-                    "recurringInterval": "D",
-                    "recurringIntervalCount": 1,
-                    "status": "2",
-                    "deductList": [
-                      {
-                        "deductNo": "4125011311423010028",
-                        "amount": "0.99",
-                        "status": 2,
-                        "orderNo": "2025011311423010028",
-                        "startTime": "2024-12-18 09:25:11",
-                        "endTime": "2024-12-25 09:25:11"
-                      }
-                    ],
-                    "sign": "fscM1XiVPqDb/NxrZuVv33zvqFxsXsKri6+MzIsWqdMlcsa7E3ayGNHg6ChiVxFVdow3NAlmg4szGXp0AtvOLDdQ/BAfC8DWpbktjDXeiEQ7ma1/ZKsmVrrLHzF01B5UI33xYX+qMsjMQ/yJBHwY1LTOhPq3lIwShwhB92CCd6IfPPkSi1EPDL6QLKAll3NNRVUw3vktIx+ghePojrmkgOesD7ujCPlXPjvznJ4o99BFhwPr6i+a0w++ZvfoE/NuClTCP4mf1n4umnw70GqHDv3OfwVk9FeE27SC/TMJIgVJiVc9L3o+mJNUyaIT3o9EyKkfUl+lNsz1KnUyfjycUg=="
+                  },
+                  "example": {
+                    "status": "1",
+                    "error": "00000000",
+                    "msg": "",
+                    "data": {
+                      "subscriptionOrderId": "1736739758574",
+                      "subscriptionNo": "4025011311423010028",
+                      "appId": 1724,
+                      "subject": "Test subscription",
+                      "payType": "SUBSCRIPTION",
+                      "inBankCode": "CREDIT_CARD",
+                      "amount": 0.5,
+                      "recurringInterval": "D",
+                      "recurringIntervalCount": 1,
+                      "status": "2",
+                      "deductList": [
+                        {
+                          "deductNo": "4125011311423010028",
+                          "amount": "0.99",
+                          "status": 2,
+                          "orderNo": "2025011311423010028",
+                          "startTime": "2024-12-18 09:25:11",
+                          "endTime": "2024-12-25 09:25:11"
+                        }
+                      ],
+                      "sign": "fscM1XiVPqDb/NxrZuVv33zvqFxsXsKri6+MzIsWqdMlcsa7E3ayGNHg6ChiVxFVdow3NAlmg4szGXp0AtvOLDdQ/BAfC8DWpbktjDXeiEQ7ma1/ZKsmVrrLHzF01B5UI33xYX+qMsjMQ/yJBHwY1LTOhPq3lIwShwhB92CCd6IfPPkSi1EPDL6QLKAll3NNRVUw3vktIx+ghePojrmkgOesD7ujCPlXPjvznJ4o99BFhwPr6i+a0w++ZvfoE/NuClTCP4mf1n4umnw70GqHDv3OfwVk9FeE27SC/TMJIgVJiVc9L3o+mJNUyaIT3o9EyKkfUl+lNsz1KnUyfjycUg=="
+                    }
                   }
                 }
               }
@@ -487,15 +523,15 @@
                 "properties": {
                   "appId": {
                     "type": "integer",
-                    "description": "业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）"
+                    "description": "Business ID (obtained from the backend, must pass the corresponding business ID according to the currency in the URL)"
                   },
                   "subscriptionNo": {
                     "type": "string",
-                    "description": "平台订阅号"
+                    "description": "Platform subscription ID"
                   },
                   "sign": {
                     "type": "string",
-                    "description": "签名"
+                    "description": "Signature"
                   }
                 },
                 "required": [
@@ -524,47 +560,47 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "description": "状态码",
+                      "description": "1: Normal, 0: Exception",
                       "example": "1"
                     },
                     "error": {
                       "type": "string",
-                      "description": "错误码",
+                      "description": "Error code",
                       "example": "00000000"
                     },
                     "msg": {
                       "type": "string",
-                      "description": "返回信息",
+                      "description": "Error description",
                       "example": ""
                     },
                     "data": {
                       "type": "object",
-                      "description": "返回数据",
+                      "description": "",
                       "properties": {
                         "subscriptionOrderId": {
                           "type": "string",
-                          "description": "商户订阅号(必须保证唯一性)"
+                          "description": "Merchant subscription ID (must be unique)"
                         },
                         "subscriptionNo": {
                           "type": "string",
-                          "description": "平台订阅号"
+                          "description": "Platform subscription ID"
                         },
                         "appId": {
                           "type": "string",
-                          "description": "业务ID"
+                          "description": "Business ID"
                         },
                         "payType": {
                           "type": "string",
-                          "description": "订阅固定为SUBSCRIPTION",
+                          "description": "Subscription fixed as SUBSCRIPTION",
                           "example": "SUBSCRIPTION"
                         },
                         "inBankCode": {
                           "type": "string",
-                          "description": "银行编码"
+                          "description": "Bank code"
                         },
                         "status": {
                           "type": "string",
-                          "description": "订阅状态(-1: 订阅异常, 1: 处理中, 2: 订阅成功, 3: 订阅失败, 4: 订阅取消)",
+                          "description": "Subscription status (-1: Error, 1: Processing, 2: Success, 3: Failed, 4: Canceled)",
                           "enum": [
                             "-1",
                             "1",
@@ -575,7 +611,7 @@
                         },
                         "sign": {
                           "type": "string",
-                          "description": "签名"
+                          "description": "Signature"
                         }
                       },
                       "additionalProperties": false
@@ -619,19 +655,19 @@
                 "properties": {
                   "appId": {
                     "type": "integer",
-                    "description": "业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）"
+                    "description": "Business ID (obtained from the backend, must pass the corresponding business ID according to the currency in the URL)"
                   },
                   "subscriptionNo": {
                     "type": "string",
-                    "description": "平台订阅号"
+                    "description": "Platform subscription ID"
                   },
                   "orderNo": {
                     "type": "string",
-                    "description": "平台订单号"
+                    "description": "Platform order ID"
                   },
                   "sign": {
                     "type": "string",
-                    "description": "签名"
+                    "description": "Signature"
                   }
                 },
                 "required": [
@@ -662,42 +698,42 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "description": "状态码",
+                      "description": "1: Normal, 0: Exception",
                       "default": "1"
                     },
                     "error": {
                       "type": "string",
-                      "description": "错误码",
+                      "description": "Error code",
                       "default": "00000000"
                     },
                     "msg": {
                       "type": "string",
-                      "description": "消息",
+                      "description": "Error description",
                       "default": ""
                     },
                     "data": {
                       "type": "object",
-                      "description": "返回数据",
+                      "description": "",
                       "properties": {
                         "orderNo": {
                           "type": "string",
-                          "description": "平台订单号"
+                          "description": "Platform order ID"
                         },
                         "subscriptionNo": {
                           "type": "string",
-                          "description": "平台订阅号"
+                          "description": "Platform subscription ID"
                         },
                         "appId": {
                           "type": "string",
-                          "description": "业务ID"
+                          "description": "Business ID"
                         },
                         "refundNo": {
                           "type": "string",
-                          "description": "退款单号"
+                          "description": "Refund order ID"
                         },
                         "sign": {
                           "type": "string",
-                          "description": "签名"
+                          "description": "Signature"
                         }
                       },
                       "default": {}

@@ -22,70 +22,70 @@
                 "properties": {
                   "appId": {
                     "type": "integer",
-                    "description": "业务ID（后台获取，请使用收银台专属APPID，币种为收银台(CASHIER)）"
+                    "description": "Business ID (retrieved from the backend; must use the Cashier-specific APPID, currency is CASHIER)"
                   },
                   "orderId": {
                     "type": "string",
-                    "description": "商户订单号(必须保证唯一性，长度不超过48)",
+                    "description": "Merchant order ID",
                     "maxLength": 48
                   },
                   "name": {
                     "type": "string",
-                    "description": "用户姓名，推荐使用真实姓名，格式：包含firstName和lastName，以空格分割的，示例：Donald John Trump"
+                    "description": "User full name (recommended to use real name). Format: firstName + lastName, separated by a space, e.g., Donald John Trump"
                   },
                   "email": {
                     "type": "string",
-                    "description": "真实电子邮件",
+                    "description": "Valid email address",
                     "format": "email"
                   },
                   "amount": {
                     "type": "string",
-                    "description": "交易金额（精确到小数点后两位；禁止添加标点符号，例如：\",\"）",
+                    "description": "Transaction amount (accurate to two decimals; do not use punctuation symbols such as “,”)",
                     "pattern": "^\\d+\\.\\d{2}$"
                   },
                   "currency": {
                     "type": "string",
-                    "description": "交易金额对应的币种，支持：USD（0.99美元起步），其他币种参考地区编码",
+                    "description": "Transaction currency. Supported: USD (minimum 0.99 USD). For other currencies, see [Region Codes](#region-code).",
                     "minLength": 3,
                     "maxLength": 3
                   },
                   "callBackUrl": {
                     "type": "string",
-                    "description": "用户支付成功后跳转地址",
+                    "description": "Redirect URL after successful payment",
                     "format": "uri"
                   },
                   "callBackFailUrl": {
                     "type": "string",
-                    "description": "用户支付失败后跳转地址",
+                    "description": "Redirect URL after failed payment",
                     "format": "uri"
                   },
                   "notifyUrl": {
                     "type": "string",
-                    "description": "回调地址",
+                    "description": "Callback URL",
                     "format": "uri"
                   },
                   "subject": {
                     "type": "string",
-                    "description": "支付备注（交易标题，商品名称，支付原因等）"
+                    "description": "Payment note (transaction title, product name, reason for payment, etc.)"
                   },
                   "body": {
                     "type": "string",
-                    "description": "备注详情"
+                    "description": "Detailed remarks"
                   },
                   "region": {
                     "type": "string",
-                    "description": "地区编码，使用两位编码即可",
+                    "description": "use 2-letter code",
                     "minLength": 2,
                     "maxLength": 2
                   },
                   "partnerUserId": {
                     "type": "string",
-                    "description": "用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。",
+                    "description": "Unique user identifier (e.g., userId), used for risk control. Must be real/valid, otherwise it may affect transactions. Allowed format: numbers, letters, or symbols -~!@#$%&*()_.",
                     "pattern": "^[A-Za-z0-9\\-~!@#$%&*()_]+$"
                   },
                   "sign": {
                     "type": "string",
-                    "description": "签名"
+                    "description": "Signature"
                   }
                 },
                 "required": [
@@ -119,38 +119,38 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "description": "状态码",
+                      "description": "1: Normal, 0: Exception",
                       "default": "1"
                     },
                     "error": {
                       "type": "string",
-                      "description": "错误码",
+                      "description": "Error code",
                       "default": "00000000"
                     },
                     "msg": {
                       "type": "string",
-                      "description": "返回消息",
+                      "description": "Error description",
                       "default": ""
                     },
                     "data": {
                       "type": "object",
-                      "description": "返回数据对象",
+                      "description": "",
                       "properties": {
                         "orderId": {
                           "type": "string",
-                          "description": "商户订单号"
+                          "description": "Merchant order ID"
                         },
                         "orderNo": {
                           "type": "string",
-                          "description": "平台订单号"
+                          "description": "Platform order ID"
                         },
                         "payUrl": {
                           "type": "string",
-                          "description": "支付链接"
+                          "description": "Payment URL"
                         },
                         "sign": {
                           "type": "string",
-                          "description": "签名"
+                          "description": "Signature"
                         }
                       },
                       "default": {}
@@ -181,19 +181,19 @@
                 "properties": {
                   "appId": {
                     "type": "integer",
-                    "description": "业务ID（后台获取，请使用收银台专属APPID，币种为收银台(CASHIER)）"
+                    "description": "Business ID (retrieved from the backend; must use the Cashier-specific APPID, currency is CASHIER)"
                   },
                   "orderId": {
                     "type": "string",
-                    "description": "商户订单号"
+                    "description": "Merchant order ID"
                   },
                   "orderNo": {
                     "type": "string",
-                    "description": "平台订单号"
+                    "description": "Platform order ID"
                   },
                   "sign": {
                     "type": "string",
-                    "description": "签名"
+                    "description": "Signature"
                   }
                 },
                 "required": [
@@ -219,54 +219,54 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "description": "响应状态码"
+                      "description": "1: Normal, 0: Exception"
                     },
                     "error": {
                       "type": "string",
-                      "description": "错误码"
+                      "description": "Error code"
                     },
                     "msg": {
                       "type": "string",
-                      "description": "响应消息"
+                      "description": "Error description"
                     },
                     "data": {
                       "type": "object",
                       "properties": {
                         "orderId": {
                           "type": "string",
-                          "description": "商户订单号"
+                          "description": "Merchant order ID"
                         },
                         "orderNo": {
                           "type": "string",
-                          "description": "平台订单号"
+                          "description": "Platform order ID"
                         },
                         "amount": {
                           "type": "string",
-                          "description": "订单金额"
+                          "description": "Order amount"
                         },
                         "actualAmount": {
                           "type": "string",
-                          "description": "实收金额"
+                          "description": "Actual received amount"
                         },
                         "fee": {
                           "type": "string",
-                          "description": "手续费"
+                          "description": "Transaction fee"
                         },
                         "status": {
                           "type": "integer",
-                          "description": "状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)"
+                          "description": "Status (0 Not Started, 1 In Progress, 2 Success (final), 3 Failed (final), -1 Exception Pending Confirmation)"
                         },
                         "payTime": {
                           "type": "string",
-                          "description": "支付成功时间（当status=2时有值）(本地时间), 格式: yyyy-MM-dd HH:mm:ss"
+                          "description": "Payment success time (present when status=2, local time), format: yyyy-MM-dd HH:mm:ss"
                         },
                         "errorMsg": {
                           "type": "string",
-                          "description": "支付失败原因（当status=3时有值）"
+                          "description": "Failure reason (present when status=3)"
                         },
                         "sign": {
                           "type": "string",
-                          "description": "签名"
+                          "description": "Signature"
                         }
                       },
                       "additionalProperties": false,
@@ -299,19 +299,19 @@
                 "properties": {
                   "appId": {
                     "type": "integer",
-                    "description": "业务ID（后台获取，请使用收银台专属APPID，币种为收银台(CASHIER)）"
+                    "description": "Business ID (retrieved from the backend; must use the Cashier-specific APPID, currency is CASHIER)"
                   },
                   "orderId": {
                     "type": "string",
-                    "description": "商户订单号"
+                    "description": "Merchant order ID"
                   },
                   "orderNo": {
                     "type": "string",
-                    "description": "平台订单号"
+                    "description": "Platform order ID"
                   },
                   "sign": {
                     "type": "string",
-                    "description": "签名"
+                    "description": "Signature"
                   }
                 },
                 "required": [
@@ -337,70 +337,70 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "description": "状态码"
+                      "description": "1: Normal, 0: Exception"
                     },
                     "error": {
                       "type": "string",
-                      "description": "错误码"
+                      "description": "Error code"
                     },
                     "msg": {
                       "type": "string",
-                      "description": "消息"
+                      "description": "Error description"
                     },
                     "data": {
                       "type": "object",
                       "properties": {
                         "orderId": {
                           "type": "string",
-                          "description": "商户订单号"
+                          "description": "Merchant order ID"
                         },
                         "orderNo": {
                           "type": "string",
-                          "description": "平台订单号"
+                          "description": "Platform order ID"
                         },
                         "currency": {
                           "type": "string",
-                          "description": "币种(选择具体支付方式后有值)"
+                          "description": "Currency (available after selecting a specific payment method)"
                         },
                         "amount": {
                           "type": "string",
-                          "description": "订单金额"
+                          "description": "Order amount"
                         },
                         "actualAmount": {
                           "type": "string",
-                          "description": "实收金额"
+                          "description": "Actual received amount"
                         },
                         "fee": {
                           "type": "string",
-                          "description": "手续费"
+                          "description": "Transaction fee"
                         },
                         "status": {
                           "type": "integer",
-                          "description": "状态(0未开始，1支付中，2成功（终态），3失败（终态）, -1异常待确认)"
+                          "description": "Status (0 Not Started, 1 In Progress, 2 Success (final), 3 Failed (final), -1 Exception Pending Confirmation)"
                         },
                         "payTime": {
                           "type": "string",
-                          "description": "支付成功时间（当status=2时有值）(本地时间), 格式: yyyy-MM-dd HH:mm:ss"
+                          "description": "Payment success time (present when status=2, local time), format: yyyy-MM-dd HH:mm:ss"
                         },
                         "errorMsg": {
                           "type": "string",
-                          "description": "支付失败原因（当status=3时有值）"
+                          "description": "Failure reason (present when status=3)"
                         },
                         "originalCurrency": {
                           "type": "string",
-                          "description": "实际支付币种"
+                          "description": "Original payment currency"
                         },
                         "floatExchangeRate": {
                           "type": "string",
-                          "description": "币种转换涉及的汇率"
+                          "description": "Exchange rate used in currency conversion"
                         },
                         "originalAmount": {
                           "type": "string",
-                          "description": "实际支付金额"
+                          "description": "Original payment amount"
                         },
                         "sign": {
                           "type": "string",
-                          "description": "签名"
+                          "description": "Signature"
                         }
                       },
                       "additionalProperties": false,

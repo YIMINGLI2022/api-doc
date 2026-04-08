@@ -203,69 +203,86 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "subscriptionOrderId": {
-                      "type": "string",
-                      "description": "商户订阅号(必须保证唯一性)"
-                    },
-                    "subscriptionNo": {
-                      "type": "string",
-                      "description": "平台订阅号"
-                    },
-                    "appId": {
-                      "type": "string",
-                      "description": "业务ID"
-                    },
-                    "subject": {
-                      "type": "string",
-                      "description": "支付备注"
-                    },
-                    "payType": {
-                      "type": "string",
-                      "description": "订阅固定为SUBSCRIPTION"
-                    },
-                    "inBankCode": {
-                      "type": "string",
-                      "description": "银行编码"
-                    },
-                    "amount": {
-                      "type": "string",
-                      "description": "金额"
-                    },
-                    "payUrl": {
-                      "type": "string",
-                      "description": "授权链接"
-                    },
-                    "recurringInterval": {
-                      "type": "string",
-                      "description": "循环周期 W,M,Y",
-                      "enum": [
-                        "W",
-                        "M",
-                        "Y"
-                      ]
-                    },
-                    "recurringIntervalCount": {
-                      "type": "string",
-                      "description": "环周期间隔"
-                    },
                     "status": {
                       "type": "string",
-                      "description": "订阅状态(-1: 订阅异常, 1: 处理中, 2: 订阅成功, 3: 订阅失败, 4: 订阅取消)",
-                      "enum": [
-                        "-1",
-                        "1",
-                        "2",
-                        "3",
-                        "4"
-                      ]
+                      "description": "状态码"
                     },
-                    "clientToken": {
+                    "error": {
                       "type": "string",
-                      "description": "在JavaScript Web SDK中使用的客户端令牌(见HaiPaySDK.js)"
+                      "description": "错误码"
                     },
-                    "sign": {
+                    "msg": {
                       "type": "string",
-                      "description": "签名"
+                      "description": "返回信息"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "subscriptionOrderId": {
+                          "type": "string",
+                          "description": "商户订阅号(必须保证唯一性)"
+                        },
+                        "subscriptionNo": {
+                          "type": "string",
+                          "description": "平台订阅号"
+                        },
+                        "appId": {
+                          "type": "string",
+                          "description": "业务ID"
+                        },
+                        "subject": {
+                          "type": "string",
+                          "description": "支付备注"
+                        },
+                        "payType": {
+                          "type": "string",
+                          "description": "订阅固定为SUBSCRIPTION"
+                        },
+                        "inBankCode": {
+                          "type": "string",
+                          "description": "银行编码"
+                        },
+                        "amount": {
+                          "type": "string",
+                          "description": "金额"
+                        },
+                        "payUrl": {
+                          "type": "string",
+                          "description": "授权链接"
+                        },
+                        "recurringInterval": {
+                          "type": "string",
+                          "description": "循环周期 W,M,Y",
+                          "enum": [
+                            "W",
+                            "M",
+                            "Y"
+                          ]
+                        },
+                        "recurringIntervalCount": {
+                          "type": "string",
+                          "description": "环周期间隔"
+                        },
+                        "status": {
+                          "type": "string",
+                          "description": "订阅状态(-1: 订阅异常, 1: 处理中, 2: 订阅成功, 3: 订阅失败, 4: 订阅取消)",
+                          "enum": [
+                            "-1",
+                            "1",
+                            "2",
+                            "3",
+                            "4"
+                          ]
+                        },
+                        "clientToken": {
+                          "type": "string",
+                          "description": "在JavaScript Web SDK中使用的客户端令牌(见HaiPaySDK.js)"
+                        },
+                        "sign": {
+                          "type": "string",
+                          "description": "签名"
+                        }
+                      }
                     }
                   },
                   "additionalProperties": false
@@ -346,94 +363,111 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "subscriptionOrderId": {
-                      "type": "string",
-                      "description": "商户订阅号(必须保证唯一性)"
-                    },
-                    "subscriptionNo": {
-                      "type": "string",
-                      "description": "平台订阅号"
-                    },
-                    "appId": {
-                      "type": "string",
-                      "description": "业务ID"
-                    },
-                    "subject": {
-                      "type": "string",
-                      "description": "支付备注"
-                    },
-                    "currency": {
-                      "type": "string",
-                      "description": "币种"
-                    },
-                    "payType": {
-                      "type": "string",
-                      "description": "订阅固定为SUBSCRIPTION"
-                    },
-                    "inBankCode": {
-                      "type": "string",
-                      "description": "银行编码"
-                    },
-                    "amount": {
-                      "type": "string",
-                      "description": "金额"
-                    },
-                    "recurringInterval": {
-                      "type": "string",
-                      "description": "循环周期 W,M,Y"
-                    },
-                    "recurringIntervalCount": {
-                      "type": "string",
-                      "description": "循环周期间隔"
-                    },
                     "status": {
                       "type": "string",
-                      "description": "订阅状态(-1: 订阅异常, 1: 处理中, 2: 订阅成功, 3: 订阅失败, 4: 订阅取消)"
+                      "description": "状态码"
                     },
-                    "deductList": {
-                      "type": "array",
-                      "description": "扣款列表",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "deductNo": {
-                            "type": "string",
-                            "description": "订阅扣款号"
-                          },
-                          "amount": {
-                            "type": "string",
-                            "description": "扣款金额"
-                          },
-                          "status": {
-                            "type": "integer",
-                            "description": "扣款状态(0未开始,1扣款中,2扣款成功,3扣款失败)"
-                          },
-                          "orderNo": {
-                            "type": "string",
-                            "description": "支付备注"
-                          },
-                          "startTime": {
-                            "type": "string",
-                            "description": "订阅扣款周期-起始时间"
-                          },
-                          "endTime": {
-                            "type": "string",
-                            "description": "订阅扣款周期-结束时间"
+                    "error": {
+                      "type": "string",
+                      "description": "错误码"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "description": "返回信息"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "subscriptionOrderId": {
+                          "type": "string",
+                          "description": "商户订阅号(必须保证唯一性)"
+                        },
+                        "subscriptionNo": {
+                          "type": "string",
+                          "description": "平台订阅号"
+                        },
+                        "appId": {
+                          "type": "string",
+                          "description": "业务ID"
+                        },
+                        "subject": {
+                          "type": "string",
+                          "description": "支付备注"
+                        },
+                        "currency": {
+                          "type": "string",
+                          "description": "币种"
+                        },
+                        "payType": {
+                          "type": "string",
+                          "description": "订阅固定为SUBSCRIPTION"
+                        },
+                        "inBankCode": {
+                          "type": "string",
+                          "description": "银行编码"
+                        },
+                        "amount": {
+                          "type": "string",
+                          "description": "金额"
+                        },
+                        "recurringInterval": {
+                          "type": "string",
+                          "description": "循环周期 W,M,Y"
+                        },
+                        "recurringIntervalCount": {
+                          "type": "string",
+                          "description": "循环周期间隔"
+                        },
+                        "status": {
+                          "type": "string",
+                          "description": "订阅状态(-1: 订阅异常, 1: 处理中, 2: 订阅成功, 3: 订阅失败, 4: 订阅取消)"
+                        },
+                        "deductList": {
+                          "type": "array",
+                          "description": "扣款列表",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "deductNo": {
+                                "type": "string",
+                                "description": "订阅扣款号"
+                              },
+                              "amount": {
+                                "type": "string",
+                                "description": "扣款金额"
+                              },
+                              "status": {
+                                "type": "integer",
+                                "description": "扣款状态(0未开始,1扣款中,2扣款成功,3扣款失败)"
+                              },
+                              "orderNo": {
+                                "type": "string",
+                                "description": "支付备注"
+                              },
+                              "startTime": {
+                                "type": "string",
+                                "description": "订阅扣款周期-起始时间"
+                              },
+                              "endTime": {
+                                "type": "string",
+                                "description": "订阅扣款周期-结束时间"
+                              }
+                            },
+                            "required": [
+                              "deductNo",
+                              "amount",
+                              "status",
+                              "orderNo",
+                              "startTime",
+                              "endTime"
+                            ]
                           }
                         },
-                        "required": [
-                          "deductNo",
-                          "amount",
-                          "status",
-                          "orderNo",
-                          "startTime",
-                          "endTime"
-                        ]
+                        "sign": {
+                          "type": "string",
+                          "description": "签名"
+                        }
                       }
-                    },
-                    "sign": {
-                      "type": "string",
-                      "description": "签名"
                     }
                   }
                 },
