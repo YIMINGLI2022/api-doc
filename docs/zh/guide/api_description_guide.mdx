@@ -32,10 +32,9 @@ POST https://uat-interface.haipay.asia/{币种}/{接口地址}
     "appId": 1054,
     "orderId": "M233323000059",
     ...
-    // sign: 根据请求body使用merchant privateKey签名
-    "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="  
+    "sign": "af0gAHkUOyYHu9owQp8NJ4mPEeUW4vuJcjdxqLIzrVw8AvpLSjD1DXupReSG/CyuSkFRyiIvCp5u703AuGGmfgD2gKDH3Ywau41bAbG2jnHJ8mtjiSJ5iWUzanyd4Kr7d1+rETbzUl7/BkW3t0X8UUFdqpxwG8DPUjAwUKfplWDHV7koG51Ozexd80DCsmW6eWdouAZ1uNXGLYmV3ftE3BmfNRtuv1C5bfTJWrTEIOxbF6g2uYOFZTlIgrQgd7/2PsAYwQQXNz8Q8CYl4OxqCv4pXJxaLWPbR5tqZu9og5kn32C9aHW/NlU1y39vzz+4ef81yPAqUV9oHlSMSPrMmw=="
 }
-```
+
 
 请求地址：
 | 联调环境 | 请求地址                                                               |
@@ -58,11 +57,11 @@ POST https://uat-interface.haipay.asia/{币种}/{接口地址}
             <td rowspan="3">代收</td>
             <td>代收申请</td>
             <td>/collect/apply</td>
-            <td rowspan="3">用户向商户进行付款(充值)</td> 
+            <td rowspan="3">用户向商户进行付款(充值)</td>
         </tr>
         <tr>
             <td>代收查询</td>
-            <td ref>/collect/query</td>
+            <td>/collect/query</td>
         </tr>
         <tr>
             <td>退款申请</td>
@@ -120,17 +119,15 @@ POST https://uat-interface.haipay.asia/{币种}/{接口地址}
 **响应示例：**
 
 ```json
-{
     {
         "status": "1",
         "error": "00000000",
         "msg": "",
         "data": {
-            ......
+            "...": "...",
             "sign": "PWA7B2u1hGr1VRxOCZbRuXQXtJiA6BgPExFnFv73hKJ+zcZfOe/R+y+inlwWcdDBzfix35+dl6raEs/yG/hcYyQOwDQ+mVjIt5wFk6iX7GPw557138yBdAmuMqvWM2IF+omLFcQFJvzfbR84rCyOmebDJlhkYMga5TTFHVLicUx3bPIrOJLoWJHrnZfcVFAJ+P5mUQhMH/cf+YmYZvrqq34pMJh6PcP5vyruJ8aNV0QfyHR42AHLIgp+HnOcZpA0aUzFXM5zpsgXK3QR/KO3vLiKd77UaZNO6g5TN/Ck2MtLkBVxyvIHstgXFXKF1e+uc91FdBHK5nfmrjLQ2wyeUA=="
         }
     }
-}
 ```
 
 **错误编码**
