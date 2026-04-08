@@ -151,9 +151,9 @@ When a collection succeeds or fails, we will push the order status. Notification
 | errorMsg  | No       | String  | Payment failure reason (when status = 3)                                    |
 | sign      | Yes      | String  | Signature                                                                   |
 
-:::warning
+<Warning>
 **After receiving the callback notification, please return body "SUCCESS" (uppercase). Otherwise, notifications will continue up to 5 times.**
-:::
+</Warning>
 
 ### Collection Query
 

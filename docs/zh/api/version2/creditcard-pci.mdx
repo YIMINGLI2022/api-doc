@@ -8,16 +8,16 @@ permalink: /api/version2/creditcard-pci/
 <div class='page-api-left'> */}
 
 
-:::warning
+<Warning>
 **阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
-:::
+</Warning>
 
-:::danger **PCI DSS（支付卡行业数据安全标准）严格禁止在 WebView 或 iframe 中嵌入信用卡输入页面，主要原因如下：**
+<Danger title="**PCI DSS（支付卡行业数据安全标准）严格禁止在 WebView 或 iframe 中嵌入信用卡输入页面，主要原因如下：**">
 1. PCI 合规性：直接违反 PCI DSS 要求
 2. 安全风险：WebView 和 iframe 可能无法提供足够的安全隔离
 3. 中间人攻击：恶意应用可能拦截或篡改支付数据
 4. 钓鱼风险：无法确保用户是在可信的环境中输入敏感信息
-:::
+</Danger>
 
 ## **限额**
 

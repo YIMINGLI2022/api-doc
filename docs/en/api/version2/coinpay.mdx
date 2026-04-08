@@ -8,7 +8,7 @@ permalink: /en/api/version2/coinpay/
 <div class='page-api-left'> */}
 
 
-:::warning
+<Warning>
 **Before reading this API document, please first review the [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
 
 ### **<font color='red'>Important Notes on Stablecoin Collection and Payout:</font>**
@@ -18,7 +18,7 @@ permalink: /en/api/version2/coinpay/
 ***In cases where fund freezing is triggered, if your company applies for fund return, depending on the transaction risk level, we may require your cooperation to provide relevant information to prove the legitimacy of the transaction (such as the initiator's name, nationality, occupation, goods involved, etc.), or to take necessary compliance measures (such as deactivating the relevant payer account).***
 
 ***Please avoid providing services to users in sanctioned regions and follow day‑to‑day compliance requirements to effectively avoid triggering risk control.***
-:::
+</Warning>
 
 ## **Collection API**
 
@@ -28,13 +28,13 @@ permalink: /en/api/version2/coinpay/
 
 * Create a collection order
 
-:::warning
+<Warning>
 **This address is only for one‑time (temporary) transfers and is valid for <font color='red'>60 minutes</font> after generation.**
 
 **1. Do not save the address for subsequent transfers**
 
 **2. Do not make transfers after the expiration time**
-:::
+</Warning>
 
 **URL:**
 
@@ -342,14 +342,14 @@ Returned data parameters description
 
 ## **Notes**
 
-:::warning
+<Warning>
 1. Payment timeliness: For on‑chain transactions, it depends on each chain's processing speed and congestion.
 2. If the full amount is paid successfully within the validity period, the callback is sent in real‑time. No need to wait until the order expires. Even if multiple payments are made to reach the total, the callback will be sent once the full amount is received.
 3. If multiple payments within the validity period still do not reach the full amount, the callback will be sent after expiration, with the callback amount being the actual amount paid, which may differ from the order amount.
 4. Payments made after the validity period require manual verification. If not received, it may cause fund loss; if received, a supplemental order can be processed. To avoid loss, please pay within the validity period.
 5. On‑chain payments incur chain handling fees (GAS fees, unrelated to this platform), which may cause differences from the actual received amount. Refer to third‑party sites: [USDT Fees](https://gasfeesnow.com)
 6. During payout operations, if the chain and address do not match, funds may be lost. Please ensure they match.
-:::
+</Warning>
 
 
 {/* </div>

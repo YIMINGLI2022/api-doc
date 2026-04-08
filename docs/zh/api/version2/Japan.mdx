@@ -10,9 +10,9 @@ permalink: /api/version2/Japan/
 <div class='page-api-left'> */}
 
 
-:::warning
+<Warning>
 **阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
-:::
+</Warning>
 
 ## **限额**
 
@@ -47,14 +47,14 @@ permalink: /api/version2/Japan/
 | payType         | 是  | String | 参考 [支付方式](#支付方式)                                                            |
 | inBankCode      | 是  | String | [支付方式](#支付方式)                                                               |
 | callBackUrl     | 是  | String | 用户支付成功后跳转地址                                                                 |
-| callBackFailUrl | 是  | String | 用户支付失败后跳转地址                                                                 
+| callBackFailUrl | 是  | String | 用户支付失败后跳转地址
 | notifyUrl       | 否  | String | 回调地址                                                                        |
 | subject         | 否  | String | 支付备注                                                                        |
 | body            | 否  | String | 备注详情                                                                        |
 | partnerUserId   | 是  | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。 |
 | sign            | 是  | String | 签名                                                                          |
 
-#####                           
+#####
 
 request
 

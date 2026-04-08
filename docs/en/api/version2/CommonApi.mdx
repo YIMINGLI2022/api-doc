@@ -47,7 +47,8 @@ Currencies use the international standard code, three-letter uppercase code, ref
 * **When the customer's collection is successful or failed, we will push the order status. If the first notification fails, it will retry every 5 minutes, up to 5 times.**
 
 **URL:** `Your provided URL`, **Please configure it in HaiPay's backend or pass it in the request parameters.**
-::: tip Strongly Recommended
+<Tip>
+Strongly Recommended
 > To ensure the extensibility and compatibility of the interface, please follow the callback parameters reception method outlined below:
 >
 > 1. **Do not** declare a specific POJO object to receive callback parameters.
@@ -55,7 +56,7 @@ Currencies use the international standard code, three-letter uppercase code, ref
 > 3. This design ensures that if we later extend the callback fields, it will not affect your signature verification logic.
 >
 > **Reason**: Keeping a loosely coupled design can prevent signature verification failures due to the addition or removal of fields.
-:::
+</Tip>
 
 **Collection Callback Parameters:**
 

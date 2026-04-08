@@ -10,24 +10,27 @@ permalink: /en/api/version2/creditcard/
 <div class='page-api-left'> */}
 
 
-:::warning **Before reading this API documentation, be sure to review the [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
-:::
+<Warning>
+**Before reading this API documentation, be sure to review the [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
+</Warning>
 
-:::tip mportant Information Regarding Credit Card Disputes
+<Tip>
+Important Information Regarding Credit Card Disputes
   - **For credit card transactions, consumers maintain the right to initiate a dispute within 180 days of the charge date. When a dispute is filed, a dispute fee of $20 will be assessed per transaction.**
   - **Upon receiving a dispute notification, you have two options for response**
     - **First: you may accept the dispute by submitting a response to the issuing bank affirming that you do not contest the refunded amount.**
     - **Second, you may counter the dispute by completing a guided submission process that prompts you to provide relevant evidence and supporting documentation for your case.**
   - **Should you elect to counter a dispute, an additional dispute countered fee of $20 will be applied. In the event that the issuing bank does not accept your counter materials and rules in favor of the consumer, both the dispute countered fee will be deducted and the consumer's payment will be refunded to them.**
   - **Regarding fee refunds, Haipay will return the dispute countered fee if you successfully win the dispute. However, unless explicitly stated otherwise in your Haipay contract, the initial dispute fee is non-refundable under all circumstances.**
-:::
+</Tip>
 
-:::danger **PCI DSS (Payment Card Industry Data Security Standard) strictly prohibits embedding credit card input pages in WebView or iframe for the following reasons:**
+<Danger>
+**PCI DSS (Payment Card Industry Data Security Standard) strictly prohibits embedding credit card input pages in WebView or iframe for the following reasons:**
 1. PCI Compliance: Direct violation of PCI DSS requirements
 2. Security Risks: WebView and iframe may not provide sufficient security isolation
 3. Man-in-the-Middle Attacks: Malicious applications may intercept or tamper with payment data
 4. Phishing Risks: Cannot ensure users are entering sensitive information in a trusted environment
-:::
+</Danger>
 
 ## Device Environment Requirements
 :::tip Check Your Device and Browser Settings
@@ -44,7 +47,8 @@ If you cannot see the wallet you want on the payment page, your device or browse
 - Confirm you are operating in supported Apple Pay and Google Pay regions.
 - For Apple Pay, confirm your device supports [biometric authentication](https://support.apple.com/en-us/102626#:~:text=iPhone%20or%20.iPad,on%20all%20devices.).
 
-:::tip **Supported Browsers**<a id="supported-browsers"></a>
+<Tip>
+**Supported Browsers**<a id="supported-browsers"></a>
 
 **Desktop Browsers**
 - Chrome 38+
@@ -65,10 +69,10 @@ For browsers not explicitly supported, we limit support as follows:
 - Requires browser support for **TLS 1.2**
 - Requires a sufficiently modern browser to support **Promises** in JavaScript
 - We respond to error reports but do not actively test other browsers
-:::
+</Tip>
 
 ## Regional Restrictions
-::: details Unsupported Regions List
+<Accordion title="Unsupported Regions List">
 
 AD - Andorra
 
@@ -468,7 +472,7 @@ ZM - Zambia
 
 ZW - Zimbabwe
 
-:::
+</Accordion>
 
 ## **HaiPay.js Integration (Apple Pay & Google Pay)** <a id="haipaysdk"></a>
 
@@ -948,9 +952,9 @@ Response data parameter description
 
 ### 7. Test Card Numbers
 
-:::warning
+<Warning>
 **For use in test environment only**
-:::
+</Warning>
 
 #### Simulate Successful Payment
 
@@ -1024,9 +1028,10 @@ flowchart TD
 
 ### 9. Apple Pay / Google Pay Token Acquisition Method Description <a id="token"></a>
 
-::: tip Online Demo (Test Environment, No Real Charges)
+<Tip>
+Online Demo (Test Environment, No Real Charges)
 - [Apple Pay && Google Pay](https://uat-cashier.haipay.top/pay/mit/apple-google/)
-:::
+</Tip>
 
 #### Integration Process
   - No need to apply for an Apple Pay or Google Pay developer account — HaiPay handles it for you.
@@ -1077,7 +1082,7 @@ flowchart TD
           }
 ```
 
-::: details Full code reference (JavaScript)
+<Accordion title="Full code reference (JavaScript)">
 
 ```html
 <!DOCTYPE html>
@@ -1357,10 +1362,10 @@ flowchart TD
 </body>
 </html>
 
-
 ```
 
-:::
+
+</Accordion>
 
 {/* </div>
 <div class='page-api-right'>
