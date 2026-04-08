@@ -107,62 +107,13 @@ permalink: /en/api/version2/HongKong/
 
 ### **Payment Methods** <a id="inBankCode"></a>
 
-<table style='border-collapse: collapse;table-layout:fixed;width:1040px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752; width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032; width:170px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496; width:200px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784; width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480; width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040; width:355px' />
-    <tr>
-        <td><b>Currency</b></td>
-        <td><b>Payment Type (payType)</b></td>
-        <td><b>Payment Code (inBankCode)</b></td>
-        <td><b>Limit</b></td>
-        <td><b>Status</b></td>
-        <td><b>Description</b></td>
-    </tr>
-    <tr>
-        <td>HKD</td>
-        <td>EWALLET</td>
-        <td>WXPAY_SCANCODE</td>
-        <td>1-1000</td>
-        <td>Available</td>
-        <td>WeChat QR Code Payment</td>
-    </tr>
-    <tr>
-        <td>HKD</td>
-        <td>EWALLET</td>
-        <td>ALIPAY_HKD</td>
-        <td>1-5000</td>
-        <td>Available</td>
-        <td>AlipayHK</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>EWALLET</td>
-        <td>HK_WXPAY_SCANCODE_USD</td>
-        <td>0.99-120</td>
-        <td>Available</td>
-        <td>WeChat QR Code Payment</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>BANK_TRANSFER</td>
-        <td>ALIPAY_USD</td>
-        <td>0.99-499.99</td>
-        <td>Available</td>
-        <td>AlipayHK</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>BANK_TRANSFER</td>
-        <td>PAYME_USD</td>
-        <td>1-1000</td>
-        <td>Maintenance</td>
-        <td>PayMe</td>
-    </tr>
-</table>
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limit     | Status      | Description            |
+| :------- | :--------------------- | :------------------------ | :-------- | :---------- | :--------------------- |
+| HKD      | EWALLET                | WXPAY_SCANCODE            | 1-1000    | Available   | WeChat QR Code Payment |
+| HKD      | EWALLET                | ALIPAY_HKD                | 1-5000    | Available   | AlipayHK               |
+| USD      | EWALLET                | HK_WXPAY_SCANCODE_USD     | 0.99-120  | Available   | WeChat QR Code Payment |
+| USD      | BANK_TRANSFER          | ALIPAY_USD                | 0.99-499.99 | Available | AlipayHK               |
+| USD      | BANK_TRANSFER          | PAYME_USD                 | 1-1000    | Maintenance | PayMe                  |
 
 {/* </div>
 <div class='page-api-right'>

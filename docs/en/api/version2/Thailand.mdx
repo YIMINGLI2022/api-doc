@@ -163,61 +163,12 @@ Return data parameter description
 
 ### **Payment Methods**<a id="inBankCode"></a>
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1040px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:170px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:200px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>Currency</b></td>
-        <td><b>Payment Type (payType)</b></td>
-        <td><b>Payment Code (inBankCode)</b></td>
-        <td><b>Limit</b></td>
-        <td><b>Status</b></td>
-        <td><b>Description</b></td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>QR</td>
-        <td>QR</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>PromptPay QR Code</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>PAYMENT_GATEWAY</td>
-        <td>TM</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>TrueMoney Wallet</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>QR</td>
-        <td>TH_QR_USD</td>
-        <td>0.99-220</td>
-        <td>Available</td>
-        <td>PromptPay QR Code</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>PAYMENT_GATEWAY</td>
-        <td>TH_TM_USD</td>
-        <td>0.99-220</td>
-        <td>Available</td>
-        <td>TrueMoney Wallet</td>
-    </tr>
-</table>
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limit    | Status    | Description       |
+|----------|------------------------|---------------------------|----------|-----------|-------------------|
+| THB      | QR                     | QR                        | 1-8000   | Available | PromptPay QR Code |
+| THB      | PAYMENT_GATEWAY        | TM                        | 1-8000   | Available | TrueMoney Wallet  |
+| USD      | QR                     | TH_QR_USD                 | 0.99-220 | Available | PromptPay QR Code |
+| USD      | PAYMENT_GATEWAY        | TH_TM_USD                 | 0.99-220 | Available | TrueMoney Wallet  |
 
 ## **Disbursement API**
 
@@ -373,205 +324,30 @@ Return Data Parameter Description
 
 ### **Payment Methods**
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1050px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>Currency</b></td>
-        <td><b>Payment Type (accountType)</b></td>
-        <td><b>Payment Code (bankCode)</b></td>
-        <td><b>Limit</b></td>
-        <td><b>Status</b></td>
-        <td><b>Description</b></td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BAAC</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>BAAC ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BAY</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>Bank of Ayudhya (Krungsri / กรุงศรี)</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BBL</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>Bangkok Bank ธนาคารกรุงเทพ</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CIMB</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>CIMB Thai ธนาคารซีไอเอ็มบีไทย</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CITI</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>Citibank N.A. ซิตี้แบงก์ ประเทศไทย</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>GHB</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>GHB ธนาคารอาคารสงเคราะห์</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>GSB</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>GSB ธนาคารออมสิน</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>HSBC</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>HSBC เอชเอสบีซี</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ICBC</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>ICBC(Thai) ธนาคารไอซีบีซี(ประเทศไทย)จำกัด(มหาชน)</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>IBANK</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>Islamic Bank ธนาคารอิสลามแห่งประเทศไทย</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>KBANK</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>Kasikorn Bank ธนาคารกสิกรไทย</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>KKP</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>Kiatnakin Phatra Bank ธนาคารเกียรตินาคินภัทร</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>KTB</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>KTB ธนาคารกรุงไทย</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>LHB</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>Land and Houses Bank ธนาคารแลนด์ แอนด์ เฮ้าส์</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SCB</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>SCB ธนาคารไทยพาณิชย์</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SCBT</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>SCBT สแตนดาร์ดชาร์เตอร์ด</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>TBANK</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>TBank ธนาคารธนชาต จำกัด (มหาชน)</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>TISCO</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>TISCO ธนาคารทิสโก้ จำกัด (มหาชน)</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>TMB</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>TTB ธนาคารทีเอ็มบีธนชาต จำกัด (มหาชน)</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>UOB</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>UOB ธนาคารยูโอบี จำกัด (มหาชน)</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ABN</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>ABN AMRO ธนาคารเอบีเอ็น แอมโร เอ็น.วี.</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MHCB</td>
-        <td>1-8000</td>
-        <td>Available</td>
-        <td>Mizuho ธนาคารมิสึโฮ คอร์ปอเรต จำกัด</td>
-    </tr>
-</table>
+| Currency | Payment Type (accountType) | Payment Code (bankCode) | Limit  | Status    | Description                                      |
+|----------|----------------------------|-------------------------|--------|-----------|--------------------------------------------------|
+| THB      | BANK_ACCOUNT               | BAAC                    | 1-8000 | Available | BAAC ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร        |
+| THB      | BANK_ACCOUNT               | BAY                     | 1-8000 | Available | Bank of Ayudhya (Krungsri / กรุงศรี)             |
+| THB      | BANK_ACCOUNT               | BBL                     | 1-8000 | Available | Bangkok Bank ธนาคารกรุงเทพ                       |
+| THB      | BANK_ACCOUNT               | CIMB                    | 1-8000 | Available | CIMB Thai ธนาคารซีไอเอ็มบีไทย                    |
+| THB      | BANK_ACCOUNT               | CITI                    | 1-8000 | Available | Citibank N.A. ซิตี้แบงก์ ประเทศไทย               |
+| THB      | BANK_ACCOUNT               | GHB                     | 1-8000 | Available | GHB ธนาคารอาคารสงเคราะห์                         |
+| THB      | BANK_ACCOUNT               | GSB                     | 1-8000 | Available | GSB ธนาคารออมสิน                                 |
+| THB      | BANK_ACCOUNT               | HSBC                    | 1-8000 | Available | HSBC เอชเอสบีซี                                  |
+| THB      | BANK_ACCOUNT               | ICBC                    | 1-8000 | Available | ICBC(Thai) ธนาคารไอซีบีซี(ประเทศไทย)จำกัด(มหาชน) |
+| THB      | BANK_ACCOUNT               | IBANK                   | 1-8000 | Available | Islamic Bank ธนาคารอิสลามแห่งประเทศไทย           |
+| THB      | BANK_ACCOUNT               | KBANK                   | 1-8000 | Available | Kasikorn Bank ธนาคารกสิกรไทย                     |
+| THB      | BANK_ACCOUNT               | KKP                     | 1-8000 | Available | Kiatnakin Phatra Bank ธนาคารเกียรตินาคินภัทร     |
+| THB      | BANK_ACCOUNT               | KTB                     | 1-8000 | Available | KTB ธนาคารกรุงไทย                                |
+| THB      | BANK_ACCOUNT               | LHB                     | 1-8000 | Available | Land and Houses Bank ธนาคารแลนด์ แอนด์ เฮ้าส์    |
+| THB      | BANK_ACCOUNT               | SCB                     | 1-8000 | Available | SCB ธนาคารไทยพาณิชย์                             |
+| THB      | BANK_ACCOUNT               | SCBT                    | 1-8000 | Available | SCBT สแตนดาร์ดชาร์เตอร์ด                         |
+| THB      | BANK_ACCOUNT               | TBANK                   | 1-8000 | Available | TBank ธนาคารธนชาต จำกัด (มหาชน)                  |
+| THB      | BANK_ACCOUNT               | TISCO                   | 1-8000 | Available | TISCO ธนาคารทิสโก้ จำกัด (มหาชน)                 |
+| THB      | BANK_ACCOUNT               | TMB                     | 1-8000 | Available | TTB ธนาคารทีเอ็มบีธนชาต จำกัด (มหาชน)            |
+| THB      | BANK_ACCOUNT               | UOB                     | 1-8000 | Available | UOB ธนาคารยูโอบี จำกัด (มหาชน)                   |
+| THB      | BANK_ACCOUNT               | ABN                     | 1-8000 | Available | ABN AMRO ธนาคารเอบีเอ็น แอมโร เอ็น.วี.           |
+| THB      | BANK_ACCOUNT               | MHCB                    | 1-8000 | Available | Mizuho ธนาคารมิสึโฮ คอร์ปอเรต จำกัด              |
 
 
 {/* </div>

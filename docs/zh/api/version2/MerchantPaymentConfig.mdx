@@ -20,13 +20,13 @@ permalink: /api/version2/MerchantPaymentConfig/
 
 **Content-Type：** `application/json`
 
-::: tip 注意事项
+<Note title = "注意事项"> 
 > 1. 请求需要进行签名验证，签名算法与其他接口一致
 > 2. tranType和tranCode为可选参数，用于筛选特定类型的支付配置
 > 3. 如果应用没有配置支付产品，返回的configs列表为空
 > 4. 响应数据也会进行签名，签名与其他方法相同，但要注意该接口返回数据存在多级嵌套。
 > 5. 如果传入币种为收银台，则会返回该用户下的所有可用app支付配置信息
-:::
+</Note>
 
 
 ## **2. 请求参数**

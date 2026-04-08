@@ -168,173 +168,27 @@ response
 
 ### **支付方式**<a id="inBankCode"></a>
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1040px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:170px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:200px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>币种</b></td>
-        <td><b>支付类型(payType)</b></td>
-        <td><b>支付编码(inBankCode)</b></td>
-        <td><b>限额</b></td>
-        <td><b>状态</b></td>
-        <td><b>说明</b></td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>QR</td>
-        <td>dynamic</td>
-        <td>10000-10000000</td>
-        <td>可用</td>
-        <td>QRIS动态码</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>EWALLET</td>
-        <td>DANA</td>
-        <td>10000-20000000</td>
-        <td>可用</td>
-        <td>Dana钱包</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>EWALLET</td>
-        <td>SHOPEEPAY</td>
-        <td>10000-20000000</td>
-        <td>可用</td>
-        <td>ShopeePay钱包</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>EWALLET</td>
-        <td>LINKAJA</td>
-        <td>10000-20000000</td>
-        <td>可用</td>
-        <td>LinkAja钱包</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>CASHIER</td>
-        <td>OVO</td>
-        <td>10000-20000000</td>
-        <td>可用</td>
-        <td>OVO钱包</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>VA</td>
-        <td>002</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BRI银行</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>VA</td>
-        <td>009</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BNI银行</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>VA</td>
-        <td>013</td>
-        <td>10000-50000000</td>
-        <td>维护</td>
-        <td>PERMATA银行</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>VA</td>
-        <td>022</td>
-        <td>10000-50000000</td>
-        <td>维护</td>
-        <td>CIMB银行</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>QR</td>
-        <td>ID_QRIS_USD</td>
-        <td>0.99-500</td>
-        <td>可用</td>
-        <td>QRIS动态码</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>EWALLET</td>
-        <td>ID_DANA_USD</td>
-        <td>0.99-1000</td>
-        <td>可用</td>
-        <td>Dana钱包</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>EWALLET</td>
-        <td>ID_SHOPEEPAY_USD</td>
-        <td>0.99-1000</td>
-        <td>可用</td>
-        <td>ShopeePay钱包</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>EWALLET</td>
-        <td>ID_LINKAJA_USD</td>
-        <td>0.99-1000</td>
-        <td>可用</td>
-        <td>LinkAja钱包</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>CASHIER</td>
-        <td>ID_OVO_USD</td>
-        <td>0.99-1000</td>
-        <td>可用</td>
-        <td>OVO钱包</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>VA</td>
-        <td>ID_BRI_USD</td>
-        <td>0.99-2500</td>
-        <td>可用</td>
-        <td>BRI银行</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>VA</td>
-        <td>ID_BNI_USD</td>
-        <td>0.99-2500</td>
-        <td>可用</td>
-        <td>BNI银行</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>VA</td>
-        <td>ID_PERMATA_USD</td>
-        <td>0.99-2500</td>
-        <td>维护</td>
-        <td>PERMATA银行</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>VA</td>
-        <td>ID_CIMB_USD</td>
-        <td>0.99-2500</td>
-        <td>维护</td>
-        <td>CIMB银行</td>
-    </tr>
-</table>
+| 币种  | 支付类型(payType) | 支付编码(inBankCode) | 限额             | 状态 | 说明          |
+|-----|---------------|------------------|----------------|----|-------------|
+| IDR | QR            | dynamic          | 10000-10000000 | 可用 | QRIS动态码     |
+| IDR | EWALLET       | DANA             | 10000-20000000 | 可用 | Dana钱包      |
+| IDR | EWALLET       | SHOPEEPAY        | 10000-20000000 | 可用 | ShopeePay钱包 |
+| IDR | EWALLET       | LINKAJA          | 10000-20000000 | 可用 | LinkAja钱包   |
+| IDR | CASHIER       | OVO              | 10000-20000000 | 可用 | OVO钱包       |
+| IDR | VA            | 002              | 10000-50000000 | 可用 | BRI银行       |
+| IDR | VA            | 009              | 10000-50000000 | 可用 | BNI银行       |
+| IDR | VA            | 013              | 10000-50000000 | 维护 | PERMATA银行   |
+| IDR | VA            | 022              | 10000-50000000 | 维护 | CIMB银行      |
+| USD | QR            | ID_QRIS_USD      | 0.99-500       | 可用 | QRIS动态码     |
+| USD | EWALLET       | ID_DANA_USD      | 0.99-1000      | 可用 | Dana钱包      |
+| USD | EWALLET       | ID_SHOPEEPAY_USD | 0.99-1000      | 可用 | ShopeePay钱包 |
+| USD | EWALLET       | ID_LINKAJA_USD   | 0.99-1000      | 可用 | LinkAja钱包   |
+| USD | CASHIER       | ID_OVO_USD       | 0.99-1000      | 可用 | OVO钱包       |
+| USD | VA            | ID_BRI_USD       | 0.99-2500      | 可用 | BRI银行       |
+| USD | VA            | ID_BNI_USD       | 0.99-2500      | 可用 | BNI银行       |
+| USD | VA            | ID_PERMATA_USD   | 0.99-2500      | 维护 | PERMATA银行   |
+| USD | VA            | ID_CIMB_USD      | 0.99-2500      | 维护 | CIMB银行      |
+
 
 ## **代付API**
 
@@ -491,829 +345,109 @@ response — 订单成功
 
 ### **支付方式**<a id="bankCode"></a>
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1050px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>币种</b></td>
-        <td><b>支付类型(accountType)</b></td>
-        <td><b>支付编码(bankCode)</b></td>
-        <td><b>限额</b></td>
-        <td><b>状态</b></td>
-        <td><b>说明</b></td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>EWALLET</td>
-        <td>DANA</td>
-        <td>10000-20000000</td>
-        <td>可用</td>
-        <td>Dana钱包</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>EWALLET</td>
-        <td>OVO</td>
-        <td>10000-20000000</td>
-        <td>可用</td>
-        <td>OVO钱包</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>EWALLET</td>
-        <td>GOPAY</td>
-        <td>10000-20000000</td>
-        <td>可用</td>
-        <td>GoPay钱包</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>EWALLET</td>
-        <td>LINKAJA</td>
-        <td>10000-20000000</td>
-        <td>可用</td>
-        <td>LinkAja钱包</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>EWALLET</td>
-        <td>SHOPEEPAY</td>
-        <td>10000-20000000</td>
-        <td>可用</td>
-        <td>ShopeePay钱包</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>002</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BRI</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>008</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>MANDIRI</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>009</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BNI</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>011</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK DANAMON</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>013</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>PERMATA/SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>014</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BCA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>016</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>MAYBANK INDONESIA/SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>019</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK PAN INDONESIA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>022</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>CIMB NIAGA/SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>023</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>UOB INDONESIA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>028</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>OCBC NISP/SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>031</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>CITIBANK NA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>033</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK OF AMERICA NA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>036</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK CHINA CONSTRUCTION</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>037</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK ARTHA GRAHA INTERNASIONAL</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>041</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>PT. BANK HSBC INDONESIA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>042</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>MUFG BANK</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>046</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>DBS</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>047</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK RESONA PERDANIA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>050</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>STANDARD CHARTERED BANK</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>054</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK CAPITAL INDONESIA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>068</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>PT BANK WOORI SAUDARA INDONESIA 1906</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>069</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK OF CHINA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>076</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK BUMI ARTA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>097</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK MAYAPADA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>110</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD JABAR BANTEN</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>111</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK DKI</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>112</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD DIY</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>113</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD JAWA TENGAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>114</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD JAWA TIMUR/SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>115</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD JAMBI/SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>116</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK ACEH SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>117</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD SUMATERA UTARA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>118</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD SUMATERA BARAT/NAGARI SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>119</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD RIAU KEPRI</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>120</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD SUMSEL BABEL/SYR</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>122</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD KALIMANTAN SELATAN</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>123</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD KALIMANTAN BARAT</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>124</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD KALTIM KALTARA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>125</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD KALIMANTAN TENGAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>126</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD SULSEL BAR</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>127</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD SULAWESI UTARA DAN GORONTALO</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>128</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD NUSA TENGGARA BARAT SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>129</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD BALI</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>130</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD NTT</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>131</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD MALUKU DAN MALUKU UTARA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>132</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>PT.BANK PEMBANGUNAN DAERAH PAPUA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>133</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD BENGKULU</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>135</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD SULAWESI TENGGARA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>137</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD BANTEN</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>147</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK MUAMALAT</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>151</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>MESTIKA DHARMA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>153</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>SINARMAS</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>157</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>MASPION</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>161</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>GANESHA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>164</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK ICBC INDONESIA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>167</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK QNB INDONESIA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>200</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BTN/SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>213</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK BTPN</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>425</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD JABAR BANTEN SYR</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>426</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>MEGA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>451</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK SYARIAH INDONESIA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>472</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK JASA JAKARTA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>484</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>PT BANK KEB HANA INDONESIA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>485</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>MNC BANK</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>490</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>NEO COMMERCE</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>494</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK RAYA INDONESIA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>501</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BCA Digital</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>503</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>NATIONALNOBU</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>506</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK MEGA SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>513</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK INA PERDANA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>523</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>PT BANK SAHABAT SAMPOERNA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>535</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>SEABANK</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>536</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BCA SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>542</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK JAGO/SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>547</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK BTPN SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>548</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK MULTI ARTA SENTOSA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>553</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK MAYORA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>555</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK INDEX SELINDO</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>564</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>PT BANK MANDIRI TASPEN POS</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>566</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK VICTORIA INTERNASIONAL</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>567</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>ALLO BANK INDONESIA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>722</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK DANAMON SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>724</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK DKI SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>725</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD JAWA TENGAH SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>727</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD KALIMANTAN BARAT SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>728</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD KALIMANTAN SELATAN SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>729</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD KALTIM KALTARA SYR</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>733</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD SUMATERA UTARA SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>734</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>SINARMAS SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>735</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD SULSEL BAR SYR</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>736</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BPD DIY SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>945</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK IBK INDONESIA</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>947</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK ALADIN SYARIAH</td>
-    </tr>
-    <tr>
-        <td>IDR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>949</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BANK CTBC</td>
-    </tr>
-</table>
+| 币种  | 支付类型(accountType) | 支付编码(bankCode) | 限额             | 状态 | 说明                                   |
+|-----|-------------------|----------------|----------------|----|--------------------------------------|
+| IDR | EWALLET           | DANA           | 10000-20000000 | 可用 | Dana钱包                               |
+| IDR | EWALLET           | OVO            | 10000-20000000 | 可用 | OVO钱包                                |
+| IDR | EWALLET           | GOPAY          | 10000-20000000 | 可用 | GoPay钱包                              |
+| IDR | EWALLET           | LINKAJA        | 10000-20000000 | 可用 | LinkAja钱包                            |
+| IDR | EWALLET           | SHOPEEPAY      | 10000-20000000 | 可用 | ShopeePay钱包                          |
+| IDR | BANK_ACCOUNT      | 002            | 10000-50000000 | 可用 | BRI                                  |
+| IDR | BANK_ACCOUNT      | 008            | 10000-50000000 | 可用 | MANDIRI                              |
+| IDR | BANK_ACCOUNT      | 009            | 10000-50000000 | 可用 | BNI                                  |
+| IDR | BANK_ACCOUNT      | 011            | 10000-50000000 | 可用 | BANK DANAMON                         |
+| IDR | BANK_ACCOUNT      | 013            | 10000-50000000 | 可用 | PERMATA/SYARIAH                      |
+| IDR | BANK_ACCOUNT      | 014            | 10000-50000000 | 可用 | BCA                                  |
+| IDR | BANK_ACCOUNT      | 016            | 10000-50000000 | 可用 | MAYBANK INDONESIA/SYARIAH            |
+| IDR | BANK_ACCOUNT      | 019            | 10000-50000000 | 可用 | BANK PAN INDONESIA                   |
+| IDR | BANK_ACCOUNT      | 022            | 10000-50000000 | 可用 | CIMB NIAGA/SYARIAH                   |
+| IDR | BANK_ACCOUNT      | 023            | 10000-50000000 | 可用 | UOB INDONESIA                        |
+| IDR | BANK_ACCOUNT      | 028            | 10000-50000000 | 可用 | OCBC NISP/SYARIAH                    |
+| IDR | BANK_ACCOUNT      | 031            | 10000-50000000 | 可用 | CITIBANK NA                          |
+| IDR | BANK_ACCOUNT      | 033            | 10000-50000000 | 可用 | BANK OF AMERICA NA                   |
+| IDR | BANK_ACCOUNT      | 036            | 10000-50000000 | 可用 | BANK CHINA CONSTRUCTION              |
+| IDR | BANK_ACCOUNT      | 037            | 10000-50000000 | 可用 | BANK ARTHA GRAHA INTERNASIONAL       |
+| IDR | BANK_ACCOUNT      | 041            | 10000-50000000 | 可用 | PT. BANK HSBC INDONESIA              |
+| IDR | BANK_ACCOUNT      | 042            | 10000-50000000 | 可用 | MUFG BANK                            |
+| IDR | BANK_ACCOUNT      | 046            | 10000-50000000 | 可用 | DBS                                  |
+| IDR | BANK_ACCOUNT      | 047            | 10000-50000000 | 可用 | BANK RESONA PERDANIA                 |
+| IDR | BANK_ACCOUNT      | 050            | 10000-50000000 | 可用 | STANDARD CHARTERED BANK              |
+| IDR | BANK_ACCOUNT      | 054            | 10000-50000000 | 可用 | BANK CAPITAL INDONESIA               |
+| IDR | BANK_ACCOUNT      | 068            | 10000-50000000 | 可用 | PT BANK WOORI SAUDARA INDONESIA 1906 |
+| IDR | BANK_ACCOUNT      | 069            | 10000-50000000 | 可用 | BANK OF CHINA                        |
+| IDR | BANK_ACCOUNT      | 076            | 10000-50000000 | 可用 | BANK BUMI ARTA                       |
+| IDR | BANK_ACCOUNT      | 097            | 10000-50000000 | 可用 | BANK MAYAPADA                        |
+| IDR | BANK_ACCOUNT      | 110            | 10000-50000000 | 可用 | BPD JABAR BANTEN                     |
+| IDR | BANK_ACCOUNT      | 111            | 10000-50000000 | 可用 | BANK DKI                             |
+| IDR | BANK_ACCOUNT      | 112            | 10000-50000000 | 可用 | BPD DIY                              |
+| IDR | BANK_ACCOUNT      | 113            | 10000-50000000 | 可用 | BPD JAWA TENGAH                      |
+| IDR | BANK_ACCOUNT      | 114            | 10000-50000000 | 可用 | BPD JAWA TIMUR/SYARIAH               |
+| IDR | BANK_ACCOUNT      | 115            | 10000-50000000 | 可用 | BPD JAMBI/SYARIAH                    |
+| IDR | BANK_ACCOUNT      | 116            | 10000-50000000 | 可用 | BANK ACEH SYARIAH                    |
+| IDR | BANK_ACCOUNT      | 117            | 10000-50000000 | 可用 | BPD SUMATERA UTARA                   |
+| IDR | BANK_ACCOUNT      | 118            | 10000-50000000 | 可用 | BPD SUMATERA BARAT/NAGARI SYARIAH    |
+| IDR | BANK_ACCOUNT      | 119            | 10000-50000000 | 可用 | BPD RIAU KEPRI                       |
+| IDR | BANK_ACCOUNT      | 120            | 10000-50000000 | 可用 | BPD SUMSEL BABEL/SYR                 |
+| IDR | BANK_ACCOUNT      | 122            | 10000-50000000 | 可用 | BPD KALIMANTAN SELATAN               |
+| IDR | BANK_ACCOUNT      | 123            | 10000-50000000 | 可用 | BPD KALIMANTAN BARAT                 |
+| IDR | BANK_ACCOUNT      | 124            | 10000-50000000 | 可用 | BPD KALTIM KALTARA                   |
+| IDR | BANK_ACCOUNT      | 125            | 10000-50000000 | 可用 | BPD KALIMANTAN TENGAH                |
+| IDR | BANK_ACCOUNT      | 126            | 10000-50000000 | 可用 | BPD SULSEL BAR                       |
+| IDR | BANK_ACCOUNT      | 127            | 10000-50000000 | 可用 | BPD SULAWESI UTARA DAN GORONTALO     |
+| IDR | BANK_ACCOUNT      | 128            | 10000-50000000 | 可用 | BPD NUSA TENGGARA BARAT SYARIAH      |
+| IDR | BANK_ACCOUNT      | 129            | 10000-50000000 | 可用 | BPD BALI                             |
+| IDR | BANK_ACCOUNT      | 130            | 10000-50000000 | 可用 | BPD NTT                              |
+| IDR | BANK_ACCOUNT      | 131            | 10000-50000000 | 可用 | BPD MALUKU DAN MALUKU UTARA          |
+| IDR | BANK_ACCOUNT      | 132            | 10000-50000000 | 可用 | PT.BANK PEMBANGUNAN DAERAH PAPUA     |
+| IDR | BANK_ACCOUNT      | 133            | 10000-50000000 | 可用 | BPD BENGKULU                         |
+| IDR | BANK_ACCOUNT      | 135            | 10000-50000000 | 可用 | BPD SULAWESI TENGGARA                |
+| IDR | BANK_ACCOUNT      | 137            | 10000-50000000 | 可用 | BPD BANTEN                           |
+| IDR | BANK_ACCOUNT      | 147            | 10000-50000000 | 可用 | BANK MUAMALAT                        |
+| IDR | BANK_ACCOUNT      | 151            | 10000-50000000 | 可用 | MESTIKA DHARMA                       |
+| IDR | BANK_ACCOUNT      | 153            | 10000-50000000 | 可用 | SINARMAS                             |
+| IDR | BANK_ACCOUNT      | 157            | 10000-50000000 | 可用 | MASPION                              |
+| IDR | BANK_ACCOUNT      | 161            | 10000-50000000 | 可用 | GANESHA                              |
+| IDR | BANK_ACCOUNT      | 164            | 10000-50000000 | 可用 | BANK ICBC INDONESIA                  |
+| IDR | BANK_ACCOUNT      | 167            | 10000-50000000 | 可用 | BANK QNB INDONESIA                   |
+| IDR | BANK_ACCOUNT      | 200            | 10000-50000000 | 可用 | BTN/SYARIAH                          |
+| IDR | BANK_ACCOUNT      | 213            | 10000-50000000 | 可用 | BANK BTPN                            |
+| IDR | BANK_ACCOUNT      | 425            | 10000-50000000 | 可用 | BPD JABAR BANTEN SYR                 |
+| IDR | BANK_ACCOUNT      | 426            | 10000-50000000 | 可用 | MEGA                                 |
+| IDR | BANK_ACCOUNT      | 451            | 10000-50000000 | 可用 | BANK SYARIAH INDONESIA               |
+| IDR | BANK_ACCOUNT      | 472            | 10000-50000000 | 可用 | BANK JASA JAKARTA                    |
+| IDR | BANK_ACCOUNT      | 484            | 10000-50000000 | 可用 | PT BANK KEB HANA INDONESIA           |
+| IDR | BANK_ACCOUNT      | 485            | 10000-50000000 | 可用 | MNC BANK                             |
+| IDR | BANK_ACCOUNT      | 490            | 10000-50000000 | 可用 | NEO COMMERCE                         |
+| IDR | BANK_ACCOUNT      | 494            | 10000-50000000 | 可用 | BANK RAYA INDONESIA                  |
+| IDR | BANK_ACCOUNT      | 501            | 10000-50000000 | 可用 | BCA Digital                          |
+| IDR | BANK_ACCOUNT      | 503            | 10000-50000000 | 可用 | NATIONALNOBU                         |
+| IDR | BANK_ACCOUNT      | 506            | 10000-50000000 | 可用 | BANK MEGA SYARIAH                    |
+| IDR | BANK_ACCOUNT      | 513            | 10000-50000000 | 可用 | BANK INA PERDANA                     |
+| IDR | BANK_ACCOUNT      | 523            | 10000-50000000 | 可用 | PT BANK SAHABAT SAMPOERNA            |
+| IDR | BANK_ACCOUNT      | 535            | 10000-50000000 | 可用 | SEABANK                              |
+| IDR | BANK_ACCOUNT      | 536            | 10000-50000000 | 可用 | BCA SYARIAH                          |
+| IDR | BANK_ACCOUNT      | 542            | 10000-50000000 | 可用 | BANK JAGO/SYARIAH                    |
+| IDR | BANK_ACCOUNT      | 547            | 10000-50000000 | 可用 | BANK BTPN SYARIAH                    |
+| IDR | BANK_ACCOUNT      | 548            | 10000-50000000 | 可用 | BANK MULTI ARTA SENTOSA              |
+| IDR | BANK_ACCOUNT      | 553            | 10000-50000000 | 可用 | BANK MAYORA                          |
+| IDR | BANK_ACCOUNT      | 555            | 10000-50000000 | 可用 | BANK INDEX SELINDO                   |
+| IDR | BANK_ACCOUNT      | 564            | 10000-50000000 | 可用 | PT BANK MANDIRI TASPEN POS           |
+| IDR | BANK_ACCOUNT      | 566            | 10000-50000000 | 可用 | BANK VICTORIA INTERNASIONAL          |
+| IDR | BANK_ACCOUNT      | 567            | 10000-50000000 | 可用 | ALLO BANK INDONESIA                  |
+| IDR | BANK_ACCOUNT      | 722            | 10000-50000000 | 可用 | BANK DANAMON SYARIAH                 |
+| IDR | BANK_ACCOUNT      | 724            | 10000-50000000 | 可用 | BANK DKI SYARIAH                     |
+| IDR | BANK_ACCOUNT      | 725            | 10000-50000000 | 可用 | BPD JAWA TENGAH SYARIAH              |
+| IDR | BANK_ACCOUNT      | 727            | 10000-50000000 | 可用 | BPD KALIMANTAN BARAT SYARIAH         |
+| IDR | BANK_ACCOUNT      | 728            | 10000-50000000 | 可用 | BPD KALIMANTAN SELATAN SYARIAH       |
+| IDR | BANK_ACCOUNT      | 729            | 10000-50000000 | 可用 | BPD KALTIM KALTARA SYR               |
+| IDR | BANK_ACCOUNT      | 733            | 10000-50000000 | 可用 | BPD SUMATERA UTARA SYARIAH           |
+| IDR | BANK_ACCOUNT      | 734            | 10000-50000000 | 可用 | SINARMAS SYARIAH                     |
+| IDR | BANK_ACCOUNT      | 735            | 10000-50000000 | 可用 | BPD SULSEL BAR SYR                   |
+| IDR | BANK_ACCOUNT      | 736            | 10000-50000000 | 可用 | BPD DIY SYARIAH                      |
+| IDR | BANK_ACCOUNT      | 945            | 10000-50000000 | 可用 | BANK IBK INDONESIA                   |
+| IDR | BANK_ACCOUNT      | 947            | 10000-50000000 | 可用 | BANK ALADIN SYARIAH                  |
+| IDR | BANK_ACCOUNT      | 949            | 10000-50000000 | 可用 | BANK CTBC                            |
+
 
 
 {/* </div>

@@ -171,69 +171,13 @@ Return `data` Parameter Description
 
 ### **Payment Methods**
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1040px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:170px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:200px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>Currency</b></td>
-        <td><b>Payment Type (payType)</b></td>
-        <td><b>Payment Code (inBankCode)</b></td>
-        <td><b>Limit</b></td>
-        <td><b>Status</b></td>
-        <td><b>Description</b></td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>QR</td>
-        <td>QR</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>QR Code</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_TRANSFER</td>
-        <td>BANK</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Bank Transfer</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>EWALLET</td>
-        <td>MOMO_VND</td>
-        <td>20000-5000000</td>
-        <td>Available</td>
-        <td>MOMO Wallet</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>QR</td>
-        <td>VN_QR_USD</td>
-        <td>0.99-2000</td>
-        <td>Available</td>
-        <td>QR Code</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>BANK_TRANSFER</td>
-        <td>VN_BANK_USD</td>
-        <td>0.99-2000</td>
-        <td>Available</td>
-        <td>Bank Transfer</td>
-    </tr>
-</table>
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limit          | Status    | Description   |
+|----------|------------------------|---------------------------|----------------|-----------|---------------|
+| VND      | QR                     | QR                        | 10000-50000000 | Available | QR Code       |
+| VND      | BANK_TRANSFER          | BANK                      | 10000-50000000 | Available | Bank Transfer |
+| VND      | EWALLET                | MOMO_VND                  | 20000-5000000  | Available | MOMO Wallet   |
+| USD      | QR                     | VN_QR_USD                 | 0.99-2000      | Available | QR Code       |
+| USD      | BANK_TRANSFER          | VN_BANK_USD               | 0.99-2000      | Available | Bank Transfer |
 
 ## **Disbursement API**
 
@@ -387,333 +331,46 @@ Return `data` Parameter Description
 
 ### **Payment Methods**
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1050px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>Currency</b></td>
-        <td><b>Payment Type (accountType)</b></td>
-        <td><b>Payment Code (bankCode)</b></td>
-        <td><b>Limit</b></td>
-        <td><b>Status</b></td>
-        <td><b>Description</b></td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>VCB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Vietcombank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>DAB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>DongA Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>TCB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Techcombank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Military Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>VIB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Vietnam International Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ICB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>VietinBank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>EXB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Eximbank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ACB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Asia Commercial Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>HDB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>HDBank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MSB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Maritime Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NCB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>National Citizen Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>VAB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Viet A Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>VPB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>VPBank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>STB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Sacombank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BAB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Bac A Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>GPB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>GPBank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>AGB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Agribank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BIDV</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>BIDV</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>OJB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>OceanBank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>PGB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>PG Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SHB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Saigon - Hanoi Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>TPB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>TienPhong Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NAB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Nam A Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SGB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Saigon Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ABB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>An Binh Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SCB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Saigon Commercial Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>IVB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Indovina Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>VCCB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Viet Capital Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>OCB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Orient Commercial Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SEA</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Dong Nam A Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>LVB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>LienVietPostBank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>WRB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Woori Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>PVCOMBANK</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>PVcomBank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SHNB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Shinhan Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>KLB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Kien Long Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BVB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>BaoViet Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>GAB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Dai A Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NVB</td>
-        <td>10000-50000000</td>
-        <td>Available</td>
-        <td>Navibank</td>
-    </tr>
-</table>
+| Currency | Payment Type (accountType) | Payment Code (bankCode) | Limit          | Status    | Description                |
+|----------|----------------------------|-------------------------|----------------|-----------|----------------------------|
+| VND      | BANK_ACCOUNT               | VCB                     | 10000-50000000 | Available | Vietcombank                |
+| VND      | BANK_ACCOUNT               | DAB                     | 10000-50000000 | Available | DongA Bank                 |
+| VND      | BANK_ACCOUNT               | TCB                     | 10000-50000000 | Available | Techcombank                |
+| VND      | BANK_ACCOUNT               | MB                      | 10000-50000000 | Available | Military Bank              |
+| VND      | BANK_ACCOUNT               | VIB                     | 10000-50000000 | Available | Vietnam International Bank |
+| VND      | BANK_ACCOUNT               | ICB                     | 10000-50000000 | Available | VietinBank                 |
+| VND      | BANK_ACCOUNT               | EXB                     | 10000-50000000 | Available | Eximbank                   |
+| VND      | BANK_ACCOUNT               | ACB                     | 10000-50000000 | Available | Asia Commercial Bank       |
+| VND      | BANK_ACCOUNT               | HDB                     | 10000-50000000 | Available | HDBank                     |
+| VND      | BANK_ACCOUNT               | MSB                     | 10000-50000000 | Available | Maritime Bank              |
+| VND      | BANK_ACCOUNT               | NCB                     | 10000-50000000 | Available | National Citizen Bank      |
+| VND      | BANK_ACCOUNT               | VAB                     | 10000-50000000 | Available | Viet A Bank                |
+| VND      | BANK_ACCOUNT               | VPB                     | 10000-50000000 | Available | VPBank                     |
+| VND      | BANK_ACCOUNT               | STB                     | 10000-50000000 | Available | Sacombank                  |
+| VND      | BANK_ACCOUNT               | BAB                     | 10000-50000000 | Available | Bac A Bank                 |
+| VND      | BANK_ACCOUNT               | GPB                     | 10000-50000000 | Available | GPBank                     |
+| VND      | BANK_ACCOUNT               | AGB                     | 10000-50000000 | Available | Agribank                   |
+| VND      | BANK_ACCOUNT               | BIDV                    | 10000-50000000 | Available | BIDV                       |
+| VND      | BANK_ACCOUNT               | OJB                     | 10000-50000000 | Available | OceanBank                  |
+| VND      | BANK_ACCOUNT               | PGB                     | 10000-50000000 | Available | PG Bank                    |
+| VND      | BANK_ACCOUNT               | SHB                     | 10000-50000000 | Available | Saigon - Hanoi Bank        |
+| VND      | BANK_ACCOUNT               | TPB                     | 10000-50000000 | Available | TienPhong Bank             |
+| VND      | BANK_ACCOUNT               | NAB                     | 10000-50000000 | Available | Nam A Bank                 |
+| VND      | BANK_ACCOUNT               | SGB                     | 10000-50000000 | Available | Saigon Bank                |
+| VND      | BANK_ACCOUNT               | ABB                     | 10000-50000000 | Available | An Binh Bank               |
+| VND      | BANK_ACCOUNT               | SCB                     | 10000-50000000 | Available | Saigon Commercial Bank     |
+| VND      | BANK_ACCOUNT               | IVB                     | 10000-50000000 | Available | Indovina Bank              |
+| VND      | BANK_ACCOUNT               | VCCB                    | 10000-50000000 | Available | Viet Capital Bank          |
+| VND      | BANK_ACCOUNT               | OCB                     | 10000-50000000 | Available | Orient Commercial Bank     |
+| VND      | BANK_ACCOUNT               | SEA                     | 10000-50000000 | Available | Dong Nam A Bank            |
+| VND      | BANK_ACCOUNT               | LVB                     | 10000-50000000 | Available | LienVietPostBank           |
+| VND      | BANK_ACCOUNT               | WRB                     | 10000-50000000 | Available | Woori Bank                 |
+| VND      | BANK_ACCOUNT               | PVCOMBANK               | 10000-50000000 | Available | PVcomBank                  |
+| VND      | BANK_ACCOUNT               | SHNB                    | 10000-50000000 | Available | Shinhan Bank               |
+| VND      | BANK_ACCOUNT               | KLB                     | 10000-50000000 | Available | Kien Long Bank             |
+| VND      | BANK_ACCOUNT               | BVB                     | 10000-50000000 | Available | BaoViet Bank               |
+| VND      | BANK_ACCOUNT               | GAB                     | 10000-50000000 | Available | Dai A Bank                 |
+| VND      | BANK_ACCOUNT               | NVB                     | 10000-50000000 | Available | Navibank                   |
 
 [//]: # (| VCB | Ngân hàng TMCP Ngoại Thương Việt Nam &#40;Vietcombank&#41; |)
 

@@ -164,47 +164,10 @@ response
 
 ### **支付方式**<a id="inBankCode"></a>
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1040px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:170px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:200px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>币种</b></td>
-        <td><b>支付类型(payType)</b></td>
-        <td><b>支付编码(inBankCode)</b></td>
-        <td><b>限额</b></td>
-        <td><b>状态</b></td>
-        <td><b>说明</b></td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>IBAN</td>
-        <td>1000-500000</td>
-        <td>可用</td>
-        <td>土耳其国际银行支付</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>PAYMENT_GATEWAY</td>
-        <td>PAPARA</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>Papara钱包</td>
-    </tr>
-</table>
-
-
+| 币种 | 支付类型(payType) | 支付编码(inBankCode) | 限额       | 状态 | 说明               |
+| :--- | :---------------- | :------------------- | :--------- | :--- | :----------------- |
+| TRY  | BANK_ACCOUNT      | IBAN                 | 1000-500000| 可用 | 土耳其国际银行支付 |
+| TRY  | PAYMENT_GATEWAY   | PAPARA               | 10-99000   | 维护 | Papara钱包         |
 
 ## **代付API**
 
@@ -366,453 +329,61 @@ response — 订单成功
 
 ### **支付方式**
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1050px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>币种</b></td>
-        <td><b>支付类型(accountType)</b></td>
-        <td><b>支付编码(bankCode)</b></td>
-        <td><b>限额</b></td>
-        <td><b>状态</b></td>
-        <td><b>说明</b></td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>EWALLET</td>
-        <td>PAPARA</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>Papara钱包</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>AKB</td>
-        <td>2000-500000</td>
-        <td>可用</td>
-        <td>AKBANK T.A.Ş.</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>Burgan_Bank</td>
-        <td>2000-500000</td>
-        <td>可用</td>
-        <td>AKBANK T.A.Ş.</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CITI_BANK</td>
-        <td>2000-500000</td>
-        <td>可用</td>
-        <td>CITIBANK A.Ş..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>DENIZ_BANK</td>
-        <td>2000-500000</td>
-        <td>可用</td>
-        <td>DENİZBANK A.Ş..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>FIBA_BANK</td>
-        <td>2000-500000</td>
-        <td>可用</td>
-        <td>FIBABANKA A.Ş.</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>FINANS_BANK</td>
-        <td>2000-500000</td>
-        <td>可用</td>
-        <td>FİNANS BANK A.Ş..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>QNB</td>
-        <td>2000-500000</td>
-        <td>可用</td>
-        <td>QNB Finansbank.</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>HSBC_BANK</td>
-        <td>2000-500000</td>
-        <td>可用</td>
-        <td>HSBC BANK A.Ş.</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ING_BANK</td>
-        <td>2000-500000</td>
-        <td>可用</td>
-        <td>ING BANK A.Ş..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>KUVEYT_TURK</td>
-        <td>2000-500000</td>
-        <td>可用</td>
-        <td>KUVEYT TÜRK KATILIM BANKASI A.Ş..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ODEA_BANK</td>
-        <td>2000-500000</td>
-        <td>可用</td>
-        <td>ODEA BANK A.Ş..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SEKER_BANK</td>
-        <td>2000-500000</td>
-        <td>可用</td>
-        <td>ŞEKERBANK T.A.Ş.</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>TEKFEN_BANK</td>
-        <td>2000-500000</td>
-        <td>可用</td>
-        <td>TEKFENBANK A.S..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>YAPI_KREDI</td>
-        <td>2000-500000</td>
-        <td>可用</td>
-        <td>Yapıkredi</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ZIRAAT_BANK</td>
-        <td>2000-500000</td>
-        <td>可用</td>
-        <td>T.C. ZİRAAT BANKASI A.Ş..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>VAKIF_BANK</td>
-        <td>2000-500000</td>
-        <td>可用</td>
-        <td>T. VAKIFLAR BANKASI.</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ISB</td>
-        <td>2000-500000</td>
-        <td>可用</td>
-        <td>T. İŞ BANKASI A.Ş..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>GARANTI_BANK</td>
-        <td>2000-500000</td>
-        <td>可用</td>
-        <td>T. GARANTİ BANKASI A.Ş..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>TCMB</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>T.C.MERKEZ BANKASI A.&#350;.</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ILB</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>İLLER BANKASI.</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>HALK_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>T. HALK BANKASI A.Ş..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>TSKB</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>T.SINAİ KALK. BANKASI A.S..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>TURK_EXIMB</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>T.IHRACAT KREDI BANKASI A.S.</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>KALKINMA_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>T.KALKINMA BANKASI A.S..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BAYINDIR_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>BAYINDIRBANK A.S..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>EKONOMI_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>T.EKONOMİ BANKASI A.S..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>YAPI_KREDI</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>YAPI ve KREDİ BANKASI A.Ş..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>TURK_TICARET</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>T.DIŞ TICARET_BANKASI A.S..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ROMA_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>BANCA DI ROMA S.P.A..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ABN_AMRO</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>ABN AMRO BANK N.V..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ATB</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>ARAP TÜRK BANKASI A.S..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>KOC_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>KOÇBANK A.S.</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>TURKISH_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>TURKISH BANK A.Ş..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>JPMORGAN_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>JP MORGAN CHASE BANK NA MERK C.</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ING_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>ING BANK A.Ş..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ADA_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>ADABANK A.S..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>DEUTSCHE_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>DEUTSCHE BANK A.S..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CALYON_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>CALYON BANK T.A.S.</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ALTERNATIF_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>ALTERNATİFBANK A.S..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ANADOLU_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>ANADOLUBANK A.Ş..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>DILER_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>DİLER YATIRIM BANKASI A.S..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>GSD_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>GSD YATIRIM BANKASI A.S..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NUROL_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>NUROL YATIRIM BANKASI A.S..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CALIK_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>ÇALIK YATIRIM BANKASI A.S.</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>TURKLAND_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>TURKLAND BANK A.Ş..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>URGAN_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>URGAN BANK A.Ş..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>AKTIF_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>AKTİF YATIRIM BANKASI A.Ş.</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ALBARAKA_TURK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>ALBARAKA TÜRK KATILIM BANKASI A.Ş..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ASYA_BANK</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>ASYA KATILIM BANKASI A.Ş..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>PTT</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>PTT.</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>TURKIYE_FINANS</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>TÜRKİYE FİNANS KATILIM BANKASI A.Ş..</td>
-    </tr>
-    <tr>
-        <td>TRY</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ININAL</td>
-        <td>10-99000</td>
-        <td>维护</td>
-        <td>Ininal.</td>
-    </tr>
-</table>
+| 币种 | 支付类型(accountType) | 支付编码(bankCode) | 限额       | 状态 | 说明                                |
+| :--- | :-------------------- | :----------------- | :--------- | :--- | :---------------------------------- |
+| TRY  | EWALLET               | PAPARA             | 10-99000   | 维护 | Papara钱包                          |
+| TRY  | BANK_ACCOUNT          | AKB                | 2000-500000| 可用 | AKBANK T.A.Ş.                       |
+| TRY  | BANK_ACCOUNT          | Burgan_Bank        | 2000-500000| 可用 | AKBANK T.A.Ş.                       |
+| TRY  | BANK_ACCOUNT          | CITI_BANK          | 2000-500000| 可用 | CITIBANK A.Ş..                      |
+| TRY  | BANK_ACCOUNT          | DENIZ_BANK         | 2000-500000| 可用 | DENİZBANK A.Ş..                     |
+| TRY  | BANK_ACCOUNT          | FIBA_BANK          | 2000-500000| 可用 | FIBABANKA A.Ş.                      |
+| TRY  | BANK_ACCOUNT          | FINANS_BANK        | 2000-500000| 可用 | FİNANS BANK A.Ş..                   |
+| TRY  | BANK_ACCOUNT          | QNB                | 2000-500000| 可用 | QNB Finansbank.                     |
+| TRY  | BANK_ACCOUNT          | HSBC_BANK          | 2000-500000| 可用 | HSBC BANK A.Ş.                      |
+| TRY  | BANK_ACCOUNT          | ING_BANK           | 2000-500000| 可用 | ING BANK A.Ş..                      |
+| TRY  | BANK_ACCOUNT          | KUVEYT_TURK        | 2000-500000| 可用 | KUVEYT TÜRK KATILIM BANKASI A.Ş..   |
+| TRY  | BANK_ACCOUNT          | ODEA_BANK          | 2000-500000| 可用 | ODEA BANK A.Ş..                     |
+| TRY  | BANK_ACCOUNT          | SEKER_BANK         | 2000-500000| 可用 | ŞEKERBANK T.A.Ş.                    |
+| TRY  | BANK_ACCOUNT          | TEKFEN_BANK        | 2000-500000| 可用 | TEKFENBANK A.S..                    |
+| TRY  | BANK_ACCOUNT          | YAPI_KREDI         | 2000-500000| 可用 | Yapıkredi                           |
+| TRY  | BANK_ACCOUNT          | ZIRAAT_BANK        | 2000-500000| 可用 | T.C. ZİRAAT BANKASI A.Ş..           |
+| TRY  | BANK_ACCOUNT          | VAKIF_BANK         | 2000-500000| 可用 | T. VAKIFLAR BANKASI.                |
+| TRY  | BANK_ACCOUNT          | ISB                | 2000-500000| 可用 | T. İŞ BANKASI A.Ş..                 |
+| TRY  | BANK_ACCOUNT          | GARANTI_BANK       | 2000-500000| 可用 | T. GARANTİ BANKASI A.Ş..            |
+| TRY  | BANK_ACCOUNT          | TCMB               | 10-99000   | 维护 | T.C.MERKEZ BANKASI A.Ş.             |
+| TRY  | BANK_ACCOUNT          | ILB                | 10-99000   | 维护 | İLLER BANKASI.                      |
+| TRY  | BANK_ACCOUNT          | HALK_BANK          | 10-99000   | 维护 | T. HALK BANKASI A.Ş..               |
+| TRY  | BANK_ACCOUNT          | TSKB               | 10-99000   | 维护 | T.SINAİ KALK. BANKASI A.S..         |
+| TRY  | BANK_ACCOUNT          | TURK_EXIMB         | 10-99000   | 维护 | T.IHRACAT KREDI BANKASI A.S.        |
+| TRY  | BANK_ACCOUNT          | KALKINMA_BANK      | 10-99000   | 维护 | T.KALKINMA BANKASI A.S..            |
+| TRY  | BANK_ACCOUNT          | BAYINDIR_BANK      | 10-99000   | 维护 | BAYINDIRBANK A.S..                  |
+| TRY  | BANK_ACCOUNT          | EKONOMI_BANK       | 10-99000   | 维护 | T.EKONOMİ BANKASI A.S..             |
+| TRY  | BANK_ACCOUNT          | YAPI_KREDI         | 10-99000   | 维护 | YAPI ve KREDİ BANKASI A.Ş..         |
+| TRY  | BANK_ACCOUNT          | TURK_TICARET       | 10-99000   | 维护 | T.DIŞ TICARET_BANKASI A.S..         |
+| TRY  | BANK_ACCOUNT          | ROMA_BANK          | 10-99000   | 维护 | BANCA DI ROMA S.P.A..               |
+| TRY  | BANK_ACCOUNT          | ABN_AMRO           | 10-99000   | 维护 | ABN AMRO BANK N.V..                 |
+| TRY  | BANK_ACCOUNT          | ATB                | 10-99000   | 维护 | ARAP TÜRK BANKASI A.S..             |
+| TRY  | BANK_ACCOUNT          | KOC_BANK           | 10-99000   | 维护 | KOÇBANK A.S.                        |
+| TRY  | BANK_ACCOUNT          | TURKISH_BANK       | 10-99000   | 维护 | TURKISH BANK A.Ş..                  |
+| TRY  | BANK_ACCOUNT          | JPMORGAN_BANK      | 10-99000   | 维护 | JP MORGAN CHASE BANK NA MERK C.     |
+| TRY  | BANK_ACCOUNT          | ING_BANK           | 10-99000   | 维护 | ING BANK A.Ş..                      |
+| TRY  | BANK_ACCOUNT          | ADA_BANK           | 10-99000   | 维护 | ADABANK A.S..                       |
+| TRY  | BANK_ACCOUNT          | DEUTSCHE_BANK      | 10-99000   | 维护 | DEUTSCHE BANK A.S..                 |
+| TRY  | BANK_ACCOUNT          | CALYON_BANK        | 10-99000   | 维护 | CALYON BANK T.A.S.                  |
+| TRY  | BANK_ACCOUNT          | ALTERNATIF_BANK    | 10-99000   | 维护 | ALTERNATİFBANK A.S..                |
+| TRY  | BANK_ACCOUNT          | ANADOLU_BANK       | 10-99000   | 维护 | ANADOLUBANK A.Ş..                   |
+| TRY  | BANK_ACCOUNT          | DILER_BANK         | 10-99000   | 维护 | DİLER YATIRIM BANKASI A.S..         |
+| TRY  | BANK_ACCOUNT          | GSD_BANK           | 10-99000   | 维护 | GSD YATIRIM BANKASI A.S..           |
+| TRY  | BANK_ACCOUNT          | NUROL_BANK         | 10-99000   | 维护 | NUROL YATIRIM BANKASI A.S..         |
+| TRY  | BANK_ACCOUNT          | CALIK_BANK         | 10-99000   | 维护 | ÇALIK YATIRIM BANKASI A.S.          |
+| TRY  | BANK_ACCOUNT          | TURKLAND_BANK      | 10-99000   | 维护 | TURKLAND BANK A.Ş..                 |
+| TRY  | BANK_ACCOUNT          | URGAN_BANK         | 10-99000   | 维护 | URGAN BANK A.Ş..                    |
+| TRY  | BANK_ACCOUNT          | AKTIF_BANK         | 10-99000   | 维护 | AKTİF YATIRIM BANKASI A.Ş.          |
+| TRY  | BANK_ACCOUNT          | ALBARAKA_TURK      | 10-99000   | 维护 | ALBARAKA TÜRK KATILIM BANKASI A.Ş.. |
+| TRY  | BANK_ACCOUNT          | ASYA_BANK          | 10-99000   | 维护 | ASYA KATILIM BANKASI A.Ş..          |
+| TRY  | BANK_ACCOUNT          | PTT                | 10-99000   | 维护 | PTT.                                |
+| TRY  | BANK_ACCOUNT          | TURKIYE_FINANS     | 10-99000   | 维护 | TÜRKİYE FİNANS KATILIM BANKASI A.Ş..|
+| TRY  | BANK_ACCOUNT          | ININAL             | 10-99000   | 维护 | Ininal.                             |
 
 {/* </div>
 <div class='page-api-right'>

@@ -160,61 +160,12 @@ response
 
 ### **支付方式**<a id="inBankCode"></a>
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1040px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:170px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:200px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>币种</b></td>
-        <td><b>支付类型(payType)</b></td>
-        <td><b>收款编码(inBankCode)</b></td>
-        <td><b>限额</b></td>
-        <td><b>状态</b></td>
-        <td><b>说明</b></td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>EWALLET</td>
-        <td>REFERENCE_CODE</td>
-        <td>10-30000</td>
-        <td>可用</td>
-        <td>Fawry钱包</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>EWALLET</td>
-        <td>VODAFONE</td>
-        <td>5-30000</td>
-        <td>可用</td>
-        <td>Vodafone钱包</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>EWALLET</td>
-        <td>R2P</td>
-        <td>10-30000</td>
-        <td>维护</td>
-        <td>MWallet USSD推送支付</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>EWALLET</td>
-        <td>OTP</td>
-        <td>5-30000</td>
-        <td>维护</td>
-        <td>Vodafone OTP验证支付</td>
-    </tr>
-</table>
+| 币种  | 支付类型(payType) | 收款编码(inBankCode) | 限额       | 状态 | 说明               |
+|-----|---------------|------------------|----------|----|------------------|
+| EGP | EWALLET       | REFERENCE_CODE   | 10-30000 | 可用 | Fawry钱包          |
+| EGP | EWALLET       | VODAFONE         | 5-30000  | 可用 | Vodafone钱包       |
+| EGP | EWALLET       | R2P              | 10-30000 | 维护 | MWallet USSD推送支付 |
+| EGP | EWALLET       | OTP              | 5-30000  | 维护 | Vodafone OTP验证支付 |
 
 ## **代付API**
 
@@ -376,365 +327,51 @@ response — 订单成功
 
 ### **支付方式**<a id="bankCode"></a>
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1050px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>币种</b></td>
-        <td><b>支付类型(accountType)</b></td>
-        <td><b>支付编码(bankCode)</b></td>
-        <td><b>限额</b></td>
-        <td><b>状态</b></td>
-        <td><b>说明</b></td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>EWALLET</td>
-        <td>MEEZA</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>MeezaWallet 为埃及 Meeza 网络下的手机号电子钱包，支持根据号码识别账户类型，并向 Vodafone Cash、Orange Money、Etisalat Cash 等本地钱包进行代付。</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>EWALLET</td>
-        <td>OPAY</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>OpayCard</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ABP</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>AllBank Inc</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>AAIB</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Arab African International Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ABC</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Arab Banking Corporation - Egypt</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ABK</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Al Ahli Bank of Kuwait – Egypt</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ABRK</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Al Baraka Bank Egypt</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ADIB</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Abu Dhabi Islamic Bank – Egypt</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>AIB</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Arab Investment Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ARAB</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Arab Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ARIB</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Arab International Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>AUB</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Ahly United Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>AUDI</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Audi Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BBE</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>ATTIJARIWAFA BANK EGYPT S.A.E</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BDC</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Banque Du Caire</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BLOM</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Blom Bank Egypt</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BOA</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Bank of Alexandria</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CAE</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Credit Agricole</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CIB</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Commercial International Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CITI</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Citibank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>EALB</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Egyptian Arab Land Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>EDBE</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Export Development Bank of Egypt</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>EGB</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Egyptian Gulf Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ENBD</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Emirates National Bank of Dubai</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>FAIB</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Faisal Islamic Bank of Egypt</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>HDB</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Housing And Development Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>HSBC</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>HSBC</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>IDBE</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Industrial Development Bank of Egypt</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MASH</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Mashreq Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MIDB</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Misr Iran Development Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MISR</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Banque Misr</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NBAD</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>National Bank of Abu Dhabi</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NBE</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>National Bank of Egypt</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NBG</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>National Bank of Greece</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NBK</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>National Bank of Kuwait – Egypt</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NSB</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Nasser Social Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>PDAC</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>The Principal Bank for Development and Agri.</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>QNB</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Qatar National Bank Alahli</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SAIB</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Societe Arabe Internationale De Banque</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SCB</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>Suez Canal Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>UB</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>The United Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>UNB</td>
-        <td>20-30000</td>
-        <td>可用</td>
-        <td>United National Bank</td>
-    </tr>
-</table>
+| 币种  | 支付类型(accountType) | 支付编码(bankCode) | 限额       | 状态 | 说明                                                                                                    |
+|-----|-------------------|----------------|----------|----|-------------------------------------------------------------------------------------------------------|
+| EGP | EWALLET           | MEEZA          | 20-30000 | 可用 | MeezaWallet 为埃及 Meeza 网络下的手机号电子钱包，支持根据号码识别账户类型，并向 Vodafone Cash、Orange Money、Etisalat Cash 等本地钱包进行代付。 |
+| EGP | EWALLET           | OPAY           | 20-30000 | 可用 | OpayCard                                                                                              |
+| EGP | BANK_ACCOUNT      | ABP            | 20-30000 | 可用 | AllBank Inc                                                                                           |
+| EGP | BANK_ACCOUNT      | AAIB           | 20-30000 | 可用 | Arab African International Bank                                                                       |
+| EGP | BANK_ACCOUNT      | ABC            | 20-30000 | 可用 | Arab Banking Corporation - Egypt                                                                      |
+| EGP | BANK_ACCOUNT      | ABK            | 20-30000 | 可用 | Al Ahli Bank of Kuwait – Egypt                                                                        |
+| EGP | BANK_ACCOUNT      | ABRK           | 20-30000 | 可用 | Al Baraka Bank Egypt                                                                                  |
+| EGP | BANK_ACCOUNT      | ADIB           | 20-30000 | 可用 | Abu Dhabi Islamic Bank – Egypt                                                                        |
+| EGP | BANK_ACCOUNT      | AIB            | 20-30000 | 可用 | Arab Investment Bank                                                                                  |
+| EGP | BANK_ACCOUNT      | ARAB           | 20-30000 | 可用 | Arab Bank                                                                                             |
+| EGP | BANK_ACCOUNT      | ARIB           | 20-30000 | 可用 | Arab International Bank                                                                               |
+| EGP | BANK_ACCOUNT      | AUB            | 20-30000 | 可用 | Ahly United Bank                                                                                      |
+| EGP | BANK_ACCOUNT      | AUDI           | 20-30000 | 可用 | Audi Bank                                                                                             |
+| EGP | BANK_ACCOUNT      | BBE            | 20-30000 | 可用 | ATTIJARIWAFA BANK EGYPT S.A.E                                                                         |
+| EGP | BANK_ACCOUNT      | BDC            | 20-30000 | 可用 | Banque Du Caire                                                                                       |
+| EGP | BANK_ACCOUNT      | BLOM           | 20-30000 | 可用 | Blom Bank Egypt                                                                                       |
+| EGP | BANK_ACCOUNT      | BOA            | 20-30000 | 可用 | Bank of Alexandria                                                                                    |
+| EGP | BANK_ACCOUNT      | CAE            | 20-30000 | 可用 | Credit Agricole                                                                                       |
+| EGP | BANK_ACCOUNT      | CIB            | 20-30000 | 可用 | Commercial International Bank                                                                         |
+| EGP | BANK_ACCOUNT      | CITI           | 20-30000 | 可用 | Citibank                                                                                              |
+| EGP | BANK_ACCOUNT      | EALB           | 20-30000 | 可用 | Egyptian Arab Land Bank                                                                               |
+| EGP | BANK_ACCOUNT      | EDBE           | 20-30000 | 可用 | Export Development Bank of Egypt                                                                      |
+| EGP | BANK_ACCOUNT      | EGB            | 20-30000 | 可用 | Egyptian Gulf Bank                                                                                    |
+| EGP | BANK_ACCOUNT      | ENBD           | 20-30000 | 可用 | Emirates National Bank of Dubai                                                                       |
+| EGP | BANK_ACCOUNT      | FAIB           | 20-30000 | 可用 | Faisal Islamic Bank of Egypt                                                                          |
+| EGP | BANK_ACCOUNT      | HDB            | 20-30000 | 可用 | Housing And Development Bank                                                                          |
+| EGP | BANK_ACCOUNT      | HSBC           | 20-30000 | 可用 | HSBC                                                                                                  |
+| EGP | BANK_ACCOUNT      | IDBE           | 20-30000 | 可用 | Industrial Development Bank of Egypt                                                                  |
+| EGP | BANK_ACCOUNT      | MASH           | 20-30000 | 可用 | Mashreq Bank                                                                                          |
+| EGP | BANK_ACCOUNT      | MIDB           | 20-30000 | 可用 | Misr Iran Development Bank                                                                            |
+| EGP | BANK_ACCOUNT      | MISR           | 20-30000 | 可用 | Banque Misr                                                                                           |
+| EGP | BANK_ACCOUNT      | NBAD           | 20-30000 | 可用 | National Bank of Abu Dhabi                                                                            |
+| EGP | BANK_ACCOUNT      | NBE            | 20-30000 | 可用 | National Bank of Egypt                                                                                |
+| EGP | BANK_ACCOUNT      | NBG            | 20-30000 | 可用 | National Bank of Greece                                                                               |
+| EGP | BANK_ACCOUNT      | NBK            | 20-30000 | 可用 | National Bank of Kuwait – Egypt                                                                       |
+| EGP | BANK_ACCOUNT      | NSB            | 20-30000 | 可用 | Nasser Social Bank                                                                                    |
+| EGP | BANK_ACCOUNT      | PDAC           | 20-30000 | 可用 | The Principal Bank for Development and Agri.                                                          |
+| EGP | BANK_ACCOUNT      | QNB            | 20-30000 | 可用 | Qatar National Bank Alahli                                                                            |
+| EGP | BANK_ACCOUNT      | SAIB           | 20-30000 | 可用 | Societe Arabe Internationale De Banque                                                                |
+| EGP | BANK_ACCOUNT      | SCB            | 20-30000 | 可用 | Suez Canal Bank                                                                                       |
+| EGP | BANK_ACCOUNT      | UB             | 20-30000 | 可用 | The United Bank                                                                                       |
+| EGP | BANK_ACCOUNT      | UNB            | 20-30000 | 可用 | United National Bank                                                                                  |
+
 
 {/* </div>
 <div class='page-api-right'>

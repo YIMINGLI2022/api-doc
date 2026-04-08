@@ -161,69 +161,13 @@ response
 
 ### **Payment Methods**<a id="inBankCode"></a>
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1040px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:170px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:200px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>Currency</b></td>
-        <td><b>Payment Type (payType)</b></td>
-        <td><b>Payment Code (inBankCode)</b></td>
-        <td><b>Limit</b></td>
-        <td><b>Status</b></td>
-        <td><b>Description</b></td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>QR</td>
-        <td>PH_QRPH_DYNAMIC</td>
-        <td>100-50000</td>
-        <td>Available</td>
-        <td>QRPH Dynamic Code</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>PAYMENT_GATEWAY</td>
-        <td>GCASH_QR</td>
-        <td>100-50000</td>
-        <td>Available</td>
-        <td>GCash Wallet (Activation)</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>PAYMENT_GATEWAY</td>
-        <td>GCASH_URL</td>
-        <td>100-50000</td>
-        <td>Available</td>
-        <td>GCash Wallet (Direct)</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>PAYMENT_GATEWAY</td>
-        <td>GRPY_URL</td>
-        <td>100-50000</td>
-        <td>Available</td>
-        <td>GrabPay Wallet</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>PAYMENT_GATEWAY</td>
-        <td>PAYMAYA_URL</td>
-        <td>100-50000</td>
-        <td>Available</td>
-        <td>PayMaya Wallet</td>
-    </tr>
-</table>
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limit     | Status    | Description            |
+| :------- | :--------------------- | :------------------------ | :-------- | :-------- | :--------------------- |
+| PHP      | QR                     | PH_QRPH_DYNAMIC           | 100-50000 | Available | QRPH Dynamic Code      |
+| PHP      | PAYMENT_GATEWAY        | GCASH_QR                  | 100-50000 | Available | GCash Wallet (Activation) |
+| PHP      | PAYMENT_GATEWAY        | GCASH_URL                 | 100-50000 | Available | GCash Wallet (Direct)  |
+| PHP      | PAYMENT_GATEWAY        | GRPY_URL                  | 100-50000 | Available | GrabPay Wallet         |
+| PHP      | PAYMENT_GATEWAY        | PAYMAYA_URL               | 100-50000 | Available | PayMaya Wallet         |
 
 ---
 
@@ -380,645 +324,85 @@ Response Data Description
 
 ### **Payment Methods**
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1050px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>Currency</b></td>
-        <td><b>Payment Type (accountType)</b></td>
-        <td><b>Payment Code (bankCode)</b></td>
-        <td><b>Limit</b></td>
-        <td><b>Status</b></td>
-        <td><b>Description</b></td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>EWALLET</td>
-        <td>GCASH</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>GCash Wallet</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>EWALLET</td>
-        <td>COINS</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Coins Wallet</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>EWALLET</td>
-        <td>PAYMAYA</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>PayMaya Wallet</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>EWALLET</td>
-        <td>GRABPAY</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>GrabPay Wallet</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>EWALLET</td>
-        <td>SHOPEE</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>ShopeePay Wallet</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>EWALLET</td>
-        <td>OMNIPAY</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>OmniPay Wallet</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ABP</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>AllBank Inc.</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ALIP</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Alipay Philippines Inc</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>AUB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Asia United Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BDO</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Banco de Oro</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BMB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Bangko Mabuhay</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BOC</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Bank Of Commerce</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BPI</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Bank of the Philippine Islands</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BPIDB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>BPI Direct BanKO, Inc., A Savings Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BRB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Binangonan Rural Bank (BRBDigital)</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CBC</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>China Banking Corporation(China Bank)</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CBS</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>China Bank Savings, Inc</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CCI</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>CIS BAYAD CENTER INC</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CEBRUR</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Cebuana Lhuillier Rural Bank, Inc.</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CIMB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>CIMB Bank Philippines, Inc.</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CMG</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>CAMALIG BANK</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CRB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>COMMUNITY RURAL BANK OF ROMBLON, INC</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CRD</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>CARD Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CSB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Citystate Savings Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CSI</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>CARD SME BANK INC</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CTBC</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Ctbc Bank (Philippines) Corp.</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>DBI</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Dungganon Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>DBP</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Development Bank of the Philippines</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>DCI</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>DUMAGUETE CITY DEVELOPMENT BANK, INC.</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>DCP</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>DCPay Philippines Inc.</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>DOP</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>DEVT. BANK OF THE PHILIPPINES</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>EQB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Equicom Savings Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>EWB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>East-West Banking Corporation</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>EWR</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>East West Rural Bank (Green Bank)</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>GTB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>GoTyme Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>IBI</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>ISLA Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ING</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>ING Bank N.V.</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>JPM</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>JP Morgan Chase Bank, N.A.</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>LBP</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Land Bank of the Philippines</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>LSB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>LEGAZPI SAVINGS BANK INC</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>LUL</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>LULU FINANCIAL SERVICES (PHILS), INC.</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MBP</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Maybank Philippines</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MCC</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>MINDANAO CONSOLIDATED COOPERATIVE</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MET</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Metrobank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MSB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Malayan Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ONB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>One Network Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>OWN</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>ownbank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>PAP</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>PalawanPay</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>PAR</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Partner Rural Bank(Cotabato) Inc.</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>PBB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Philippine Business Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>PBCOM</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Philippine Bank of Communications</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>PNB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Philippine National Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>PNS</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>PNB Savings Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>PRB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Producers Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>PSB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Philippine Savings Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>PTC</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Philippine Trust Company</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>PVB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Philippine Veterans Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>QCB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Queen City Development Bank, Inc.</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>QRB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Quezon Capital Rural Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>RBG</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>RURAL BANK OF GUINOBATAN, INC.</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>RCBC</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Rizal Commercial Banking Corp. (RCBC)</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>RSB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Robinsons Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>RSBI</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Rcbc Savings Bank Inc.</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SBA</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Sterling Bank Of Asia</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SBC</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Security Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SEB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>SEABANK PH</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SPY</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Starpay Corporation</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SSB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Sun Savings Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>TSB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>THE STANDARD CHARTERED BANK</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>TYC</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Tayocash</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>UBP</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Union Bank Of The Philippines</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>UCBSB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>UCBP Savings bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>UCPB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>United Coconut Planters Bank (UCPB)</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>USS</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>USSC Money Services</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>WDB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Wealth Development Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>YUANSB</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>Yuanta Savings Bank</td>
-    </tr>
-    <tr>
-        <td>PHP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ZTI</td>
-        <td>1-50000</td>
-        <td>Available</td>
-        <td>ZYBI TECH, INC.</td>
-    </tr>
-</table>
+| Currency | Payment Type (accountType) | Payment Code (bankCode) | Limit   | Status    | Description |
+| :------- | :------------------------- | :---------------------- | :------ | :-------- | :---------- |
+| PHP      | EWALLET                    | GCASH                   | 1-50000 | Available | GCash Wallet |
+| PHP      | EWALLET                    | COINS                   | 1-50000 | Available | Coins Wallet |
+| PHP      | EWALLET                    | PAYMAYA                 | 1-50000 | Available | PayMaya Wallet |
+| PHP      | EWALLET                    | GRABPAY                 | 1-50000 | Available | GrabPay Wallet |
+| PHP      | EWALLET                    | SHOPEE                  | 1-50000 | Available | ShopeePay Wallet |
+| PHP      | EWALLET                    | OMNIPAY                 | 1-50000 | Available | OmniPay Wallet |
+| PHP      | BANK_ACCOUNT               | ABP                     | 1-50000 | Available | AllBank Inc. |
+| PHP      | BANK_ACCOUNT               | ALIP                    | 1-50000 | Available | Alipay Philippines Inc |
+| PHP      | BANK_ACCOUNT               | AUB                     | 1-50000 | Available | Asia United Bank |
+| PHP      | BANK_ACCOUNT               | BDO                     | 1-50000 | Available | Banco de Oro |
+| PHP      | BANK_ACCOUNT               | BMB                     | 1-50000 | Available | Bangko Mabuhay |
+| PHP      | BANK_ACCOUNT               | BOC                     | 1-50000 | Available | Bank Of Commerce |
+| PHP      | BANK_ACCOUNT               | BPI                     | 1-50000 | Available | Bank of the Philippine Islands |
+| PHP      | BANK_ACCOUNT               | BPIDB                   | 1-50000 | Available | BPI Direct BanKO, Inc., A Savings Bank |
+| PHP      | BANK_ACCOUNT               | BRB                     | 1-50000 | Available | Binangonan Rural Bank (BRBDigital) |
+| PHP      | BANK_ACCOUNT               | CBC                     | 1-50000 | Available | China Banking Corporation(China Bank) |
+| PHP      | BANK_ACCOUNT               | CBS                     | 1-50000 | Available | China Bank Savings, Inc |
+| PHP      | BANK_ACCOUNT               | CCI                     | 1-50000 | Available | CIS BAYAD CENTER INC |
+| PHP      | BANK_ACCOUNT               | CEBRUR                  | 1-50000 | Available | Cebuana Lhuillier Rural Bank, Inc. |
+| PHP      | BANK_ACCOUNT               | CIMB                    | 1-50000 | Available | CIMB Bank Philippines, Inc. |
+| PHP      | BANK_ACCOUNT               | CMG                     | 1-50000 | Available | CAMALIG BANK |
+| PHP      | BANK_ACCOUNT               | CRB                     | 1-50000 | Available | COMMUNITY RURAL BANK OF ROMBLON, INC |
+| PHP      | BANK_ACCOUNT               | CRD                     | 1-50000 | Available | CARD Bank |
+| PHP      | BANK_ACCOUNT               | CSB                     | 1-50000 | Available | Citystate Savings Bank |
+| PHP      | BANK_ACCOUNT               | CSI                     | 1-50000 | Available | CARD SME BANK INC |
+| PHP      | BANK_ACCOUNT               | CTBC                    | 1-50000 | Available | Ctbc Bank (Philippines) Corp. |
+| PHP      | BANK_ACCOUNT               | DBI                     | 1-50000 | Available | Dungganon Bank |
+| PHP      | BANK_ACCOUNT               | DBP                     | 1-50000 | Available | Development Bank of the Philippines |
+| PHP      | BANK_ACCOUNT               | DCI                     | 1-50000 | Available | DUMAGUETE CITY DEVELOPMENT BANK, INC. |
+| PHP      | BANK_ACCOUNT               | DCP                     | 1-50000 | Available | DCPay Philippines Inc. |
+| PHP      | BANK_ACCOUNT               | DOP                     | 1-50000 | Available | DEVT. BANK OF THE PHILIPPINES |
+| PHP      | BANK_ACCOUNT               | EQB                     | 1-50000 | Available | Equicom Savings Bank |
+| PHP      | BANK_ACCOUNT               | EWB                     | 1-50000 | Available | East-West Banking Corporation |
+| PHP      | BANK_ACCOUNT               | EWR                     | 1-50000 | Available | East West Rural Bank (Green Bank) |
+| PHP      | BANK_ACCOUNT               | GTB                     | 1-50000 | Available | GoTyme Bank |
+| PHP      | BANK_ACCOUNT               | IBI                     | 1-50000 | Available | ISLA Bank |
+| PHP      | BANK_ACCOUNT               | ING                     | 1-50000 | Available | ING Bank N.V. |
+| PHP      | BANK_ACCOUNT               | JPM                     | 1-50000 | Available | JP Morgan Chase Bank, N.A. |
+| PHP      | BANK_ACCOUNT               | LBP                     | 1-50000 | Available | Land Bank of the Philippines |
+| PHP      | BANK_ACCOUNT               | LSB                     | 1-50000 | Available | LEGAZPI SAVINGS BANK INC |
+| PHP      | BANK_ACCOUNT               | LUL                     | 1-50000 | Available | LULU FINANCIAL SERVICES (PHILS), INC. |
+| PHP      | BANK_ACCOUNT               | MBP                     | 1-50000 | Available | Maybank Philippines |
+| PHP      | BANK_ACCOUNT               | MCC                     | 1-50000 | Available | MINDANAO CONSOLIDATED COOPERATIVE |
+| PHP      | BANK_ACCOUNT               | MET                     | 1-50000 | Available | Metrobank |
+| PHP      | BANK_ACCOUNT               | MSB                     | 1-50000 | Available | Malayan Bank |
+| PHP      | BANK_ACCOUNT               | ONB                     | 1-50000 | Available | One Network Bank |
+| PHP      | BANK_ACCOUNT               | OWN                     | 1-50000 | Available | ownbank |
+| PHP      | BANK_ACCOUNT               | PAP                     | 1-50000 | Available | PalawanPay |
+| PHP      | BANK_ACCOUNT               | PAR                     | 1-50000 | Available | Partner Rural Bank(Cotabato) Inc. |
+| PHP      | BANK_ACCOUNT               | PBB                     | 1-50000 | Available | Philippine Business Bank |
+| PHP      | BANK_ACCOUNT               | PBCOM                   | 1-50000 | Available | Philippine Bank of Communications |
+| PHP      | BANK_ACCOUNT               | PNB                     | 1-50000 | Available | Philippine National Bank |
+| PHP      | BANK_ACCOUNT               | PNS                     | 1-50000 | Available | PNB Savings Bank |
+| PHP      | BANK_ACCOUNT               | PRB                     | 1-50000 | Available | Producers Bank |
+| PHP      | BANK_ACCOUNT               | PSB                     | 1-50000 | Available | Philippine Savings Bank |
+| PHP      | BANK_ACCOUNT               | PTC                     | 1-50000 | Available | Philippine Trust Company |
+| PHP      | BANK_ACCOUNT               | PVB                     | 1-50000 | Available | Philippine Veterans Bank |
+| PHP      | BANK_ACCOUNT               | QCB                     | 1-50000 | Available | Queen City Development Bank, Inc. |
+| PHP      | BANK_ACCOUNT               | QRB                     | 1-50000 | Available | Quezon Capital Rural Bank |
+| PHP      | BANK_ACCOUNT               | RBG                     | 1-50000 | Available | RURAL BANK OF GUINOBATAN, INC. |
+| PHP      | BANK_ACCOUNT               | RCBC                    | 1-50000 | Available | Rizal Commercial Banking Corp. (RCBC) |
+| PHP      | BANK_ACCOUNT               | RSB                     | 1-50000 | Available | Robinsons Bank |
+| PHP      | BANK_ACCOUNT               | RSBI                    | 1-50000 | Available | Rcbc Savings Bank Inc. |
+| PHP      | BANK_ACCOUNT               | SBA                     | 1-50000 | Available | Sterling Bank Of Asia |
+| PHP      | BANK_ACCOUNT               | SBC                     | 1-50000 | Available | Security Bank |
+| PHP      | BANK_ACCOUNT               | SEB                     | 1-50000 | Available | SEABANK PH |
+| PHP      | BANK_ACCOUNT               | SPY                     | 1-50000 | Available | Starpay Corporation |
+| PHP      | BANK_ACCOUNT               | SSB                     | 1-50000 | Available | Sun Savings Bank |
+| PHP      | BANK_ACCOUNT               | TSB                     | 1-50000 | Available | THE STANDARD CHARTERED BANK |
+| PHP      | BANK_ACCOUNT               | TYC                     | 1-50000 | Available | Tayocash |
+| PHP      | BANK_ACCOUNT               | UBP                     | 1-50000 | Available | Union Bank Of The Philippines |
+| PHP      | BANK_ACCOUNT               | UCBSB                   | 1-50000 | Available | UCBP Savings bank |
+| PHP      | BANK_ACCOUNT               | UCPB                    | 1-50000 | Available | United Coconut Planters Bank (UCPB) |
+| PHP      | BANK_ACCOUNT               | USS                     | 1-50000 | Available | USSC Money Services                      |
+| PHP      | BANK_ACCOUNT               | WDB                     | 1-50000 | Available | Wealth Development Bank |
+| PHP      | BANK_ACCOUNT               | YUANSB    | 1-50000 | Available | Yuanta Savings Bank |
+| PHP      | BANK_ACCOUNT               | ZTI     | 1-50000 | Available | ZYBI TECH, INC. |
 
 {/* </div>
 <div class='page-api-right'>

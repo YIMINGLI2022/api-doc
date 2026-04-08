@@ -104,71 +104,13 @@ permalink: /api/version2/HongKong/
 
 ### **支付方式**<a id="inBankCode"></a>
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1040px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:170px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:200px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>币种</b></td>
-        <td><b>支付类型(payType)</b></td>
-        <td><b>支付编码(inBankCode)</b></td>
-        <td><b>限额</b></td>
-        <td><b>状态</b></td>
-        <td><b>说明</b></td>
-    </tr>
-    <tr>
-        <td>HKD</td>
-        <td>EWALLET</td>
-        <td>WXPAY_SCANCODE</td>
-        <td>1-1000</td>
-        <td>可用</td>
-        <td>微信扫码支付</td>
-    </tr>
-    <tr>
-        <td>HKD</td>
-        <td>EWALLET</td>
-        <td>ALIPAY_HKD</td>
-        <td>1-5000</td>
-        <td>可用</td>
-        <td>AlipayHK</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>EWALLET</td>
-        <td>HK_WXPAY_SCANCODE_USD</td>
-        <td>0.99-120</td>
-        <td>可用</td>
-        <td>微信扫码支付</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>BANK_TRANSFER</td>
-        <td>ALIPAY_USD</td>
-        <td>0.99-499.99</td>
-        <td>可用</td>
-        <td>AlipayHK</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>BANK_TRANSFER</td>
-        <td>PAYME_USD</td>
-        <td>1-1000</td>
-        <td>维护</td>
-        <td>PayMe</td>
-    </tr>
-</table>
-
-<br/><br/>
+| 币种 | 支付类型(accountType) | 支付编码(bankCode)       | 限额      | 状态 | 说明       |
+| :--- | :-------------------- | :----------------------- | :-------- | :--- | :--------- |
+| HKD  | EWALLET               | WXPAY_SCANCODE           | 1-1000    | 可用 | 微信扫码支付 |
+| HKD  | EWALLET               | ALIPAY_HKD               | 1-5000    | 可用 | AlipayHK   |
+| USD  | EWALLET               | HK_WXPAY_SCANCODE_USD    | 0.99-120  | 可用 | 微信扫码支付 |
+| USD  | BANK_TRANSFER         | ALIPAY_USD               | 0.99-499.99 | 可用 | AlipayHK   |
+| USD  | BANK_TRANSFER         | PAYME_USD                | 1-1000    | 维护 | PayMe      |
 
 {/* </div>
 <div class='page-api-right'>

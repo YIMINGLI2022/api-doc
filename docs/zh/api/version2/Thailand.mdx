@@ -166,61 +166,12 @@ response
 
 ### **支付方式**<a id="inBankCode"></a>
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1040px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:170px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:200px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>币种</b></td>
-        <td><b>支付类型(payType)</b></td>
-        <td><b>支付编码(inBankCode)</b></td>
-        <td><b>限额</b></td>
-        <td><b>状态</b></td>
-        <td><b>说明</b></td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>QR</td>
-        <td>QR</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>PromptPay QR二维码</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>PAYMENT_GATEWAY</td>
-        <td>TM</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>TrueMoney钱包</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>QR</td>
-        <td>TH_QR_USD</td>
-        <td>0.99-220</td>
-        <td>可用</td>
-        <td>PromptPay QR二维码</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>PAYMENT_GATEWAY</td>
-        <td>TH_TM_USD</td>
-        <td>0.99-220</td>
-        <td>可用</td>
-        <td>TrueMoney钱包</td>
-    </tr>
-</table>
+| 币种  | 支付类型(payType)   | 支付编码(inBankCode) | 限额       | 状态 | 说明              |
+|-----|-----------------|------------------|----------|----|-----------------|
+| THB | QR              | QR               | 1-8000   | 可用 | PromptPay QR二维码 |
+| THB | PAYMENT_GATEWAY | TM               | 1-8000   | 可用 | TrueMoney钱包     |
+| USD | QR              | TH_QR_USD        | 0.99-220 | 可用 | PromptPay QR二维码 |
+| USD | PAYMENT_GATEWAY | TH_TM_USD        | 0.99-220 | 可用 | TrueMoney钱包     |
 
 ## **代付API**
 
@@ -379,205 +330,30 @@ response — 订单成功
 
 ### **支付方式**
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1050px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>币种</b></td>
-        <td><b>支付类型(accountType)</b></td>
-        <td><b>支付编码(bankCode)</b></td>
-        <td><b>限额</b></td>
-        <td><b>状态</b></td>
-        <td><b>说明</b></td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BAAC</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>BAAC ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BAY</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>Bank of Ayudhya (Krungsri / กรุงศรี)</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BBL</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>Bangkok Bank ธนาคารกรุงเทพ</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CIMB</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>CIMB Thai ธนาคารซีไอเอ็มบีไทย</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CITI</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>Citibank N.A. ซิตี้แบงก์ ประเทศไทย</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>GHB</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>GHB ธนาคารอาคารสงเคราะห์</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>GSB</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>GSB ธนาคารออมสิน</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>HSBC</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>HSBC เอชเอสบีซี</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ICBC</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>ICBC(Thai) ธนาคารไอซีบีซี(ประเทศไทย)จำกัด(มหาชน)</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>IBANK</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>Islamic Bank ธนาคารอิสลามแห่งประเทศไทย</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>KBANK</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>Kasikorn Bank ธนาคารกสิกรไทย</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>KKP</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>Kiatnakin Phatra Bank ธนาคารเกียรตินาคินภัทร</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>KTB</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>KTB ธนาคารกรุงไทย</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>LHB</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>Land and Houses Bank ธนาคารแลนด์ แอนด์ เฮ้าส์</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SCB</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>SCB ธนาคารไทยพาณิชย์</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SCBT</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>SCBT สแตนดาร์ดชาร์เตอร์ด</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>TBANK</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>TBank ธนาคารธนชาต จำกัด (มหาชน)</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>TISCO</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>TISCO ธนาคารทิสโก้ จำกัด (มหาชน)</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>TMB</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>TTB ธนาคารทีเอ็มบีธนชาต จำกัด (มหาชน)</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>UOB</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>UOB ธนาคารยูโอบี จำกัด (มหาชน)</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ABN</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>ABN AMRO ธนาคารเอบีเอ็น แอมโร เอ็น.วี.</td>
-    </tr>
-    <tr>
-        <td>THB</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MHCB</td>
-        <td>1-8000</td>
-        <td>可用</td>
-        <td>Mizuho ธนาคารมิสึโฮ คอร์ปอเรต จำกัด</td>
-    </tr>
-</table>
+| 币种  | 支付类型(accountType) | 支付编码(bankCode) | 限额     | 状态 | 说明                                               |
+|-----|-------------------|----------------|--------|----|--------------------------------------------------|
+| THB | BANK_ACCOUNT      | BAAC           | 1-8000 | 可用 | BAAC ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร        |
+| THB | BANK_ACCOUNT      | BAY            | 1-8000 | 可用 | Bank of Ayudhya (Krungsri / กรุงศรี)             |
+| THB | BANK_ACCOUNT      | BBL            | 1-8000 | 可用 | Bangkok Bank ธนาคารกรุงเทพ                       |
+| THB | BANK_ACCOUNT      | CIMB           | 1-8000 | 可用 | CIMB Thai ธนาคารซีไอเอ็มบีไทย                    |
+| THB | BANK_ACCOUNT      | CITI           | 1-8000 | 可用 | Citibank N.A. ซิตี้แบงก์ ประเทศไทย               |
+| THB | BANK_ACCOUNT      | GHB            | 1-8000 | 可用 | GHB ธนาคารอาคารสงเคราะห์                         |
+| THB | BANK_ACCOUNT      | GSB            | 1-8000 | 可用 | GSB ธนาคารออมสิน                                 |
+| THB | BANK_ACCOUNT      | HSBC           | 1-8000 | 可用 | HSBC เอชเอสบีซี                                  |
+| THB | BANK_ACCOUNT      | ICBC           | 1-8000 | 可用 | ICBC(Thai) ธนาคารไอซีบีซี(ประเทศไทย)จำกัด(มหาชน) |
+| THB | BANK_ACCOUNT      | IBANK          | 1-8000 | 可用 | Islamic Bank ธนาคารอิสลามแห่งประเทศไทย           |
+| THB | BANK_ACCOUNT      | KBANK          | 1-8000 | 可用 | Kasikorn Bank ธนาคารกสิกรไทย                     |
+| THB | BANK_ACCOUNT      | KKP            | 1-8000 | 可用 | Kiatnakin Phatra Bank ธนาคารเกียรตินาคินภัทร     |
+| THB | BANK_ACCOUNT      | KTB            | 1-8000 | 可用 | KTB ธนาคารกรุงไทย                                |
+| THB | BANK_ACCOUNT      | LHB            | 1-8000 | 可用 | Land and Houses Bank ธนาคารแลนด์ แอนด์ เฮ้าส์    |
+| THB | BANK_ACCOUNT      | SCB            | 1-8000 | 可用 | SCB ธนาคารไทยพาณิชย์                             |
+| THB | BANK_ACCOUNT      | SCBT           | 1-8000 | 可用 | SCBT สแตนดาร์ดชาร์เตอร์ด                         |
+| THB | BANK_ACCOUNT      | TBANK          | 1-8000 | 可用 | TBank ธนาคารธนชาต จำกัด (มหาชน)                  |
+| THB | BANK_ACCOUNT      | TISCO          | 1-8000 | 可用 | TISCO ธนาคารทิสโก้ จำกัด (มหาชน)                 |
+| THB | BANK_ACCOUNT      | TMB            | 1-8000 | 可用 | TTB ธนาคารทีเอ็มบีธนชาต จำกัด (มหาชน)            |
+| THB | BANK_ACCOUNT      | UOB            | 1-8000 | 可用 | UOB ธนาคารยูโอบี จำกัด (มหาชน)                   |
+| THB | BANK_ACCOUNT      | ABN            | 1-8000 | 可用 | ABN AMRO ธนาคารเอบีเอ็น แอมโร เอ็น.วี.           |
+| THB | BANK_ACCOUNT      | MHCB           | 1-8000 | 可用 | Mizuho ธนาคารมิสึโฮ คอร์ปอเรต จำกัด              |
 
 {/* </div>
 <div class='page-api-right'>

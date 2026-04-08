@@ -93,69 +93,15 @@ permalink: /api/version2/Pakistan/
 | sign         | String  | 签名                                                    |
 
 ### **支付方式**
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1040px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:170px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:200px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>币种</b></td>
-        <td><b>支付类型(payType)</b></td>
-        <td><b>支付编码(inBankCode)</b></td>
-        <td><b>限额</b></td>
-        <td><b>状态</b></td>
-        <td><b>说明</b></td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>PAYMENT_GATEWAY</td>
-        <td>CASHIER</td>
-        <td>10-500000</td>
-        <td>可用</td>
-        <td>收银台模式</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>EWALLET</td>
-        <td>JAZZCASH</td>
-        <td>10-500000</td>
-        <td>可用</td>
-        <td>JazzCash钱包</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>EWALLET</td>
-        <td>EASYPAISA</td>
-        <td>10-500000</td>
-        <td>可用</td>
-        <td>EasyPaisa钱包</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>EWALLET</td>
-        <td>ALFA</td>
-        <td>10-500000</td>
-        <td>维护</td>
-        <td>ALFA钱包</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>EWALLET</td>
-        <td>HBL_KONNECT</td>
-        <td>10-500000</td>
-        <td>维护</td>
-        <td>HBL KONNECT钱包</td>
-    </tr>
-</table>
+
+| 币种  | 支付类型(payType)   | 支付编码(inBankCode) | 限额        | 状态 | 说明            |
+|-----|-----------------|------------------|-----------|----|---------------|
+| PKR | PAYMENT_GATEWAY | CASHIER          | 10-500000 | 可用 | 收银台模式         |
+| PKR | EWALLET         | JAZZCASH         | 10-500000 | 可用 | JazzCash钱包    |
+| PKR | EWALLET         | EASYPAISA        | 10-500000 | 可用 | EasyPaisa钱包   |
+| PKR | EWALLET         | ALFA             | 10-500000 | 维护 | ALFA钱包        |
+| PKR | EWALLET         | HBL_KONNECT      | 10-500000 | 维护 | HBL KONNECT钱包 |
+
 
 ## **代付API**
 
@@ -229,461 +175,63 @@ permalink: /api/version2/Pakistan/
 
 ### **支付方式**
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1050px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>币种</b></td>
-        <td><b>支付类型(accountType)</b></td>
-        <td><b>支付编码(bankCode)</b></td>
-        <td><b>限额</b></td>
-        <td><b>状态</b></td>
-        <td><b>说明</b></td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>EWALLET</td>
-        <td>ALFA</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>ALFA钱包</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>EWALLET</td>
-        <td>BAFL</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Bank Alfalah Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>EWALLET</td>
-        <td>EASYPAISA</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>EasyPaisa钱包</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>EWALLET</td>
-        <td>JAZZCASH</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>JazzCash钱包</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>EWALLET</td>
-        <td>HBL_KONNECT</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>HBL KONNECT钱包</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ABBL</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Al Baraka Bank Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ABHI</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Abhi Finance</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ABL</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Allied Bank Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ACBL</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Askari Commercial Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ADVANS</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Advans Pakistan</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>APNA</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Apna Microfinance Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BAHL</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Bank AL Habib Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BARWAQT</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Barwaqt</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BIPL</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>BankIslami Pakistan</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BOK</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Bank of Khyber</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BOP</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Bank of Punjab</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BYKEA</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>BYKEA</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CDNS</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>CDNS</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CITI</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Citi Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>DIBPL</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Dubai Islamic Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>FAYSAL</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Faysal Bank Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>FINCA</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>FINCA Microfinance Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>FINJA</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>FINJA EMI</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>FMB</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>First Microfinance Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>FWBL</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>First Women Bank Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>HBL</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Habib Bank Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>HBLASSET</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>HBL ASSET MANAGEMENT</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>HMBL</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Habib Metropolitan Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ICBC</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>ICBC</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>JSB</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>JS Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>KHUSHALI</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Khushali Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MCB</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>MCB Bank Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MCBARIF</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>MCB ARIF HABIB</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MCIB</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>MCB Islamic Banking</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MEEZAN</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Meezan Bank Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MOD</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>MOD</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NAYAPAY</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>NayaPay Private Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NBP</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>National Bank of Pakistan</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NBPF</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>NBP Funds</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NRSP</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>NRSP Microfinance</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>PAYMAX</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>PayMax (Zong)</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SADAPAY</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>SadaPay</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SAMBA</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>SAMBA</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SCB</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Standard Chartered Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SILK</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Silk Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SIMPAISA</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>SimPaisa</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SINDH</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Sindh Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SME</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>SME Bank Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SONERI</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Soneri Bank Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SUMMIT</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Summit Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>UBANK</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Ubank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>UBL</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>United Bank Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>WHITE</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>WHITE LABEL ATM</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ZARAI</td>
-        <td>10-100000</td>
-        <td>可用</td>
-        <td>Zarai Taraqiati Bank</td>
-    </tr>
-</table>
+| 币种  | 支付类型(accountType) | 支付编码(bankCode) | 限额        | 状态 | 说明                        |
+|-----|-------------------|----------------|-----------|----|---------------------------|
+| PKR | EWALLET           | ALFA           | 10-100000 | 可用 | ALFA钱包                    |
+| PKR | EWALLET           | BAFL           | 10-100000 | 可用 | Bank Alfalah Limited      |
+| PKR | EWALLET           | EASYPAISA      | 10-100000 | 可用 | EasyPaisa钱包               |
+| PKR | EWALLET           | JAZZCASH       | 10-100000 | 可用 | JazzCash钱包                |
+| PKR | EWALLET           | HBL_KONNECT    | 10-100000 | 可用 | HBL KONNECT钱包             |
+| PKR | BANK_ACCOUNT      | ABBL           | 10-100000 | 可用 | Al Baraka Bank Limited    |
+| PKR | BANK_ACCOUNT      | ABHI           | 10-100000 | 可用 | Abhi Finance              |
+| PKR | BANK_ACCOUNT      | ABL            | 10-100000 | 可用 | Allied Bank Limited       |
+| PKR | BANK_ACCOUNT      | ACBL           | 10-100000 | 可用 | Askari Commercial Bank    |
+| PKR | BANK_ACCOUNT      | ADVANS         | 10-100000 | 可用 | Advans Pakistan           |
+| PKR | BANK_ACCOUNT      | APNA           | 10-100000 | 可用 | Apna Microfinance Bank    |
+| PKR | BANK_ACCOUNT      | BAHL           | 10-100000 | 可用 | Bank AL Habib Limited     |
+| PKR | BANK_ACCOUNT      | BARWAQT        | 10-100000 | 可用 | Barwaqt                   |
+| PKR | BANK_ACCOUNT      | BIPL           | 10-100000 | 可用 | BankIslami Pakistan       |
+| PKR | BANK_ACCOUNT      | BOK            | 10-100000 | 可用 | Bank of Khyber            |
+| PKR | BANK_ACCOUNT      | BOP            | 10-100000 | 可用 | Bank of Punjab            |
+| PKR | BANK_ACCOUNT      | BYKEA          | 10-100000 | 可用 | BYKEA                     |
+| PKR | BANK_ACCOUNT      | CDNS           | 10-100000 | 可用 | CDNS                      |
+| PKR | BANK_ACCOUNT      | CITI           | 10-100000 | 可用 | Citi Bank                 |
+| PKR | BANK_ACCOUNT      | DIBPL          | 10-100000 | 可用 | Dubai Islamic Bank        |
+| PKR | BANK_ACCOUNT      | FAYSAL         | 10-100000 | 可用 | Faysal Bank Limited       |
+| PKR | BANK_ACCOUNT      | FINCA          | 10-100000 | 可用 | FINCA Microfinance Bank   |
+| PKR | BANK_ACCOUNT      | FINJA          | 10-100000 | 可用 | FINJA EMI                 |
+| PKR | BANK_ACCOUNT      | FMB            | 10-100000 | 可用 | First Microfinance Bank   |
+| PKR | BANK_ACCOUNT      | FWBL           | 10-100000 | 可用 | First Women Bank Limited  |
+| PKR | BANK_ACCOUNT      | HBL            | 10-100000 | 可用 | Habib Bank Limited        |
+| PKR | BANK_ACCOUNT      | HBLASSET       | 10-100000 | 可用 | HBL ASSET MANAGEMENT      |
+| PKR | BANK_ACCOUNT      | HMBL           | 10-100000 | 可用 | Habib Metropolitan Bank   |
+| PKR | BANK_ACCOUNT      | ICBC           | 10-100000 | 可用 | ICBC                      |
+| PKR | BANK_ACCOUNT      | JSB            | 10-100000 | 可用 | JS Bank                   |
+| PKR | BANK_ACCOUNT      | KHUSHALI       | 10-100000 | 可用 | Khushali Bank             |
+| PKR | BANK_ACCOUNT      | MCB            | 10-100000 | 可用 | MCB Bank Limited          |
+| PKR | BANK_ACCOUNT      | MCBARIF        | 10-100000 | 可用 | MCB ARIF HABIB            |
+| PKR | BANK_ACCOUNT      | MCIB           | 10-100000 | 可用 | MCB Islamic Banking       |
+| PKR | BANK_ACCOUNT      | MEEZAN         | 10-100000 | 可用 | Meezan Bank Limited       |
+| PKR | BANK_ACCOUNT      | MOD            | 10-100000 | 可用 | MOD                       |
+| PKR | BANK_ACCOUNT      | NAYAPAY        | 10-100000 | 可用 | NayaPay Private Limited   |
+| PKR | BANK_ACCOUNT      | NBP            | 10-100000 | 可用 | National Bank of Pakistan |
+| PKR | BANK_ACCOUNT      | NBPF           | 10-100000 | 可用 | NBP Funds                 |
+| PKR | BANK_ACCOUNT      | NRSP           | 10-100000 | 可用 | NRSP Microfinance         |
+| PKR | BANK_ACCOUNT      | PAYMAX         | 10-100000 | 可用 | PayMax (Zong)             |
+| PKR | BANK_ACCOUNT      | SADAPAY        | 10-100000 | 可用 | SadaPay                   |
+| PKR | BANK_ACCOUNT      | SAMBA          | 10-100000 | 可用 | SAMBA                     |
+| PKR | BANK_ACCOUNT      | SCB            | 10-100000 | 可用 | Standard Chartered Bank   |
+| PKR | BANK_ACCOUNT      | SILK           | 10-100000 | 可用 | Silk Bank                 |
+| PKR | BANK_ACCOUNT      | SIMPAISA       | 10-100000 | 可用 | SimPaisa                  |
+| PKR | BANK_ACCOUNT      | SINDH          | 10-100000 | 可用 | Sindh Bank                |
+| PKR | BANK_ACCOUNT      | SME            | 10-100000 | 可用 | SME Bank Limited          |
+| PKR | BANK_ACCOUNT      | SONERI         | 10-100000 | 可用 | Soneri Bank Limited       |
+| PKR | BANK_ACCOUNT      | SUMMIT         | 10-100000 | 可用 | Summit Bank               |
+| PKR | BANK_ACCOUNT      | UBANK          | 10-100000 | 可用 | Ubank                     |
+| PKR | BANK_ACCOUNT      | UBL            | 10-100000 | 可用 | United Bank Limited       |
+| PKR | BANK_ACCOUNT      | WHITE          | 10-100000 | 可用 | WHITE LABEL ATM           |
+| PKR | BANK_ACCOUNT      | ZARAI          | 10-100000 | 可用 | Zarai Taraqiati Bank      |
+
 
 {/* </div>
 <div class='page-api-right'>

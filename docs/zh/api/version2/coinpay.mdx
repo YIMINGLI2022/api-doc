@@ -115,83 +115,15 @@ USDC: `/usdc/collect/query`
 
 ### **支付方式**<a id="inBankCode"></a>
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1040px;margin:0' >
-<colgroup >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:170px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:200px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-</colgroup>
-<thead>
-<tr>
-        <th><b>币种</b></th>
-        <th><b>支付类型(payType)</b></th>
-        <th><b>支付编码(inBankCode)</b></th>
-        <th><b>限额</b></th>
-        <th><b>状态</b></th>
-        <th><b>说明</b></th>
-    </tr>
-</thead>
-<tbody>
-    <tr>
-        <td>USDT</td>
-        <td>EWALLET</td>
-        <td>EWALLET</td>
-        <td>1-200000</td>
-        <td>可用</td>
-        <td>收银台</td>
-    </tr>
-    <tr>
-        <td>USDT</td>
-        <td>EWALLET</td>
-        <td>TRX</td>
-        <td>1-200000</td>
-        <td>可用</td>
-        <td>TRON 链上的 USDT，TRC-20 代币标准</td>
-    </tr>
-    <tr>
-        <td>USDT</td>
-        <td>EWALLET</td>
-        <td>ETH</td>
-        <td>1-200000</td>
-        <td>可用</td>
-        <td>以太坊链上的 USDT，ERC-20 代币标准</td>
-    </tr>
-    <tr>
-        <td>USDT</td>
-        <td>EWALLET</td>
-        <td>BSC</td>
-        <td>1-200000</td>
-        <td>可用</td>
-        <td>币安智能链上的 USDT，BEP-20 代币标准</td>
-    </tr>
-    <tr>
-        <td>USDC</td>
-        <td>EWALLET</td>
-        <td>EWALLET</td>
-        <td>1-200000</td>
-        <td>可用</td>
-        <td>收银台</td>
-    </tr>
-<tr>
-        <td>USDC</td>
-        <td>EWALLET</td>
-        <td>ETH</td>
-        <td>1-200000</td>
-        <td>可用</td>
-        <td>以太坊链上的 USDC，ERC-20 代币标准</td>
-    </tr>
-</tbody>
-</table>
+| 币种   | 支付类型(payType) | 支付编码(inBankCode) | 限额       | 状态 | 说明                        |
+|------|---------------|------------------|----------|----|---------------------------|
+| USDT | EWALLET       | EWALLET          | 1-200000 | 可用 | 收银台                       |
+| USDT | EWALLET       | TRX              | 1-200000 | 可用 | TRON 链上的 USDT，TRC-20 代币标准 |
+| USDT | EWALLET       | ETH              | 1-200000 | 可用 | 以太坊链上的 USDT，ERC-20 代币标准   |
+| USDT | EWALLET       | BSC              | 1-200000 | 可用 | 币安智能链上的 USDT，BEP-20 代币标准  |
+| USDC | EWALLET       | EWALLET          | 1-200000 | 可用 | 收银台                       |
+| USDC | EWALLET       | ETH              | 1-200000 | 可用 | 以太坊链上的 USDC，ERC-20 代币标准   |
+
 
 ## **代付API**
 
@@ -266,91 +198,16 @@ USDC: `/usdc/collect/query`
 
 ### **支付方式**<a id="bankCode"></a>
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1050px;margin:0' >
-<colgroup >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-</colgroup>
-<thead>
-<tr>
-        <th><b>币种</b></th>
-        <th><b>支付类型(accountType)</b></th>
-        <th><b>支付编码(bankCode)</b></th>
-        <th><b>限额</b></th>
-        <th><b>状态</b></th>
-        <th><b>说明</b></th>
-</tr>
-</thead>
-<tbody>
-    <tr>
-        <td>USDT</td>
-        <td>EWALLET</td>
-        <td>TRX</td>
-        <td>10-200000</td>
-        <td>可用</td>
-        <td>TRON 链上的 USDT，TRC-20 代币标准</td>
-    </tr>
-    <tr>
-        <td>USDT</td>
-        <td>EWALLET</td>
-        <td>ETH</td>
-        <td>10-200000</td>
-        <td>可用</td>
-        <td>以太坊链上的 USDT，ERC-20 代币标准</td>
-    </tr>
-    <tr>
-        <td>USDT</td>
-        <td>EWALLET</td>
-        <td>BSC</td>
-        <td>10-200000</td>
-        <td>可用</td>
-        <td>币安智能链上的 USDT，BEP-20 代币标准</td>
-    </tr>
-    <tr>
-        <td>USDC</td>
-        <td>EWALLET</td>
-        <td>BSC</td>
-        <td>10-200000</td>
-        <td>可用</td>
-        <td>币安智能链上的 USDC，BEP-20 代币标准</td>
-    </tr>
-    <tr>
-        <td>USDC</td>
-        <td>EWALLET</td>
-        <td>ETH</td>
-        <td>10-200000</td>
-        <td>可用</td>
-        <td>以太坊链上的 USDC，ERC-20 代币标准</td>
-    </tr>
-    <tr>
-        <td>USDC</td>
-        <td>EWALLET</td>
-        <td>TRX</td>
-        <td>10-200000</td>
-        <td>可用</td>
-        <td>TRON 链上的 USDC，TRC-20 代币标准</td>
-    </tr>
-    <tr>
-        <td>USDC</td>
-        <td>EWALLET</td>
-        <td>BASEEVM</td>
-        <td>10-200000</td>
-        <td>可用</td>
-        <td>EVM（Ethereum Virtual Machine） 链上的 USDC，EVM 兼容链上的 ERC-20 代币标准</td>
-    </tr>
-</tbody>
-</table>
+| 币种   | 支付类型(accountType) | 支付编码(bankCode) | 限额        | 状态 | 说明                                                           |
+|------|-------------------|----------------|-----------|----|--------------------------------------------------------------|
+| USDT | EWALLET           | TRX            | 10-200000 | 可用 | TRON 链上的 USDT，TRC-20 代币标准                                    |
+| USDT | EWALLET           | ETH            | 10-200000 | 可用 | 以太坊链上的 USDT，ERC-20 代币标准                                      |
+| USDT | EWALLET           | BSC            | 10-200000 | 可用 | 币安智能链上的 USDT，BEP-20 代币标准                                     |
+| USDC | EWALLET           | BSC            | 10-200000 | 可用 | 币安智能链上的 USDC，BEP-20 代币标准                                     |
+| USDC | EWALLET           | ETH            | 10-200000 | 可用 | 以太坊链上的 USDC，ERC-20 代币标准                                      |
+| USDC | EWALLET           | TRX            | 10-200000 | 可用 | TRON 链上的 USDC，TRC-20 代币标准                                    |
+| USDC | EWALLET           | BASEEVM        | 10-200000 | 可用 | EVM（Ethereum Virtual Machine） 链上的 USDC，EVM 兼容链上的 ERC-20 代币标准 |
+
 
 ## **注意事项**
 

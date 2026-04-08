@@ -1,14 +1,14 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "palm",
+  "theme": "luma",
   "name": "HaiPay",
   "logo": {
     "light": "/logo/light.png",
     "dark": "/logo/dark.png"
   },
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
+    "primary": "#5F3CC7",
+    "light": "#9289FE",
     "dark": "#15803D"
   },
   "favicon": "/favicon.png",
@@ -30,8 +30,7 @@
                   "docs/zh/guide/api_description_guide",
                   "docs/zh/guide/api_doc_list",
                   "docs/zh/guide/end_to_end_testing",
-                  "docs/zh/guide/onboarding_checklist",
-                  "docs/zh/guide/frequently_asked_question"
+                  "docs/zh/guide/onboarding_checklist"
                 ]
               },
               {
@@ -391,8 +390,7 @@
                   "docs/en/guide/api_description_guide",
                   "docs/en/guide/api_doc_list",
                   "docs/en/guide/end_to_end_testing",
-                  "docs/en/guide/onboarding_checklist",
-                  "docs/en/guide/frequently_asked_question"
+                  "docs/en/guide/onboarding_checklist"
                 ]
               },
               {

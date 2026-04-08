@@ -172,69 +172,13 @@ response
 
 ### **支付方式**
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1040px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:170px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:200px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>币种</b></td>
-        <td><b>支付类型(payType)</b></td>
-        <td><b>支付编码(inBankCode)</b></td>
-        <td><b>限额</b></td>
-        <td><b>状态</b></td>
-        <td><b>说明</b></td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>QR</td>
-        <td>QR</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>QR二维码</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_TRANSFER</td>
-        <td>BANK</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>银行转账</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>EWALLET</td>
-        <td>MOMO_VND</td>
-        <td>20000-5000000</td>
-        <td>可用</td>
-        <td>MOMO钱包</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>QR</td>
-        <td>VN_QR_USD</td>
-        <td>0.99-2000</td>
-        <td>可用</td>
-        <td>QR二维码</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>BANK_TRANSFER</td>
-        <td>VN_BANK_USD</td>
-        <td>0.99-2000</td>
-        <td>可用</td>
-        <td>银行转账</td>
-    </tr>
-</table>
+| 币种  | 支付类型(payType) | 支付编码(inBankCode) | 限额             | 状态 | 说明     |
+|-----|---------------|------------------|----------------|----|--------|
+| VND | QR            | QR               | 10000-50000000 | 可用 | QR二维码  |
+| VND | BANK_TRANSFER | BANK             | 10000-50000000 | 可用 | 银行转账   |
+| VND | EWALLET       | MOMO_VND         | 20000-5000000  | 可用 | MOMO钱包 |
+| USD | QR            | VN_QR_USD        | 0.99-2000      | 可用 | QR二维码  |
+| USD | BANK_TRANSFER | VN_BANK_USD      | 0.99-2000      | 可用 | 银行转账   |
 
 ## **代付API**
 
@@ -391,334 +335,47 @@ response — 订单成功
 
 ### **支付方式**
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1050px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>币种</b></td>
-        <td><b>支付类型(accountType)</b></td>
-        <td><b>支付编码(bankCode)</b></td>
-        <td><b>限额</b></td>
-        <td><b>状态</b></td>
-        <td><b>说明</b></td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>VCB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Vietcombank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>DAB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>DongA Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>TCB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Techcombank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Military Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>VIB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Vietnam International Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ICB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>VietinBank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>EXB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Eximbank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ACB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Asia Commercial Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>HDB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>HDBank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MSB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Maritime Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NCB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>National Citizen Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>VAB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Viet A Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>VPB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>VPBank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>STB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Sacombank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BAB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Bac A Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>GPB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>GPBank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>AGB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Agribank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BIDV</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BIDV</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>OJB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>OceanBank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>PGB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>PG Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SHB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Saigon - Hanoi Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>TPB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>TienPhong Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NAB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Nam A Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SGB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Saigon Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ABB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>An Binh Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SCB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Saigon Commercial Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>IVB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Indovina Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>VCCB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Viet Capital Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>OCB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Orient Commercial Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SEA</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Dong Nam A Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>LVB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>LienVietPostBank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>WRB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Woori Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>PVCOMBANK</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>PVcomBank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SHNB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Shinhan Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>KLB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Kien Long Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BVB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>BaoViet Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>GAB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Dai A Bank</td>
-    </tr>
-    <tr>
-        <td>VND</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NVB</td>
-        <td>10000-50000000</td>
-        <td>可用</td>
-        <td>Navibank</td>
-    </tr>
+| 币种  | 支付类型(accountType) | 支付编码(bankCode) | 限额             | 状态 | 说明                         |
+|-----|-------------------|----------------|----------------|----|----------------------------|
+| VND | BANK_ACCOUNT      | VCB            | 10000-50000000 | 可用 | Vietcombank                |
+| VND | BANK_ACCOUNT      | DAB            | 10000-50000000 | 可用 | DongA Bank                 |
+| VND | BANK_ACCOUNT      | TCB            | 10000-50000000 | 可用 | Techcombank                |
+| VND | BANK_ACCOUNT      | MB             | 10000-50000000 | 可用 | Military Bank              |
+| VND | BANK_ACCOUNT      | VIB            | 10000-50000000 | 可用 | Vietnam International Bank |
+| VND | BANK_ACCOUNT      | ICB            | 10000-50000000 | 可用 | VietinBank                 |
+| VND | BANK_ACCOUNT      | EXB            | 10000-50000000 | 可用 | Eximbank                   |
+| VND | BANK_ACCOUNT      | ACB            | 10000-50000000 | 可用 | Asia Commercial Bank       |
+| VND | BANK_ACCOUNT      | HDB            | 10000-50000000 | 可用 | HDBank                     |
+| VND | BANK_ACCOUNT      | MSB            | 10000-50000000 | 可用 | Maritime Bank              |
+| VND | BANK_ACCOUNT      | NCB            | 10000-50000000 | 可用 | National Citizen Bank      |
+| VND | BANK_ACCOUNT      | VAB            | 10000-50000000 | 可用 | Viet A Bank                |
+| VND | BANK_ACCOUNT      | VPB            | 10000-50000000 | 可用 | VPBank                     |
+| VND | BANK_ACCOUNT      | STB            | 10000-50000000 | 可用 | Sacombank                  |
+| VND | BANK_ACCOUNT      | BAB            | 10000-50000000 | 可用 | Bac A Bank                 |
+| VND | BANK_ACCOUNT      | GPB            | 10000-50000000 | 可用 | GPBank                     |
+| VND | BANK_ACCOUNT      | AGB            | 10000-50000000 | 可用 | Agribank                   |
+| VND | BANK_ACCOUNT      | BIDV           | 10000-50000000 | 可用 | BIDV                       |
+| VND | BANK_ACCOUNT      | OJB            | 10000-50000000 | 可用 | OceanBank                  |
+| VND | BANK_ACCOUNT      | PGB            | 10000-50000000 | 可用 | PG Bank                    |
+| VND | BANK_ACCOUNT      | SHB            | 10000-50000000 | 可用 | Saigon - Hanoi Bank        |
+| VND | BANK_ACCOUNT      | TPB            | 10000-50000000 | 可用 | TienPhong Bank             |
+| VND | BANK_ACCOUNT      | NAB            | 10000-50000000 | 可用 | Nam A Bank                 |
+| VND | BANK_ACCOUNT      | SGB            | 10000-50000000 | 可用 | Saigon Bank                |
+| VND | BANK_ACCOUNT      | ABB            | 10000-50000000 | 可用 | An Binh Bank               |
+| VND | BANK_ACCOUNT      | SCB            | 10000-50000000 | 可用 | Saigon Commercial Bank     |
+| VND | BANK_ACCOUNT      | IVB            | 10000-50000000 | 可用 | Indovina Bank              |
+| VND | BANK_ACCOUNT      | VCCB           | 10000-50000000 | 可用 | Viet Capital Bank          |
+| VND | BANK_ACCOUNT      | OCB            | 10000-50000000 | 可用 | Orient Commercial Bank     |
+| VND | BANK_ACCOUNT      | SEA            | 10000-50000000 | 可用 | Dong Nam A Bank            |
+| VND | BANK_ACCOUNT      | LVB            | 10000-50000000 | 可用 | LienVietPostBank           |
+| VND | BANK_ACCOUNT      | WRB            | 10000-50000000 | 可用 | Woori Bank                 |
+| VND | BANK_ACCOUNT      | PVCOMBANK      | 10000-50000000 | 可用 | PVcomBank                  |
+| VND | BANK_ACCOUNT      | SHNB           | 10000-50000000 | 可用 | Shinhan Bank               |
+| VND | BANK_ACCOUNT      | KLB            | 10000-50000000 | 可用 | Kien Long Bank             |
+| VND | BANK_ACCOUNT      | BVB            | 10000-50000000 | 可用 | BaoViet Bank               |
+| VND | BANK_ACCOUNT      | GAB            | 10000-50000000 | 可用 | Dai A Bank                 |
+| VND | BANK_ACCOUNT      | NVB            | 10000-50000000 | 可用 | Navibank                   |
 
-</table>
 
 {/* </div>
 <div class='page-api-right'>

@@ -62,121 +62,121 @@ The private key should be securely stored, and the public key should be added to
 Refer to online examples; OpenSSL needs to be installed, and the key length should be 2048 bits.
 
 #### Method 2: Generate Keys Online
-You can generate key pairs using the HaiPay Developer Tools, which are implemented purely in JavaScript and will not interact with the HaiPay server, ensuring that merchant key information is not leaked.  <a href="/en/rsa/rsa_generate/" target="_blank">Generates addresses</a>, alternatively, other online tools can be used to generate the key pair.
+You can generate key pairs using the HaiPay Developer Tools, which are implemented purely in JavaScript and will not interact with the HaiPay server, ensuring that merchant key information is not leaked.  <a href="https://doc.haipay.net/en/rsa/rsa_generate/" target="_blank">Generates addresses</a>, alternatively, other online tools can be used to generate the key pair.
 
 #### Method 3: Generate Keys via Code
 Merchants can generate public and private keys using the following SDK. The merchant's private key should be securely stored and used for signing requests to HaiPay. The merchant’s public key should be uploaded to the platform for HaiPay to verify the merchant’s signature to prevent tampering during transmission. Additionally, the HaiPay public key should be obtained from the platform and integrated into the merchant’s system for verifying the HaiPay-signed messages.
 
 
-::: details Generate key
-::: tabs
+<Expandable title="Generate key">
+<CodeGroup>
 
-@tab java
-```java
-    /**
-     * Generates a 2048-bit RSA key pair and converts the public and private keys to PEM format.
-     *
-     * @return A Map containing the public and private keys, with keys "publicKey" and "privateKey".
-     */
-    public static Map<String, String> generateRSAKeyPair() {
-        try {
-            // Create KeyPairGenerator object and specify RSA algorithm
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+```java Java
+/**
+ * Generates a 2048-bit RSA key pair and converts the public and private keys to PEM format.
+ *
+ * @return A Map containing the public and private keys, with keys "publicKey" and "privateKey".
+ */
+public static Map<String, String> generateRSAKeyPair() {
+    try {
+        // Create KeyPairGenerator object and specify RSA algorithm
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
 
-            // Initialize the key length to 2048 bits
-            keyPairGenerator.initialize(2048);
+        // Initialize the key length to 2048 bits
+        keyPairGenerator.initialize(2048);
 
-            // Generate the key pair
-            KeyPair keyPair = keyPairGenerator.generateKeyPair();
+        // Generate the key pair
+        KeyPair keyPair = keyPairGenerator.generateKeyPair();
 
-            // Retrieve the public and private keys
-            PublicKey publicKey = keyPair.getPublic();
-            PrivateKey privateKey = keyPair.getPrivate();
+        // Retrieve the public and private keys
+        PublicKey publicKey = keyPair.getPublic();
+        PrivateKey privateKey = keyPair.getPrivate();
 
-            // Convert the public and private keys to PEM format
-            String publicKeyPem = convertPublicKeyToPEM(publicKey);
-            String privateKeyPem = convertPrivateKeyToPEM(privateKey);
+        // Convert the public and private keys to PEM format
+        String publicKeyPem = convertPublicKeyToPEM(publicKey);
+        String privateKeyPem = convertPrivateKeyToPEM(privateKey);
 
-            // Store the public and private keys in a Map
-            Map<String, String> keyPairMap = new HashMap<>();
-            keyPairMap.put("publicKey", publicKeyPem);
-            keyPairMap.put("privateKey", privateKeyPem);
-            return keyPairMap;
+        // Store the public and private keys in a Map
+        Map<String, String> keyPairMap = new HashMap<>();
+        keyPairMap.put("publicKey", publicKeyPem);
+        keyPairMap.put("privateKey", privateKeyPem);
+        return keyPairMap;
 
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Failed to generate RSA key pair", e);
-        }
+    } catch (NoSuchAlgorithmException e) {
+        throw new RuntimeException("Failed to generate RSA key pair", e);
     }
+}
 
-    /**
-     * Converts the public key to PEM format.
-     *
-     * @param publicKey The public key object.
-     * @return The public key as a PEM formatted string.
-     */
-    private static String convertPublicKeyToPEM(PublicKey publicKey) {
-        String encodedPublicKey = Base64.getMimeEncoder(64, "\n".getBytes())
-                .encodeToString(publicKey.getEncoded());
-        return "-----BEGIN PUBLIC KEY-----\n"
-                + encodedPublicKey
-                + "\n-----END PUBLIC KEY-----";
-    }
+/**
+ * Converts the public key to PEM format.
+ *
+ * @param publicKey The public key object.
+ * @return The public key as a PEM formatted string.
+ */
+private static String convertPublicKeyToPEM(PublicKey publicKey) {
+    String encodedPublicKey = Base64.getMimeEncoder(64, "\n".getBytes())
+            .encodeToString(publicKey.getEncoded());
+    return "-----BEGIN PUBLIC KEY-----\n"
+            + encodedPublicKey
+            + "\n-----END PUBLIC KEY-----";
+}
 
-    /**
-     * Converts the private key to PEM format.
-     *
-     * @param privateKey The private key object.
-     * @return The private key as a PEM formatted string.
-     */
-    private static String convertPrivateKeyToPEM(PrivateKey privateKey) {
-        String encodedPrivateKey = Base64.getMimeEncoder(64, "\n".getBytes())
-                .encodeToString(privateKey.getEncoded());
-        return "-----BEGIN PRIVATE KEY-----\n"
-                + encodedPrivateKey
-                + "\n-----END PRIVATE KEY-----";
-    }
+/**
+ * Converts the private key to PEM format.
+ *
+ * @param privateKey The private key object.
+ * @return The private key as a PEM formatted string.
+ */
+private static String convertPrivateKeyToPEM(PrivateKey privateKey) {
+    String encodedPrivateKey = Base64.getMimeEncoder(64, "\n".getBytes())
+            .encodeToString(privateKey.getEncoded());
+    return "-----BEGIN PRIVATE KEY-----\n"
+            + encodedPrivateKey
+            + "\n-----END PRIVATE KEY-----";
+}
 ```
 
-@tab php
-```php
-    /**
-     * Initialize RSA key pair.
-     *
-     * @param int $keysize RSA 1024 is insecure, recommended size is 2048
-     * 
-     * Usage example:
-     * Call the function to generate an RSA key pair with a key length of 2048 bits:
-        $result = initRSAKey(2048);
+```php PHP
+/**
+ * Initialize RSA key pair.
+ *
+ * @param int $keysize RSA 1024 is insecure, recommended size is 2048
+ * 
+ * Usage example:
+ * Call the function to generate an RSA key pair with a key length of 2048 bits:
+    $result = initRSAKey(2048);
 
-        echo "Private Key:\n";
-        echo $result['private_key'] . "\n";
+    echo "Private Key:\n";
+    echo $result['private_key'] . "\n";
 
-        echo "Public Key:\n";
-        echo $result['public_key'] . "\n";
-     */
-    public function initRSAKey($keysize) {
-        $config = array(
-            "digest_alg" => "sha256",
-            "private_key_bits" => $keysize,
-            "private_key_type" => OPENSSL_KEYTYPE_RSA,
-        );
-        // Generate a new RSA key pair using SHA256 algorithm
-        $rsaKey = openssl_pkey_new($config);
+    echo "Public Key:\n";
+    echo $result['public_key'] . "\n";
+ */
+public function initRSAKey($keysize) {
+    $config = array(
+        "digest_alg" => "sha256",
+        "private_key_bits" => $keysize,
+        "private_key_type" => OPENSSL_KEYTYPE_RSA,
+    );
+    // Generate a new RSA key pair using SHA256 algorithm
+    $rsaKey = openssl_pkey_new($config);
 
-        // Export the private key
-        openssl_pkey_export($rsaKey, $privateKey);
+    // Export the private key
+    openssl_pkey_export($rsaKey, $privateKey);
 
-        // Get the public key
-        $publicKey = openssl_pkey_get_details($rsaKey);
-        $publicKey = $publicKey["key"];
+    // Get the public key
+    $publicKey = openssl_pkey_get_details($rsaKey);
+    $publicKey = $publicKey["key"];
 
-        return array(
-            'public_key' => $publicKey,
-            'private_key' => $privateKey
-        );
-    }
+    return array(
+        'public_key' => $publicKey,
+        'private_key' => $privateKey
+    );
+}
 ```
-:::
+
+</CodeGroup>
+</Expandable>
 
 ## 4. Signature
 
@@ -196,12 +196,10 @@ Use the RSA algorithm to calculate the string and generate the signature.
 
 **The API may add response fields. When verifying the signature, the added fields must be supported.**
 
-::: details Signature Tool
+<Expandable title="Signature Tool">
+<CodeGroup>
 
-::: tabs
-
-@tab java
-```java
+```java Java
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 
@@ -413,10 +411,9 @@ public class SHA256WithRSAUtils {
         return resultDatas;
     }
 }
+```
 
-
-@tab php
-```php
+```php PHP
 /*Usage examples
 require 'SHA256WithRSAUtils.php';
 $rsa = new SHA256WithRSAUtils();
@@ -536,13 +533,13 @@ class SHA256WithRSAUtils
 }
 ```
 
-:::
+</CodeGroup>
+</Expandable>
 
-::: details Generate Signature String
+<Expandable title="Generate Signature String">
+<CodeGroup>
 
-::: tabs
-@tab java
-```java
+```java Java
 public static String getSign(Object obj, String secretKey) {
     Map<String, Object> map;
     if (obj instanceof Map) {
@@ -590,8 +587,7 @@ public class BeanMapTool {
 }
 ```
 
-@tab php
-```php
+```php PHP
 function getSign($array, $merchantSecretKey) {
     $result = "";
     try {
@@ -615,8 +611,7 @@ function getSign($array, $merchantSecretKey) {
 }
 ```
 
-@tab js
-```js
+```js JavaScript
 function getSign(map, merchantSecretKey) {
     try {
         // Extract keys and sort alphabetically
@@ -642,13 +637,15 @@ function getSign(map, merchantSecretKey) {
     }
 }
 ```
-:::
+
+</CodeGroup>
+</Expandable>
 
 
-::: details Signature Verification Test Demo
-::: tabs
-@tab java
-```java
+<Expandable title="Signature Verification Test Demo">
+<CodeGroup>
+
+```java Java
 public static void main(String[] args) {
         String privateKey = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCKqgxszb4ObuoJ5U8Ddz2ytOFFc81fmniRFo+jvNtrOegMUpd9gBPvMEaBzdeJC74Cg/HsAE7f9u24APLi0oLYZCwthhs01xTIhAis8h7IYCSdWrcbn8gpB7apSe4Ud0dS6zkuRcDTVGsLNrzNOMKHfT8S13dtsqDyDBBhSpkBwe9TkeLQB8K5ZjDYJ8uTtsrcey95eNFe22r8qAhv562yUBTG0PjZpQmiJWD0T6URLLzNYEOXEzsVVZgPKBNWSVZvMjLg32eFv/2Mw+x83n44w39FLx6E347A5hVQYWbBLuHDyFUzW/endOmMSj1YJmGDhctgEK+UIA1bNbexYo33AgMBAAECggEAZlZ6NRLjYeOZ9xO17OjkMDAu0gNVX2mx8eKkwENx7QEfsXiDNayBCdanMsWofQydf13B/lt72u9zIooQuDaFOw8zS6XeDnFudU582KcY8OmEHF4HJewW3bFDrk1R2OjvStMvsGbqmQ2EsxIC5bMuXrChDFbZXayn+/vLWwKjShetqPkN2cRHcKWaASqOnWOAnpgHm5VuGu2ttaR5K14pmMq7a0TOaj7lDYyHelWejCfqFFiWfYLefNj3oFVAfiNxwsxj8q42xWwPZ/Xzhn8p0cInja//1AMuNLIadyC4r6VR7cOIKm4F7XwCTCRCSmPbhDu5pOEA//pERFTTNtE7gQKBgQDdzbujAJRqkn0WwPtbKE7ZxR2KFjc4fM1LyPyODz4tbXhtXtZeMcjjsKn8pTpzbgj+Cfmhz9X8sKAqdxe1WJTtkgg5zbvPQ8A+Q0Su19LZMfFCuC0RCp1SX/asl4XeQe6fQZCft3AG7RgA5HjHET0/7Mpwb3C7A/xBwMfn51T0+wKBgQCgCuy9NmpG2bG/MEz1gDojYe08yKOGgTLp6v/UZcn+U6Oit37/sFe0vU7n9NMtkCLdhf2mqF1cNCUv+rzHkvtgG8FaNlsuozOMXuTNCJ6nj/IypMOnU8vV9DL9zUq5cUnny7HKwCTuS8FYZTjI75GfDDwrxIhhzOIkh2leQD+iNQKBgDV1xOgA18ToEeZOFUdfa8HpVLlXqW+gBQtjIhxLaD0iyYfy99A0R6s5hX8zg+cWemxgkx6BLZ5+I9yYX8qB00N/kyP7hmzqc4eORxutQVDATNo78gDNgiW8o4Pt8YIkehNAhk84s3O36bUtXD7+1Lh3pkN7WLx6tW5TvNsUUtHJAoGBAIYOoJ8dpYgTccAkRVKfRhO9Q2tW5SMVtgAayJCxcrGGfdseuVKT8+OBb0b83KedxJaqVf3zqcBCLaQy80543/dxSFS4k0hNjDBYjG7yeXMCMG4bdYgDuQpOsyfFfoI3UyDGjva2XDj/W8UfhKFLiz8ekIhY56SEaikPBEPerW7BAoGBAIW+5xD7BH4Z/w+GNrA5WFWNNH02+32AD/k6W59GQ+ejrFzCa9/SPa/7WEbBjKNWnzYl9pcdA0lP3LGEbKzrm6Zy+6lCHI6Hx/o4PbHaKTQg2jAIJdEUrAOKR44rjIY41a8wtgilfZA4I4zDSvJMPkMYOItIXjFCwHTxLLfw0CJp";
         String publicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiqoMbM2+Dm7qCeVPA3c9srThRXPNX5p4kRaPo7zbaznoDFKXfYAT7zBGgc3XiQu+AoPx7ABO3/btuADy4tKC2GQsLYYbNNcUyIQIrPIeyGAknVq3G5/IKQe2qUnuFHdHUus5LkXA01RrCza8zTjCh30/Etd3bbKg8gwQYUqZAcHvU5Hi0AfCuWYw2CfLk7bK3HsveXjRXttq/KgIb+etslAUxtD42aUJoiVg9E+lESy8zWBDlxM7FVWYDygTVklWbzIy4N9nhb/9jMPsfN5+OMN/RS8ehN+OwOYVUGFmwS7hw8hVM1v3p3TpjEo9WCZhg4XLYBCvlCANWzW3sWKN9wIDAQAB";
@@ -660,12 +657,11 @@ public static void main(String[] args) {
         //Execute Signature
         String sign = SHA256WithRSAUtils.buildRSASignByPrivateKey(content, privateKey);
         System.out.println("Signature:" + SHA256WithRSAUtils.buildRSASignByPrivateKey(content, privateKey));
-        System.out.println("Verification:" + SHA256WithRSAUtils.buildRSAverifyByPublicKey(content, publicKey, SHA256WithRSAUtils.buildRSASignByPrivateKey(content, privateKey)));
-    }
+    System.out.println("Verification:" + SHA256WithRSAUtils.buildRSAverifyByPublicKey(content, publicKey, SHA256WithRSAUtils.buildRSASignByPrivateKey(content, privateKey)));
+}
 ```
 
-@tab php
-```php
+```php PHP
 require 'SHA256WithRSAUtils.php';
 require 'SignUtils.php';
 $publicKey  = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiqoMbM2+Dm7qCeVPA3c9srThRXPNX5p4kRaPo7zbaznoDFKXfYAT7zBGgc3XiQu+AoPx7ABO3/btuADy4tKC2GQsLYYbNNcUyIQIrPIeyGAknVq3G5/IKQe2qUnuFHdHUus5LkXA01RrCza8zTjCh30/Etd3bbKg8gwQYUqZAcHvU5Hi0AfCuWYw2CfLk7bK3HsveXjRXttq/KgIb+etslAUxtD42aUJoiVg9E+lESy8zWBDlxM7FVWYDygTVklWbzIy4N9nhb/9jMPsfN5+OMN/RS8ehN+OwOYVUGFmwS7hw8hVM1v3p3TpjEo9WCZhg4XLYBCvlCANWzW3sWKN9wIDAQAB';
@@ -688,9 +684,7 @@ $flag = $rsa->buildRSAverifyByPublicKey($content,$publicKey,$sign);
 var_dump($content,$sign,$flag)
 ```
 
-
-@tab js
-```js
+```js JavaScript
 import { sign as _sign, constants, verify as _verify } from 'crypto';
 
 
@@ -738,7 +732,9 @@ Signature: YhuB6NaBumqFh9owd4qiTFAwaKS0sCBWAqS1CkEIIm2Tj5bJeUe7JZ1hbr6lS7usmNpIY
 Verification result: true
 
 ```
-:::
+
+</CodeGroup>
+</Expandable>
 
 ## 5. Example Message
 

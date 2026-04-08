@@ -11,11 +11,10 @@ permalink: /en/api/version2/creditcard/
 
 
 <Warning>
-**Before reading this API documentation, be sure to review the [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
+**Before reading this API documentation, be sure to review the [**API Description Guide**](/en/docs/guide/api_description_guide)**
 </Warning>
 
-<Tip>
-Important Information Regarding Credit Card Disputes
+<Tip title="Important Information Regarding Credit Card Disputes">
   - **For credit card transactions, consumers maintain the right to initiate a dispute within 180 days of the charge date. When a dispute is filed, a dispute fee of $20 will be assessed per transaction.**
   - **Upon receiving a dispute notification, you have two options for response**
     - **First: you may accept the dispute by submitting a response to the issuing bank affirming that you do not contest the refunded amount.**
@@ -24,8 +23,7 @@ Important Information Regarding Credit Card Disputes
   - **Regarding fee refunds, Haipay will return the dispute countered fee if you successfully win the dispute. However, unless explicitly stated otherwise in your Haipay contract, the initial dispute fee is non-refundable under all circumstances.**
 </Tip>
 
-<Danger>
-**PCI DSS (Payment Card Industry Data Security Standard) strictly prohibits embedding credit card input pages in WebView or iframe for the following reasons:**
+<Danger title="PCI DSS (Payment Card Industry Data Security Standard) strictly prohibits embedding credit card input pages in WebView or iframe for the following reasons:">
 1. PCI Compliance: Direct violation of PCI DSS requirements
 2. Security Risks: WebView and iframe may not provide sufficient security isolation
 3. Man-in-the-Middle Attacks: Malicious applications may intercept or tamper with payment data
@@ -33,7 +31,7 @@ Important Information Regarding Credit Card Disputes
 </Danger>
 
 ## Device Environment Requirements
-:::tip Check Your Device and Browser Settings
+<Tip title="Check Your Device and Browser Settings">
 
 If you cannot see the wallet you want on the payment page, your device or browser may not meet the following Apple Pay or Google Pay requirements.
 
@@ -46,9 +44,9 @@ If you cannot see the wallet you want on the payment page, your device or browse
 - Do not use Chrome incognito window or Safari private window.
 - Confirm you are operating in supported Apple Pay and Google Pay regions.
 - For Apple Pay, confirm your device supports [biometric authentication](https://support.apple.com/en-us/102626#:~:text=iPhone%20or%20.iPad,on%20all%20devices.).
+</Tip>
 
-<Tip>
-**Supported Browsers**<a id="supported-browsers"></a>
+<Tip title="Supported Browsers">
 
 **Desktop Browsers**
 - Chrome 38+
@@ -529,7 +527,7 @@ HaiPay provides a convenient Apple Pay and Google Pay payment integration soluti
 
 | Error Message                                    | Error Cause                        | Solution                                                                  |
 | :----------------------------------------------- | :--------------------------------- | :------------------------------------------------------------------------ |
-| Missing required parameters: clientToken       | Missing required initialization parameters | Check if parameters clientToken are passed                          | 
+| Missing required parameters: clientToken       | Missing required initialization parameters | Check if parameters clientToken are passed                          |
 | Unsupported region: CN                          | Production environment does not support China region | Check if there is a DOM element with the corresponding ID in the page     |
 
 ## **HaiPay.js Integration (creditCard)** <a id="haipaysdk"></a>
@@ -586,7 +584,7 @@ HaiPay provides a convenient creditCard payment integration solution that allows
 
 | Error Message                                    | Error Cause                        | Solution                                                                  |
 | :----------------------------------------------- | :--------------------------------- | :------------------------------------------------------------------------ |
-| Missing required parameters: clientToken       | Missing required initialization parameters | Check if parameters clientToken are passed                          | 
+| Missing required parameters: clientToken       | Missing required initialization parameters | Check if parameters clientToken are passed                          |
 | Unsupported region: CN                          | Production environment does not support China region | Check if there is a DOM element with the corresponding ID in the page     |
 
 ## **Transaction Limits**
@@ -615,7 +613,7 @@ Note: appId for USD, amount in USD, settlement in USD
 | appId              | Yes      | Long     | Business ID (obtained from backend, must pass corresponding business ID based on currency in URL) |
 | orderId            | Yes      | String   | Merchant order number (must be unique, length not exceeding 48)                  |
 | name               | Yes      | String   | User name, recommended to use real name, format: firstName and lastName separated by space, example: Donald John Trump |
-| phone              | Yes      | String   | Real phone number (format reference [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format)) |
+| phone              | Yes      | String   | Real phone number (format reference [Phone Number Format](/en/docs/guide/frequently_asked_question#phone_format)) |
 | email              | Yes      | String   | Real email address                                                               |
 | amount             | Yes      | String   | Transaction amount (accurate to two decimal places; do not add punctuation, e.g., ",") |
 | payType            | Yes      | String   | [Payment method type](#inBankCode)                                               |
@@ -629,9 +627,7 @@ Note: appId for USD, amount in USD, settlement in USD
 | partnerUserId      | Yes      | String   | Unique user identifier (e.g., userId), used for risk control, must be real and valid, otherwise it will affect transactions. Format requirements: digits, uppercase and lowercase letters or common symbols -~!@#$%&*()_. |
 | sign               | Yes      | String   | Signature                                                                        |
 
-##### 
-
-request
+**Request Example**
 
 ```json
 {
@@ -648,7 +644,7 @@ request
 }
 ```
 
-response
+**Response Example**
 
 ```json
 {
@@ -710,12 +706,10 @@ Note: appId for USD, amount in USD, settlement in USD
 | tokenID            | No       | String   | Payment token, not required for first transaction, required for subsequent active deductions, obtained through callback |
 | token              | No       | String   | Apple Pay / Google Pay Token, you can obtain and transfer the data yourself or use the HaiPay page., [How to get?](#token) |
 | loadingType            | No  | Integer | 0 (default) – Display the current/normal payment result view; 1 – Show a loading spinner with no order information.                                                                                |
-| cancelUrl            | No  | String | If provided, the user can click “Back” on the payment page to return to this URL after canceling the payment.                                                                                |
+| cancelUrl            | No  | String | If provided, the user can click "Back" on the payment page to return to this URL after canceling the payment.                                                                                |
 | sign               | Yes      | String   | Signature                                                                        |
 
-##### 
-
-request
+**Request Example**
 
 ```json
 {
@@ -732,7 +726,7 @@ request
 }
 ```
 
-response
+**Response Example**
 
 ```json
 {
@@ -779,7 +773,7 @@ USD: `/usd/collect/query`
 | orderNo        | No       | String   | Platform order number (faster response)                         |
 | sign           | Yes      | String   | Signature                                                        |
 
-request
+**Request Example**
 
 ```json
 {
@@ -789,7 +783,7 @@ request
 }
 ```
 
-response
+**Response Example**
 
 ```json
 {
@@ -886,69 +880,14 @@ Response data parameter description
 
 ### **6. Payment Methods** <a id="inBankCode"></a>
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1040px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:170px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:200px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>Currency</b></td>
-        <td><b>Payment Type (payType)</b></td>
-        <td><b>Payment Code (inBankCode)</b></td>
-        <td><b>Limits</b></td>
-        <td><b>Status</b></td>
-        <td><b>Description</b></td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>BANK_TRANSFER</td>
-        <td>CREDIT_CARD</td>
-        <td>0.99-1000</td>
-        <td>Available</td>
-        <td>VISA</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>BANK_TRANSFER</td>
-        <td>CREDIT_CARD</td>
-        <td>0.99-1000</td>
-        <td>Available</td>
-        <td>MasterCard</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>BANK_TRANSFER</td>
-        <td>CREDIT_CARD</td>
-        <td>0.99-1000</td>
-        <td>Available</td>
-        <td>JCB</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>EWALLET</td>
-        <td>GOOGLE_PAY</td>
-        <td>0.99-1000</td>
-        <td>Available</td>
-        <td>Google Pay</td>
-    </tr>
-    <tr>
-        <td>USD</td>
-        <td>EWALLET</td>
-        <td>APPLE_PAY</td>
-        <td>0.99-1000</td>
-        <td>Available</td>
-        <td>Apple Pay</td>
-    </tr>
-</table>
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits | Status | Description |
+|:---------|:-----------------------|:--------------------------|:-------|:-------|:------------|
+| USD | BANK_TRANSFER | CREDIT_CARD | 0.99-1000 | Available | VISA |
+| USD | BANK_TRANSFER | CREDIT_CARD | 0.99-1000 | Available | MasterCard |
+| USD | BANK_TRANSFER | CREDIT_CARD | 0.99-1000 | Available | JCB |
+| USD | EWALLET | GOOGLE_PAY | 0.99-1000 | Available | Google Pay |
+| USD | EWALLET | APPLE_PAY | 0.99-1000 | Available | Apple Pay |
+
 
 ### 7. Test Card Numbers
 
@@ -974,27 +913,27 @@ Use the following test card numbers with invalid data to simulate payment failur
 
 ### 8. MIT (Merchant Initiated Transaction) Mode Description <a id="mit"></a>
 
-**MIT (Merchant Initiated Transaction)**  
-Refers to transactions that merchants can initiate without the user being present after the user completes a one-time payment authorization.  
-This mode is widely used in business scenarios such as **subscription payments, installment payments, membership renewals, delayed deductions**, etc.  
+**MIT (Merchant Initiated Transaction)**
+Refers to transactions that merchants can initiate without the user being present after the user completes a one-time payment authorization.
+This mode is widely used in business scenarios such as **subscription payments, installment payments, membership renewals, delayed deductions**, etc.
 
 #### Basic Process
-1. **User Authorization**  
-   - User enters payment information during the first payment and completes necessary identity verification.  
-   - Merchant saves the user's payment credentials for subsequent deduction requests.  
+1. **User Authorization**
+   - User enters payment information during the first payment and completes necessary identity verification.
+   - Merchant saves the user's payment credentials for subsequent deduction requests.
 
-2. **Merchant-Initiated Deduction**  
-   - Merchant directly uses saved payment credentials to initiate deduction requests based on agreed cycles or conditions.  
-   - Since the transaction is an **offline scenario (off-session)**, meaning the user is not involved in the transaction, the system will complete processing based on user authorization and compliance requirements.  
+2. **Merchant-Initiated Deduction**
+   - Merchant directly uses saved payment credentials to initiate deduction requests based on agreed cycles or conditions.
+   - Since the transaction is an **offline scenario (off-session)**, meaning the user is not involved in the transaction, the system will complete processing based on user authorization and compliance requirements.
 
-3. **Authentication Requirements**  
-   - In most cases, transactions will complete directly.  
-   - If the issuing bank or risk control system requires re-verification, the transaction may enter a pending user confirmation state, requiring user supplementary verification to complete.  
+3. **Authentication Requirements**
+   - In most cases, transactions will complete directly.
+   - If the issuing bank or risk control system requires re-verification, the transaction may enter a pending user confirmation state, requiring user supplementary verification to complete.
 
 #### Mode Features
-- **Enhanced Experience**: Users don't need to manually enter payment information each time.  
-- **Compliant and Secure**: Meets international payment regulations and Strong Customer Authentication (SCA) requirements.  
-- **Wide Application**: Suitable for subscription billing, auto-renewal, installment deductions, delayed settlement, etc.  
+- **Enhanced Experience**: Users don't need to manually enter payment information each time.
+- **Compliant and Secure**: Meets international payment regulations and Strong Customer Authentication (SCA) requirements.
+- **Wide Application**: Suitable for subscription billing, auto-renewal, installment deductions, delayed settlement, etc.
 
 #### MIT Flow Diagram
 ```mermaid
@@ -1028,8 +967,7 @@ flowchart TD
 
 ### 9. Apple Pay / Google Pay Token Acquisition Method Description <a id="token"></a>
 
-<Tip>
-Online Demo (Test Environment, No Real Charges)
+<Tip title="Online Demo (Test Environment, No Real Charges)">
 - [Apple Pay && Google Pay](https://uat-cashier.haipay.top/pay/mit/apple-google/)
 </Tip>
 
@@ -1096,10 +1034,10 @@ Online Demo (Test Environment, No Real Charges)
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/8.0.20/jsrsasign-all-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.15.14/theme-chalk/index.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.15.14/index.js"></script>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.15.14/index.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
 
-    
+
     <style type="text/tailwindcss">
         @layer utilities {
             .apple-pay-button {
@@ -1163,18 +1101,18 @@ Online Demo (Test Environment, No Real Charges)
                 <el-form-item label="privateKey" prop="privateKey">
                   <el-input v-model="form.privateKey" placeholder="Please enter the privateKey."  type="textarea" resize="none" :autosize="{ minRows: 4, maxRows: 10 }"  />
                 </el-form-item>
-            </el-form>  
+            </el-form>
             </div>
 
 
             <div class="text-center">
-                
+
                 <div id="applePay-googlePay"></div>
-                
+
                 <div id="applePay-googlePay-not-supported" class="text-gray-500 mb-6 hidden">
                     <p><i class="fa fa-info-circle mr-2"></i>This device does not support Google Pay or Apple Pay.</p>
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -1233,7 +1171,7 @@ Online Demo (Test Environment, No Real Charges)
           this.initApplePay()
         },
         methods: {
-          isMobileDevice() { 
+          isMobileDevice() {
             let self = this
             if(typeof window.orientation !== 'undefined'){
               self.isH5 = true
@@ -1310,10 +1248,10 @@ Online Demo (Test Environment, No Real Charges)
                 const contentType = requestData.headers['content-type'] || '';
                 if (contentType.toLowerCase().includes('application/json')) {
                     try {
-                        const jsonData = typeof requestData.body === 'string' 
-                            ? JSON.parse(requestData.body) 
+                        const jsonData = typeof requestData.body === 'string'
+                            ? JSON.parse(requestData.body)
                             : requestData.body;
-                        
+
                         for (let key in jsonData) {
                             if (jsonData[key] !== '') {
                                 param[key] = jsonData[key];
@@ -1330,12 +1268,12 @@ Online Demo (Test Environment, No Real Charges)
                 .sort();
             const paramString = sortedKeys.map(key => `${key}=${param[key]}`).join('&');
 
-            let body = typeof requestData.body === 'string' 
-                ? requestData.body 
+            let body = typeof requestData.body === 'string'
+                ? requestData.body
                 : JSON.stringify(requestData.body);
             let jsonData = JSON.parse(body);
             let key = jsonData.key;
-            
+
             const stringSignTemp = `${paramString}&key=${key}`;
             console.log('signstring:', stringSignTemp);
 

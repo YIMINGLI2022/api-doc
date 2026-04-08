@@ -162,61 +162,12 @@ Response data field description
 
 ### **Payment Methods**<a id="inBankCode"></a>
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1040px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:170px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:200px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>Currency</b></td>
-        <td><b>Payment Type (payType)</b></td>
-        <td><b>Payment Code (inBankCode)</b></td>
-        <td><b>Limit</b></td>
-        <td><b>Status</b></td>
-        <td><b>Description</b></td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>EWALLET</td>
-        <td>REFERENCE_CODE</td>
-        <td>10-30000</td>
-        <td>Available</td>
-        <td>Fawry Wallet</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>EWALLET</td>
-        <td>VODAFONE</td>
-        <td>5-30000</td>
-        <td>Available</td>
-        <td>Vodafone Wallet</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>EWALLET</td>
-        <td>R2P</td>
-        <td>10-30000</td>
-        <td>Maintenance</td>
-        <td>MWallet USSD Push Payment</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>EWALLET</td>
-        <td>OTP</td>
-        <td>5-30000</td>
-        <td>Maintenance</td>
-        <td>Vodafone OTP Verification Payment</td>
-    </tr>
-</table>
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limit    | Status      | Description                       |
+|----------|------------------------|---------------------------|----------|-------------|-----------------------------------|
+| EGP      | EWALLET                | REFERENCE_CODE            | 10-30000 | Available   | Fawry Wallet                      |
+| EGP      | EWALLET                | VODAFONE                  | 5-30000  | Available   | Vodafone Wallet                   |
+| EGP      | EWALLET                | R2P                       | 10-30000 | Maintenance | MWallet USSD Push Payment         |
+| EGP      | EWALLET                | OTP                       | 5-30000  | Maintenance | Vodafone OTP Verification Payment |
 
 ## **Disbursement API**
 
@@ -378,365 +329,51 @@ Response data field description
 
 ### **Payment Methods**<a id="bankCode"></a>
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1050px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>Currency</b></td>
-        <td><b>Payment Type (accountType)</b></td>
-        <td><b>Payment Code (bankCode)</b></td>
-        <td><b>Limit</b></td>
-        <td><b>Status</b></td>
-        <td><b>Description</b></td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>EWALLET</td>
-        <td>MEEZA</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>MeezaWallet is a mobile number–based e-wallet under Egypt’s Meeza payment network, supporting account type identification based on the phone number and enabling payouts to local wallets such as Vodafone Cash, Orange Money, and Etisalat Cash.</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>EWALLET</td>
-        <td>OPAY</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>OpayCard</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ABP</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>AllBank Inc</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>AAIB</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Arab African International Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ABC</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Arab Banking Corporation - Egypt</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ABK</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Al Ahli Bank of Kuwait – Egypt</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ABRK</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Al Baraka Bank Egypt</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ADIB</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Abu Dhabi Islamic Bank – Egypt</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>AIB</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Arab Investment Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ARAB</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Arab Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ARIB</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Arab International Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>AUB</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Ahly United Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>AUDI</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Audi Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BBE</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>ATTIJARIWAFA BANK EGYPT S.A.E</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BDC</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Banque Du Caire</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BLOM</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Blom Bank Egypt</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BOA</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Bank of Alexandria</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CAE</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Credit Agricole</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CIB</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Commercial International Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CITI</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Citibank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>EALB</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Egyptian Arab Land Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>EDBE</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Export Development Bank of Egypt</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>EGB</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Egyptian Gulf Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ENBD</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Emirates National Bank of Dubai</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>FAIB</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Faisal Islamic Bank of Egypt</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>HDB</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Housing And Development Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>HSBC</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>HSBC</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>IDBE</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Industrial Development Bank of Egypt</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MASH</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Mashreq Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MIDB</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Misr Iran Development Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MISR</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Banque Misr</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NBAD</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>National Bank of Abu Dhabi</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NBE</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>National Bank of Egypt</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NBG</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>National Bank of Greece</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NBK</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>National Bank of Kuwait – Egypt</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NSB</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Nasser Social Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>PDAC</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>The Principal Bank for Development and Agri.</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>QNB</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Qatar National Bank Alahli</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SAIB</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Societe Arabe Internationale De Banque</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SCB</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>Suez Canal Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>UB</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>The United Bank</td>
-    </tr>
-    <tr>
-        <td>EGP</td>
-        <td>BANK_ACCOUNT</td>
-        <td>UNB</td>
-        <td>20-30000</td>
-        <td>Available</td>
-        <td>United National Bank</td>
-    </tr>
-</table>
+| Currency | Payment Type (accountType) | Payment Code (bankCode) | Limit    | Status    | Description                                                                                                                                                                                                                                       |
+|----------|----------------------------|-------------------------|----------|-----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| EGP      | EWALLET                    | MEEZA                   | 20-30000 | Available | MeezaWallet is a mobile number–based e-wallet under Egypt’s Meeza payment network, supporting account type identification based on the phone number and enabling payouts to local wallets such as Vodafone Cash, Orange Money, and Etisalat Cash. |
+| EGP      | EWALLET                    | OPAY                    | 20-30000 | Available | OpayCard                                                                                                                                                                                                                                          |
+| EGP      | BANK_ACCOUNT               | ABP                     | 20-30000 | Available | AllBank Inc                                                                                                                                                                                                                                       |
+| EGP      | BANK_ACCOUNT               | AAIB                    | 20-30000 | Available | Arab African International Bank                                                                                                                                                                                                                   |
+| EGP      | BANK_ACCOUNT               | ABC                     | 20-30000 | Available | Arab Banking Corporation - Egypt                                                                                                                                                                                                                  |
+| EGP      | BANK_ACCOUNT               | ABK                     | 20-30000 | Available | Al Ahli Bank of Kuwait – Egypt                                                                                                                                                                                                                    |
+| EGP      | BANK_ACCOUNT               | ABRK                    | 20-30000 | Available | Al Baraka Bank Egypt                                                                                                                                                                                                                              |
+| EGP      | BANK_ACCOUNT               | ADIB                    | 20-30000 | Available | Abu Dhabi Islamic Bank – Egypt                                                                                                                                                                                                                    |
+| EGP      | BANK_ACCOUNT               | AIB                     | 20-30000 | Available | Arab Investment Bank                                                                                                                                                                                                                              |
+| EGP      | BANK_ACCOUNT               | ARAB                    | 20-30000 | Available | Arab Bank                                                                                                                                                                                                                                         |
+| EGP      | BANK_ACCOUNT               | ARIB                    | 20-30000 | Available | Arab International Bank                                                                                                                                                                                                                           |
+| EGP      | BANK_ACCOUNT               | AUB                     | 20-30000 | Available | Ahly United Bank                                                                                                                                                                                                                                  |
+| EGP      | BANK_ACCOUNT               | AUDI                    | 20-30000 | Available | Audi Bank                                                                                                                                                                                                                                         |
+| EGP      | BANK_ACCOUNT               | BBE                     | 20-30000 | Available | ATTIJARIWAFA BANK EGYPT S.A.E                                                                                                                                                                                                                     |
+| EGP      | BANK_ACCOUNT               | BDC                     | 20-30000 | Available | Banque Du Caire                                                                                                                                                                                                                                   |
+| EGP      | BANK_ACCOUNT               | BLOM                    | 20-30000 | Available | Blom Bank Egypt                                                                                                                                                                                                                                   |
+| EGP      | BANK_ACCOUNT               | BOA                     | 20-30000 | Available | Bank of Alexandria                                                                                                                                                                                                                                |
+| EGP      | BANK_ACCOUNT               | CAE                     | 20-30000 | Available | Credit Agricole                                                                                                                                                                                                                                   |
+| EGP      | BANK_ACCOUNT               | CIB                     | 20-30000 | Available | Commercial International Bank                                                                                                                                                                                                                     |
+| EGP      | BANK_ACCOUNT               | CITI                    | 20-30000 | Available | Citibank                                                                                                                                                                                                                                          |
+| EGP      | BANK_ACCOUNT               | EALB                    | 20-30000 | Available | Egyptian Arab Land Bank                                                                                                                                                                                                                           |
+| EGP      | BANK_ACCOUNT               | EDBE                    | 20-30000 | Available | Export Development Bank of Egypt                                                                                                                                                                                                                  |
+| EGP      | BANK_ACCOUNT               | EGB                     | 20-30000 | Available | Egyptian Gulf Bank                                                                                                                                                                                                                                |
+| EGP      | BANK_ACCOUNT               | ENBD                    | 20-30000 | Available | Emirates National Bank of Dubai                                                                                                                                                                                                                   |
+| EGP      | BANK_ACCOUNT               | FAIB                    | 20-30000 | Available | Faisal Islamic Bank of Egypt                                                                                                                                                                                                                      |
+| EGP      | BANK_ACCOUNT               | HDB                     | 20-30000 | Available | Housing And Development Bank                                                                                                                                                                                                                      |
+| EGP      | BANK_ACCOUNT               | HSBC                    | 20-30000 | Available | HSBC                                                                                                                                                                                                                                              |
+| EGP      | BANK_ACCOUNT               | IDBE                    | 20-30000 | Available | Industrial Development Bank of Egypt                                                                                                                                                                                                              |
+| EGP      | BANK_ACCOUNT               | MASH                    | 20-30000 | Available | Mashreq Bank                                                                                                                                                                                                                                      |
+| EGP      | BANK_ACCOUNT               | MIDB                    | 20-30000 | Available | Misr Iran Development Bank                                                                                                                                                                                                                        |
+| EGP      | BANK_ACCOUNT               | MISR                    | 20-30000 | Available | Banque Misr                                                                                                                                                                                                                                       |
+| EGP      | BANK_ACCOUNT               | NBAD                    | 20-30000 | Available | National Bank of Abu Dhabi                                                                                                                                                                                                                        |
+| EGP      | BANK_ACCOUNT               | NBE                     | 20-30000 | Available | National Bank of Egypt                                                                                                                                                                                                                            |
+| EGP      | BANK_ACCOUNT               | NBG                     | 20-30000 | Available | National Bank of Greece                                                                                                                                                                                                                           |
+| EGP      | BANK_ACCOUNT               | NBK                     | 20-30000 | Available | National Bank of Kuwait – Egypt                                                                                                                                                                                                                   |
+| EGP      | BANK_ACCOUNT               | NSB                     | 20-30000 | Available | Nasser Social Bank                                                                                                                                                                                                                                |
+| EGP      | BANK_ACCOUNT               | PDAC                    | 20-30000 | Available | The Principal Bank for Development and Agri.                                                                                                                                                                                                      |
+| EGP      | BANK_ACCOUNT               | QNB                     | 20-30000 | Available | Qatar National Bank Alahli                                                                                                                                                                                                                        |
+| EGP      | BANK_ACCOUNT               | SAIB                    | 20-30000 | Available | Societe Arabe Internationale De Banque                                                                                                                                                                                                            |
+| EGP      | BANK_ACCOUNT               | SCB                     | 20-30000 | Available | Suez Canal Bank                                                                                                                                                                                                                                   |
+| EGP      | BANK_ACCOUNT               | UB                      | 20-30000 | Available | The United Bank                                                                                                                                                                                                                                   |
+| EGP      | BANK_ACCOUNT               | UNB                     | 20-30000 | Available | United National Bank                                                                                                                                                                                                                              |
+
 
 {/* </div>
 <div class='page-api-right'>
