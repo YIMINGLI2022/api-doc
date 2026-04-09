@@ -9,9 +9,9 @@ permalink: /api/version2/Middle_East/
 <div class='page-api-content'>
 <div class='page-api-left'> */}
 
-:::warning
-**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
-:::
+<Warning>
+**阅读该接口文档前，务必先查看 [**接口说明**](/docs/zh/guide/api_description_guide)**
+</Warning>
 
 ## **限额**
 
@@ -54,7 +54,7 @@ permalink: /api/version2/Middle_East/
 | appId         | 是   | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                                          |
 | orderId       | 是   | String | 商户订单号(必须保证唯一性，长度不超过48)                                                                                         |
 | name          | 是   | String | 收款人姓名，用于风险控制                                                                                                         |
-| phone         | 是   | String | 真实手机号（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ）                               |
+| phone         | 是   | String | 真实手机号（格式参考 [电话号码格式](/docs/zh/guide/frequently_asked_question.html#phone_format) ）                               |
 | email         | 是   | String | 真实电子邮件                                                                                                                     |
 | amount        | 是   | String | 交易金额（单位：本币，精确到小数点后两位；禁止添加标点符号，例如：”,”），测试环境请使用10SAR以下的金额                           |
 | currency      | 否   | String | 币种(USD,本币)                                                                                                                   |
@@ -73,6 +73,20 @@ permalink: /api/version2/Middle_East/
 | body          | 否   | String | 备注详情                                                                                                                         |
 | partnerUserId | 是   | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。 |
 | sign          | 是   | String | 签名                                                                                                                             |
+
+**阿联酋特殊请求参数：**
+
+| 参数名 | 必选 | 类型 | 说明                   |
+| --- | --- | --- |----------------------|
+| firstName | 是 | String | 收款人名                 |
+| lastName | 是 | String | 收款人姓                 |
+| dateOfBirth | 是 | String | 出生日期（格式示例：DD-MM-YYYY） |
+| countryCode | 是 | String | 国家代码（如 AE 表示阿联酋）     |
+| street | 是 | String | 街道地址                 |
+| city | 是 | String | 城市                   |
+| state | 是 | String | 州/省份                 |
+| postalCode | 是 | String | 邮政编码                 |
+| phoneCode | 是 | String | 电话区号（如 "+971"）     |
 
 #####   
 

@@ -387,7 +387,7 @@
                   },
                   "phone": {
                     "type": "string",
-                    "description": "Real phone number (refer to the [phone format](/en/docs/guide/frequently_asked_question.html#phone_format))"
+                    "description": "Real phone number (refer to the [phone format](/docs/en/guide/frequently_asked_question.html#phone_format))"
                   },
                   "email": {
                     "type": "string",

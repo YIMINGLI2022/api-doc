@@ -7,9 +7,9 @@ permalink: /api/version2/Mexico/
 <div class='page-api-content'>
 <div class='page-api-left'> */}
 
-:::warning
-**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
-:::
+<Warning>
+**阅读该接口文档前，务必先查看 [**接口说明**](/docs/zh/guide/api_description_guide)**
+</Warning>
 
 ## **限额**
 
@@ -39,7 +39,7 @@ permalink: /api/version2/Mexico/
 | appId         | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                                                                                                                                     |
 | orderId       | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                                                                                                                                              |
 | name          | 是  | String | 收款人姓名(收款人姓名格式:英文大小写且允许有空格,1-30位,"firstName middleName lastName" (middleName非必填,特殊字符支持'.-)                                                                                                           |
-| phone         | 是  | String | 真实手机号（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ）                                                                                  |
+| phone         | 是  | String | 真实手机号（格式参考 [电话号码格式](/docs/zh/guide/frequently_asked_question.html#phone_format) ）                                                                                  |
 | email         | 是  | String | 真实电子邮件                                                                                                                                                       |
 | amount        | 是  | String | 交易金额(单位：Mex$，精确到小数点后两位；禁止添加标点符号，例如：","）                                                                                                                                                             |
 | payType       | 是  | String | 用户支付方式：QR（条形码支付）或 VA（虚拟账户）                                                                                                                                                                          |
@@ -52,12 +52,12 @@ permalink: /api/version2/Mexico/
 | partnerUserId | 是  | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。                                                                                                                         |
 | sign          | 是  | String | 签名                                                                                                                                                                                                  |
 
-:::warning
+<Warning>
 **重要说明：**
 1. 此接口支持 QR（条形码支付）和 VA（CLABE虚拟账户）两种支付方式
 2. CLABE虚拟账户为单次收款，不支持多次收款
-3. 回调说明请参考 [公共接口-异步通知](/zh/docs/api/version2/CommonApi.md#2异步通知)
-:::
+3. 回调说明请参考 [公共接口-异步通知](/docs/zh/api/version2/CommonApi)
+</Warning>
 
 ##### 
 
@@ -231,10 +231,10 @@ response
 | orderId     | 是   | String | 商户订单号(必须保证唯一性，长度不超过48)                                                                                                                         |
 | amount      | 是   | String | 交易金额（单位：Mex$，精确到小数点后两位；禁止添加标点符号，例如：","）                                                                             |
 | accountType | 是   | String | 账户类型：BANK_CARD（借记卡（长度16位） , BANK_ACCOUNT（CLABE（长度18位））                                                                      |
-| bankCode    | 是   | String | 银行代码具体值查看 [完整银行编码列表](/zh/docs/api/version2/Mexico_BankCodes.md) |
+| bankCode    | 是   | String | 银行代码具体值查看 [完整银行编码列表](/docs/zh/api/version2/Mexico_BankCodes) |
 | accountNo   | 是   | String | 用户银行账号                                                                                                                                       |
 | name        | 是   | String | 收款人姓名(收款人姓名 格式：英文大小写且允许有空格，1-30位,"firstName middleName lastName" (middleName 非必填, 特殊字符支持 '.-))                  |
-| phone       | 否   | String | 真实手机号（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ）                                                                                                                            |
+| phone       | 否   | String | 真实手机号（格式参考 [电话号码格式](/docs/zh/guide/frequently_asked_question.html#phone_format) ）                                                                                                                            |
 | email       | 是   | String | 真实电子邮件                                                                                                                                           |
 | notifyUrl   | 否  | String | 回调地址                 |
 | subject     | 否   | String | 支付备注（交易标题，商品名称，支付原因）                                                                                                           |
@@ -366,13 +366,13 @@ response — 订单成功
 
 ### **银行编码**
 
-:::warning
+<Warning>
 **重要说明：**
 - 在调用代付接口时，请使用对应的银行名称作为 `bankCode` 参数值
 - 如果银行名称中包含空格，请用"_"代替，例如 "VE POR MAS"，应为 "VE_POR_MAS"
 - CLABE账户号码为18位数字，前3位为银行代码
 - BANK_CARD（借记卡）账户号码为16位数字
-:::
+</Warning>
 
 | 币种 | 支付类型(accountType) | 支付编码(bankCode) | 限额     | 状态 | ABM编码 | 说明              |
 | :------| :------------------------| :--------------------| :----------| :------| :---------| :-------------------|

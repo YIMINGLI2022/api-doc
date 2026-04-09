@@ -19,14 +19,14 @@ permalink: /guide/api_parameters_doc/
 
 创建代收订单
 
-**URL**：`/{currency}/collect/apply`，{currency}为币种，详情参考 [交易支持的国家与币种](/zh/docs/version2/guide/supported-country-region-currency.md)
+**URL**：`/{currency}/collect/apply`，{currency}为币种，详情参考 [交易支持的国家与币种](/docs/zh/version2/guide/supported-country-region-currency)
 
 **请求方式**：POST
 
 **请求参数**: 
 | 参数名        | 必选 | 类型    | 说明                                                                                           |
 | :------------ | :--- | :------ | :--------------------------------------------------------------------------------------------- |
-| appId         | 是   | Long    | 业务ID（后台获取，参考 [商户接入流程](/zh/docs/version2/guide/integration_process_guide.md)） |
+| appId         | 是   | Long    | 业务ID（后台获取，参考 [商户接入流程](/docs/zh/version2/guide/integration_process_guide)） |
 | orderId       | 是   | String  | 商户订单号(必须保证唯一性，长度不超过48)                                                                     |
 | amount        | 是   | String  | 交易金额                                                                                       |
 | name          | 否   | String  | 收款人姓名，（TODO XXX时需要上传）                                                             |
@@ -74,7 +74,7 @@ permalink: /guide/api_parameters_doc/
             <td colspan="2">error</td>
             <td>否</td>
             <td>Integer</td>
-            <td>错误码，详情参考 <a href="/zh/docs/version2/guide/error_code_doc">错误码</a></td>
+            <td>错误码，详情参考 <a href="/docs/zh/version2/guide/error_code_doc">错误码</a></td>
         </tr>
         <tr>
             <td colspan="2">msg</td>
@@ -132,7 +132,7 @@ permalink: /guide/api_parameters_doc/
 
 当客户代收成功或失败，我方会推送订单状态，每隔5分钟回调一次，持续5次。推送的是客户当次支付信息，金额：本次还款金额，手续费：本次手续费。
 
-**URL**：`贵方提供`，参考 [商户接入流程](/zh/docs/version2/guide/integration_process_guide.md)
+**URL**：`贵方提供`，参考 [商户接入流程](/docs/zh/version2/guide/integration_process_guide)
 
 **请求方式**：POST
 
@@ -163,7 +163,7 @@ permalink: /guide/api_parameters_doc/
 **请求参数**：
 | 参数名  | 必选 | 类型   | 说明                                                                                           |
 | :------ | :--- | :----- | :--------------------------------------------------------------------------------------------- |
-| appId   | 是   | Long   | 业务ID（后台获取，参考 [商户接入流程](/zh/docs/version2/guide/integration_process_guide.md)） |
+| appId   | 是   | Long   | 业务ID（后台获取，参考 [商户接入流程](/docs/zh/version2/guide/integration_process_guide)） |
 | orderId | 是   | String | 商户订单号                                                                                     |
 | orderNo | 否   | String | 平台订单号（响应快）                                                                           |
 | sign    | 是   | String | 签名                                                                                           |
@@ -193,7 +193,7 @@ TODO
 
 创建代付订单
 
-**URL**：`/{currency}/pay/apply`，{currency}为币种，详情参考 [交易支持的国家与币种](/zh/docs/version2/guide/supported-country-region-currency.md)
+**URL**：`/{currency}/pay/apply`，{currency}为币种，详情参考 [交易支持的国家与币种](/docs/zh/version2/guide/supported-country-region-currency)
 
 **请求方式**：POST
 
@@ -201,7 +201,7 @@ TODO
 
 | 参数名       | 必选 | 类型   | 说明                                                                                           |
 | :----------- | :--- | :----- | :--------------------------------------------------------------------------------------------- |
-| appId        | 是   | Long   | 业务ID（后台获取，参考 [商户接入流程](/zh/docs/version2/guide/integration_process_guide.md)） |
+| appId        | 是   | Long   | 业务ID（后台获取，参考 [商户接入流程](/docs/zh/version2/guide/integration_process_guide)） |
 | orderId      | 是   | String | 商户订单号(必须保证唯一性，长度不超过48)                                                                     |
 | amount       | 是   | String | 交易金额                                                                                       |
 | name         | 是   | String | 收款人姓名                                                                                     |

@@ -23,7 +23,7 @@ When merchants integrate with HaiPay services and call the API, they must follow
 | Data Format     | Both requests and responses must use application/json format                                                                                                               |
 | Character Set   | UTF-8 character encoding must be used                                                                                                                                      |
 | Signature Algo  | SHA256WithRSA                                                                                                                                                              |
-| Signature Req.  | Both request and response data must be signed and verified. See [Configuration & Signature Rules](/en/docs/guide/config_settings_and_signature_rules_guide.md) for details |
+| Signature Req.  | Both request and response data must be signed and verified. See [Configuration & Signature Rules](/docs/en/guide/config_settings_and_signature_rules_guide) for details |
 | SSL/TLS Version | TLSv1.2, TLSv1.3     
 ## 3. API Structure
 Below is the structure for calling HaiPay APIs. The API name is appended to the request URL. The content inside `data` contains the concatenated payload for different business operations.
@@ -87,7 +87,7 @@ Request URL:
     </tbody>
 </table>
 
-For details, see [API Documentation](/en/docs/guide/api_doc_list.md).
+For details, see [API Documentation](/docs/en/guide/api_doc_list).
 
 ## 5. Parameters
 
@@ -96,7 +96,7 @@ For details, see [API Documentation](/en/docs/guide/api_doc_list.md).
 | Parameter | Required | Type    | Description                                                                                       |
 | :-------- | :------- | :------ | :------------------------------------------------------------------------------------------------ |
 | appId     | Yes      | Integer | Business ID (retrieved from the backend, must correspond to the currency in the request URL)      |
-| sign      | Yes      | String  | Signature (see [Configuration & Signature Rules](/en/docs/guide/config_settings_and_signature_rules_guide.md)) |
+| sign      | Yes      | String  | Signature (see [Configuration & Signature Rules](/docs/en/guide/config_settings_and_signature_rules_guide)) |
 
 **Request Example:**
 ```json

@@ -9,7 +9,7 @@ permalink: /api/version2/creditcard-pci/
 
 
 <Warning>
-**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
+**阅读该接口文档前，务必先查看 [**接口说明**](/docs/zh/guide/api_description_guide)**
 </Warning>
 
 <Danger title="**PCI DSS（支付卡行业数据安全标准）严格禁止在 WebView 或 iframe 中嵌入信用卡输入页面，主要原因如下：**">
@@ -46,7 +46,7 @@ permalink: /api/version2/creditcard-pci/
 | appId         | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                   |
 | orderId       | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                            |
 | name          | 是  | String | 持卡人姓名，格式：包含firstName和lastName，以空格分割的，示例：Donald John Trump                         |
-| phone         | 否  | String | 真实手机号（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ） |
+| phone         | 否  | String | 真实手机号（格式参考 [电话号码格式](/docs/zh/guide/frequently_asked_question.html#phone_format) ） |
 | email         | 是  | String | 真实电子邮件                                                                            |
 | amount        | 是  | String | 交易金额，默认：美元（精确到小数点后两位；禁止添加标点符号，例如：”,”）                                             |
 | payType       | 是  | String | **BANK\_TRANSFER**                                                                |
@@ -217,7 +217,7 @@ response
 | subscriptionOrderId    | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                            |
 | amount                 | 是  | String | 交易金额（精确到小数点后两位；禁止添加标点符号，例如：”,”）                                                   |
 | name                   | 是  | String | 用户姓名，推荐使用真实姓名，格式：包含firstName和lastName，以空格分割的，示例：Donald John Trump                 |
-| phone                  | 否  | String | 真实手机号（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ） |
+| phone                  | 否  | String | 真实手机号（格式参考 [电话号码格式](/docs/zh/guide/frequently_asked_question.html#phone_format) ） |
 | email                  | 是  | String | 真实电子邮件                                                                            |
 | subject                | 是  | String | 支付备注                                                                              |
 | body                   | 否  | String | 备注详情                                                                              |

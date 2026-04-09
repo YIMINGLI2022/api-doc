@@ -6,6 +6,9 @@
     "light": "/logo/light.png",
     "dark": "/logo/dark.png"
   },
+  "search": {
+    "prompt": "搜索文档..."
+  },
   "colors": {
     "primary": "#5F3CC7",
     "light": "#9289FE",
@@ -483,7 +486,7 @@
                 "pages": [
                   "docs/en/api/version2/cashin_code_list",
                   "docs/en/api/version2/cashout_code_list",
-                  "docs/en/api/guide/error_response_appendix"
+                  "docs/en/guide/error_response_appendix"
                 ]
               },
               {
@@ -740,30 +743,44 @@
   "contextual": {
     "options": [
       "copy",
-      "view",
-      "chatgpt",
-      "claude",
-      "perplexity",
-      "mcp",
-      "cursor",
-      "vscode"
+      "view"
     ]
   },
   "navbar": {
     "links": [
       {
-        "label": "支持",
-        "href": "https://your-dashboard-url.com"
+        "label": "Support",
+        "href": "mailto:suupport.haipay.net"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "控制台",
-      "href": "https://your-dashboard-url.com"
+      "label": "Dashboard",
+      "href": "https://dashboard.haipay.top/#/"
     }
   },
   "footer": {
-    "socials": {}
+    "socials": {
+      "x": "https://x.com/mintlify",
+      "linkedin": "https://linkedin.com/company/mintlify",
+      "github": "https://github.com/mintlify"
+    },
+    "links": [
+      {
+        "title": "Explore",
+        "items": [
+          { "label": "Startups", "href": "https://..." },
+          { "label": "Enterprise", "href": "https://..." }
+        ]
+      },
+      {
+        "title": "Resources",
+        "items": [
+          { "label": "Customers", "href": "https://..." },
+          { "label": "Blog", "href": "https://..." }
+        ]
+      }
+    ]
   },
   "api": {
     "playground": {
