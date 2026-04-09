@@ -9,283 +9,266 @@ Below are all the payment methods supported for different countries/regions and 
 
 ## Global
 
-| Currency  | Payment Type(accountType) | Payment Code(bankCode) | Limits        | Status | Description         |
-|-----|---------------|------------------|-----------|----|------------|
-| USD | BANK_TRANSFER | CREDIT_CARD      | 0.99-1000 | 可用 | VISA       |
-| USD | BANK_TRANSFER | CREDIT_CARD      | 0.99-1000 | 可用 | MasterCard |
-| USD | BANK_TRANSFER | CREDIT_CARD      | 0.99-1000 | 可用 | JCB        |
-| USD | EWALLET       | GOOGLE_PAY       | 0.99-1000 | 可用 | Google Pay |
-| USD | EWALLET       | APPLE_PAY        | 0.99-1000 | 可用 | Apple Pay  |
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits    | Status    | Description |
+|----------|------------------------|---------------------------|-----------|-----------|-------------|
+| USD      | BANK_TRANSFER          | CREDIT_CARD               | 0.99-1000 | Available | VISA        |
+| USD      | BANK_TRANSFER          | CREDIT_CARD               | 0.99-1000 | Available | MasterCard  |
+| USD      | BANK_TRANSFER          | CREDIT_CARD               | 0.99-1000 | Available | JCB         |
+| USD      | EWALLET                | GOOGLE_PAY                | 0.99-1000 | Available | Google Pay  |
+| USD      | EWALLET                | APPLE_PAY                 | 0.99-1000 | Available | Apple Pay   |
 
 ## Europe
 
 ### European Wallets
 
-| Currency  | Payment Type(accountType) | Payment Code(bankCode) | Limits        | Status | Description               |
-|-----|---------------|------------------|-----------|----|------------------|
-| USD | BANK_TRANSFER | BANCONTACT_USD   | 0.99-1000 | 可用 | 比利时 Bancontact   |
-| USD | BANK_TRANSFER | EPS_USD          | 0.99-1000 | 可用 | 奥地利 EPS          |
-| USD | BANK_TRANSFER | IDEAL_USD        | 0.99-1000 | 可用 | 荷兰 IDEAL         |
-| USD | EWALLET       | BANCOMATPAY_USD  | 0.99-1000 | 可用 | 意大利 Bancomat Pay |
-| USD | BANK_TRANSFER | BLIK_USD         | 0.99-1000 | 可用 | 波兰 BLIK          |
-| EUR | BANK_TRANSFER | BANCONTACT_EUR   | 0.99-1000 | 可用 | 比利时 Bancontact   |
-| EUR | BANK_TRANSFER | EPS_EUR          | 0.99-1000 | 可用 | 奥地利 EPS          |
-| EUR | BANK_TRANSFER | IDEAL_EUR        | 0.99-1000 | 可用 | 荷兰 IDEAL         |
-| EUR | EWALLET       | BANCOMATPAY_EUR  | 0.99-1000 | 可用 | 意大利 Bancomat Pay |
-| USD | BANK_TRANSFER | PRZELEWY24_USD   | 0.99-1000 | 维护 | 波兰 Przelewy24    |
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits    | Status      | Description        |
+|----------|------------------------|---------------------------|-----------|-------------|--------------------|
+| USD      | BANK_TRANSFER          | BANCONTACT_USD            | 0.99-1000 | Available   | Belgium Bancontact |
+| USD      | BANK_TRANSFER          | EPS_USD                   | 0.99-1000 | Available   | Austria EPS        |
+| USD      | BANK_TRANSFER          | IDEAL_USD                 | 0.99-1000 | Available   | Netherlands IDEAL  |
+| USD      | EWALLET                | BANCOMATPAY_USD           | 0.99-1000 | Available   | Italy Bancomat Pay |
+| USD      | BANK_TRANSFER          | BLIK_USD                  | 0.99-1000 | Available   | Poland BLIK        |
+| EUR      | BANK_TRANSFER          | BANCONTACT_EUR            | 0.99-1000 | Available   | Belgium Bancontact |
+| EUR      | BANK_TRANSFER          | EPS_EUR                   | 0.99-1000 | Available   | Austria EPS        |
+| EUR      | BANK_TRANSFER          | IDEAL_EUR                 | 0.99-1000 | Available   | Netherlands IDEAL  |
+| EUR      | EWALLET                | BANCOMATPAY_EUR           | 0.99-1000 | Available   | Italy Bancomat Pay |
+| USD      | BANK_TRANSFER          | PRZELEWY24_USD            | 0.99-1000 | Maintenance | Poland Przelewy24  |
 
 
 ### Turkey
 
-| Currency  | Payment Type(accountType)   | Payment Code(bankCode) | Limits          | Status | Description        |
-|-----|-----------------|------------------|-------------|----|-----------|
-| TRY | BANK_ACCOUNT    | IBAN             | 1000-500000 | 可用 | 土耳其国际银行支付 |
-| TRY | PAYMENT_GATEWAY | PAPARA           | 10-99000    | 维护 | Papara钱包  |
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits      | Status      | Description                       |
+|----------|------------------------|---------------------------|-------------|-------------|-----------------------------------|
+| TRY      | BANK_ACCOUNT           | IBAN                      | 1000-500000 | Available   | International Bank Account Number |
+| TRY      | PAYMENT_GATEWAY        | PAPARA                    | 10-99000    | Maintenance | Papara Wallet                     |
+
 
 ## South America
 
 ### Brazil
 
-| Currency  | Payment Type(accountType) | Payment Code(bankCode) | Limits      | Status | Description     |
-|-----|---------------|------------------|---------|----|--------|
-| BRL | QR            | PIX              | 5-20000 | 可用 | PIX二维码 |
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits  | Status    | Description |
+|----------|------------------------|---------------------------|---------|-----------|-------------|
+| BRL      | QR                     | PIX                       | 5-20000 | Available | PIX QR Code |
 
 ## Asia
 
 ### Hong Kong
 
-| Currency  | Payment Type(accountType) | Payment Code(bankCode)      | Limits          | Status | Description       |
-|-----|---------------|-----------------------|-------------|----|----------|
-| HKD | EWALLET       | WXPAY_SCANCODE        | 1-1000      | 可用 | 微信扫码支付   |
-| HKD | EWALLET       | ALIPAY_HKD            | 1-5000      | 可用 | AlipayHK |
-| USD | EWALLET       | HK_WXPAY_SCANCODE_USD | 0.99-120    | 可用 | 微信扫码支付   |
-| USD | BANK_TRANSFER | ALIPAY_USD            | 0.99-499.99 | 可用 | AlipayHK |
-| USD | BANK_TRANSFER | PAYME_USD             | 1-1000      | 维护 | PayMe    |
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits | Status    | Description        |
+|----------|------------------------|---------------------------|--------|-----------|--------------------|
+| HKD      | EWALLET                | WXPAY_SCANCODE            | 1-1000 | Available | WeChat Pay QR Code |
+| HKD      | EWALLET                | PAYNOW_SCANCODE           | 1-1000 | Available | PayNow QR Code     |
+| USD      | BANK_TRANSFER          | PAYME_USD                 | 1-1000 | Available | Hong Kong PAYME    |
+| USD      | BANK_TRANSFER          | ALIPAY_USD                | 1-1000 | Available | Hong Kong ALIPAY   |
 
 ### Singapore
 
-| Currency  | Payment Type(accountType) | Payment Code(bankCode) | Limits     | Status | Description         |
-|-----|---------------|------------------|--------|----|------------|
-| SGD | EWALLET       | PAYNOW_SGD       | 1-3000 | 可用 | PayNow扫码支付 |
-| USD | BANK_TRANSFER | PAYNOW_USD       | 1-3000 | 可用 | PayNow扫码支付 |
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits | Status    | Description            |
+|----------|------------------------|---------------------------|--------|-----------|------------------------|
+| SGD      | EWALLET                | PAYNOW_SGD                | 2-3000 | Available | PayNow QR code payment |
+| USD      | BANK_TRANSFER          | PAYNOW_USD                | 1-500  | Available | PayNow QR code payment |
 
 ### Taiwan
 
-
-| Currency  | Payment Type(accountType) | Payment Code(bankCode)       | Limits           | Status | Description                 |
-|-----|---------------|------------------------|--------------|----|--------------------|
-| TWD | QR            | JKO_PAY_QR             | 30-20000     | 可用 | JkoPay QR          |
-| TWD | EWALLET       | JKO_PAY_TWD            | 30-20000     | 可用 | JkoPay             |
-| TWD | BANK_TRANSFER | ATM                    | 1000-20000   | 可用 | ATM收银台             |
-| TWD | BANK_TRANSFER | STORE_IBON             | 100-20000    | 可用 | 7-11超商             |
-| TWD | BANK_TRANSFER | STORE_HILIFEET         | 100-20000    | 可用 | 萊爾富Life-ET         |
-| TWD | BANK_TRANSFER | STORE_OKGO             | 100-20000    | 可用 | OK超商OK-go          |
-| TWD | BANK_TRANSFER | STORE_FAMI             | 100-20000    | 可用 | 全家FAMIPORT         |
-| TWD | BANK_TRANSFER | STORE_MBC_HILIFEET     | 100-20000    | 可用 | 超商行動掃碼(萊爾富Life-ET) |
-| TWD | BANK_TRANSFER | STORE_MBC_IBON         | 100-20000    | 可用 | 7-11超商行動掃碼         |
-| USD | EWALLET       | JKO_PAY                | 0.99-499.99  | 可用 | JkoPay             |
-| USD | BANK_TRANSFER | LINE_PAY_USD           | 2.99-499.99  | 可用 | LinePay            |
-| USD | BANK_TRANSFER | ATM_USD                | 32.99-499.99 | 可用 | ATM收银台             |
-| USD | BANK_TRANSFER | STORE_IBON_USD         | 2.99-499.99  | 可用 | 7-11超商             |
-| USD | BANK_TRANSFER | STORE_HILIFEET_USD     | 2.99-499.99  | 可用 | 萊爾富Life-ET         |
-| USD | BANK_TRANSFER | STORE_OKGO_USD         | 2.99-499.99  | 可用 | OK超商OK-go          |
-| USD | BANK_TRANSFER | STORE_FAMI_USD         | 2.99-499.99  | 可用 | 全家FAMIPORT         |
-| USD | BANK_TRANSFER | STORE_MBC_HILIFEET_USD | 2.99-499.99  | 可用 | 超商行動掃碼(萊爾富Life-ET) |
-| USD | BANK_TRANSFER | STORE_MBC_IBON_USD     | 2.99-499.99  | 可用 | 超商行動掃碼(7-11)       |
-
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits       | Status      | Description                        |
+|----------|------------------------|---------------------------|--------------|-------------|------------------------------------|
+| TWD      | QR                     | JKO_PAY_QR                | 30-20000     | Available   | JkoPay QR                          |
+| TWD      | EWALLET                | JKO_PAY_TWD               | 30-20000     | Available   | JkoPay                             |
+| TWD      | BANK_TRANSFER          | ATM                       | 1000-20000   | Available   | ATM Cashier                        |
+| TWD      | BANK_TRANSFER          | STORE_IBON                | 100-20000    | Available   | 7-11 Convenience Store             |
+| TWD      | BANK_TRANSFER          | STORE_HILIFEET            | 100-20000    | Available   | Hi-Life Life-ET                    |
+| TWD      | BANK_TRANSFER          | STORE_OKGO                | 100-20000    | Maintenance | OK Convenience Store OK-go         |
+| TWD      | BANK_TRANSFER          | STORE_FAMI                | 100-20000    | Available   | FamilyMart FAMIPORT                |
+| TWD      | BANK_TRANSFER          | STORE_MBC_HILIFEET        | 100-20000    | Available   | Mobile Scan (Hi-Life Life-ET)      |
+| TWD      | BANK_TRANSFER          | STORE_MBC_IBON            | 100-20000    | Available   | 7-11 Convenience Store Mobile Scan |
+| USD      | EWALLET                | JKO_PAY                   | 0.99-499.99  | Available   | JkoPay                             |
+| USD      | BANK_TRANSFER          | LINE_PAY_USD              | 2.99-499.99  | Available   | LinePay                            |
+| USD      | BANK_TRANSFER          | ATM_USD                   | 32.99-499.99 | Available   | ATM Cashier                        |
+| USD      | BANK_TRANSFER          | STORE_IBON_USD            | 2.99-499.99  | Available   | 7-11 Convenience Store             |
+| USD      | BANK_TRANSFER          | STORE_HILIFEET_USD        | 2.99-499.99  | Available   | Hi-Life Life-ET                    |
+| USD      | BANK_TRANSFER          | STORE_OKGO_USD            | 2.99-499.99  | Available   | OK Convenience Store OK-go         |
+| USD      | BANK_TRANSFER          | STORE_FAMI_USD            | 2.99-499.99  | Available   | FamilyMart FAMIPORT                |
+| USD      | BANK_TRANSFER          | STORE_MBC_HILIFEET_USD    | 2.99-499.99  | Available   | Mobile Scan (Hi-Life Life-ET)      |
+| USD      | BANK_TRANSFER          | STORE_MBC_IBON_USD        | 2.99-499.99  | Available   | Mobile Scan (7-11)                 |
 
 ### Japan
 
-| Currency  | Payment Type(accountType) | Payment Code(bankCode)            | Limits         | Status | Description            |
-|-----|---------------|-----------------------------|------------|----|---------------|
-| JPY | EWALLET       | AU_PAY                      | 100-150000 | 可用 | AuPay         |
-| JPY | EWALLET       | MERPAY                      | 100-150000 | 可用 | MerPay        |
-| JPY | BANK_TRANSFER | GMO_AOZORA                  | 100-150000 | 可用 | GMO Aozora VA |
-| JPY | BANK_TRANSFER | KONBINI_FAMILYMART          | 300-150000 | 可用 | 全家便利店         |
-| JPY | BANK_TRANSFER | KONBINI_LAWSON              | 300-150000 | 可用 | 罗森便利店         |
-| JPY | BANK_TRANSFER | KONBINI_SEVEN_ELEVEN        | 300-150000 | 可用 | 7-11便利店       |
-| JPY | BANK_TRANSFER | KONBINI_MINISTOP            | 300-150000 | 可用 | 迷你岛便利店        |
-| USD | EWALLET       | JP_AU_PAY_USD               | 0.99-1000  | 可用 | AuPay         |
-| USD | EWALLET       | JP_MERPAY_USD               | 0.99-1000  | 可用 | MerPay        |
-| USD | BANK_TRANSFER | JP_GMO_AOZORA_USD           | 0.99-1000  | 可用 | GMO Aozora VA |
-| USD | BANK_TRANSFER | JP_KONBINI_FAMILYMART_USD   | 1.99-1000  | 可用 | 全家便利店         |
-| USD | BANK_TRANSFER | JP_KONBINI_LAWSON_USD       | 1.99-1000  | 可用 | 罗森便利店         |
-| USD | BANK_TRANSFER | JP_KONBINI_SEVEN_ELEVEN_USD | 1.99-1000  | 可用 | 7-11便利店       |
-| USD | BANK_TRANSFER | JP_KONBINI_MINISTOP_USD     | 1.99-1000  | 可用 | 迷你岛便利店        |
-
-
-### South Korea
-
-| Currency  | Payment Type(accountType) | Payment Code(bankCode) | Limits           | Status | Description                 |
-|-----|---------------|------------------|--------------|----|--------------------|
-| KRW | BANK_TRANSFER | KAKAOPAY_KRW     | 1000-1500000 | 可用 | Kakao Pay钱包        |
-| KRW | BANK_TRANSFER | NAVERPAY_KRW     | 1000-1500000 | 可用 | Naver Pay钱包        |
-| KRW | BANK_TRANSFER | TOSS_KRW         | 1000-1500000 | 可用 | Toss Pay钱包         |
-| KRW | EWALLET       | SAMSUNGPAY_KRW   | 1000-1500000 | 可用 | Samsung Pay钱包      |
-| KRW | EWALLET       | PAYCO_KRW        | 1000-1500000 | 可用 | PayCo钱包            |
-| KRW | BANK_TRANSFER | BANK_KRW         | 1000-1500000 | 可用 | 银行账号授权支付(支持韩国所有银行) |
-| USD | BANK_TRANSFER | KAKAOPAY_USD     | 0.99-1000    | 可用 | Kakao Pay钱包        |
-| USD | BANK_TRANSFER | NAVERPAY_USD     | 0.99-1000    | 可用 | Naver Pay钱包        |
-| USD | BANK_TRANSFER | TOSS_USD         | 0.99-1000    | 可用 | Toss Pay钱包         |
-| USD | EWALLET       | SAMSUNGPAY_USD   | 0.99-1000    | 可用 | Samsung Pay钱包      |
-| USD | EWALLET       | PAYCO_USD        | 0.99-1000    | 可用 | PayCo钱包            |
-| USD | BANK_TRANSFER | KR_BANK_USD      | 0.99-1000    | 可用 | 银行账号授权支付(支持韩国所有银行) |
-
+| Currency | Payment Type (payType) | Payment Code (inBankCode)   | Limits     | Status    | Description                  |
+|----------|------------------------|-----------------------------|------------|-----------|------------------------------|
+| JPY      | EWALLET                | AU_PAY                      | 100-150000 | Available | AuPay                        |
+| JPY      | EWALLET                | MERPAY                      | 100-150000 | Available | MerPay                       |
+| JPY      | BANK_TRANSFER          | GMO_AOZORA                  | 100-150000 | Available | GMO Aozora VA                |
+| JPY      | BANK_TRANSFER          | KONBINI_FAMILYMART          | 300-150000 | Available | FamilyMart Convenience Store |
+| JPY      | BANK_TRANSFER          | KONBINI_LAWSON              | 300-150000 | Available | Lawson Convenience Store     |
+| JPY      | BANK_TRANSFER          | KONBINI_SEVEN_ELEVEN        | 300-150000 | Available | 7-11 Convenience Store       |
+| JPY      | BANK_TRANSFER          | KONBINI_MINISTOP            | 300-150000 | Available | Mini Stop Convenience Store  |
+| USD      | EWALLET                | JP_AU_PAY_USD               | 0.99-1000  | Available | AuPay                        |
+| USD      | EWALLET                | JP_MERPAY_USD               | 0.99-1000  | Available | MerPay                       |
+| USD      | BANK_TRANSFER          | JP_GMO_AOZORA_USD           | 0.99-1000  | Available | GMO Aozora VA                |
+| USD      | BANK_TRANSFER          | JP_KONBINI_FAMILYMART_USD   | 1.99-1000  | Available | FamilyMart Convenience Store |
+| USD      | BANK_TRANSFER          | JP_KONBINI_LAWSON_USD       | 1.99-1000  | Available | Lawson Convenience Store     |
+| USD      | BANK_TRANSFER          | JP_KONBINI_SEVEN_ELEVEN_USD | 1.99-1000  | Available | 7-11 Convenience Store       |
+| USD      | BANK_TRANSFER          | JP_KONBINI_MINISTOP_USD     | 1.99-1000  | Available | Mini Stop Convenience Store  |
 
 ### Philippines
 
-| Currency  | Payment Type(accountType)   | Payment Code(bankCode) | Limits        | Status | Description          |
-|-----|-----------------|------------------|-----------|----|-------------|
-| PHP | QR              | PH_QRPH_DYNAMIC  | 100-50000 | 可用 | QRPH动态码     |
-| PHP | PAYMENT_GATEWAY | GCASH_QR         | 100-50000 | 可用 | Gcash钱包(唤醒) |
-| PHP | PAYMENT_GATEWAY | GCASH_URL        | 100-50000 | 可用 | Gcash钱包(直连) |
-| PHP | PAYMENT_GATEWAY | GRPY_URL         | 100-50000 | 可用 | GrabPay钱包   |
-| PHP | PAYMENT_GATEWAY | PAYMAYA_URL      | 100-50000 | 可用 | PayMaya钱包   |
-
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits    | Status    | Description            |
+|----------|------------------------|---------------------------|-----------|-----------|------------------------|
+| PHP      | QR                     | PH_QRPH_DYNAMIC           | 100-50000 | Available | QRPH Dynamic Code      |
+| PHP      | PAYMENT_GATEWAY        | GCASH_QR                  | 100-50000 | Available | Gcash Wallet (Wake-up) |
+| PHP      | PAYMENT_GATEWAY        | GCASH_URL                 | 100-50000 | Available | Gcash Wallet (Direct)  |
+| PHP      | PAYMENT_GATEWAY        | GRPY_URL                  | 100-50000 | Available | GrabPay Wallet         |
+| PHP      | PAYMENT_GATEWAY        | PAYMAYA_URL               | 100-50000 | Available | PayMaya Wallet         |
 
 ### Thailand
 
-| Currency | Payment Type(accountType) | Payment Code(bankCode) | Limits   | Status | Description |
-| :--- | :---------------- | :------------------- | :----- | :--- | :--- |
-| THB  | QR                | QR                   | 1-8000 | 可用 | PromptPay QR二维码 |
-| THB  | PAYMENT_GATEWAY   | TM                   | 1-8000 | 可用 | TrueMoney钱包 |
-| USD  | QR                | TH_QR_USD            | 0.99-220 | 可用 | PromptPay QR二维码 |
-| USD  | PAYMENT_GATEWAY   | TH_TM_USD            | 0.99-220 | 可用 | TrueMoney钱包 |
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits   | Status    | Description       |
+|----------|------------------------|---------------------------|----------|-----------|-------------------|
+| THB      | QR                     | QR                        | 1-8000   | Available | PromptPay QR Code |
+| THB      | PAYMENT_GATEWAY        | TM                        | 1-8000   | Available | TrueMoney Wallet  |
+| USD      | QR                     | TH_QR_USD                 | 0.99-220 | Available | PromptPay QR Code |
+| USD      | PAYMENT_GATEWAY        | TH_TM_USD                 | 0.99-220 | Available | TrueMoney Wallet  |
 
 ### Vietnam
 
-| Currency | Payment Type(accountType) | Payment Code(bankCode) | Limits        | Status | Description |
-| :--- | :---------------- | :------------------- | :---------- | :--- | :--- |
-| VND  | QR                | QR                   | 100000-10000000 | 可用 | QR二维码 |
-| VND  | BANK_TRANSFER     | BANK                 | 100000-10000000 | 可用 | 银行转账 |
-| VND  | EWALLET           | MOMO_VND             | 100000-10000000 | 可用 | MOMO钱包 |
-| USD  | QR                | VN_QR_USD            | 0.99-2000 | 可用 | QR二维码 |
-| USD  | BANK_TRANSFER     | VN_BANK_USD          | 0.99-2000 | 可用 | 银行转账 |
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits          | Status    | Description   |
+|----------|------------------------|---------------------------|-----------------|-----------|---------------|
+| VND      | QR                     | QR                        | 100000-10000000 | Available | QR Code       |
+| VND      | BANK_TRANSFER          | BANK                      | 100000-10000000 | Available | Bank Transfer |
+| VND      | EWALLET                | MOMO_VND                  | 100000-10000000 | Available | MOMO Wallet   |
+| USD      | QR                     | VN_QR_USD                 | 0.99-2000       | Available | QR Code       |
+| USD      | BANK_TRANSFER          | VN_BANK_USD               | 0.99-2000       | Available | Bank Transfer |
 
 ### Indonesia
 
-| Currency | Payment Type(accountType) | Payment Code(bankCode) | Limits        | Status | Description |
-| :--- | :---------------- | :------------------- | :---------- | :--- | :--- |
-| IDR  | QR                | dynamic              | 10000-10000000 | 可用 | QRIS动态码 |
-| IDR  | EWALLET           | DANA                 | 10000-20000000 | 可用 | Dana钱包 |
-| IDR  | EWALLET           | SHOPEEPAY            | 10000-20000000 | 可用 | ShopeePay钱包 |
-| IDR  | EWALLET           | LINKAJA              | 10000-20000000 | 可用 | LinkAja钱包 |
-| IDR  | CASHIER           | OVO                  | 10000-20000000 | 可用 | OVO钱包 |
-| IDR  | VA                | 002                  | 10000-50000000 | 可用 | BRI银行 |
-| IDR  | VA                | 009                  | 10000-50000000 | 可用 | BNI银行 |
-| IDR  | VA                | 013                  | 10000-50000000 | 维护 | PERMATA银行 |
-| IDR  | VA                | 022                  | 10000-50000000 | 维护 | CIMB银行 |
-| USD  | QR                | ID_QRIS_USD          | 0.99-500 | 可用 | QRIS动态码 |
-| USD  | EWALLET           | ID_DANA_USD          | 0.99-1000 | 可用 | Dana钱包 |
-| USD  | EWALLET           | ID_SHOPEEPAY_USD     | 0.99-1000 | 可用 | ShopeePay钱包 |
-| USD  | EWALLET           | ID_LINKAJA_USD       | 0.99-1000 | 可用 | LinkAja钱包 |
-| USD  | CASHIER           | ID_OVO_USD           | 0.99-1000 | 可用 | OVO钱包 |
-| USD  | VA                | ID_BRI_USD           | 0.99-2500 | 可用 | BRI银行 |
-| USD  | VA                | ID_BNI_USD           | 0.99-2500 | 可用 | BNI银行 |
-| USD  | VA                | ID_PERMATA_USD       | 0.99-2500 | 维护 | PERMATA银行 |
-| USD  | VA                | ID_CIMB_USD          | 0.99-2500 | 维护 | CIMB银行 |
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits         | Status      | Description       |
+|----------|------------------------|---------------------------|----------------|-------------|-------------------|
+| IDR      | QR                     | dynamic                   | 10000-10000000 | Available   | QRIS Dynamic Code |
+| IDR      | EWALLET                | DANA                      | 10000-20000000 | Available   | Dana Wallet       |
+| IDR      | EWALLET                | SHOPEEPAY                 | 10000-20000000 | Available   | ShopeePay Wallet  |
+| IDR      | EWALLET                | LINKAJA                   | 10000-20000000 | Available   | LinkAja Wallet    |
+| IDR      | CASHIER                | OVO                       | 10000-20000000 | Available   | OVO Wallet        |
+| IDR      | VA                     | 002                       | 10000-50000000 | Available   | BRI Bank          |
+| IDR      | VA                     | 009                       | 10000-50000000 | Available   | BNI Bank          |
+| IDR      | VA                     | 013                       | 10000-50000000 | Maintenance | PERMATA Bank      |
+| IDR      | VA                     | 022                       | 10000-50000000 | Maintenance | CIMB Bank         |
+| USD      | QR                     | ID_QRIS_USD               | 0.99-500       | Available   | QRIS Dynamic Code |
+| USD      | EWALLET                | ID_DANA_USD               | 0.99-1000      | Available   | Dana Wallet       |
+| USD      | EWALLET                | ID_SHOPEEPAY_USD          | 0.99-1000      | Available   | ShopeePay Wallet  |
+| USD      | EWALLET                | ID_LINKAJA_USD            | 0.99-1000      | Available   | LinkAja Wallet    |
+| USD      | CASHIER                | ID_OVO_USD                | 0.99-1000      | Available   | OVO Wallet        |
+| USD      | VA                     | ID_BRI_USD                | 0.99-2500      | Available   | BRI Bank          |
+| USD      | VA                     | ID_BNI_USD                | 0.99-2500      | Available   | BNI Bank          |
+| USD      | VA                     | ID_PERMATA_USD            | 0.99-2500      | Maintenance | PERMATA Bank      |
+| USD      | VA                     | ID_CIMB_USD               | 0.99-2500      | Maintenance | CIMB Bank         |
 
 ### Malaysia
 
-| Currency | Payment Type(accountType) | Payment Code(bankCode) | Limits   | Status | Description |
-| :--- | :---------------- | :------------------- | :----- | :--- | :--- |
-| MYR  | QR                | QR                   | 1-3000 | 维护 | DuitNow QR二维码 |
-| MYR  | EWALLET           | TNG                  | 1-3000 | 可用 | Touch N Go |
-| MYR  | EWALLET           | GRAB                 | 1-3000 | 可用 | GrabPay |
-| MYR  | EWALLET           | BOOST                | 1-3000 | 可用 | Boost |
-| MYR  | EWALLET           | SHOPEE               | 1-3000 | 可用 | ShopeePay |
-| MYR  | EWALLET           | MCash                | 1-3000 | 可用 | MCash |
-| MYR  | BANK_TRANSFER     | FPX_MYR              | 1-3000 | 可用 | FPX银行转账 |
-| USD  | BANK_TRANSFER     | TNG_USD              | 0.99-499.99 | 可用 | Touch N Go |
-| USD  | BANK_TRANSFER     | BOOST_USD            | 0.99-499.99 | 可用 | Boost |
-| USD  | BANK_TRANSFER     | FPX_USD              | 0.99-499.99 | 可用 | FPX银行转账 |
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits      | Status      | Description       |
+|----------|------------------------|---------------------------|-------------|-------------|-------------------|
+| MYR      | QR                     | QR                        | 1-3000      | Maintenance | DuitNow QR Code   |
+| MYR      | EWALLET                | TNG                       | 1-3000      | Available   | Touch N Go        |
+| MYR      | EWALLET                | GRAB                      | 1-3000      | Available   | GrabPay           |
+| MYR      | EWALLET                | BOOST                     | 1-3000      | Available   | Boost             |
+| MYR      | EWALLET                | SHOPEE                    | 1-3000      | Available   | ShopeePay         |
+| MYR      | EWALLET                | MCash                     | 1-3000      | Available   | MCash             |
+| MYR      | BANK_TRANSFER          | FPX_MYR                   | 1-3000      | Available   | FPX Bank Transfer |
+| USD      | BANK_TRANSFER          | TNG_USD                   | 0.99-499.99 | Available   | Touch N Go        |
+| USD      | BANK_TRANSFER          | BOOST_USD                 | 0.99-499.99 | Available   | Boost             |
+| USD      | BANK_TRANSFER          | FPX_USD                   | 0.99-499.99 | Available   | FPX Bank Transfer |
 
 ### Pakistan
 
-| Currency | Payment Type(accountType) | Payment Code(bankCode) | Limits      | Status | Description |
-| :--- | :---------------- | :------------------- | :-------- | :--- | :--- |
-| PKR  | PAYMENT_GATEWAY   | CASHIER              | 10-500000 | 可用 | 收银台模式 |
-| PKR  | EWALLET           | JAZZCASH             | 10-500000 | 可用 | JazzCash钱包 |
-| PKR  | EWALLET           | EASYPAISA            | 10-500000 | 可用 | EasyPaisa钱包 |
-| PKR  | EWALLET           | ALFA                 | 10-500000 | 维护 | ALFA钱包 |
-| PKR  | EWALLET           | HBL_KONNECT          | 10-500000 | 维护 | HBL KONNECT钱包 |
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits    | Status      | Description        |
+|----------|------------------------|---------------------------|-----------|-------------|--------------------|
+| PKR      | PAYMENT_GATEWAY        | CASHIER                   | 10-500000 | Available   | Cashier Mode       |
+| PKR      | EWALLET                | JAZZCASH                  | 10-500000 | Available   | JazzCash Wallet    |
+| PKR      | EWALLET                | EASYPAISA                 | 10-500000 | Available   | EasyPaisa Wallet   |
+| PKR      | EWALLET                | ALFA                      | 10-500000 | Maintenance | ALFA Wallet        |
+| PKR      | EWALLET                | HBL_KONNECT               | 10-500000 | Maintenance | HBL KONNECT Wallet |
 
 ### Bangladesh
 
-| Currency | Payment Type(accountType) | Payment Code(bankCode) | Limits   | Status | Description |
-| :--- | :---------------- | :------------------- | :----- | :--- | :--- |
-| BDT  | EWALLET           | BDT_BKASH            | 100-50000 | 可用 | bkash |
-| BDT  | EWALLET           | BDT_NAGAD            | 100-50000 | 可用 | nagad |
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limit     | Status    | Description |
+|----------|------------------------|---------------------------|-----------|-----------|-------------|
+| BDT      | EWALLET                | BDT_BKASH                 | 100-50000 | Available | bkash       |
+| BDT      | EWALLET                | BDT_NAGAD                 | 100-50000 | Available | nagad       |
+
 
 ## Middle East
 
 ### Egypt
 
-| Currency | Payment Type(accountType) | Payment Code(bankCode) | Limits   | Status | Description |
-| :--- | :---------------- | :------------------- | :----- | :--- | :--- |
-| EGP  | EWALLET           | REFERENCE_CODE       | 10-30000 | 可用 | Fawry钱包 |
-| EGP  | EWALLET           | VODAFONE             | 5-30000 | 可用 | Vodafone钱包 |
-| EGP  | EWALLET           | R2P                  | 5-30000 | 维护 | MWallet USSD推送支付 |
-| EGP  | EWALLET           | OTP                  | 5-30000 | 维护 | Vodafone OTP验证支付 |
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits   | Status      | Description                       |
+|----------|------------------------|---------------------------|----------|-------------|-----------------------------------|
+| EGP      | EWALLET                | REFERENCE_CODE            | 10-30000 | Available   | Fawry Wallet                      |
+| EGP      | EWALLET                | VODAFONE                  | 5-30000  | Available   | Vodafone Wallet                   |
+| EGP      | EWALLET                | R2P                       | 5-30000  | Maintenance | MWallet USSD Push Payment         |
+| EGP      | EWALLET                | OTP                       | 5-30000  | Maintenance | Vodafone OTP Verification Payment |
 
 ### Saudi Arabia
 
-| Currency | Payment Type(accountType) | Payment Code(bankCode) | Limits   | Status | Description |
-| :--- | :---------------- | :------------------- | :----- | :--- | :--- |
-| SAR  | PAYMENT_GATEWAY   | CARD                 | 0.5-5000 | 可用 | VISA |
-| SAR  | PAYMENT_GATEWAY   | CARD                 | 0.5-5000 | 可用 | MasterCard |
-| SAR  | PAYMENT_GATEWAY   | CARD                 | 0.5-5000 | 可用 | Mada |
-| SAR  | PAYMENT_GATEWAY   | STCPAY               | 0.5-300 | 可用 | STCPay钱包 |
-| SAR  | EWALLET           | APPLE_PAY            | 0.5-5000 | 可用 | Apple Pay |
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits   | Status    | Description   |
+|----------|------------------------|---------------------------|----------|-----------|---------------|
+| SAR      | PAYMENT_GATEWAY        | CARD                      | 0.5-5000 | Available | VISA          |
+| SAR      | PAYMENT_GATEWAY        | CARD                      | 0.5-5000 | Available | MasterCard    |
+| SAR      | PAYMENT_GATEWAY        | CARD                      | 0.5-5000 | Available | Mada          |
+| SAR      | PAYMENT_GATEWAY        | STCPAY                    | 0.5-300  | Available | STCPay Wallet |
+| SAR      | EWALLET                | APPLE_PAY                 | 0.5-5000 | Available | Apple Pay     |
+
 
 ### UAE
 
-| Currency | Payment Type(accountType) | Payment Code(bankCode) | Limits   | Status | Description |
-| :--- | :---------------- | :------------------- | :----- | :--- | :--- |
-| AED  | PAYMENT_GATEWAY   | CARD                 | 0.5-5000 | 可用 | VISA |
-| AED  | PAYMENT_GATEWAY   | CARD                 | 0.5-5000 | 可用 | MasterCard |
-| AED  | EWALLET           | APPLE_PAY            | 0.5-5000 | 可用 | Apple Pay |
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits   | Status    | Description |
+|----------|------------------------|---------------------------|----------|-----------|-------------|
+| AED      | PAYMENT_GATEWAY        | CARD                      | 0.5-5000 | Available | VISA        |
+| AED      | PAYMENT_GATEWAY        | CARD                      | 0.5-5000 | Available | MasterCard  |
+| AED      | EWALLET                | APPLE_PAY                 | 0.5-5000 | Available | Apple Pay   |
+
 
 ### Kuwait
 
-| Currency | Payment Type(accountType) | Payment Code(bankCode) | Limits   | Status | Description |
-| :--- | :---------------- | :------------------- | :----- | :--- | :--- |
-| KWD  | PAYMENT_GATEWAY   | CARD                 | 0.5-800 | 可用 | VISA |
-| KWD  | PAYMENT_GATEWAY   | CARD                 | 0.5-800 | 可用 | MasterCard |
-| KWD  | PAYMENT_GATEWAY   | CARD                 | 0.5-800 | 可用 | KNET |
-| KWD  | EWALLET           | APPLE_PAY            | 0.5-800 | 可用 | Apple Pay |
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits  | Status    | Description |
+|----------|------------------------|---------------------------|---------|-----------|-------------|
+| KWD      | PAYMENT_GATEWAY        | CARD                      | 0.5-800 | Available | VISA        |
+| KWD      | PAYMENT_GATEWAY        | CARD                      | 0.5-800 | Available | MasterCard  |
+| KWD      | PAYMENT_GATEWAY        | CARD                      | 0.5-800 | Available | KNET        |
+| KWD      | EWALLET                | APPLE_PAY                 | 0.5-800 | Available | Apple Pay   |
 
 ### Qatar
 
-| Currency | Payment Type(accountType) | Payment Code(bankCode) | Limits   | Status | Description |
-| :--- | :---------------- | :------------------- | :----- | :--- | :--- |
-| QAR  | PAYMENT_GATEWAY   | CARD                 | 0.5-5000 | 可用 | VISA |
-| QAR  | PAYMENT_GATEWAY   | CARD                 | 0.5-5000 | 可用 | MasterCard |
-| QAR  | PAYMENT_GATEWAY   | CARD                 | 0.5-5000 | 可用 | NAPS |
-| QAR  | EWALLET           | APPLE_PAY            | 0.5-5000 | 可用 | Apple Pay |
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits   | Status    | Description |
+|----------|------------------------|---------------------------|----------|-----------|-------------|
+| QAR      | PAYMENT_GATEWAY        | CARD                      | 0.5-5000 | Available | VISA        |
+| QAR      | PAYMENT_GATEWAY        | CARD                      | 0.5-5000 | Available | MasterCard  |
+| QAR      | PAYMENT_GATEWAY        | CARD                      | 0.5-5000 | Available | NAPS        |
+| QAR      | EWALLET                | APPLE_PAY                 | 0.5-5000 | Available | Apple Pay   |
+
 
 ### Oman
 
-| Currency | Payment Type(accountType) | Payment Code(bankCode) | Limits   | Status | Description |
-| :--- | :---------------- | :------------------- | :----- | :--- | :--- |
-| OMR  | PAYMENT_GATEWAY   | CARD                 | 0.5-800 | 可用 | VISA |
-| OMR  | PAYMENT_GATEWAY   | CARD                 | 0.5-800 | 可用 | MasterCard |
-| OMR  | EWALLET           | APPLE_PAY            | 0.5-800 | 可用 | Apple Pay |
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits  | Status    | Description |
+|----------|------------------------|---------------------------|---------|-----------|-------------|
+| OMR      | PAYMENT_GATEWAY        | CARD                      | 0.5-800 | Available | VISA        |
+| OMR      | PAYMENT_GATEWAY        | CARD                      | 0.5-800 | Available | MasterCard  |
+| OMR      | EWALLET                | APPLE_PAY                 | 0.5-800 | Available | Apple Pay   |
+
 
 ### Bahrain
 
-| Currency | Payment Type(accountType) | Payment Code(bankCode) | Limits   | Status | Description |
-| :--- | :---------------- | :------------------- | :----- | :--- | :--- |
-| BHD  | PAYMENT_GATEWAY   | CARD                 | 0.5-800 | 可用 | VISA |
-| BHD  | PAYMENT_GATEWAY   | CARD                 | 0.5-800 | 可用 | MasterCard |
-| BHD  | PAYMENT_GATEWAY   | CARD                 | 0.5-800 | 可用 | BENEFIT |
-| BHD  | EWALLET           | APPLE_PAY            | 0.5-800 | 可用 | Apple Pay |
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits  | Status    | Description |
+|----------|------------------------|---------------------------|---------|-----------|-------------|
+| BHD      | PAYMENT_GATEWAY        | CARD                      | 0.5-800 | Available | VISA        |
+| BHD      | PAYMENT_GATEWAY        | CARD                      | 0.5-800 | Available | MasterCard  |
+| BHD      | PAYMENT_GATEWAY        | CARD                      | 0.5-800 | Available | BENEFIT     |
+| BHD      | EWALLET                | APPLE_PAY                 | 0.5-800 | Available | Apple Pay   |
 
 ## Stablecoin
 
-| Currency | Payment Type(accountType) | Payment Code(bankCode) | Limits     | Status | Description |
-| :--- | :---------------- | :------------------- | :------- | :--- | :--- |
-| USDT | EWALLET           | EWALLET              | 1-200000 | 可用 | 收银台 |
-| USDT | EWALLET           | TRX                  | 1-200000 | 可用 | TRON 链上的 USDT，TRC-20 代币标准 |
-| USDT | EWALLET           | ETH                  | 1-200000 | 可用 | 以太坊链上的 USDT，ERC-20 代币标准 |
-| USDT | EWALLET           | BSC                  | 1-200000 | 可用 | 币安智能链上的 USDT，BEP-20 代币标准 |
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limits   | Status    | Description                                        |
+|----------|------------------------|---------------------------|----------|-----------|----------------------------------------------------|
+| USDT     | EWALLET                | EWALLET                   | 1-200000 | Available | Cashier                                            |
+| USDT     | EWALLET                | TRX                       | 1-200000 | Available | USDT on TRON chain, TRC-20 token standard          |
+| USDT     | EWALLET                | ETH                       | 1-200000 | Available | USDT on Ethereum chain, ERC-20 token standard      |
+| USDT     | EWALLET                | BSC                       | 1-200000 | Available | USDT on Binance Smart Chain, BEP-20 token standard |
