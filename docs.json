@@ -6,9 +6,6 @@
     "light": "/logo/light.png",
     "dark": "/logo/dark.png"
   },
-  "search": {
-    "prompt": "搜索文档..."
-  },
   "colors": {
     "primary": "#5F3CC7",
     "light": "#9289FE",
@@ -743,7 +740,13 @@
   "contextual": {
     "options": [
       "copy",
-      "view"
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
     ]
   },
   "navbar": {
