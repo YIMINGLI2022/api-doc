@@ -9,9 +9,9 @@ permalink: /en/api/version2/Indonesia/
 <div class='page-api-content'>
 <div class='page-api-left'> */}
 
-:::warning
-**Before reading this API documentation, please make sure to check [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
-:::
+<Warning>
+**Before reading this API documentation, please make sure to check [**API Description Guide**](/docs/en/guide/api_description_guide)**
+</Warning>
 
 ## **Transaction Limits**
 
@@ -43,7 +43,7 @@ Note: appId needs to use USD corresponding, user payment success will increase U
 | appId           | Yes      | Long   | Business ID (retrieved from the backend; must pass the corresponding ID for the currency in the URL)                                                                                                                     |
 | orderId         | Yes      | String | Merchant order ID (must be unique, max length 48)                                                                                                                                                                        |
 | name            | Yes      | String | Payer's name (Payer's name format: 1-30 characters, English or Indonesian letters (case-insensitive), follows "firstName middleName lastName" structure (middleName optional), allows spaces and special characters !-)) |
-| phone           | Yes      | String | Valid phone number (08xxxxxxxxxx), format reference [Phone Format](/en/docs/guide/frequently_asked_question.html#phone_format)                                                                                           |
+| phone           | Yes      | String | Valid phone number (08xxxxxxxxxx), format reference [Phone Format](/docs/en/guide/frequently_asked_question.html#phone_format)                                                                                           |
 | email           | Yes      | String | Valid email address                                                                                                                                                                                                      |
 | amount          | Yes      | String | Transaction amount (Unit: **IDR**)                                                                                                                                                                                       |
 | payType         | Yes      | String | [Payment Methods](#inBankCode)                                                                                                                                                                                           |
@@ -213,7 +213,7 @@ response
 | bankCode      | Yes      | String | [Bank Code](#银行代码)                                                                                          |
 | accountNo     | Yes      | String | User bank account number                                                                                        |
 | name          | Yes      | String | Recipient name (format: English or Indonesian letters, case-insensitive, spaces allowed, 1-30 characters, "firstName middleName lastName" (middleName is optional), special characters allowed: '.-)) |
-| phone         | Yes      | String | Valid phone number (format reference: [Phone number format](/en/docs/guide/frequently_asked_question.html#phone_format)) |
+| phone         | Yes      | String | Valid phone number (format reference: [Phone number format](/docs/en/guide/frequently_asked_question.html#phone_format)) |
 | email         | Yes      | String | Valid email                                                                                                     |
 | notifyUrl     | No       | String | Callback URL                                                                                                   |
 | subject       | No       | String | Payment remark (transaction title, product name, payment reason)                                                |

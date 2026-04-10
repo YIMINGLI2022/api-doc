@@ -425,7 +425,7 @@
                   },
                   "bankCode": {
                     "type": "string",
-                    "description": "Bank Code. For specific values, see [Complete Bank Code List](/en/docs/api/version2/Mexico_BankCodes.md)"
+                    "description": "Bank Code. For specific values, see [Complete Bank Code List](/docs/en/api/version2//Mexico_BankCodes)"
                   },
                   "accountNo": {
                     "type": "string",

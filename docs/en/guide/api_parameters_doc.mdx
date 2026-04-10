@@ -19,14 +19,14 @@ Through these API definitions, merchants can use the interfaces in different env
 
 Create a collection order.
 
-**URL**: `/{currency}/collect/apply`, where {currency} is the currency. See [Supported Countries and Currencies](/en/docs/version2/guide/supported-country-region-currency.md)
+**URL**: `/{currency}/collect/apply`, where {currency} is the currency. See [Supported Countries and Currencies](/docs/en/version2/guide/supported-country-region-currency)
 
 **Request Method**: POST
 
 **Request Parameters**:  
 | Parameter       | Required | Type    | Description                                                                                       |
 | :-------------- | :------- | :------ | :------------------------------------------------------------------------------------------------ |
-| appId           | Yes      | Long    | Business ID (retrieved from backend, see [Merchant Integration Process](/en/docs/version2/guide/integration_process_guide.md)) |
+| appId           | Yes      | Long    | Business ID (retrieved from backend, see [Merchant Integration Process](/docs/en/version2/guide/integration_process_guide)) |
 | orderId         | Yes      | String  | Merchant Order ID (must be unique, max length 48)                                                 |
 | amount          | Yes      | String  | Transaction amount                                                                                |
 | name            | No       | String  | Payee name (required for certain scenarios, TODO XXX)                                             |
@@ -74,7 +74,7 @@ Create a collection order.
             <td colspan="2">error</td>
             <td>No</td>
             <td>Integer</td>
-            <td>Error code, see <a href="/zh/docs/version2/guide/error_code_doc">Error Codes</a></td>
+            <td>Error code, see <a href="/docs/zh/version2/guide/error_code_doc">Error Codes</a></td>
         </tr>
         <tr>
             <td colspan="2">msg</td>
@@ -132,7 +132,7 @@ Create a collection order.
 
 When a collection succeeds or fails, we will push the order status. Notifications are sent every 5 minutes, up to 5 times. The pushed data contains details of the current payment attempt, including: payment amountm and handling fee.
 
-**URL**: `Provided by merchant`, see [Merchant Integration Process](/en/docs/version2/guide/integration_process_guide.md)
+**URL**: `Provided by merchant`, see [Merchant Integration Process](/docs/en/version2/guide/integration_process_guide)
 
 **Request Method**: POST
 
@@ -162,7 +162,7 @@ Query a collection order.
 **Request Parameters**:  
 | Parameter | Required | Type   | Description                                                                 |
 | :-------- | :------- | :----- | :-------------------------------------------------------------------------- |
-| appId     | Yes      | Long   | Business ID (retrieved from backend, see [Merchant Integration Process](/en/docs/version2/guide/integration_process_guide.md)) |
+| appId     | Yes      | Long   | Business ID (retrieved from backend, see [Merchant Integration Process](/docs/en/version2/guide/integration_process_guide)) |
 | orderId   | Yes      | String | Merchant Order ID                                                           |
 | orderNo   | No       | String | Platform Order ID (faster response)                                         |
 | sign      | Yes      | String | Signature                                                                   |
@@ -191,14 +191,14 @@ TODO
 
 Create a disbursement order.
 
-**URL**: `/{currency}/pay/apply`, where {currency} is the currency. See [Supported Countries and Currencies](/en/docs/version2/guide/supported-country-region-currency.md)
+**URL**: `/{currency}/pay/apply`, where {currency} is the currency. See [Supported Countries and Currencies](/docs/en/version2/guide/supported-country-region-currency)
 
 **Request Method**: POST
 
 **Request Parameters**:  
 | Parameter     | Required | Type   | Description                                                                 |
 | :------------ | :------- | :----- | :-------------------------------------------------------------------------- |
-| appId         | Yes      | Long   | Business ID (retrieved from backend, see [Merchant Integration Process](/en/docs/version2/guide/integration_process_guide.md)) |
+| appId         | Yes      | Long   | Business ID (retrieved from backend, see [Merchant Integration Process](/docs/en/version2/guide/integration_process_guide)) |
 | orderId       | Yes      | String | Merchant Order ID (must be unique, max length 48)                           |
 | amount        | Yes      | String | Transaction amount                                                          |
 | name          | Yes      | String | Payee name                                                                  |

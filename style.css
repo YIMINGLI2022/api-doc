@@ -1,3 +1,30 @@
-.sidebar-group-header {
-    font-weight: bold;
+.light #sidebar-title {
+    font-weight: bold !important;
+    color: #000000 !important;
+    font-size: 14px;
 }
+
+/* 暗黑模式 侧边栏标题 */
+.dark #sidebar-title {
+    font-weight: bold !important;
+    color: #ffffff !important;
+    font-size: 14px;
+}
+
+/* 暗黑模式 侧边栏内容文字 */
+.dark span.min-w-0.max-w-full.break-words {
+    color: #e0e0e0 !important;
+}
+
+:lang(zh) {
+    font-family: "Noto Sans SC", sans-serif;
+
+}
+
+:lang(en) {
+    font-family: "Inter", sans-serif;
+}
+
+/*#navigation-items {*/
+/*    width: 1000px !important;*/
+/*}*/

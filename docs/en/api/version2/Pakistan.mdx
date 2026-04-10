@@ -7,9 +7,9 @@ permalink: /en/api/version2/Pakistan/
 <div class='page-api-content'>
 <div class='page-api-left'> */}
 
-:::warning
-**Before reading this API documentation, please make sure to check [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
-:::
+<Warning>
+**Before reading this API documentation, please make sure to check [**API Description Guide**](/docs/en/guide/api_description_guide)**
+</Warning>
 
 ## **Transaction Limits**
 
@@ -96,69 +96,13 @@ Note: appId needs to use PKR corresponding, user payment success will increase P
 
 ### **Payment Methods**
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1040px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:170px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:200px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>Currency</b></td>
-        <td><b>Payment Type (payType)</b></td>
-        <td><b>Payment Code (inBankCode)</b></td>
-        <td><b>Limit</b></td>
-        <td><b>Status</b></td>
-        <td><b>Description</b></td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>PAYMENT_GATEWAY</td>
-        <td>CASHIER</td>
-        <td>10-500000</td>
-        <td>Available</td>
-        <td>Cashier Mode</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>EWALLET</td>
-        <td>JAZZCASH</td>
-        <td>10-500000</td>
-        <td>Available</td>
-        <td>JazzCash Wallet</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>EWALLET</td>
-        <td>EASYPAISA</td>
-        <td>10-500000</td>
-        <td>Available</td>
-        <td>EasyPaisa Wallet</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>EWALLET</td>
-        <td>ALFA</td>
-        <td>10-500000</td>
-        <td>Maintenance</td>
-        <td>ALFA Wallet</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>EWALLET</td>
-        <td>HBL_KONNECT</td>
-        <td>10-500000</td>
-        <td>Maintenance</td>
-        <td>HBL KONNECT Wallet</td>
-    </tr>
-</table>
+| Currency | Payment Type (payType) | Payment Code (inBankCode) | Limit     | Status      | Description        |
+|----------|------------------------|---------------------------|-----------|-------------|--------------------|
+| PKR      | PAYMENT_GATEWAY        | CASHIER                   | 10-500000 | Available   | Cashier Mode       |
+| PKR      | EWALLET                | JAZZCASH                  | 10-500000 | Available   | JazzCash Wallet    |
+| PKR      | EWALLET                | EASYPAISA                 | 10-500000 | Available   | EasyPaisa Wallet   |
+| PKR      | EWALLET                | ALFA                      | 10-500000 | Maintenance | ALFA Wallet        |
+| PKR      | EWALLET                | HBL_KONNECT               | 10-500000 | Maintenance | HBL KONNECT Wallet |
 
 
 
@@ -238,461 +182,63 @@ Note: appId needs to use PKR corresponding, user payment success will increase P
 
 ### **Payment Codes**
 
-<table style='border-collapse:
- collapse;table-layout:fixed;width:1050px;margin:0' >
-    <col style='mso-width-source:userset;mso-width-alt:6752;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:8032;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6496;
- width:190px' />
-    <col style='mso-width-source:userset;mso-width-alt:6784;
- width:155px' />
-    <col style='mso-width-source:userset;mso-width-alt:4480;
- width:80px' />
-    <col style='mso-width-source:userset;mso-width-alt:15040;
- width:355px' />
-    <tr>
-        <td><b>Currency</b></td>
-        <td><b>Payment Type (accountType)</b></td>
-        <td><b>Payment Code (bankCode)</b></td>
-        <td><b>Limit</b></td>
-        <td><b>Status</b></td>
-        <td><b>Description</b></td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>EWALLET</td>
-        <td>ALFA</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>ALFA Wallet</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>EWALLET</td>
-        <td>BAFL</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Bank Alfalah Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>EWALLET</td>
-        <td>EASYPAISA</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>EasyPaisa Wallet</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>EWALLET</td>
-        <td>JAZZCASH</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>JazzCash Wallet</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>EWALLET</td>
-        <td>HBL_KONNECT</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>HBL KONNECT Wallet</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ABBL</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Al Baraka Bank Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ABHI</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Abhi Finance</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ABL</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Allied Bank Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ACBL</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Askari Commercial Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ADVANS</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Advans Pakistan</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>APNA</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Apna Microfinance Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BAHL</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Bank AL Habib Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BARWAQT</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Barwaqt</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BIPL</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>BankIslami Pakistan</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BOK</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Bank of Khyber</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BOP</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Bank of Punjab</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>BYKEA</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>BYKEA</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CDNS</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>CDNS</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>CITI</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Citi Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>DIBPL</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Dubai Islamic Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>FAYSAL</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Faysal Bank Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>FINCA</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>FINCA Microfinance Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>FINJA</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>FINJA EMI</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>FMB</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>First Microfinance Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>FWBL</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>First Women Bank Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>HBL</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Habib Bank Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>HBLASSET</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>HBL ASSET MANAGEMENT</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>HMBL</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Habib Metropolitan Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ICBC</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>ICBC</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>JSB</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>JS Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>KHUSHALI</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Khushali Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MCB</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>MCB Bank Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MCBARIF</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>MCB ARIF HABIB</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MCIB</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>MCB Islamic Banking</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MEEZAN</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Meezan Bank Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>MOD</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>MOD</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NAYAPAY</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>NayaPay Private Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NBP</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>National Bank of Pakistan</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NBPF</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>NBP Funds</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>NRSP</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>NRSP Microfinance</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>PAYMAX</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>PayMax (Zong)</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SADAPAY</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>SadaPay</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SAMBA</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>SAMBA</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SCB</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Standard Chartered Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SILK</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Silk Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SIMPAISA</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>SimPaisa</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SINDH</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Sindh Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SME</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>SME Bank Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SONERI</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Soneri Bank Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>SUMMIT</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Summit Bank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>UBANK</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Ubank</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>UBL</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>United Bank Limited</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>WHITE</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>WHITE LABEL ATM</td>
-    </tr>
-    <tr>
-        <td>PKR</td>
-        <td>BANK_ACCOUNT</td>
-        <td>ZARAI</td>
-        <td>10-100000</td>
-        <td>Available</td>
-        <td>Zarai Taraqiati Bank</td>
-    </tr>
-</table>
+| Currency | Payment Type (accountType) | Payment Code (bankCode) | Limit     | Status    | Description               |
+|----------|----------------------------|-------------------------|-----------|-----------|---------------------------|
+| PKR      | EWALLET                    | ALFA                    | 10-100000 | Available | ALFA Wallet               |
+| PKR      | EWALLET                    | BAFL                    | 10-100000 | Available | Bank Alfalah Limited      |
+| PKR      | EWALLET                    | EASYPAISA               | 10-100000 | Available | EasyPaisa Wallet          |
+| PKR      | EWALLET                    | JAZZCASH                | 10-100000 | Available | JazzCash Wallet           |
+| PKR      | EWALLET                    | HBL_KONNECT             | 10-100000 | Available | HBL KONNECT Wallet        |
+| PKR      | BANK_ACCOUNT               | ABBL                    | 10-100000 | Available | Al Baraka Bank Limited    |
+| PKR      | BANK_ACCOUNT               | ABHI                    | 10-100000 | Available | Abhi Finance              |
+| PKR      | BANK_ACCOUNT               | ABL                     | 10-100000 | Available | Allied Bank Limited       |
+| PKR      | BANK_ACCOUNT               | ACBL                    | 10-100000 | Available | Askari Commercial Bank    |
+| PKR      | BANK_ACCOUNT               | ADVANS                  | 10-100000 | Available | Advans Pakistan           |
+| PKR      | BANK_ACCOUNT               | APNA                    | 10-100000 | Available | Apna Microfinance Bank    |
+| PKR      | BANK_ACCOUNT               | BAHL                    | 10-100000 | Available | Bank AL Habib Limited     |
+| PKR      | BANK_ACCOUNT               | BARWAQT                 | 10-100000 | Available | Barwaqt                   |
+| PKR      | BANK_ACCOUNT               | BIPL                    | 10-100000 | Available | BankIslami Pakistan       |
+| PKR      | BANK_ACCOUNT               | BOK                     | 10-100000 | Available | Bank of Khyber            |
+| PKR      | BANK_ACCOUNT               | BOP                     | 10-100000 | Available | Bank of Punjab            |
+| PKR      | BANK_ACCOUNT               | BYKEA                   | 10-100000 | Available | BYKEA                     |
+| PKR      | BANK_ACCOUNT               | CDNS                    | 10-100000 | Available | CDNS                      |
+| PKR      | BANK_ACCOUNT               | CITI                    | 10-100000 | Available | Citi Bank                 |
+| PKR      | BANK_ACCOUNT               | DIBPL                   | 10-100000 | Available | Dubai Islamic Bank        |
+| PKR      | BANK_ACCOUNT               | FAYSAL                  | 10-100000 | Available | Faysal Bank Limited       |
+| PKR      | BANK_ACCOUNT               | FINCA                   | 10-100000 | Available | FINCA Microfinance Bank   |
+| PKR      | BANK_ACCOUNT               | FINJA                   | 10-100000 | Available | FINJA EMI                 |
+| PKR      | BANK_ACCOUNT               | FMB                     | 10-100000 | Available | First Microfinance Bank   |
+| PKR      | BANK_ACCOUNT               | FWBL                    | 10-100000 | Available | First Women Bank Limited  |
+| PKR      | BANK_ACCOUNT               | HBL                     | 10-100000 | Available | Habib Bank Limited        |
+| PKR      | BANK_ACCOUNT               | HBLASSET                | 10-100000 | Available | HBL ASSET MANAGEMENT      |
+| PKR      | BANK_ACCOUNT               | HMBL                    | 10-100000 | Available | Habib Metropolitan Bank   |
+| PKR      | BANK_ACCOUNT               | ICBC                    | 10-100000 | Available | ICBC                      |
+| PKR      | BANK_ACCOUNT               | JSB                     | 10-100000 | Available | JS Bank                   |
+| PKR      | BANK_ACCOUNT               | KHUSHALI                | 10-100000 | Available | Khushali Bank             |
+| PKR      | BANK_ACCOUNT               | MCB                     | 10-100000 | Available | MCB Bank Limited          |
+| PKR      | BANK_ACCOUNT               | MCBARIF                 | 10-100000 | Available | MCB ARIF HABIB            |
+| PKR      | BANK_ACCOUNT               | MCIB                    | 10-100000 | Available | MCB Islamic Banking       |
+| PKR      | BANK_ACCOUNT               | MEEZAN                  | 10-100000 | Available | Meezan Bank Limited       |
+| PKR      | BANK_ACCOUNT               | MOD                     | 10-100000 | Available | MOD                       |
+| PKR      | BANK_ACCOUNT               | NAYAPAY                 | 10-100000 | Available | NayaPay Private Limited   |
+| PKR      | BANK_ACCOUNT               | NBP                     | 10-100000 | Available | National Bank of Pakistan |
+| PKR      | BANK_ACCOUNT               | NBPF                    | 10-100000 | Available | NBP Funds                 |
+| PKR      | BANK_ACCOUNT               | NRSP                    | 10-100000 | Available | NRSP Microfinance         |
+| PKR      | BANK_ACCOUNT               | PAYMAX                  | 10-100000 | Available | PayMax (Zong)             |
+| PKR      | BANK_ACCOUNT               | SADAPAY                 | 10-100000 | Available | SadaPay                   |
+| PKR      | BANK_ACCOUNT               | SAMBA                   | 10-100000 | Available | SAMBA                     |
+| PKR      | BANK_ACCOUNT               | SCB                     | 10-100000 | Available | Standard Chartered Bank   |
+| PKR      | BANK_ACCOUNT               | SILK                    | 10-100000 | Available | Silk Bank                 |
+| PKR      | BANK_ACCOUNT               | SIMPAISA                | 10-100000 | Available | SimPaisa                  |
+| PKR      | BANK_ACCOUNT               | SINDH                   | 10-100000 | Available | Sindh Bank                |
+| PKR      | BANK_ACCOUNT               | SME                     | 10-100000 | Available | SME Bank Limited          |
+| PKR      | BANK_ACCOUNT               | SONERI                  | 10-100000 | Available | Soneri Bank Limited       |
+| PKR      | BANK_ACCOUNT               | SUMMIT                  | 10-100000 | Available | Summit Bank               |
+| PKR      | BANK_ACCOUNT               | UBANK                   | 10-100000 | Available | Ubank                     |
+| PKR      | BANK_ACCOUNT               | UBL                     | 10-100000 | Available | United Bank Limited       |
+| PKR      | BANK_ACCOUNT               | WHITE                   | 10-100000 | Available | WHITE LABEL ATM           |
+| PKR      | BANK_ACCOUNT               | ZARAI                   | 10-100000 | Available | Zarai Taraqiati Bank      |
+
 
 
 {/* </div>

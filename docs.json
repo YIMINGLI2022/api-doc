@@ -1,5 +1,11 @@
 {
   "$schema": "https://mintlify.com/docs.json",
+  "search": {
+    "mode": "local"
+  },
+  "seo": {
+    "indexing": "all"
+  },
   "theme": "luma",
   "name": "HaiPay",
   "logo": {
@@ -135,7 +141,7 @@
             ]
           },
           {
-            "tab": "API reference",
+            "tab": "API 文档",
             "groups": [
               {
                 "group": "收银台",
@@ -372,6 +378,17 @@
                 ]
               }
             ]
+          },
+          {
+            "tab": "更新日志",
+            "groups":[
+              {
+                "group": "产品更新日志",
+                "pages": [
+                  "docs/zh/changelog/changelog"
+                ]
+              }
+            ]
           }
         ]
       },
@@ -483,7 +500,7 @@
                 "pages": [
                   "docs/en/api/version2/cashin_code_list",
                   "docs/en/api/version2/cashout_code_list",
-                  "docs/en/api/guide/error_response_appendix"
+                  "docs/en/guide/error_response_appendix"
                 ]
               },
               {
@@ -732,6 +749,17 @@
                 ]
               }
             ]
+          },
+          {
+            "tab": "Update log",
+            "groups":[
+              {
+                "group": "Update log",
+                "pages": [
+                  "docs/en/changelog/changelog"
+                ]
+              }
+            ]
           }
         ]
       }
@@ -752,23 +780,47 @@
   "navbar": {
     "links": [
       {
-        "label": "支持",
-        "href": "https://your-dashboard-url.com"
+        "label": "Support",
+        "href": "mailto:support@haipay.net"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "控制台",
-      "href": "https://your-dashboard-url.com"
+      "label": "Dashboard",
+      "href": "https://dashboard.haipay.top/#/"
     }
   },
   "footer": {
-    "socials": {}
+    "socials": {
+      "x": "https://x.com/mintlify",
+      "linkedin": "https://linkedin.com/company/mintlify",
+      "github": "https://github.com/mintlify"
+    },
+    "links": [
+      {
+        "title": "Explore",
+        "items": [
+          { "label": "Startups", "href": "https://..." },
+          { "label": "Enterprise", "href": "https://..." }
+        ]
+      },
+      {
+        "title": "Resources",
+        "items": [
+          { "label": "Customers", "href": "https://..." },
+          { "label": "Blog", "href": "https://..." }
+        ]
+      }
+    ]
   },
   "api": {
     "playground": {
       "display": "interactive",
       "proxy": true
     }
-  }
+  },
+  "appearance": {
+    "default": "light"
+  },
+  "excludeFiles": ["node_modules/**"]
 }

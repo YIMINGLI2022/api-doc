@@ -8,9 +8,9 @@ permalink: /en/api/version2/Malaysia/
 <div class='page-api-content'>
 <div class='page-api-left'> */}
 
-:::warning
-**Before reading this API documentation, please make sure to review [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
-:::
+<Warning>
+**Before reading this API documentation, please make sure to review [**API Description Guide**](/docs/en/guide/api_description_guide)**
+</Warning>
 
 ### **Transaction Limits**
 
@@ -42,7 +42,7 @@ Note: appId needs to use USD corresponding, user payment success will increase U
 | appId          | Yes      | Long   | Business ID (obtained from backend, must pass the corresponding business ID according to the currency in the URL)                                                                                              |
 | orderId        | Yes      | String | Merchant order number (must be unique, maximum length 48)                                                                                                                                                      |
 | name           | Yes      | String | User’s full name, recommended to use real name. Format: include firstName and lastName, separated by a space. Example: Donald John Trump                                                                       |
-| phone          | Yes      | String | Valid phone number (format reference: [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format))                                                                                       |
+| phone          | Yes      | String | Valid phone number (format reference: [Phone Number Format](/docs/en/guide/frequently_asked_question.html#phone_format))                                                                                       |
 | email          | Yes      | String | Valid email                                                                                                                                                                                                    |
 | amount         | Yes      | String | Transaction amount (accurate to two decimal places; punctuation marks such as “,” are prohibited)                                                                                                              |
 | payType        | Yes      | String | Transaction type                                                                                                                                                                                               |
@@ -136,7 +136,7 @@ Return Data Parameters
 | bankCode       | Yes      | String | [Payment Method](#bankCode)                                                                                                           |
 | accountNo      | Yes      | String | User account number                                                                                                                   |
 | name           | Yes      | String | Recipient’s name (format: English letters, case-insensitive, spaces allowed, 1-30 chars, “firstName middleName lastName” (middleName optional, special chars supported '.-)) |
-| phone          | Yes      | String | Valid phone number (format reference: [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format))              |
+| phone          | Yes      | String | Valid phone number (format reference: [Phone Number Format](/docs/en/guide/frequently_asked_question.html#phone_format))              |
 | email          | Yes      | String | Valid email                                                                                                                           |
 | notifyUrl      | No       | String | Callback URL                                                                                                                          |
 | subject        | No       | String | Payment remark (transaction title, product name, or payment reason)                                                                   |

@@ -11,7 +11,7 @@ permalink: /api/version2/SouthKorea/
 
 
 <Warning>
-**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
+**阅读该接口文档前，务必先查看 [**接口说明**](/docs/zh/guide/api_description_guide)**
 </Warning>
 
 ## **限额**
@@ -44,13 +44,13 @@ permalink: /api/version2/SouthKorea/
 | appId           | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                   |
 | orderId         | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                            |
 | name            | 是  | String | 用户姓名，推荐使用真实姓名，格式：包含firstName和lastName，以空格分割的，示例：Donald John Trump                 |
-| phone           | 是  | String | 真实手机号（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ） |
+| phone           | 是  | String | 真实手机号（格式参考 [电话号码格式](/docs/zh/guide/frequently_asked_question.html#phone_format) ） |
 | email           | 是  | String | 真实电子邮件                                                                            |
 | amount          | 是  | String | 交易金额（精确到小数点后两位；禁止添加标点符号，例如：”,”） 范围参考：收款编码Code                                     |
 | payType         | 是  | String | [交易类型](#inBankCode)                                                               |
 | inBankCode      | 是  | String | [支付方式](#inBankCode)                                                               |
 | callBackUrl     | 是  | String | 用户支付成功后跳转地址                                                                       |
-| callBackFailUrl | 是  | String | 用户支付失败后跳转地址                                                                       
+| callBackFailUrl | 是  | String | 用户支付失败后跳转地址
 | notifyUrl       | 否  | String | 回调地址                                                                              |
 | subject         | 否  | String | 支付备注                                                                              |
 | country         | 否  | String | 收银台模式需要传递，请传：410                                                                  |
@@ -133,36 +133,36 @@ response
 
 ### **支付方式** <a id="inBankCode"></a>
 
-| 币种 | 支付类型(payType)       | 支付编码(inBankCode) | 限额        | 状态 | 说明                                   |
-| :--- | :---------------------- | :------------------- | :---------- | :--- | :-------------------------------------- |
-| KRW  | EWALLET                 | KAKAOPAY_KRW         | 1000-1500000| 可用 | Kakao Pay钱包                           |
-| KRW  | EWALLET                 | NAVERPAY_KRW         | 1000-1500000| 可用 | Naver Pay钱包                           |
-| KRW  | EWALLET                 | TOSS_KRW             | 1000-1500000| 可用 | Toss Pay钱包                            |
-| KRW  | EWALLET                 | SAMSUNGPAY_KRW       | 1000-1500000| 可用 | Samsung Pay钱包                         |
-| KRW  | EWALLET                 | PAYCO_KRW            | 1000-1500000| 可用 | PayCo钱包                               |
-| KRW  | BANK_TRANSFER           | BANK_KRW             | 1000-1500000| 可用 | 银行账号授权支付(支持韩国所有银行)       |
-| KRW  | VA (Virtual Account)    | VA_BANK_KRW          | 300-500000  | 可用 | VA收银台入口                            |
-| KRW  | VA (Virtual Account)    | KOOKMIN_BANK         | 300-500000  | 可用 | 支持银行：Kookmin Bank                  |
-| KRW  | VA (Virtual Account)    | SHBKKRSE             | 300-500000  | 可用 | 支持银行：Shinhan Bank                  |
-| KRW  | VA (Virtual Account)    | HANA_BANK            | 300-500000  | 可用 | 支持银行：Hana Bank                     |
-| KRW  | VA (Virtual Account)    | WOORI_BANK           | 300-500000  | 可用 | 支持银行：Woori Bank                    |
-| KRW  | VA (Virtual Account)    | NONGHYUP_BANK        | 300-500000  | 可用 | 支持银行：Nonghyup Bank                 |
-| KRW  | VA (Virtual Account)    | IBK                  | 300-500000  | 可用 | 支持银行：IBK                           |
-| KRW  | VA (Virtual Account)    | SC_BANK              | 300-500000  | 可用 | 支持银行：SC Bank                       |
-| KRW  | VA (Virtual Account)    | KBANK                | 300-500000  | 可用 | 支持银行：Kbank                         |
-| KRW  | VA (Virtual Account)    | SUHYUP               | 300-500000  | 可用 | 支持银行：Suhyup                        |
-| KRW  | VA (Virtual Account)    | DAEGU_BANK           | 300-500000  | 可用 | 支持银行：Daegu Bank                    |
-| KRW  | VA (Virtual Account)    | BUSAN_BANK           | 300-500000  | 可用 | 支持银行：Busan Bank                    |
-| KRW  | VA (Virtual Account)    | KYONGNAM_BANK        | 300-500000  | 可用 | 支持银行：Kyongnam Bank                 |
-| KRW  | VA (Virtual Account)    | KWANGJU_BANK         | 300-500000  | 可用 | 支持银行：Kwangju Bank                  |
-| KRW  | VA (Virtual Account)    | KFCC                 | 300-500000  | 可用 | 支持银行：Korea Federation of Community Credit Cooperatives |
-| KRW  | VA (Virtual Account)    | KOREA_POST           | 300-500000  | 可用 | 支持银行：Korea Post                     |
-| USD  | EWALLET                 | KAKAOPAY_USD         | 0.99-1000   | 可用 | Kakao Pay钱包                           |
-| USD  | EWALLET                 | NAVERPAY_USD         | 0.99-1000   | 可用 | Naver Pay钱包                           |
-| USD  | EWALLET                 | TOSS_USD             | 0.99-1000   | 可用 | Toss Pay钱包                            |
-| USD  | EWALLET                 | SAMSUNGPAY_USD       | 0.99-1000   | 可用 | Samsung Pay钱包                         |
-| USD  | EWALLET                 | PAYCO_USD            | 0.99-1000   | 可用 | PayCo钱包                               |
-| USD  | BANK_TRANSFER           | KR_BANK_USD          | 0.99-1000   | 可用 | 银行账号授权支付(支持韩国所有银行)       |
+| 币种  | 支付类型(payType)        | 支付编码(inBankCode) | 限额           | 状态 | 说明                                                     |
+|-----|----------------------|------------------|--------------|----|--------------------------------------------------------|
+| KRW | EWALLET              | KAKAOPAY_KRW     | 1000-1500000 | 可用 | Kakao Pay钱包                                            |
+| KRW | EWALLET              | NAVERPAY_KRW     | 1000-1500000 | 可用 | Naver Pay钱包                                            |
+| KRW | EWALLET              | TOSS_KRW         | 1000-1500000 | 可用 | Toss Pay钱包                                             |
+| KRW | EWALLET              | SAMSUNGPAY_KRW   | 1000-1500000 | 可用 | Samsung Pay钱包                                          |
+| KRW | EWALLET              | PAYCO_KRW        | 1000-1500000 | 可用 | PayCo钱包                                                |
+| KRW | BANK_TRANSFER        | BANK_KRW         | 1000-1500000 | 可用 | 银行账号授权支付(支持韩国所有银行)                                     |
+| KRW | VA (Virtual Account) | VA_BANK_KRW      | 300-500000   | 可用 | VA收银台入口                                                |
+| KRW | VA (Virtual Account) | KOOKMIN_BANK     | 300-500000   | 可用 | 支持银行：Kookmin Bank                                      |
+| KRW | VA (Virtual Account) | SHBKKRSE         | 300-500000   | 可用 | 支持银行：Shinhan Bank                                      |
+| KRW | VA (Virtual Account) | HANA_BANK        | 300-500000   | 可用 | 支持银行：Hana Bank                                         |
+| KRW | VA (Virtual Account) | WOORI_BANK       | 300-500000   | 可用 | 支持银行：Woori Bank                                        |
+| KRW | VA (Virtual Account) | NONGHYUP_BANK    | 300-500000   | 可用 | 支持银行：Nonghyup Bank                                     |
+| KRW | VA (Virtual Account) | IBK              | 300-500000   | 可用 | 支持银行：IBK                                               |
+| KRW | VA (Virtual Account) | SC_BANK          | 300-500000   | 可用 | 支持银行：SC Bank                                           |
+| KRW | VA (Virtual Account) | KBANK            | 300-500000   | 可用 | 支持银行：Kbank                                             |
+| KRW | VA (Virtual Account) | SUHYUP           | 300-500000   | 可用 | 支持银行：Suhyup                                            |
+| KRW | VA (Virtual Account) | DAEGU_BANK       | 300-500000   | 可用 | 支持银行：Daegu Bank                                        |
+| KRW | VA (Virtual Account) | BUSAN_BANK       | 300-500000   | 可用 | 支持银行：Busan Bank                                        |
+| KRW | VA (Virtual Account) | KYONGNAM_BANK    | 300-500000   | 可用 | 支持银行：Kyongnam Bank                                     |
+| KRW | VA (Virtual Account) | KWANGJU_BANK     | 300-500000   | 可用 | 支持银行：Kwangju Bank                                      |
+| KRW | VA (Virtual Account) | KFCC             | 300-500000   | 可用 | 支持银行：Korea Federation of Community Credit Cooperatives |
+| KRW | VA (Virtual Account) | KOREA_POST       | 300-500000   | 可用 | 支持银行：Korea Post                                        |
+| USD | EWALLET              | KAKAOPAY_USD     | 0.99-1000    | 可用 | Kakao Pay钱包                                            |
+| USD | EWALLET              | NAVERPAY_USD     | 0.99-1000    | 可用 | Naver Pay钱包                                            |
+| USD | EWALLET              | TOSS_USD         | 0.99-1000    | 可用 | Toss Pay钱包                                             |
+| USD | EWALLET              | SAMSUNGPAY_USD   | 0.99-1000    | 可用 | Samsung Pay钱包                                          |
+| USD | EWALLET              | PAYCO_USD        | 0.99-1000    | 可用 | PayCo钱包                                                |
+| USD | BANK_TRANSFER        | KR_BANK_USD      | 0.99-1000    | 可用 | 银行账号授权支付(支持韩国所有银行)                                     |
 
 
 ## **代付API**
@@ -194,25 +194,25 @@ response
 | partnerUserId | 是  | String | 用户唯一标识（如用户ID userId），用于风控系统，必须真实有效，否则会影响交易。 格式要求：数字、大小写字母或常用符号-~!@#$%&*()_。                    |
 | sign          | 是  | String | 签名                                                                                             |
 
-#####                
+#####
 
 request（accountType为BANK\_ACCOUNT类型时）
 
 ```json
 {
-  "appId": 1054,
-  "orderId": "M100000450012",
-  "amount": "2000",
-  "accountType": "BANK_ACCOUNT",
-  "bankCode": "KYNAKR22",
-  "accountNo": "09876543210",
-  "name": "john doe",
-  "phone": "09876543210",
-  "email": "johndoe@cashfree.com",
-  "subject": "iphone13",
-  "body": "ProMotion technology with adaptive refresh rates up to 120Hz",
-  "partnerUserId": "149597870",
-  "sign": "I1PeK3eJOVsFFNowxVRqMXpeWm1lr/BcRpBi8WsW4wVo1+5CC3JsrFq/m/L2O69NzKHvtDWi4zia3DL3dPut0yMyUyqL91LNCSaeISbGsQPlhEsQpyTOryS/RKOfsrn2Xo37SCF/phAvndOk2jwwGwqM5xLz1ms9Ukl85wv27QFNrXIMxK2p18oe7MpMYrgf+xvEBE/VqCtKMtN9pO449wWwXzHWNPbZ76s4pAvKwRE9yXQDr7Iw14Dktcnl1FoLM4gWM/obkO+mz6SyAGDuXhVh/+OD/IGNiCyTCNq6ciQY28UnCFV6ZIP40gxsFhfBJKbK+Raw7y1Bh912ifYfug=="
+"appId": 1054,
+    "orderId": "M100000450012",
+    "amount": "2000",
+    "accountType": "BANK_ACCOUNT",
+    "bankCode": "KYNAKR22",
+    "accountNo": "09876543210",
+    "name": "john doe",
+    "phone": "09876543210",
+    "email": "johndoe@cashfree.com",
+    "subject": "iphone13",
+    "body": "ProMotion technology with adaptive refresh rates up to 120Hz",
+    "partnerUserId": "149597870",
+    "sign": "I1PeK3eJOVsFFNowxVRqMXpeWm1lr/BcRpBi8WsW4wVo1+5CC3JsrFq/m/L2O69NzKHvtDWi4zia3DL3dPut0yMyUyqL91LNCSaeISbGsQPlhEsQpyTOryS/RKOfsrn2Xo37SCF/phAvndOk2jwwGwqM5xLz1ms9Ukl85wv27QFNrXIMxK2p18oe7MpMYrgf+xvEBE/VqCtKMtN9pO449wWwXzHWNPbZ76s4pAvKwRE9yXQDr7Iw14Dktcnl1FoLM4gWM/obkO+mz6SyAGDuXhVh/+OD/IGNiCyTCNq6ciQY28UnCFV6ZIP40gxsFhfBJKbK+Raw7y1Bh912ifYfug=="
 }
 ```
 
@@ -220,14 +220,14 @@ response
 
 ```json
 {
-  "status": "1",
-  "error": "00000000",
-  "msg": "",
-  "data": {
+"status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
     "orderId": "M100000450013",
-    "orderNo": "3023062014149637",
-    "sign": "LmhUnkw5j0pMiimsG8rKwdNNZGvXH5MpSmD6mdHZwq1SQwuK5BohmdEoqKB/jkMk28o3da4Cxh6Q+tW97+yTCemRrF+dMaHA73rpOeUuujKQl/UcFvJuMhfLBa2tp09L71NzoBqpPD6aXf37mYAz8E1HmERwFPpac5FVxIYanHG8cqmMLJYsVmHTSxWavgWU03ys9UczBePkBiR8sl2FSOhFABB0wAP28lswrV/ABS68IsLKtyd1fyI3GBfSbIK5nDEEnlE+EdElFdLs9taAxJImeVF1x4eT47+bkPJ2qS8z3K8QGzKLF3W+8SiRZGfSwDTsLKH+2Vycvy5auRl+ag=="
-  }
+        "orderNo": "3023062014149637",
+        "sign": "LmhUnkw5j0pMiimsG8rKwdNNZGvXH5MpSmD6mdHZwq1SQwuK5BohmdEoqKB/jkMk28o3da4Cxh6Q+tW97+yTCemRrF+dMaHA73rpOeUuujKQl/UcFvJuMhfLBa2tp09L71NzoBqpPD6aXf37mYAz8E1HmERwFPpac5FVxIYanHG8cqmMLJYsVmHTSxWavgWU03ys9UczBePkBiR8sl2FSOhFABB0wAP28lswrV/ABS68IsLKtyd1fyI3GBfSbIK5nDEEnlE+EdElFdLs9taAxJImeVF1x4eT47+bkPJ2qS8z3K8QGzKLF3W+8SiRZGfSwDTsLKH+2Vycvy5auRl+ag=="
+}
 }
 ```
 
@@ -260,10 +260,10 @@ request
 
 ```json
 {
-  "appId": 1000,
-  "orderId": "M1234567111",
-  "orderNo": "3022111516571436",
-  "sign": "ZxkVZL+GAyv0VhvWn4IvuYahTzxgQuthkuV2ONWiqIfIDb2avvHlFOUJVzqZi1q8CPHXZm1ltanRTRVTxfsuftLvGeDioUHglWt46/RU6c1OPznpLGsZ35Q3n5tW2y1EnOsxPynXBFLuDQy+aZ3l9u6AQ30T0zQexMGT+IxuFkmUp02g/6juaHa5ZgNMv7lN67ixIp162wrM7OJuaOif872QijSceRdZhzaMGImAwB0D4MosRV4WMBOKkwgPdmS7GuZN66YUidXk3wTGqX3MYRw6M0kj4eNegSUwPXvp4q4p0KO8Y3xUMld54GY2ApX3WN3CBtC/vpJqEszjGBbbGg=="
+"appId": 1000,
+    "orderId": "M1234567111",
+    "orderNo": "3022111516571436",
+    "sign": "ZxkVZL+GAyv0VhvWn4IvuYahTzxgQuthkuV2ONWiqIfIDb2avvHlFOUJVzqZi1q8CPHXZm1ltanRTRVTxfsuftLvGeDioUHglWt46/RU6c1OPznpLGsZ35Q3n5tW2y1EnOsxPynXBFLuDQy+aZ3l9u6AQ30T0zQexMGT+IxuFkmUp02g/6juaHa5ZgNMv7lN67ixIp162wrM7OJuaOif872QijSceRdZhzaMGImAwB0D4MosRV4WMBOKkwgPdmS7GuZN66YUidXk3wTGqX3MYRw6M0kj4eNegSUwPXvp4q4p0KO8Y3xUMld54GY2ApX3WN3CBtC/vpJqEszjGBbbGg=="
 }
 ```
 
@@ -271,18 +271,18 @@ response — 订单失败
 
 ```json
 {
-  "status": "1",
-  "error": "00000000",
-  "msg": "",
-  "data": {
+"status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
     "orderId": "M1234567111",
-    "orderNo": "3022111516571436",
-    "amount": "2000.00",
-    "fee": "0.00",
-    "status": 3,
-    "errorMsg": "Đơn hàng không tồn tại",
-    "sign": "KKuvCl0SuNANJs+l2ogDaJm8pmV+Hi+Xa7q27vJ6D1Ehs4aOp13kRbITfJAhczh3T81BE9qwHeJaYwf+r0EypKM9TL6pMwfG8Az4gRy1D57wiUaVjl2PWcvbEqrn1hL0b+btkjvAM9I+CcSv+wuOW3/uku17Ws3FhgJLj9sFsQUBAPjDO+758VnwBytCOLBmljLBXyKgNgpmFQ1/DNkqWl0UNzyLK45Zw3yf5NiwhEFbvW0jlOWlfu/ql4hluISUQG573jEoFCBEnQLb2tQoRZj1QYNRCXPf5lbej0vzqbEwvR9h+ZOf255t1MocJkdIe463DTV5U3KZdVT87HMagw=="
-  }
+        "orderNo": "3022111516571436",
+        "amount": "2000.00",
+        "fee": "0.00",
+        "status": 3,
+        "errorMsg": "Đơn hàng không tồn tại",
+        "sign": "KKuvCl0SuNANJs+l2ogDaJm8pmV+Hi+Xa7q27vJ6D1Ehs4aOp13kRbITfJAhczh3T81BE9qwHeJaYwf+r0EypKM9TL6pMwfG8Az4gRy1D57wiUaVjl2PWcvbEqrn1hL0b+btkjvAM9I+CcSv+wuOW3/uku17Ws3FhgJLj9sFsQUBAPjDO+758VnwBytCOLBmljLBXyKgNgpmFQ1/DNkqWl0UNzyLK45Zw3yf5NiwhEFbvW0jlOWlfu/ql4hluISUQG573jEoFCBEnQLb2tQoRZj1QYNRCXPf5lbej0vzqbEwvR9h+ZOf255t1MocJkdIe463DTV5U3KZdVT87HMagw=="
+}
 }
 ```
 
@@ -290,18 +290,18 @@ response — 订单成功
 
 ```json
 {
-  "status": "1",
-  "error": "00000000",
-  "msg": "",
-  "data": {
+"status": "1",
+    "error": "00000000",
+    "msg": "",
+    "data": {
     "orderId": "M1234567112",
-    "orderNo": "3022111517401574",
-    "amount": "2000.00",
-    "fee": "1003.00",
-    "status": 2,
-    "payTime": "2024-03-01 23:59:59",
-    "sign": "khPtOmGq+cpKX0HFAI/lbP0dx4oVyNAnL5oLsdmhDJdASlQm0yg5I3o+MhImYggEsL6c2bo5fP29t54OZFqSdQDfIuNDvGbAMAr4mRBxc0hoHLkBLyyagfVPBLyQA1JY8XV3ZL4ySzQ3ZQnMCfrh2K39ueUuz6HpZ03Hj0KYijVRCXAZaio/L5jfLBT12QXmvIfAHa8s/k9flhK05ENHPep3zjj/MZGOEaX7jkEJLfjK0duypDCa61BRQjM+oePOdVsgleIl1Yf98UAxMDZ/A3912KFHEb+/jvmdnulNbiJFyuT1fEe+j2teUgw3vFsZAtwNWAgxhC7UO+N0Q5z4EA=="
-  }
+        "orderNo": "3022111517401574",
+        "amount": "2000.00",
+        "fee": "1003.00",
+        "status": 2,
+        "payTime": "2024-03-01 23:59:59",
+        "sign": "khPtOmGq+cpKX0HFAI/lbP0dx4oVyNAnL5oLsdmhDJdASlQm0yg5I3o+MhImYggEsL6c2bo5fP29t54OZFqSdQDfIuNDvGbAMAr4mRBxc0hoHLkBLyyagfVPBLyQA1JY8XV3ZL4ySzQ3ZQnMCfrh2K39ueUuz6HpZ03Hj0KYijVRCXAZaio/L5jfLBT12QXmvIfAHa8s/k9flhK05ENHPep3zjj/MZGOEaX7jkEJLfjK0duypDCa61BRQjM+oePOdVsgleIl1Yf98UAxMDZ/A3912KFHEb+/jvmdnulNbiJFyuT1fEe+j2teUgw3vFsZAtwNWAgxhC7UO+N0Q5z4EA=="
+}
 }
 ```
 
@@ -320,44 +320,44 @@ response — 订单成功
 
 ### **支付方式**
 
-| 币种 | 支付类型(accountType) | 支付编码(bankCode) | 限额        | 状态 | 说明                                   |
-| :--- | :-------------------- | :----------------- | :---------- | :--- | :-------------------------------------- |
-| KRW  | BANK_ACCOUNT          | SAMCKRSL           | 1000-1500000| 可用 | Samsung Securities                      |
-| KRW  | BANK_ACCOUNT          | KOPOKRS1           | 1000-1500000| 可用 | Korea Post(Epost)                       |
-| KRW  | BANK_ACCOUNT          | KWABKRSE           | 1000-1500000| 可用 | Kwangju Bank(KJ)                        |
-| KRW  | BANK_ACCOUNT          | KYBOKRSE           | 1000-1500000| 可用 | Kyobo Securities                        |
-| KRW  | BANK_ACCOUNT          | KYNAKR22           | 1000-1500000| 可用 | Kyongnam Bank                           |
-| KRW  | BANK_ACCOUNT          | MHCBKRSE           | 1000-1500000| 可用 | Mirae Asset Daewoo                      |
-| KRW  | BANK_ACCOUNT          | NACFKRSE           | 1000-1500000| 可用 | Nonghyup Bank(NH)                       |
-| KRW  | BANK_ACCOUNT          | NFFCKRSE           | 1000-1500000| 可用 | Suhyup Local Cooperatives               |
-| KRW  | BANK_ACCOUNT          | PUSBKR2P           | 1000-1500000| 可用 | Busan Bank(BNK)                         |
-| KRW  | BANK_ACCOUNT          | KODBKRSE           | 1000-1500000| 可用 | Korea Development Bank(KDB)             |
-| KRW  | BANK_ACCOUNT          | SCBLKRSE           | 1000-1500000| 可用 | Standard Chartered Korea(SC First)      |
-| KRW  | BANK_ACCOUNT          | SECDKRS1           | 1000-1500000| 可用 | Daishin Securities                      |
-| KRW  | BANK_ACCOUNT          | SEOSKRS1           | 1000-1500000| 可用 | Eugene Investment and Securities        |
-| KRW  | BANK_ACCOUNT          | SHBKKRSE           | 1000-1500000| 可用 | Shinhan Bank                            |
-| KRW  | BANK_ACCOUNT          | SHHEKRS1           | 1000-1500000| 可用 | Hyundai Motor Securities                |
-| KRW  | BANK_ACCOUNT          | SKSEKRS1           | 1000-1500000| 可用 | SK Securities                           |
-| KRW  | BANK_ACCOUNT          | SSISKRSS           | 1000-1500000| 可用 | Shinhan Investment                      |
-| KRW  | BANK_ACCOUNT          | WISHKRSE           | 1000-1500000| 可用 | NH Investment and Securities            |
-| KRW  | BANK_ACCOUNT          | HVBKKRSE           | 1000-1500000| 可用 | Woori Bank                              |
-| KRW  | BANK_ACCOUNT          | CITIKRSXKAK        | 1000-1500000| 可用 | K Bank                                  |
-| KRW  | BANK_ACCOUNT          | CZNBKRSE           | 1000-1500000| 可用 | Kookmin-Bank(KB)                        |
-| KRW  | BANK_ACCOUNT          | DAEBKR22           | 1000-1500000| 可用 | Daegu Bank(DGB)                         |
-| KRW  | BANK_ACCOUNT          | DEUTKRSE           | 1000-1500000| 可用 | Deutsche Bank                           |
-| KRW  | BANK_ACCOUNT          | ETSIKRS1           | 1000-1500000| 可用 | eBEST Investment and Securities         |
-| KRW  | BANK_ACCOUNT          | HNBNKRSE           | 1000-1500000| 可用 | KEB Hana Bank                           |
-| KRW  | BANK_ACCOUNT          | HNWSKRSS           | 1000-1500000| 可用 | Hanhwa Investment and Securities        |
-| KRW  | BANK_ACCOUNT          | HSBCKRSE           | 1000-1500000| 可用 | HSBC                                    |
-| KRW  | BANK_ACCOUNT          | CITIKRSX           | 1000-1500000| 可用 | Citibank Korea                          |
-| KRW  | BANK_ACCOUNT          | HYSEKRSE           | 1000-1500000| 可用 | KB Securities                           |
-| KRW  | BANK_ACCOUNT          | IBKOKRSE           | 1000-1500000| 可用 | Industrial Bank of Korea(IBK)           |
-| KRW  | BANK_ACCOUNT          | JEONKRSE           | 1000-1500000| 可用 | Jeonbuk Bank(JB)                        |
-| KRW  | BANK_ACCOUNT          | JJBKKR22           | 1000-1500000| 可用 | Jeju Bank                               |
-| KRW  | BANK_ACCOUNT          | KAKOKR22           | 1000-1500000| 可用 | KAKAO Bank                              |
-| KRW  | BANK_ACCOUNT          | KFBCKRSE           | 1000-1500000| 可用 | Meritz Securities                       |
-| KRW  | BANK_ACCOUNT          | KISEKRSE           | 1000-1500000| 可用 | Korea Investment and Securities         |
-| KRW  | BANK_ACCOUNT          | KIWCKRSE           | 1000-1500000| 可用 | Kiwoom Securities                       |
+| 币种  | 支付类型(accountType) | 支付编码(bankCode) | 限额           | 状态  | 说明                                 |
+|-----|-------------------|----------------|--------------|-----|------------------------------------|
+| KRW | BANK_ACCOUNT      | SAMCKRSL       | 1000-1500000 | 不可用 | Samsung Securities                 |
+| KRW | BANK_ACCOUNT      | KOPOKRS1       | 1000-1500000 | 可用  | Korea Post(Epost)                  |
+| KRW | BANK_ACCOUNT      | KWABKRSE       | 1000-1500000 | 可用  | Kwangju Bank(KJ)                   |
+| KRW | BANK_ACCOUNT      | KYBOKRSE       | 1000-1500000 | 不可用 | Kyobo Securities                   |
+| KRW | BANK_ACCOUNT      | KYNAKR22       | 1000-1500000 | 可用  | Kyongnam Bank                      |
+| KRW | BANK_ACCOUNT      | MHCBKRSE       | 1000-1500000 | 不可用 | Mirae Asset Daewoo                 |
+| KRW | BANK_ACCOUNT      | NACFKRSE       | 1000-1500000 | 可用  | Nonghyup Bank(NH)                  |
+| KRW | BANK_ACCOUNT      | NFFCKRSE       | 1000-1500000 | 可用  | Suhyup Local Cooperatives          |
+| KRW | BANK_ACCOUNT      | PUSBKR2P       | 1000-1500000 | 可用  | Busan Bank(BNK)                    |
+| KRW | BANK_ACCOUNT      | KODBKRSE       | 1000-1500000 | 可用  | Korea Development Bank(KDB)        |
+| KRW | BANK_ACCOUNT      | SCBLKRSE       | 1000-1500000 | 可用  | Standard Chartered Korea(SC First) |
+| KRW | BANK_ACCOUNT      | SECDKRS1       | 1000-1500000 | 不可用 | Daishin Securities                 |
+| KRW | BANK_ACCOUNT      | SEOSKRS1       | 1000-1500000 | 不可用 | Eugene Investment and Securities   |
+| KRW | BANK_ACCOUNT      | SHBKKRSE       | 1000-1500000 | 可用  | Shinhan Bank                       |
+| KRW | BANK_ACCOUNT      | SHHEKRS1       | 1000-1500000 | 不可用 | Hyundai Motor Securities           |
+| KRW | BANK_ACCOUNT      | SKSEKRS1       | 1000-1500000 | 不可用 | SK Securities                      |
+| KRW | BANK_ACCOUNT      | SSISKRSS       | 1000-1500000 | 可用  | Shinhan Investment                 |
+| KRW | BANK_ACCOUNT      | WISHKRSE       | 1000-1500000 | 不可用 | NH Investment and Securities       |
+| KRW | BANK_ACCOUNT      | HVBKKRSE       | 1000-1500000 | 可用  | Woori Bank                         |
+| KRW | BANK_ACCOUNT      | CITIKRSXKAK    | 1000-1500000 | 可用  | K Bank                             |
+| KRW | BANK_ACCOUNT      | CZNBKRSE       | 1000-1500000 | 可用  | Kookmin-Bank(KB)                   |
+| KRW | BANK_ACCOUNT      | DAEBKR22       | 1000-1500000 | 可用  | Daegu Bank(DGB)                    |
+| KRW | BANK_ACCOUNT      | DEUTKRSE       | 1000-1500000 | 可用  | Deutsche Bank                      |
+| KRW | BANK_ACCOUNT      | ETSIKRS1       | 1000-1500000 | 可用  | eBEST Investment and Securities    |
+| KRW | BANK_ACCOUNT      | HNBNKRSE       | 1000-1500000 | 可用  | KEB Hana Bank                      |
+| KRW | BANK_ACCOUNT      | HNWSKRSS       | 1000-1500000 | 不可用 | Hanhwa Investment and Securities   |
+| KRW | BANK_ACCOUNT      | HSBCKRSE       | 1000-1500000 | 可用  | HSBC                               |
+| KRW | BANK_ACCOUNT      | CITIKRSX       | 1000-1500000 | 可用  | Citibank Korea                     |
+| KRW | BANK_ACCOUNT      | HYSEKRSE       | 1000-1500000 | 不可用 | KB Securities                      |
+| KRW | BANK_ACCOUNT      | IBKOKRSE       | 1000-1500000 | 可用  | Industrial Bank of Korea(IBK)      |
+| KRW | BANK_ACCOUNT      | JEONKRSE       | 1000-1500000 | 可用  | Jeonbuk Bank(JB)                   |
+| KRW | BANK_ACCOUNT      | JJBKKR22       | 1000-1500000 | 可用  | Jeju Bank                          |
+| KRW | BANK_ACCOUNT      | KAKOKR22       | 1000-1500000 | 可用  | KAKAO Bank                         |
+| KRW | BANK_ACCOUNT      | KFBCKRSE       | 1000-1500000 | 不可用 | Meritz Securities                  |
+| KRW | BANK_ACCOUNT      | KISEKRSE       | 1000-1500000 | 不可用 | Korea Investment and Securities    |
+| KRW | BANK_ACCOUNT      | KIWCKRSE       | 1000-1500000 | 不可用 | Kiwoom Securities                  |
 
 {/* </div>
 <div class='page-api-right'>

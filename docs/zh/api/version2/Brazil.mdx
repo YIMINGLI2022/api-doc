@@ -9,9 +9,9 @@ permalink: /api/version2/Brazil/
 <div class='page-api-content'>
 <div class='page-api-left'> */}
 
-:::warning
-**阅读该接口文档前，务必先查看 [**接口说明**](/zh/docs/guide/api_description_guide.md)**
-:::
+<Warning>
+**阅读该接口文档前，务必先查看 [**接口说明**](/docs/zh/guide/api_description_guide)**
+</Warning>
 
 ## **限额**
 
@@ -38,7 +38,7 @@ permalink: /api/version2/Brazil/
 | appId           | 是  | Long   | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                           |
 | orderId         | 是  | String | 商户订单号(必须保证唯一性，长度不超过48)                                                                    |
 | name            | 是  | String | 收款人姓名（收款人姓名格式:英文大小写且允许有空格,1-30位,"firstName middleName lastName" (middleName非必填,特殊字符支持\!-) |
-| phone           | 是  | String | 真实手机号（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ）         |
+| phone           | 是  | String | 真实手机号（格式参考 [电话号码格式](/docs/zh/guide/frequently_asked_question.html#phone_format) ）         |
 | email           | 是  | String | 真实电子邮件                                                                                    |
 | amount          | 是  | String | 交易金额(单位：巴西雷纳尔，精确到小数点后两位；禁止添加标点符号，例如：”,”） 范围:1-99999                                       |
 | payType         | 是  | String | [支付方式类型](#inBankCode)                                                                     |
@@ -191,7 +191,7 @@ response
 | identifyType  | 是  | String | 账号类型(CPF/PHONE/EMAIL)                                                                          |
 | accountNo     | 是  | String | 用户收款账号                                                                                         |
 | name          | 是  | String | 收款人姓名(收款人姓名 格式：英文大小写且允许有空格，1-30位,"firstName middleName lastName" (middleName 非必填, 特殊字符支持 '.-)) |
-| phone         | 是  | String | 真实手机号（格式参考 [电话号码格式](/zh/docs/guide/frequently_asked_question.html#phone_format) ）              |
+| phone         | 是  | String | 真实手机号（格式参考 [电话号码格式](/docs/zh/guide/frequently_asked_question.html#phone_format) ）              |
 | email         | 是  | String | 真实电子邮件                                                                                         |
 | notifyUrl     | 否  | String | 回调地址                                                                                           |
 | subject       | 否  | String | 支付备注（交易标题，商品名称，支付原因）                                                                           |

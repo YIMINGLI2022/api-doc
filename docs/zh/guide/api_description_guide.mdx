@@ -21,7 +21,7 @@ permalink: /guide/api_description_guide/
 | 数据格式        | 提交和返回数据都为application/json格式                                                                               |
 | 字符编码        | 统一采用UTF-8字符编码                                                                                                |
 | 签名算法        | SHA256WithRSA                                                                                                        |
-| 签名要求        | 请求和接受数据均需要校验签名，详细方法参考 [配置与签名](/zh/docs/guide/config_settings_and_signature_rules_guide.md) |
+| 签名要求        | 请求和接受数据均需要校验签名，详细方法参考 [配置与签名](/docs/zh/guide/config_settings_and_signature_rules_guide) |
 | SSL/TLS协议版本 | TLSv1.2 TLSv1.3
 
 ## 3. 接口结构
@@ -86,7 +86,7 @@ POST https://uat-interface.haipay.asia/{币种}/{接口地址}
     </tbody>
 </table>
 
-详情查看 [接口文档](/zh/docs/guide/api_doc_list.md) 。
+详情查看 [接口文档](/docs/zh/guide/api_doc_list) 。
 
 
 ## 5. 参数
@@ -97,7 +97,7 @@ POST https://uat-interface.haipay.asia/{币种}/{接口地址}
 | 参数名 | 必选 | 类型    | 说明                                                                                       |
 | :----- | :--- | :------ | :----------------------------------------------------------------------------------------- |
 | appId  | 是   | Integer | 业务ID（后台获取，需要根据URL中的币种传递对应的业务ID）                                                                         |
-| sign   | 是   | String  | 签名（详情查看 [配置与签名](/zh/docs/guide/config_settings_and_signature_rules_guide.md)） |
+| sign   | 是   | String  | 签名（详情查看 [配置与签名](/docs/zh/guide/config_settings_and_signature_rules_guide)） |
 
 **请求示例：**
 ```json

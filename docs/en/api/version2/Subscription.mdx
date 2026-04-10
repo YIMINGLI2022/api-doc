@@ -10,8 +10,8 @@ permalink: /en/api/version2/Subscription/
 <div class='page-api-left'> */}
 
 
-:::warning
-**Before reading this API documentation, be sure to review [**API Description Guide**](/en/docs/guide/api_description_guide.md) and [**Subscription Process**](/en/docs/api/version2/subscription-process.md)**
+<Warning>
+**Before reading this API documentation, be sure to review [**API Description Guide**](/docs/en/guide/api_description_guide) and [**Subscription Process**](/docs/en/api/version2//subscription-process)**
 
 **Since this involves deductions, in order to avoid complaints, the platform must provide the following functions or services:**
 
@@ -24,7 +24,7 @@ permalink: /en/api/version2/Subscription/
 **4. Both after subscription success and before/after deductions, there must be email or other (non-platform internal) notifications to inform customers of deduction details**
 
 **5. The platform must provide the subscription service agreement content, and subscription deductions can only be initiated after explicit confirmation by the customer**
-:::
+</Warning>
 :::tip mportant Information Regarding Credit Card Disputes
   - **For credit card transactions, consumers maintain the right to initiate a dispute within 180 days of the charge date. When a dispute is filed, a dispute fee of $20 will be assessed per transaction.**
   - **Upon receiving a dispute notification, you have two options for response**
@@ -182,7 +182,7 @@ HaiPay provides a convenient creditCard Subscribe payment integration solution t
 | subscriptionOrderId    | Yes      | String  | Merchant order ID (must be unique, max length 48)                                                                                                                                        |
 | amount                 | Yes      | String  | Transaction amount (accurate to two decimals; punctuation such as “,” is not allowed)                                                                                                    |
 | name                   | Yes      | String  | User name, recommended to use real name. Format: includes firstName and lastName, separated by space. Example: Donald John Trump                                                         |
-| phone                  | Yes      | String  | Real phone number (format reference: [Phone Format](/en/docs/guide/frequently_asked_question.html#phone_format))                                                                         |
+| phone                  | Yes      | String  | Real phone number (format reference: [Phone Format](/docs/en/guide/frequently_asked_question.html#phone_format))                                                                         |
 | email                  | Yes      | String  | Real email                                                                                                                                                                               |
 | subject                | Yes      | String  | Subscription title                                                                                                                                                                       |
 | body                   | No       | String  | Remark details                                                                                                                                                                           |
@@ -527,9 +527,9 @@ needed.
 
 ## 3. Test Card Numbers
 
-:::warning
+<Warning>
 **Only for use in the test environment**
-:::
+</Warning>
 
 #### Simulate successful payment
 

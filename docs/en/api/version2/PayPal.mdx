@@ -7,9 +7,9 @@ permalink: /en/api/version2/PayPal/
 <div class='page-api-content'>
 <div class='page-api-left'> */}
 
-:::warning
-**Before reading this API document, please make sure to review [**API Description Guide**](/en/docs/guide/api_description_guide.md)**
-:::
+<Warning>
+**Before reading this API document, please make sure to review [**API Description Guide**](/docs/en/guide/api_description_guide)**
+</Warning>
 
 ## **Limits**
 
@@ -34,7 +34,7 @@ USD: `/usd/pay/apply`
 | appId          | Yes      | Long   | Business ID (obtained from the backend; must use the corresponding business ID for the currency in the URL).                                                                                                               |
 | orderId        | Yes      | String | Merchant order number (must be unique, max length 48).                                                                                                                                                                     |
 | name           | Yes      | String | Recipient's full name, recommended to use the real name in English, no special characters, separated by spaces, must include at least firstName and lastName. Example: Donald John Trump                                   |
-| phone          | Yes      | String | Real phone number (format reference: [Phone Number Format](/en/docs/guide/frequently_asked_question.html#phone_format)).                                                                                                   |
+| phone          | Yes      | String | Real phone number (format reference: [Phone Number Format](/docs/en/guide/frequently_asked_question.html#phone_format)).                                                                                                   |
 | email          | Yes      | String | Real email address.                                                                                                                                                                                                        |
 | notifyUrl      | No       | String | Callback URL.                                                                                                                                                                                                              |
 | amount         | Yes      | String | Transaction amount (unit: USD, accurate to two decimals; no punctuation marks allowed, e.g., “,”).                                                                                                                         |
