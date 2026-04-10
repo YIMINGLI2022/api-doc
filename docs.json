@@ -135,7 +135,7 @@
             ]
           },
           {
-            "tab": "API reference",
+            "tab": "API 文档",
             "groups": [
               {
                 "group": "收银台",
@@ -369,6 +369,17 @@
                   "docs/zh/api-reference/usdtc/api/usdtCollectQuery",
                   "docs/zh/api-reference/usdtc/api/usdtPayApply",
                   "docs/zh/api-reference/usdtc/api/usdtPayQuery"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "更新日志",
+            "groups":[
+              {
+                "group": "收银台",
+                "pages": [
+                  "docs/zh/changelog"
                 ]
               }
             ]
@@ -732,6 +743,17 @@
                 ]
               }
             ]
+          },
+          {
+            "tab": "Update log",
+            "groups":[
+              {
+                "group": "Update log",
+                "pages": [
+                  "docs/en/changelog"
+                ]
+              }
+            ]
           }
         ]
       }
@@ -790,5 +812,9 @@
       "display": "interactive",
       "proxy": true
     }
-  }
+  },
+  "appearance": {
+    "default": "light"
+  },
+  "excludeFiles": ["node_modules/**"]
 }
