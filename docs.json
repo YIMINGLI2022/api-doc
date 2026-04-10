@@ -1,5 +1,11 @@
 {
   "$schema": "https://mintlify.com/docs.json",
+  "search": {
+    "mode": "local"
+  },
+  "seo": {
+    "indexing": "all"
+  },
   "theme": "luma",
   "name": "HaiPay",
   "logo": {
@@ -377,9 +383,9 @@
             "tab": "更新日志",
             "groups":[
               {
-                "group": "收银台",
+                "group": "产品更新日志",
                 "pages": [
-                  "docs/zh/changelog"
+                  "docs/zh/changelog/changelog"
                 ]
               }
             ]
@@ -750,7 +756,7 @@
               {
                 "group": "Update log",
                 "pages": [
-                  "docs/en/changelog"
+                  "docs/en/changelog/changelog"
                 ]
               }
             ]
